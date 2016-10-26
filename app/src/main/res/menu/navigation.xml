@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".MainActivity">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/nav_menu_black"
+            android:checkable="true"
+            android:checked="true"
+            android:title="@string/navigation_menu" />
+        <item
+            android:id="@+id/nav_balance"
+            android:icon="@drawable/nav_card_black"
+            android:title="@string/navigation_balance" />
+        <item
+            android:id="@+id/nav_counter"
+            android:icon="@drawable/nav_counter_black"
+            android:title="@string/navigation_counter" />
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/nav_map_black"
+            android:title="@string/navigation_map" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/nav_about_black"
+            android:title="@string/navigation_about" />
+    </group>
+
+</menu>

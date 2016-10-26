@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dialog_margin"
+        android:text="@string/balance_dialog_set_name_title"
+        android:textColor="@color/primary_text"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions"
+        android:padding="@dimen/dialog_margin"
+        android:drawableStart="@drawable/ic_person_black"
+        android:drawableLeft="@drawable/ic_person_black"
+        android:id="@+id/new_name_text" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dialog_margin"
+        android:text="@string/balance_dialog_save"
+        android:id="@+id/save_new_name_button"
+        android:layout_gravity="end"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+</LinearLayout>

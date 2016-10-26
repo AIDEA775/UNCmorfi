@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_new_user_camera"
+        android:icon="@drawable/ic_camera"
+        android:orderInCategory="3"
+        android:title="@string/balance_action_new_user_camera"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_new_user"
+        android:icon="@drawable/ic_create"
+        android:orderInCategory="3"
+        android:title="@string/balance_action_new_user"
+        app:showAsAction="ifRoom" />
+</menu>

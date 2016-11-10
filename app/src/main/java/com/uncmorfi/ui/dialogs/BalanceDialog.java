@@ -1,6 +1,5 @@
-package com.uncmorfi.dialogs;
+package com.uncmorfi.ui.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -35,9 +34,7 @@ public class BalanceDialog extends DialogFragment {
     public AlertDialog createNewCardDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View v = inflater.inflate(R.layout.dialog_new_user, null);
+        View v = View.inflate(getContext(), R.layout.dialog_new_user, null);
 
         builder.setView(v);
 

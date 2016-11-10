@@ -1,4 +1,4 @@
-package com.uncmorfi.fragments;
+package com.uncmorfi.ui.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,10 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.uncmorfi.R;
@@ -59,7 +56,7 @@ public class MenuFragment extends Fragment {
         //noinspection ResourceType
         colorDays = getContext().getString(R.color.primary_text).substring(3);
         //noinspection ResourceType
-        colorAll = getContext().getString(R.color.secondary_text).substring(3);;
+        colorAll = getContext().getString(R.color.secondary_text).substring(3);
     }
 
     @Override

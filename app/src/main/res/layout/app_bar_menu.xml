@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:clickable="true"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity"
+    tools:context=".ui.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <android.support.design.widget.AppBarLayout

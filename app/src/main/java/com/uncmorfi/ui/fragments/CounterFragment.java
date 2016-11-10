@@ -1,4 +1,4 @@
-package com.uncmorfi.fragments;
+package com.uncmorfi.ui.fragments;
 
 
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -231,7 +230,11 @@ public class CounterFragment extends Fragment {
 
             } finally {
                 if (is != null) {
-                    is.close();
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.uncmorfi.userSQL;
+package com.uncmorfi.userModel;
 
 import android.provider.BaseColumns;
 

@@ -1,4 +1,4 @@
-package com.uncmorfi.dialogs;
+package com.uncmorfi.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -32,9 +32,7 @@ public class SetNameDialog extends DialogFragment {
     public AlertDialog createNewCardDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View v = inflater.inflate(R.layout.dialog_set_name, null);
+        View v = View.inflate(getContext(), R.layout.dialog_set_name, null);
 
         builder.setView(v);
 

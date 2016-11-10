@@ -1,4 +1,4 @@
-package com.uncmorfi.fragments;
+package com.uncmorfi.ui.fragments;
 
 
 import android.os.Bundle;
@@ -23,8 +23,7 @@ public class MapFragment extends SupportMapFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
 }

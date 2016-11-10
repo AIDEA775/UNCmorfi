@@ -1,21 +1,18 @@
-package com.uncmorfi.barcode;
+package com.uncmorfi.ui;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import com.uncmorfi.R;
-import com.uncmorfi.barcode.BarcodeProcesor;
+import com.uncmorfi.backend.BarcodeProcesor;
 
 import java.io.IOException;
 

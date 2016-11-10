@@ -1,4 +1,4 @@
-package com.uncmorfi.fragments;
+package com.uncmorfi.ui.fragments;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -16,19 +16,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.uncmorfi.barcode.BarcodeReaderActivity;
-import com.uncmorfi.dialogs.BalanceDialog;
+import com.uncmorfi.ui.BarcodeReaderActivity;
+import com.uncmorfi.ui.dialogs.BalanceDialog;
 import com.uncmorfi.R;
-import com.uncmorfi.dialogs.SetNameDialog;
-import com.uncmorfi.userSQL.DownloadUser;
-import com.uncmorfi.userSQL.User;
-import com.uncmorfi.userSQL.UsersCursorAdapter;
-import com.uncmorfi.userSQL.UsersDbHelper;
+import com.uncmorfi.ui.dialogs.SetNameDialog;
+import com.uncmorfi.backend.DownloadUser;
+import com.uncmorfi.userModel.User;
+import com.uncmorfi.ui.UsersCursorAdapter;
+import com.uncmorfi.userModel.UsersDbHelper;
 
 public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCardClickListener {
     final static private int REQUEST_CODE = 1;

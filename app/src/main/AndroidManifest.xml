@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,7 +24,7 @@
         </activity>
 
         <activity
-            android:name=".barcode.BarcodeReaderActivity"
+            android:name=".ui.BarcodeReaderActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
 

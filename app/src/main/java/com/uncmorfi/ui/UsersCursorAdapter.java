@@ -1,4 +1,4 @@
-package com.uncmorfi.userSQL;
+package com.uncmorfi.ui;
 
 
 import android.content.Context;
@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.uncmorfi.R;
+import com.uncmorfi.backend.DownloadUser;
+import com.uncmorfi.userModel.User;
+import com.uncmorfi.userModel.UsersDbHelper;
 
 import java.util.Locale;
 

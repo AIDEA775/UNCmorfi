@@ -1,4 +1,4 @@
-package com.uncmorfi;
+package com.uncmorfi.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -19,13 +18,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.uncmorfi.dialogs.AboutDialog;
-import com.uncmorfi.dialogs.BalanceDialog;
-import com.uncmorfi.dialogs.SetNameDialog;
-import com.uncmorfi.fragments.BalanceFragment;
-import com.uncmorfi.fragments.CounterFragment;
-import com.uncmorfi.fragments.MapFragment;
-import com.uncmorfi.fragments.MenuFragment;
+import com.uncmorfi.R;
+import com.uncmorfi.ui.dialogs.AboutDialog;
+import com.uncmorfi.ui.dialogs.BalanceDialog;
+import com.uncmorfi.ui.dialogs.SetNameDialog;
+import com.uncmorfi.ui.fragments.BalanceFragment;
+import com.uncmorfi.ui.fragments.CounterFragment;
+import com.uncmorfi.ui.fragments.MapFragment;
+import com.uncmorfi.ui.fragments.MenuFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         BalanceDialog.OnNewCardListener, SetNameDialog.OnSetNameListener, OnMapReadyCallback {

@@ -1,7 +1,9 @@
-package com.uncmorfi.userSQL;
+package com.uncmorfi.backend;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.uncmorfi.userModel.User;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

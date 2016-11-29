@@ -25,7 +25,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> implements
         DownloadUserTask.DownloadUserListener {
-    private static final String URLUserImages = "https://asiruws.unc.edu.ar/foto/";
+    private static final String URL_USER_IMAGES = "https://asiruws.unc.edu.ar/foto/";
     private Context context;
     private Cursor items;
     private OnCardClickListener listener;
@@ -80,16 +80,14 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     public void onBindViewHolder(final UserViewHolder holder, int position) {
         items.moveToPosition(position);
 
-        // Get user
         final User user = new User (items);
 
-        // Setup
         holder.nameText.setText(user.getName());
         holder.cardText.setText(user.getCard());
         holder.typeText.setText(user.getType());
         holder.balanceText.setText(String.format(Locale.US, "$ %d", user.getBalance()));
         Glide.with(context)
-                .load(URLUserImages + user.getImage())
+                .load(URL_USER_IMAGES + user.getImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .bitmapTransform(new CropCircleTransformation(context))
@@ -103,15 +101,15 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         });
     }
 
-    private void onPressRefreshButton(UserViewHolder holder, String card) {
-        new RefreshUserTask(this, holder).execute(card);
-    }
-
     @Override
     public int getItemCount() {
         if (items != null)
             return items.getCount();
         return 0;
+    }
+
+    private void onPressRefreshButton(UserViewHolder holder, String card) {
+        new RefreshUserTask(this, holder).execute(card);
     }
 
     void swapCursor(Cursor newCursor) {
@@ -123,13 +121,10 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
     @Override
     public void onUserDownloaded(User user) {
-        if (user != null) { //&& user.getCard().equals(cardText.getText().toString())) {
+        if (user != null) {
             UsersDbHelper usersDbHelper = new UsersDbHelper(context);
 
-            // Guardar en la base de datos
             usersDbHelper.updateUserBalance(user);
-
-            // Volver a consultar la base de datos
             swapCursor(usersDbHelper.getAllUsers());
 
             Toast.makeText(context,
@@ -144,12 +139,10 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
     private class RefreshUserTask extends DownloadUserTask {
         private ProgressBar progressBar;
-        private TextView cardText;
 
         RefreshUserTask(DownloadUserListener listener, UserViewHolder holder) {
             super(listener);
             progressBar = holder.progressBar;
-            cardText = holder.cardText;
         }
 
         @Override

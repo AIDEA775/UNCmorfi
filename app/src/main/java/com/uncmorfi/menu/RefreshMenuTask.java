@@ -28,7 +28,8 @@ class RefreshMenuTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         try {
             // Descargar el html
-            Document doc = Jsoup.connect("http://m.unc.edu.ar/vidaestudiantil/sae/comedor/menu").get();
+            Document doc = Jsoup.connect("http://m.unc.edu.ar/vidaestudiantil/sae/comedor/menu")
+                    .get();
 
             // Seleccionar la parte del menú
             Element menu = doc.getElementById("content-core").child(0).child(0);

@@ -122,7 +122,8 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     }
 
     private void animationStart() {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)
+                getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ImageView iv = (ImageView) inflater.inflate(R.layout.icon_refresh, null);
 
         Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);

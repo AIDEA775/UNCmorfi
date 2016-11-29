@@ -29,6 +29,12 @@ public class UsersDbHelper extends SQLiteOpenHelper {
                 + "UNIQUE (" + UserEntry.CARD + "))");
     }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
+        onCreate(sqLiteDatabase);
+    }
+
     public void saveNewUser(User user) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
@@ -40,12 +46,12 @@ public class UsersDbHelper extends SQLiteOpenHelper {
     public void updateUserBalance(User user) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
-        ContentValues content = new ContentValues();
-        content.put(UserEntry.BALANCE, user.getBalance());
+        ContentValues newUserBalance = new ContentValues();
+        newUserBalance.put(UserEntry.BALANCE, user.getBalance());
 
         sqLiteDatabase.update(
                 UserEntry.TABLE_NAME,
-                content,
+                newUserBalance,
                 UserEntry.CARD + " = ?",
                 new String[]{user.getCard()}
         );
@@ -55,12 +61,12 @@ public class UsersDbHelper extends SQLiteOpenHelper {
     public void updateUserName(User user) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
-        ContentValues content = new ContentValues();
-        content.put(UserEntry.NAME, user.getName());
+        ContentValues newUserName = new ContentValues();
+        newUserName.put(UserEntry.NAME, user.getName());
 
         sqLiteDatabase.update(
                 UserEntry.TABLE_NAME,
-                content,
+                newUserName,
                 UserEntry.CARD + " = ?",
                 new String[]{user.getCard()}
         );
@@ -96,10 +102,5 @@ public class UsersDbHelper extends SQLiteOpenHelper {
                 null,
                 null
         );
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // todo pensar en esto
     }
 }

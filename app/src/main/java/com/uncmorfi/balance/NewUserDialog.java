@@ -44,7 +44,6 @@ public class NewUserDialog extends DialogFragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Añadir tarjeta
                         listener.newCard(input.getText().toString());
                         dismiss();
                     }

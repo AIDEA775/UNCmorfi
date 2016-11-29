@@ -54,8 +54,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
         mUsersDbHelper = new UsersDbHelper(getContext());
 
-        // cargar datos
-        // todo usar un theard o un loader para mejorar la performance
+        // TODO usar un theard o un loader para mejorar la performance
         mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
 
         return view;
@@ -97,13 +96,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0) {
                             createDeleteDialog(card, name).show();
-                        } else if (which == 1){
-                            Bundle bundle = new Bundle();
-                            bundle.putString("card", card);
-                            bundle.putString("oldName", name);
-                            SetNameDialog setNameDialog = new SetNameDialog();
-                            setNameDialog.setArguments(bundle);
-                            setNameDialog.show(getFragmentManager(), "SetNameDialog");
+                        } else if (which == 1) {
+                            createSetNameDialog(card, name);
                         }
                     }
                 })
@@ -111,7 +105,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 .show();
     }
 
-    public AlertDialog createDeleteDialog(final String card, final String name) {
+    private AlertDialog createDeleteDialog(final String card, final String name) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Eliminar tarjeta de " + name + "?")
                 .setPositiveButton("ELIMINAR",
@@ -133,11 +127,20 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         return builder.create();
     }
 
+    private void createSetNameDialog(String card, String name) {
+        Bundle bundle = new Bundle();
+        bundle.putString("card", card);
+        bundle.putString("oldName", name);
+        SetNameDialog setNameDialog = new SetNameDialog();
+        setNameDialog.setArguments(bundle);
+        setNameDialog.show(getFragmentManager(), "SetNameDialog");
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                this.newUser(data.getStringExtra(BarcodeReaderActivity.REQUEST_DATA));
+                newUser(data.getStringExtra(BarcodeReaderActivity.REQUEST_DATA));
             }
         }
     }

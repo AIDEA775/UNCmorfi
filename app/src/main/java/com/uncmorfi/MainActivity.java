@@ -22,8 +22,9 @@ import com.uncmorfi.map.MapFragment;
 import com.uncmorfi.menu.MenuFragment;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        NewUserDialog.OnNewCardListener, SetNameDialog.OnSetNameListener, OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, NewUserDialog.OnNewCardListener,
+        SetNameDialog.OnSetNameListener, OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void newCard(String card) {
-        BalanceFragment fragment = (BalanceFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        BalanceFragment fragment = (BalanceFragment)
+                getSupportFragmentManager().findFragmentById(R.id.content_frame);
 
         if (fragment != null) {
             fragment.newUser(card);
@@ -126,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void setName(String card, String name) {
-        BalanceFragment fragment = (BalanceFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        BalanceFragment fragment = (BalanceFragment)
+                getSupportFragmentManager().findFragmentById(R.id.content_frame);
 
         if (fragment != null) {
             fragment.setName(card, name);
@@ -135,7 +138,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        MapFragment fragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        MapFragment fragment = (MapFragment)
+                getSupportFragmentManager().findFragmentById(R.id.content_frame);
 
         if (fragment != null) {
             fragment.onMapReady(googleMap);

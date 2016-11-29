@@ -16,7 +16,8 @@ import com.uncmorfi.R;
 import java.io.IOException;
 
 
-public class BarcodeReaderActivity extends AppCompatActivity implements BarcodeProcesor.CallbackFound {
+public class BarcodeReaderActivity extends AppCompatActivity implements
+        BarcodeProcesor.CallbackFound {
     public static final String REQUEST_DATA = "barcode";
 
     CameraSource mCameraSource;

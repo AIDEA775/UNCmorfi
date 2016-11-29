@@ -1,4 +1,4 @@
-package com.uncmorfi.backend;
+package com.uncmorfi.balance.barcode;
 
 import android.util.SparseArray;
 
@@ -6,17 +6,18 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 
 
-public class BarcodeProcesor implements Detector.Processor<Barcode> {
+class BarcodeProcesor implements Detector.Processor<Barcode> {
     private CallbackFound listener;
 
-    public interface CallbackFound {
+    interface CallbackFound {
         void onFound(String barcodeValue);
     }
 
-    public BarcodeProcesor(CallbackFound listener){
+    BarcodeProcesor(CallbackFound listener){
         this.listener = listener;
     }
 
+    @Override
     public void receiveDetections (Detector.Detections<Barcode> detections) {
         final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 

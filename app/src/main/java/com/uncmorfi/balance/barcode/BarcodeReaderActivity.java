@@ -1,4 +1,4 @@
-package com.uncmorfi.ui;
+package com.uncmorfi.balance.barcode;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,9 +12,9 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import com.uncmorfi.R;
-import com.uncmorfi.backend.BarcodeProcesor;
 
 import java.io.IOException;
+
 
 public class BarcodeReaderActivity extends AppCompatActivity implements BarcodeProcesor.CallbackFound {
     public static final String REQUEST_DATA = "barcode";
@@ -59,9 +59,9 @@ public class BarcodeReaderActivity extends AppCompatActivity implements BarcodeP
                 mCameraSource.stop();
             }
         });
-
     }
 
+    @Override
     public void onFound (String barcodeValue) {
         Intent data = new Intent();
         data.putExtra(REQUEST_DATA, barcodeValue);

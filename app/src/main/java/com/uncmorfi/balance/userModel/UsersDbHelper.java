@@ -1,5 +1,4 @@
-package com.uncmorfi.userModel;
-
+package com.uncmorfi.balance.userModel;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.uncmorfi.userModel.UsersContract.UserEntry;
+import com.uncmorfi.balance.userModel.UsersContract.UserEntry;
+
 
 public class UsersDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;

@@ -1,4 +1,4 @@
-package com.uncmorfi.ui.dialogs;
+package com.uncmorfi.balance;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,14 +13,15 @@ import android.widget.EditText;
 
 import com.uncmorfi.R;
 
-public class SetNameDialog extends DialogFragment {
-    public interface OnSetNameListener {
-        void setName(String card, String name);
+
+public class NewUserDialog extends DialogFragment {
+    OnNewCardListener listener;
+
+    public interface OnNewCardListener {
+        void newCard(String id);
     }
 
-    OnSetNameListener listener;
-
-    public SetNameDialog() {
+    public NewUserDialog() {
     }
 
     @Override
@@ -32,21 +33,19 @@ public class SetNameDialog extends DialogFragment {
     public AlertDialog createNewCardDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        View v = View.inflate(getContext(), R.layout.dialog_set_name, null);
+        View v = View.inflate(getContext(), R.layout.dialog_new_user, null);
 
         builder.setView(v);
 
-        Button agree = (Button) v.findViewById(R.id.save_new_name_button);
-        final EditText input = (EditText) v.findViewById(R.id.new_name_text);
-        input.setText(getArguments().getString("oldName"));
+        Button agree = (Button) v.findViewById(R.id.new_card_button);
+        final EditText input = (EditText) v.findViewById(R.id.new_card_id);
 
         agree.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Añadir tarjeta
-                        listener.setName(getArguments().getString("card"),
-                                input.getText().toString());
+                        listener.newCard(input.getText().toString());
                         dismiss();
                     }
                 }
@@ -57,8 +56,9 @@ public class SetNameDialog extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         try {
-            listener = (OnSetNameListener) context;
+            listener = (OnNewCardListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(
                     context.toString() +

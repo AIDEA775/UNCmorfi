@@ -1,10 +1,10 @@
-package com.uncmorfi.ui;
+package com.uncmorfi;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,25 +12,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.uncmorfi.R;
-import com.uncmorfi.ui.dialogs.AboutDialog;
-import com.uncmorfi.ui.dialogs.BalanceDialog;
-import com.uncmorfi.ui.dialogs.SetNameDialog;
-import com.uncmorfi.ui.fragments.BalanceFragment;
-import com.uncmorfi.ui.fragments.CounterFragment;
-import com.uncmorfi.ui.fragments.MapFragment;
-import com.uncmorfi.ui.fragments.MenuFragment;
+import com.uncmorfi.balance.BalanceFragment;
+import com.uncmorfi.balance.NewUserDialog;
+import com.uncmorfi.balance.SetNameDialog;
+import com.uncmorfi.counter.CounterFragment;
+import com.uncmorfi.map.MapFragment;
+import com.uncmorfi.menu.MenuFragment;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        BalanceDialog.OnNewCardListener, SetNameDialog.OnSetNameListener, OnMapReadyCallback {
-
-    GoogleMap map;
+        NewUserDialog.OnNewCardListener, SetNameDialog.OnSetNameListener, OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,29 +134,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onMapReady(GoogleMap googleMap) {
+        MapFragment fragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+        if (fragment != null) {
+            fragment.onMapReady(googleMap);
+        }
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-
-        LatLng central = new LatLng(-31.439734, -64.189293);
-        map.addMarker(new MarkerOptions()
-                .position(central)
-                .title("Sucursal Central"));
-
-        LatLng belgrano = new LatLng(-31.416686, -64.189000);
-        map.addMarker(new MarkerOptions()
-                .position(belgrano)
-                .title("Sucursal Belgrano"));
-
-        CameraPosition cameraPosition = CameraPosition.builder()
-                .target(central)
-                .zoom(16)
-                .build();
-
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

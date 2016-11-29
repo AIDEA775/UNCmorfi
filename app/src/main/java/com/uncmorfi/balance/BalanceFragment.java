@@ -1,4 +1,4 @@
-package com.uncmorfi.ui.fragments;
+package com.uncmorfi.balance;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -18,22 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.uncmorfi.ui.BarcodeReaderActivity;
-import com.uncmorfi.ui.dialogs.BalanceDialog;
 import com.uncmorfi.R;
-import com.uncmorfi.ui.dialogs.SetNameDialog;
-import com.uncmorfi.backend.DownloadUser;
-import com.uncmorfi.userModel.User;
-import com.uncmorfi.ui.UsersCursorAdapter;
-import com.uncmorfi.userModel.UsersDbHelper;
+import com.uncmorfi.balance.barcode.BarcodeReaderActivity;
+import com.uncmorfi.balance.userModel.User;
+import com.uncmorfi.balance.userModel.UsersDbHelper;
 
-public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCardClickListener {
+public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
+        DownloadUserTask.DownloadUserListener {
     final static private int REQUEST_CODE = 1;
 
     private UsersDbHelper mUsersDbHelper;
 
     private RecyclerView mRecyclerView;
-    private UsersCursorAdapter mUserCursorAdapter;
+    private UserCursorAdapter mUserCursorAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -43,9 +40,8 @@ public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCa
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        // Inflar el layout para este Fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_balance, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.user_list);
@@ -53,7 +49,7 @@ public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCa
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mUserCursorAdapter = new UsersCursorAdapter(getContext(), this);
+        mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
         mRecyclerView.setAdapter(mUserCursorAdapter);
 
         mUsersDbHelper = new UsersDbHelper(getContext());
@@ -74,7 +70,7 @@ public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_new_user:
-                new BalanceDialog().show(getFragmentManager(), "NewUserDialog");
+                new NewUserDialog().show(getFragmentManager(), "NewUserDialog");
                 break;
             case R.id.action_new_user_camera:
                 Intent i = new Intent(getActivity(), BarcodeReaderActivity.class);
@@ -85,7 +81,7 @@ public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCa
     }
 
     @Override
-    public void onClick(UsersCursorAdapter.UserViewHolder holder) {
+    public void onClick(UserCursorAdapter.UserViewHolder holder) {
         final String card = holder.cardText.getText().toString();
         final String name = holder.nameText.getText().toString();
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -146,10 +142,9 @@ public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCa
         }
     }
 
-
     public void newUser(String card) {
         Log.i("BalanceFragment", "New card " + card);
-        new DownloadNewUser().execute(card);
+        new DownloadUserTask(this).execute(card);
     }
 
     public void setName(String card, String name) {
@@ -170,28 +165,22 @@ public class BalanceFragment extends Fragment implements UsersCursorAdapter.OnCa
         }
     }
 
-    private class DownloadNewUser extends DownloadUser {
-        @Override
-        protected void onPreExecute() {
-        }
+    @Override
+    public void onUserDownloaded(User user) {
+        if (user != null) {
+            // Guardar en la base de datos
+            mUsersDbHelper.saveNewUser(user);
 
-        @Override
-        protected void onPostExecute(User user) {
-            if (user != null) {
-                // Guardar en la base de datos
-                mUsersDbHelper.saveNewUser(user);
+            // Volver a consultar la base de datos
+            mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
 
-                // Volver a consultar la base de datos
-                mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
-
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.new_user_success), Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.new_user_fail), Toast.LENGTH_LONG)
-                        .show();
-            }
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.new_user_success), Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.new_user_fail), Toast.LENGTH_LONG)
+                    .show();
         }
     }
 

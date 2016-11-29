@@ -4,7 +4,7 @@
     android:id="@+id/activity_barcode_reader"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.uncmorfi.ui.BarcodeReaderActivity">
+    tools:context="com.uncmorfi.balance.barcode.BarcodeReaderActivity">
 
     <SurfaceView
         android:layout_width="match_parent"

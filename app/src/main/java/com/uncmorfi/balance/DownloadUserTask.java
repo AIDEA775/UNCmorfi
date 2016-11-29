@@ -1,9 +1,9 @@
-package com.uncmorfi.backend;
+package com.uncmorfi.balance;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.uncmorfi.userModel.User;
+import com.uncmorfi.balance.userModel.User;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -14,7 +14,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class DownloadUser extends AsyncTask<String, Void, User> {
+class DownloadUserTask extends AsyncTask<String, Void, User> {
+    private DownloadUserListener listener;
+
+    interface DownloadUserListener {
+        void onUserDownloaded(User user);
+    }
+
+    DownloadUserTask(DownloadUserListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    protected void onPreExecute() {
+    }
+
     @Override
     protected User doInBackground(String... params) {
         try {
@@ -33,8 +47,14 @@ public class DownloadUser extends AsyncTask<String, Void, User> {
 
             return user;
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    protected void onPostExecute(User user) {
+        listener.onUserDownloaded(user);
     }
 
     private String[] downloadUser(String card) throws IOException {
@@ -52,7 +72,6 @@ public class DownloadUser extends AsyncTask<String, Void, User> {
 
             connection.setRequestProperty("Content-Length", "" +
                     Integer.toString(urlParameters.getBytes().length));
-            connection.setRequestProperty("Connection", "keep-alive");
 
             connection.setUseCaches(false);
             connection.setDoInput(true);
@@ -75,6 +94,8 @@ public class DownloadUser extends AsyncTask<String, Void, User> {
                 response.append('\r');
             }
             rd.close();
+
+            // TODO: 11/29/16 crear y llamar al parser
             int left = response.indexOf("rows: [{c: [");
             int rigth = response.indexOf("]", left);
             Log.d("JSwa", "left: " + String.valueOf(left) + " right: " + String.valueOf(rigth));

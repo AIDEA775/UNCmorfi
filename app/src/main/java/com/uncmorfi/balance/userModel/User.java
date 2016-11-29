@@ -1,4 +1,4 @@
-package com.uncmorfi.userModel;
+package com.uncmorfi.balance.userModel;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -60,7 +60,7 @@ public class User {
         this.image = image;
     }
 
-    public ContentValues toContentValues () {
+    ContentValues toContentValues () {
         ContentValues values = new ContentValues();
         values.put(UsersContract.UserEntry.CARD, this.card);
         values.put(UsersContract.UserEntry.NAME, this.name);

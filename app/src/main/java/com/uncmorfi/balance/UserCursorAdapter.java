@@ -1,5 +1,4 @@
-package com.uncmorfi.ui;
-
+package com.uncmorfi.balance;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,28 +15,28 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.uncmorfi.R;
-import com.uncmorfi.backend.DownloadUser;
-import com.uncmorfi.userModel.User;
-import com.uncmorfi.userModel.UsersDbHelper;
+import com.uncmorfi.balance.userModel.User;
+import com.uncmorfi.balance.userModel.UsersDbHelper;
 
 import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
-public class UsersCursorAdapter extends RecyclerView.Adapter<UsersCursorAdapter.UserViewHolder> {
-    private final String URLUserImages = "https://asiruws.unc.edu.ar/foto/";
+class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> implements
+        DownloadUserTask.DownloadUserListener {
+    private static final String URLUserImages = "https://asiruws.unc.edu.ar/foto/";
     private Context context;
     private Cursor items;
     private OnCardClickListener listener;
 
-    public interface OnCardClickListener {
+    interface OnCardClickListener {
         void onClick(UserViewHolder holder);
     }
 
-    public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView nameText;
-        public TextView cardText;
+    class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView nameText;
+        TextView cardText;
         TextView typeText;
         TextView balanceText;
         Button refreshButton;
@@ -65,7 +64,7 @@ public class UsersCursorAdapter extends RecyclerView.Adapter<UsersCursorAdapter.
         }
     }
 
-    public UsersCursorAdapter(Context context, OnCardClickListener listener) {
+    UserCursorAdapter(Context context, OnCardClickListener listener) {
         this.context = context;
         this.listener = listener;
     }
@@ -99,9 +98,13 @@ public class UsersCursorAdapter extends RecyclerView.Adapter<UsersCursorAdapter.
         holder.refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DownloadRefreshUser(holder).execute(user.getCard());
+                onPressRefreshButton(holder, user.getCard());
             }
         });
+    }
+
+    private void onPressRefreshButton(UserViewHolder holder, String card) {
+        new RefreshUserTask(this, holder).execute(card);
     }
 
     @Override
@@ -111,23 +114,40 @@ public class UsersCursorAdapter extends RecyclerView.Adapter<UsersCursorAdapter.
         return 0;
     }
 
-    public void swapCursor(Cursor newCursor) {
+    void swapCursor(Cursor newCursor) {
         if (newCursor != null) {
             items = newCursor;
             notifyDataSetChanged();
         }
     }
 
-    public Cursor getCursor() {
-        return items;
+    @Override
+    public void onUserDownloaded(User user) {
+        if (user != null) { //&& user.getCard().equals(cardText.getText().toString())) {
+            UsersDbHelper usersDbHelper = new UsersDbHelper(context);
+
+            // Guardar en la base de datos
+            usersDbHelper.updateUserBalance(user);
+
+            // Volver a consultar la base de datos
+            swapCursor(usersDbHelper.getAllUsers());
+
+            Toast.makeText(context,
+                    context.getString(R.string.refresh_success), Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            Toast.makeText(context,
+                    context.getString(R.string.refresh_fail), Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 
-
-    private class DownloadRefreshUser extends DownloadUser {
+    private class RefreshUserTask extends DownloadUserTask {
         private ProgressBar progressBar;
         private TextView cardText;
 
-        DownloadRefreshUser(UserViewHolder holder) {
+        RefreshUserTask(DownloadUserListener listener, UserViewHolder holder) {
+            super(listener);
             progressBar = holder.progressBar;
             cardText = holder.cardText;
         }
@@ -139,25 +159,8 @@ public class UsersCursorAdapter extends RecyclerView.Adapter<UsersCursorAdapter.
 
         @Override
         protected void onPostExecute(User user) {
-            if (user != null && user.getCard().equals(cardText.getText().toString())) {
-                progressBar.setVisibility(View.GONE);
-
-                UsersDbHelper usersDbHelper = new UsersDbHelper(context);
-
-                // Guardar en la base de datos
-                usersDbHelper.updateUserBalance(user);
-
-                // Volver a consultar la base de datos
-                swapCursor(usersDbHelper.getAllUsers());
-
-                Toast.makeText(context,
-                        context.getString(R.string.refresh_success), Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                Toast.makeText(context,
-                        context.getString(R.string.refresh_fail), Toast.LENGTH_LONG)
-                        .show();
-            }
+            progressBar.setVisibility(View.GONE);
+            super.onPostExecute(user);
         }
     }
 }

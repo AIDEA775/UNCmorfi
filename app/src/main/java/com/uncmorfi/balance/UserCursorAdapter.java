@@ -24,7 +24,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> implements
-        DownloadUserTask.DownloadUserListener {
+        DownloadUserAsyncTask.DownloadUserListener {
     private static final String URL_USER_IMAGES = "https://asiruws.unc.edu.ar/foto/";
     private Context context;
     private Cursor items;
@@ -109,7 +109,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     }
 
     private void onPressRefreshButton(UserViewHolder holder, String card) {
-        new RefreshUserTask(this, holder).execute(card);
+        new RefreshUserAsyncTask(this, holder).execute(card);
     }
 
     void swapCursor(Cursor newCursor) {
@@ -137,10 +137,10 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         }
     }
 
-    private class RefreshUserTask extends DownloadUserTask {
+    private class RefreshUserAsyncTask extends DownloadUserAsyncTask {
         private ProgressBar progressBar;
 
-        RefreshUserTask(DownloadUserListener listener, UserViewHolder holder) {
+        RefreshUserAsyncTask(DownloadUserListener listener, UserViewHolder holder) {
             super(listener);
             progressBar = holder.progressBar;
         }

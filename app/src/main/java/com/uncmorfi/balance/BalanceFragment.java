@@ -24,7 +24,7 @@ import com.uncmorfi.balance.userModel.User;
 import com.uncmorfi.balance.userModel.UsersDbHelper;
 
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
-        DownloadUserTask.DownloadUserListener {
+        DownloadUserAsyncTask.DownloadUserListener {
     final static private int REQUEST_CODE = 1;
 
     private UsersDbHelper mUsersDbHelper;
@@ -147,7 +147,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     public void newUser(String card) {
         Log.i("BalanceFragment", "New card " + card);
-        new DownloadUserTask(this).execute(card);
+        new DownloadUserAsyncTask(this).execute(card);
     }
 
     public void setName(String card, String name) {

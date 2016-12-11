@@ -14,14 +14,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-class DownloadUserTask extends AsyncTask<String, Void, User> {
+class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
     private DownloadUserListener listener;
 
     interface DownloadUserListener {
         void onUserDownloaded(User user);
     }
 
-    DownloadUserTask(DownloadUserListener listener) {
+    DownloadUserAsyncTask(DownloadUserListener listener) {
         this.listener = listener;
     }
 

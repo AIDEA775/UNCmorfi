@@ -3,7 +3,7 @@ package com.uncmorfi.balance;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.uncmorfi.balance.userModel.User;
+import com.uncmorfi.balance.model.User;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

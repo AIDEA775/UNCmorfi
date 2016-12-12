@@ -32,6 +32,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyByHG0fe24a8losPOsi4W5ypTRIAA9PhgM" />
 
+        <provider
+            android:name=".balance.model.UserProvider"
+            android:authorities="com.uncmorfi"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

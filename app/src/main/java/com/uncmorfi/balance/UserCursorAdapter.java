@@ -15,8 +15,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.uncmorfi.R;
-import com.uncmorfi.balance.userModel.User;
-import com.uncmorfi.balance.userModel.UsersDbHelper;
+import com.uncmorfi.balance.model.User;
+import com.uncmorfi.balance.model.UsersDbHelper;
 
 import java.util.Locale;
 

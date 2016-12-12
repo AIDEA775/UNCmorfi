@@ -1,4 +1,4 @@
-package com.uncmorfi.balance.userModel;
+package com.uncmorfi.balance.model;
 
 import android.provider.BaseColumns;
 

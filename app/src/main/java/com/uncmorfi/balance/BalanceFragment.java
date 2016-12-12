@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,18 +23,17 @@ import android.widget.Toast;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.barcode.BarcodeReaderActivity;
-import com.uncmorfi.balance.userModel.User;
-import com.uncmorfi.balance.userModel.UsersDbHelper;
+import com.uncmorfi.balance.model.User;
+import com.uncmorfi.balance.model.UserProvider;
+import com.uncmorfi.balance.model.UsersDbHelper;
 
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
-        DownloadUserAsyncTask.DownloadUserListener {
+        DownloadUserAsyncTask.DownloadUserListener, LoaderManager.LoaderCallbacks<Cursor> {
     final static private int REQUEST_CODE = 1;
 
     private UsersDbHelper mUsersDbHelper;
 
-    private RecyclerView mRecyclerView;
     private UserCursorAdapter mUserCursorAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -44,18 +46,16 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_balance, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.user_list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.user_list);
 
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
-        mRecyclerView.setAdapter(mUserCursorAdapter);
+        recyclerView.setAdapter(mUserCursorAdapter);
 
         mUsersDbHelper = new UsersDbHelper(getContext());
 
-        // TODO usar un theard o un loader para mejorar la performance
-        mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
+        getLoaderManager().initLoader(0, null, this);
 
         return view;
     }
@@ -77,6 +77,26 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(),
+                UserProvider.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (mUserCursorAdapter != null) mUserCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mUserCursorAdapter.swapCursor(null);
     }
 
     @Override

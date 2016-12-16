@@ -3,6 +3,7 @@ package com.uncmorfi.counter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,12 @@ import java.util.Locale;
 
 
 public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener {
+    private final static int TOTAL_RACIONES = 1500;
     private TextView mResumeView;
     private ProgressBar mProgressBar;
     private TextView mPercentView;
     private FloatingActionButton mRefreshFab;
+    private View mRootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +35,9 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
         mResumeView = (TextView) view.findViewById(R.id.counter_resume);
         mProgressBar = (ProgressBar) view.findViewById(R.id.counter_bar);
+        mProgressBar.setMax(TOTAL_RACIONES);
         mPercentView = (TextView) view.findViewById(R.id.counter_percent);
+        mRootView = view.findViewById(R.id.counter_coordinator);
 
         mRefreshFab = (FloatingActionButton) view.findViewById(R.id.counter_fab);
         mRefreshFab.setScaleX(0);
@@ -55,9 +60,8 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
             hideRefreshButton();
             new RefreshCounterTask(this).execute();
         } else {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.no_connection),
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(mRootView, R.string.connection_error, Snackbar.LENGTH_LONG)
+                    .show();
         }
     }
 
@@ -92,13 +96,12 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         if (isAdded()) {
             mProgressBar.setIndeterminate(false);
             mProgressBar.setProgress(percent);
-            mResumeView.setText(String.format(Locale.US, "%d raciones de %d", percent, 1500));
-            mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100)/1500));
+            mResumeView.setText(String.format(Locale.US, "%d raciones de %d", percent, TOTAL_RACIONES));
+            mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / TOTAL_RACIONES));
 
             showRefreshButton();
 
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.refresh_success), Toast.LENGTH_SHORT)
+            Snackbar.make(mRootView, R.string.refresh_success, Snackbar.LENGTH_LONG)
                     .show();
         }
     }
@@ -106,10 +109,11 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     @Override
     public void onRefreshCounterFail() {
         if (isAdded()) {
+            mProgressBar.setIndeterminate(false);
+
             showRefreshButton();
 
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.connection_error), Toast.LENGTH_SHORT)
+            Snackbar.make(mRootView, R.string.connection_error, Snackbar.LENGTH_LONG)
                     .show();
         }
     }

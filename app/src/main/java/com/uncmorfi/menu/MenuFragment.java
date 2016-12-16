@@ -2,6 +2,7 @@ package com.uncmorfi.menu;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -76,8 +77,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
             mSwipeRefreshLayout.setRefreshing(true);
             new RefreshMenuTask(getActivity(), this).execute();
         } else {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.no_connection), Toast.LENGTH_SHORT)
+            Snackbar.make(mWebView, R.string.connection_error, Snackbar.LENGTH_LONG)
                     .show();
         }
     }
@@ -87,8 +87,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
         if (isAdded()) {
             mWebView.loadDataWithBaseURL(null, menu, "text/html", "UTF-8", null);
 
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.refresh_success), Toast.LENGTH_SHORT)
+            Snackbar.make(mWebView, R.string.refresh_success, Snackbar.LENGTH_LONG)
                     .show();
 
             mSwipeRefreshLayout.setRefreshing(false);
@@ -98,8 +97,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     @Override
     public void onRefreshMenuFail() {
         if (isAdded()) {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.connection_error), Toast.LENGTH_SHORT)
+            Snackbar.make(mWebView, R.string.connection_error, Snackbar.LENGTH_LONG)
                     .show();
 
             mSwipeRefreshLayout.setRefreshing(false);

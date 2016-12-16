@@ -16,20 +16,16 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <!-- Toolbar -->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:fitsSystemWindows="true"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            android:theme="@style/ToolBarStyle">
-        </android.support.v7.widget.Toolbar>
+            android:theme="@style/ToolBarStyle" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <!-- Resto de la interfaz de usuario -->
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"

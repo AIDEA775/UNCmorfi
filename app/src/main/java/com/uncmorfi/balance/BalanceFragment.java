@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -32,8 +33,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     final static private int REQUEST_CODE = 1;
 
     private UsersDbHelper mUsersDbHelper;
-
     private UserCursorAdapter mUserCursorAdapter;
+    private View mRootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -46,6 +47,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_balance, container, false);
 
+        mRootView = view;
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.user_list);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -183,8 +185,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
             // Volver a consultar la base de datos
             mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
         } else {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.refresh_fail), Toast.LENGTH_LONG).show();
+            Snackbar.make(mRootView, R.string.refresh_fail, Snackbar.LENGTH_LONG)
+                    .show();
         }
     }
 
@@ -197,12 +199,10 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
             // Volver a consultar la base de datos
             mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
 
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.new_user_success), Toast.LENGTH_SHORT)
+            Snackbar.make(mRootView, R.string.new_user_success, Snackbar.LENGTH_SHORT)
                     .show();
         } else {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.new_user_fail), Toast.LENGTH_LONG)
+            Snackbar.make(mRootView, R.string.new_user_fail, Snackbar.LENGTH_LONG)
                     .show();
         }
     }

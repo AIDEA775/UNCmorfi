@@ -25,10 +25,10 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> implements
         DownloadUserAsyncTask.DownloadUserListener {
-    private static final String URL_USER_IMAGES = "https://asiruws.unc.edu.ar/foto/";
-    private Context context;
-    private Cursor items;
-    private OnCardClickListener listener;
+    private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
+    private Context mContext;
+    private Cursor mCursor;
+    private OnCardClickListener mListener;
 
     interface OnCardClickListener {
         void onClick(UserViewHolder holder);
@@ -46,7 +46,6 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         UserViewHolder(View v) {
             super(v);
 
-            // Referencias UI
             nameText = (TextView) v.findViewById(R.id.user_name);
             cardText = (TextView) v.findViewById(R.id.user_card);
             typeText = (TextView) v.findViewById(R.id.user_type);
@@ -60,13 +59,13 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
         @Override
         public void onClick(View v) {
-            listener.onClick(this);
+            mListener.onClick(this);
         }
     }
 
     UserCursorAdapter(Context context, OnCardClickListener listener) {
-        this.context = context;
-        this.listener = listener;
+        mContext = context;
+        mListener = listener;
     }
 
     @Override
@@ -78,19 +77,19 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
     @Override
     public void onBindViewHolder(final UserViewHolder holder, int position) {
-        items.moveToPosition(position);
+        mCursor.moveToPosition(position);
 
-        final User user = new User (items);
+        final User user = new User (mCursor);
 
         holder.nameText.setText(user.getName());
         holder.cardText.setText(user.getCard());
         holder.typeText.setText(user.getType());
         holder.balanceText.setText(String.format(Locale.US, "$ %d", user.getBalance()));
-        Glide.with(context)
-                .load(URL_USER_IMAGES + user.getImage())
+        Glide.with(mContext)
+                .load(USER_IMAGES_URL + user.getImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
-                .bitmapTransform(new CropCircleTransformation(context))
+                .bitmapTransform(new CropCircleTransformation(mContext))
                 .into(holder.userImage);
 
         holder.refreshButton.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +102,8 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
     @Override
     public int getItemCount() {
-        if (items != null)
-            return items.getCount();
+        if (mCursor != null)
+            return mCursor.getCount();
         return 0;
     }
 
@@ -114,7 +113,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
     void swapCursor(Cursor newCursor) {
         if (newCursor != null) {
-            items = newCursor;
+            mCursor = newCursor;
             notifyDataSetChanged();
         }
     }
@@ -122,17 +121,17 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     @Override
     public void onUserDownloaded(User user) {
         if (user != null) {
-            UsersDbHelper usersDbHelper = new UsersDbHelper(context);
+            UsersDbHelper usersDbHelper = new UsersDbHelper(mContext);
 
             usersDbHelper.updateUserBalance(user);
             swapCursor(usersDbHelper.getAllUsers());
 
-            Toast.makeText(context,
-                    context.getString(R.string.refresh_success), Toast.LENGTH_SHORT)
+            Toast.makeText(mContext,
+                    mContext.getString(R.string.refresh_success), Toast.LENGTH_SHORT)
                     .show();
         } else {
-            Toast.makeText(context,
-                    context.getString(R.string.refresh_fail), Toast.LENGTH_LONG)
+            Toast.makeText(mContext,
+                    mContext.getString(R.string.refresh_fail), Toast.LENGTH_LONG)
                     .show();
         }
     }

@@ -1,18 +1,14 @@
 package com.uncmorfi.counter;
 
-import android.content.Context;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.view.animation.Interpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,65 +20,40 @@ import java.util.Locale;
 
 
 public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener {
-    // Toolbar
-    MenuItem refreshItem;
-
-    // UI
-    private TextView resume;
-    private ProgressBar bar;
-    private TextView percent;
-
-    // Tarea asincrona
-    private AsyncTask thread;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        // TODO cambiar la animacion por un progressBar
-        // TODO crear un fab para actualizar
-    }
+    private TextView mResumeView;
+    private ProgressBar mProgressBar;
+    private TextView mPercentView;
+    private FloatingActionButton mRefreshFab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_counter, container, false);
 
-        resume = (TextView) view.findViewById(R.id.counter_resume);
-        bar = (ProgressBar) view.findViewById(R.id.counter_bar);
-        percent = (TextView) view.findViewById(R.id.counter_percent);
+        mResumeView = (TextView) view.findViewById(R.id.counter_resume);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.counter_bar);
+        mPercentView = (TextView) view.findViewById(R.id.counter_percent);
+
+        mRefreshFab = (FloatingActionButton) view.findViewById(R.id.counter_fab);
+        mRefreshFab.setScaleX(0);
+        mRefreshFab.setScaleY(0);
+        mRefreshFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshCounter();
+            }
+        });
+
+        refreshCounter();
+
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.counter, menu);
-        refreshItem = menu.findItem(R.id.action_sync_counter);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_sync_counter) {
-            refreshCounter();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (thread != null) {
-            thread.cancel(true);
-        }
-        animationStop();
     }
 
     private void refreshCounter() {
         if (ConnectionHelper.isOnline(getContext())) {
-            bar.setMax(1500);
-            bar.setProgress(0);
-            this.thread = new RefreshCounterTask(this).execute();
+            mProgressBar.setIndeterminate(true);
+            hideRefreshButton();
+            new RefreshCounterTask(this).execute();
         } else {
             Toast.makeText(getContext(),
                     getContext().getString(R.string.no_connection),
@@ -90,53 +61,56 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         }
     }
 
-    @Override
-    public void onRefreshCounter(int code, int progress) {
-        switch (code) {
-            case ConnectionHelper.CONNECTION_ERROR:
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.connection_error), Toast.LENGTH_SHORT)
-                        .show();
-                break;
-            case ConnectionHelper.ERROR:
-                break;
-            case ConnectionHelper.SUCCESS:
-                animationStop();
-                bar.setProgress(progress);
-                resume.setText(String.format(Locale.US, "%d raciones de %d", progress, 1500));
-                percent.setText(String.format(Locale.US, "%d%%", (progress*100)/1500));
+    private void showRefreshButton() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final Interpolator interpolator = AnimationUtils.loadInterpolator(getContext(),
+                    android.R.interpolator.fast_out_slow_in);
 
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.refresh_success), Toast.LENGTH_SHORT)
-                        .show();
-                break;
-            case RefreshCounterTask.RefreshCounterListener.ANIM_START:
-                animationStart();
-                break;
-            case RefreshCounterTask.RefreshCounterListener.ANIM_STOP:
-                animationStop();
-                break;
-            default:
-                break;
+            mRefreshFab.animate()
+                    .scaleX(1)
+                    .scaleY(1)
+                    .setInterpolator(interpolator)
+                    .setDuration(600);
         }
     }
 
-    private void animationStart() {
-        LayoutInflater inflater = (LayoutInflater)
-                getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ImageView iv = (ImageView) inflater.inflate(R.layout.icon_refresh, null);
+    private void hideRefreshButton() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final Interpolator interpolator = AnimationUtils.loadInterpolator(getContext(),
+                    android.R.interpolator.fast_out_slow_in);
 
-        Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
-        rotation.setRepeatCount(Animation.INFINITE);
-        iv.startAnimation(rotation);
-
-        refreshItem.setActionView(iv);
+            mRefreshFab.animate()
+                    .scaleX(0)
+                    .scaleY(0)
+                    .setInterpolator(interpolator)
+                    .setDuration(300);
+        }
     }
 
-    private void animationStop() {
-        if (refreshItem.getActionView() != null) {
-            refreshItem.getActionView().clearAnimation();
-            refreshItem.setActionView(null);
+    @Override
+    public void onRefreshCounterSuccess(int percent) {
+        if (isAdded()) {
+            mProgressBar.setIndeterminate(false);
+            mProgressBar.setProgress(percent);
+            mResumeView.setText(String.format(Locale.US, "%d raciones de %d", percent, 1500));
+            mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100)/1500));
+
+            showRefreshButton();
+
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.refresh_success), Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    @Override
+    public void onRefreshCounterFail() {
+        if (isAdded()) {
+            showRefreshButton();
+
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.connection_error), Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 }

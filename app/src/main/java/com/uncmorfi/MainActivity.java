@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, NewUserDialog.OnNewCardListener,
         SetNameDialog.OnSetNameListener, OnMapReadyCallback {
 
+    private static final int EXIT_INTERVAL_TIME = 2000;
+    private double mLastBackPressed;
+    private Toast mExitToast;
+    private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         // Definir la hamburguesa, las 3 lineas horizontales
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_open, R.string.navigation_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         // Definir el Navigation, el menú deslizante
@@ -63,11 +69,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (mLastBackPressed + EXIT_INTERVAL_TIME > System.currentTimeMillis()) {
+            mExitToast.cancel();
             super.onBackPressed();
+        } else {
+            mLastBackPressed = System.currentTimeMillis();
+            mExitToast = Toast.makeText(this, getString(R.string.press_back_again),
+                    Toast.LENGTH_SHORT);
+            mExitToast.show();
         }
     }
 
@@ -75,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
 
-        // Parsear el item
         switch (item.getItemId()) {
             case R.id.nav_menu:
                 fragment = new MenuFragment();
@@ -111,8 +121,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Cerrar el Navigation
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

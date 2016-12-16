@@ -36,6 +36,7 @@
     <string name="icon_info_refresh">Sincronizando&#8230;</string>
 
     <!-- Toast -->
+    <string name="press_back_again">Presiona atrás de nuevo para salir</string>
     <string name="no_connection">No hay conexion</string>
     <string name="connection_error">Error de conexion</string>
     <string name="refresh_success">Actualizado</string>

@@ -1,8 +1,9 @@
 package com.uncmorfi.menu;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
-import com.uncmorfi.helpers.ConnectionHelper;
+import com.uncmorfi.helpers.MemoryHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,15 +14,17 @@ import java.io.IOException;
 
 
 class RefreshMenuTask extends AsyncTask<Void, Void, String> {
-    private RefreshMenuListener listener;
-
+    private RefreshMenuListener mListener;
+    private Context mContext;
 
     interface RefreshMenuListener {
-        void onNewMenuDownloaded(int code, String menu);
+        void onRefreshMenuSuccess(String menu);
+        void onRefreshMenuFail();
     }
 
-    RefreshMenuTask(RefreshMenuListener listener) {
-        this.listener = listener;
+    RefreshMenuTask(Context context, RefreshMenuListener listener) {
+        mContext = context;
+        mListener = listener;
     }
 
     @Override
@@ -47,22 +50,20 @@ class RefreshMenuTask extends AsyncTask<Void, Void, String> {
             String body = menu.html().replaceAll("•[ &nbsp;]*", "&#128523; ");
 
             // Agregar encabezado y color al texto
-            return "<html><head><style type=\"text/css\">body{color: #757575" +
+            String result = "<html><head><style type=\"text/css\">body{color: #757575" +
                     "}</style></head><body>" + body + "</body></html>";
+
+            MemoryHelper.saveToInternalMemory(mContext, MenuFragment.MENU_FILE, result);
+            return result;
         } catch (IOException t) {
             t.printStackTrace();
             return null;
         }
     }
-    @Override
-    protected void onCancelled() {
-        listener.onNewMenuDownloaded(ConnectionHelper.ERROR, null);
-    }
 
     @Override
     protected void onPostExecute(String result) {
-        listener.onNewMenuDownloaded(result == null?
-                ConnectionHelper.CONNECTION_ERROR : ConnectionHelper.SUCCESS, result);
+        if (result == null) mListener.onRefreshMenuFail();
+        else mListener.onRefreshMenuSuccess(result);
     }
-
 }

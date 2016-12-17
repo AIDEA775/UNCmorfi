@@ -12,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
@@ -21,7 +20,7 @@ import java.util.Locale;
 
 
 public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener {
-    private final static int TOTAL_RACIONES = 1500;
+    private final static int FOOD_RATIONS = 1500;
     private TextView mResumeView;
     private ProgressBar mProgressBar;
     private TextView mPercentView;
@@ -35,7 +34,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
         mResumeView = (TextView) view.findViewById(R.id.counter_resume);
         mProgressBar = (ProgressBar) view.findViewById(R.id.counter_bar);
-        mProgressBar.setMax(TOTAL_RACIONES);
+        mProgressBar.setMax(FOOD_RATIONS);
         mPercentView = (TextView) view.findViewById(R.id.counter_percent);
         mRootView = view.findViewById(R.id.counter_coordinator);
 
@@ -96,8 +95,8 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         if (isAdded()) {
             mProgressBar.setIndeterminate(false);
             mProgressBar.setProgress(percent);
-            mResumeView.setText(String.format(Locale.US, "%d raciones de %d", percent, TOTAL_RACIONES));
-            mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / TOTAL_RACIONES));
+            mResumeView.setText(String.format(Locale.US, "%d raciones de %d", percent, FOOD_RATIONS));
+            mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / FOOD_RATIONS));
 
             showRefreshButton();
 

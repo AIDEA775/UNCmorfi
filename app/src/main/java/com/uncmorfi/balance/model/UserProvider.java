@@ -1,6 +1,7 @@
 package com.uncmorfi.balance.model;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -76,16 +77,46 @@ public class UserProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
-        return null;
+        long newUserId;
+
+        SQLiteDatabase db = mUsersDbHelper.getWritableDatabase();
+
+        newUserId = db.insert(UserEntry.TABLE_NAME, null, contentValues);
+
+        db.close();
+        return ContentUris.withAppendedId(CONTENT_URI, newUserId);
     }
 
     @Override
-    public int delete(@NonNull Uri uri, String s, String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+        String where = selection;
+
+        if (mUriMatcher.match(uri) == USER_ID) {
+            where = "_id=" + uri.getLastPathSegment();
+        }
+
+        SQLiteDatabase db = mUsersDbHelper.getWritableDatabase();
+
+        int result = db.delete(UserEntry.TABLE_NAME, where, selectionArgs);
+
+        db.close();
+        return result;
     }
 
     @Override
-    public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+    public int update(@NonNull Uri uri, ContentValues contentValues, String selection,
+                      String[] selectionArgs) {
+        String where = selection;
+
+        if (mUriMatcher.match(uri) == USER_ID) {
+            where = "_id=" + uri.getLastPathSegment();
+        }
+
+        SQLiteDatabase db = mUsersDbHelper.getWritableDatabase();
+
+        int result = db.update(UserEntry.TABLE_NAME, contentValues, where, selectionArgs);
+
+        db.close();
+        return result;
     }
 }

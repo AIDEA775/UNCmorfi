@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.uncmorfi.about.AboutDialog;
 import com.uncmorfi.balance.BalanceFragment;
 import com.uncmorfi.balance.NewUserDialog;
 import com.uncmorfi.balance.SetNameDialog;

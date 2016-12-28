@@ -1,4 +1,4 @@
-package com.uncmorfi;
+package com.uncmorfi.about;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+
+import com.uncmorfi.R;
 
 
 public class AboutDialog extends DialogFragment {

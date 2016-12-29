@@ -6,40 +6,38 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.uncmorfi.R;
 import com.uncmorfi.balance.model.User;
-import com.uncmorfi.balance.model.UsersDbHelper;
+import com.uncmorfi.balance.model.UsersContract;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
-class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> implements
-        DownloadUserAsyncTask.DownloadUserListener {
+public class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> {
     private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
     private Context mContext;
     private Cursor mCursor;
     private OnCardClickListener mListener;
 
     interface OnCardClickListener {
-        void onClick(UserViewHolder holder);
+        void onClick(UserViewHolder holder, int id);
     }
 
-    class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            Serializable{
         TextView nameText;
         TextView cardText;
         TextView typeText;
         TextView balanceText;
-        Button refreshButton;
         ImageView userImage;
         ProgressBar progressBar;
 
@@ -50,7 +48,6 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
             cardText = (TextView) v.findViewById(R.id.user_card);
             typeText = (TextView) v.findViewById(R.id.user_type);
             balanceText = (TextView) v.findViewById(R.id.user_balance);
-            refreshButton = (Button) v.findViewById(R.id.user_refresh);
             userImage = (ImageView) v.findViewById(R.id.user_image);
             progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
@@ -59,7 +56,9 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
         @Override
         public void onClick(View v) {
-            mListener.onClick(this);
+            mCursor.moveToPosition(this.getAdapterPosition());
+            int id = mCursor.getInt(mCursor.getColumnIndex(UsersContract.UserEntry._ID));
+            mListener.onClick(this, id);
         }
     }
 
@@ -91,13 +90,6 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
                 .centerCrop()
                 .bitmapTransform(new CropCircleTransformation(mContext))
                 .into(holder.userImage);
-
-        holder.refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onPressRefreshButton(holder, user.getCard());
-            }
-        });
     }
 
     @Override
@@ -107,52 +99,9 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         return 0;
     }
 
-    private void onPressRefreshButton(UserViewHolder holder, String card) {
-        new RefreshUserAsyncTask(this, holder).execute(card);
-    }
-
     void swapCursor(Cursor newCursor) {
-        if (newCursor != null) {
-            mCursor = newCursor;
-            notifyDataSetChanged();
-        }
+        mCursor = newCursor;
+        notifyDataSetChanged();
     }
 
-    @Override
-    public void onUserDownloaded(User user) {
-        if (user != null) {
-            UsersDbHelper usersDbHelper = new UsersDbHelper(mContext);
-
-            usersDbHelper.updateUserBalance(user);
-            swapCursor(usersDbHelper.getAllUsers());
-
-            Toast.makeText(mContext,
-                    mContext.getString(R.string.refresh_success), Toast.LENGTH_SHORT)
-                    .show();
-        } else {
-            Toast.makeText(mContext,
-                    mContext.getString(R.string.refresh_fail), Toast.LENGTH_LONG)
-                    .show();
-        }
-    }
-
-    private class RefreshUserAsyncTask extends DownloadUserAsyncTask {
-        private ProgressBar progressBar;
-
-        RefreshUserAsyncTask(DownloadUserListener listener, UserViewHolder holder) {
-            super(listener);
-            progressBar = holder.progressBar;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(User user) {
-            progressBar.setVisibility(View.GONE);
-            super.onPostExecute(user);
-        }
-    }
 }

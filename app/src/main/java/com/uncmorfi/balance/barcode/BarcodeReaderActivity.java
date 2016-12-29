@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class BarcodeReaderActivity extends AppCompatActivity implements
         BarcodeProcesor.CallbackFound {
-    public static final String REQUEST_DATA = "barcode";
+    public static final String ARG_BARCODE_CARD = "barcode";
 
     CameraSource mCameraSource;
     BarcodeDetector mBarcodeDetector;
@@ -65,7 +65,7 @@ public class BarcodeReaderActivity extends AppCompatActivity implements
     @Override
     public void onFound (String barcodeValue) {
         Intent data = new Intent();
-        data.putExtra(REQUEST_DATA, barcodeValue);
+        data.putExtra(ARG_BARCODE_CARD, barcodeValue);
         setResult(Activity.RESULT_OK, data);
         finish();
     }

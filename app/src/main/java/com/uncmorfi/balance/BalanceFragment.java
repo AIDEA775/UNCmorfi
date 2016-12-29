@@ -1,7 +1,9 @@
 package com.uncmorfi.balance;
 
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,19 +21,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.barcode.BarcodeReaderActivity;
+import com.uncmorfi.balance.dialogs.NewUserDialog;
+import com.uncmorfi.balance.dialogs.UserOptionsDialog;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
-import com.uncmorfi.balance.model.UsersDbHelper;
+import com.uncmorfi.balance.model.UsersContract;
+
 
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
         DownloadUserAsyncTask.DownloadUserListener, LoaderManager.LoaderCallbacks<Cursor> {
-    final static private int REQUEST_CODE = 1;
+    private static final int BARCODE_REQUEST_CODE = 1;
+    private static final int NEW_USER_REQUEST_CODE = 2;
+    private static final int REFRESH_USER_REQUEST_CODE = 3;
+    public static final int UPDATE_REQUEST_CODE = 4;
 
-    private UsersDbHelper mUsersDbHelper;
+    private ContentResolver mContentResolver;
     private UserCursorAdapter mUserCursorAdapter;
     private View mRootView;
 
@@ -55,7 +62,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
         recyclerView.setAdapter(mUserCursorAdapter);
 
-        mUsersDbHelper = new UsersDbHelper(getContext());
+        mContentResolver = getActivity().getContentResolver();
 
         getLoaderManager().initLoader(0, null, this);
 
@@ -71,11 +78,13 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_new_user:
-                new NewUserDialog().show(getFragmentManager(), "NewUserDialog");
+                NewUserDialog newUser = new NewUserDialog();
+                newUser.setTargetFragment(this, NEW_USER_REQUEST_CODE);
+                newUser.show(getFragmentManager(), "NewUserDialog");
                 break;
             case R.id.action_new_user_camera:
                 Intent i = new Intent(getActivity(), BarcodeReaderActivity.class);
-                startActivityForResult(i, REQUEST_CODE);
+                startActivityForResult(i, BARCODE_REQUEST_CODE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -102,109 +111,122 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void onClick(UserCursorAdapter.UserViewHolder holder) {
-        final String card = holder.cardText.getText().toString();
-        final String name = holder.nameText.getText().toString();
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    public void onClick(UserCursorAdapter.UserViewHolder holder, int id) {
+        final ContentResolver cr = getActivity().getContentResolver();
 
-        final CharSequence[] items = new CharSequence[2];
+        Cursor c = cr.query(
+                ContentUris.withAppendedId(UserProvider.CONTENT_URI, id),
+                null,
+                null,
+                null,
+                null);
 
-        items[0] = "Eliminar";
-        items[1] = "Modificar nombre";
+        if (c != null && c.moveToFirst()) {
+            final User user = new User(c);
+            c.close();
 
-        builder.setTitle("Tarjeta")
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            createDeleteDialog(card, name).show();
-                        } else if (which == 1) {
-                            createSetNameDialog(card, name);
-                        }
-                    }
-                })
-                .create()
-                .show();
-    }
-
-    private AlertDialog createDeleteDialog(final String card, final String name) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Eliminar tarjeta de " + name + "?")
-                .setPositiveButton("ELIMINAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                UsersDbHelper usersDbHelper = new UsersDbHelper(getContext());
-                                usersDbHelper.deleteUserByCard(card);
-                                mUserCursorAdapter.swapCursor(usersDbHelper.getAllUsers());
-                            }
-                        })
-                .setNegativeButton("CANCELAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Nope
-                            }
-                        });
-        return builder.create();
-    }
-
-    private void createSetNameDialog(String card, String name) {
-        Bundle bundle = new Bundle();
-        bundle.putString("card", card);
-        bundle.putString("oldName", name);
-        SetNameDialog setNameDialog = new SetNameDialog();
-        setNameDialog.setArguments(bundle);
-        setNameDialog.show(getFragmentManager(), "SetNameDialog");
+            UserOptionsDialog userOptions = UserOptionsDialog.newInstance(user, holder);
+            userOptions.setTargetFragment(this, REFRESH_USER_REQUEST_CODE);
+            userOptions.show(getFragmentManager(), "UserOptionsDialog");
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                newUser(data.getStringExtra(BarcodeReaderActivity.REQUEST_DATA));
-            }
+        switch (requestCode) {
+            case BARCODE_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    newUser(data.getStringExtra(BarcodeReaderActivity.ARG_BARCODE_CARD));
+                }
+                break;
+            case NEW_USER_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    newUser(data.getStringExtra(NewUserDialog.ARG_CARD));
+                }
+                break;
+            case REFRESH_USER_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String card = data.getStringExtra(UserOptionsDialog.ARG_CARD);
+                    UserCursorAdapter.UserViewHolder holder = (UserCursorAdapter.UserViewHolder)
+                            data.getSerializableExtra(UserOptionsDialog.ARG_HOLDER);
+
+                    new RefreshUserAsyncTask(this, holder).execute(card);
+                }
+                break;
+            case UPDATE_REQUEST_CODE:
+                onDataChanged();
+                break;
+            default:
+                break;
         }
     }
 
-    public void newUser(String card) {
+    private void newUser(String card) {
         Log.i("BalanceFragment", "New card " + card);
         new DownloadUserAsyncTask(this).execute(card);
     }
 
-    public void setName(String card, String name) {
-        Cursor cursor = mUsersDbHelper.getUserByCard(card);
-        if (cursor.moveToNext()) {
-            // Generar el usurio
-            User user = new User(cursor);
+    @Override
+    public void onUserDownloaded(User user) {
+        mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues());
 
-            // Cambiarle el nombre y guardarlo
-            user.setName(name);
-            mUsersDbHelper.updateUserName(user);
+        onDataChanged();
 
-            // Volver a consultar la base de datos
-            mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
-        } else {
-            Snackbar.make(mRootView, R.string.refresh_fail, Snackbar.LENGTH_LONG)
-                    .show();
-        }
+        Snackbar.make(mRootView, R.string.new_user_success, Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     @Override
-    public void onUserDownloaded(User user) {
-        if (user != null) {
-            // Guardar en la base de datos
-            mUsersDbHelper.saveNewUser(user);
+    public void onUserRefresh(User user) {
+        ContentValues values = new ContentValues();
+        values.put(UsersContract.UserEntry.BALANCE, user.getBalance());
 
-            // Volver a consultar la base de datos
-            mUserCursorAdapter.swapCursor(mUsersDbHelper.getAllUsers());
+        mContentResolver.update(
+                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.getId()),
+                values,
+                null,
+                null);
 
-            Snackbar.make(mRootView, R.string.new_user_success, Snackbar.LENGTH_SHORT)
-                    .show();
-        } else {
-            Snackbar.make(mRootView, R.string.new_user_fail, Snackbar.LENGTH_LONG)
-                    .show();
-        }
+        onDataChanged();
+
+        Snackbar.make(mRootView, R.string.refresh_success, Snackbar.LENGTH_SHORT)
+                .show();
     }
 
+    @Override
+    public void onUserDownloadFail() {
+        Snackbar.make(mRootView, R.string.new_user_fail, Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    public void onDataChanged() {
+        mUserCursorAdapter.swapCursor(mContentResolver.query(
+                UserProvider.CONTENT_URI,
+                null,
+                null,
+                null,
+                null,
+                null));
+    }
+
+    private class RefreshUserAsyncTask extends DownloadUserAsyncTask {
+        private ProgressBar progressBar;
+
+        RefreshUserAsyncTask(DownloadUserListener listener, UserCursorAdapter.UserViewHolder holder) {
+            super(listener);
+            progressBar = holder.progressBar;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            progressBar.setVisibility(View.GONE);
+            if (user != null) mListener.onUserRefresh(user);
+            else mListener.onUserDownloadFail();
+        }
+    }
 }

@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import com.uncmorfi.balance.model.UsersContract.UserEntry;
 
 
-
 public class UserProvider extends ContentProvider {
     private static final String authority = "com.uncmorfi";
 
@@ -44,12 +43,22 @@ public class UserProvider extends ContentProvider {
         SQLiteDatabase db = mUsersDbHelper.getReadableDatabase();
 
         Cursor c;
-
         switch (mUriMatcher.match(uri)) {
             case USERS:
-                c = db.query(UserEntry.TABLE_NAME,
+                c = db.query(
+                        UserEntry.TABLE_NAME,
                         projection,
                         selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case USER_ID:
+                c = db.query(
+                        UserEntry.TABLE_NAME,
+                        projection,
+                        UserEntry._ID + "=" + uri.getLastPathSegment(),
                         selectionArgs,
                         null,
                         null,
@@ -80,7 +89,6 @@ public class UserProvider extends ContentProvider {
         long newUserId;
 
         SQLiteDatabase db = mUsersDbHelper.getWritableDatabase();
-
         newUserId = db.insert(UserEntry.TABLE_NAME, null, contentValues);
 
         db.close();
@@ -92,11 +100,10 @@ public class UserProvider extends ContentProvider {
         String where = selection;
 
         if (mUriMatcher.match(uri) == USER_ID) {
-            where = "_id=" + uri.getLastPathSegment();
+            where = UserEntry._ID + "=" + uri.getLastPathSegment();
         }
 
         SQLiteDatabase db = mUsersDbHelper.getWritableDatabase();
-
         int result = db.delete(UserEntry.TABLE_NAME, where, selectionArgs);
 
         db.close();
@@ -109,11 +116,10 @@ public class UserProvider extends ContentProvider {
         String where = selection;
 
         if (mUriMatcher.match(uri) == USER_ID) {
-            where = "_id=" + uri.getLastPathSegment();
+            where = UserEntry._ID + "=" + uri.getLastPathSegment();
         }
 
         SQLiteDatabase db = mUsersDbHelper.getWritableDatabase();
-
         int result = db.update(UserEntry.TABLE_NAME, contentValues, where, selectionArgs);
 
         db.close();

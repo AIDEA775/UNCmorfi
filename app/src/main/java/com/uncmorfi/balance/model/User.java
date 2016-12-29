@@ -3,7 +3,11 @@ package com.uncmorfi.balance.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-public class User {
+import java.io.Serializable;
+
+
+public class User implements Serializable {
+    private long id;
     private String card;
     private String name;
     private String type;
@@ -13,11 +17,16 @@ public class User {
     public User() {}
 
     public User(Cursor cursor) {
+        this.id = cursor.getLong(cursor.getColumnIndex(UsersContract.UserEntry._ID));
         this.card = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.CARD));
         this.name = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.NAME));
         this.type = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.TYPE));
         this.image = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.IMAGE));
         this.balance = cursor.getInt(cursor.getColumnIndex(UsersContract.UserEntry.BALANCE));
+    }
+
+    public long getId() {
+        return id;
     }
 
     public int getBalance() {
@@ -60,7 +69,7 @@ public class User {
         this.image = image;
     }
 
-    ContentValues toContentValues () {
+    public ContentValues toContentValues () {
         ContentValues values = new ContentValues();
         values.put(UsersContract.UserEntry.CARD, this.card);
         values.put(UsersContract.UserEntry.NAME, this.name);

@@ -17,16 +17,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.uncmorfi.about.AboutDialog;
 import com.uncmorfi.balance.BalanceFragment;
-import com.uncmorfi.balance.NewUserDialog;
-import com.uncmorfi.balance.SetNameDialog;
 import com.uncmorfi.counter.CounterFragment;
 import com.uncmorfi.map.MapFragment;
 import com.uncmorfi.menu.MenuFragment;
 
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, NewUserDialog.OnNewCardListener,
-        SetNameDialog.OnSetNameListener, OnMapReadyCallback {
+        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private static final int EXIT_INTERVAL_TIME = 2000;
     private double mLastBackPressed;
@@ -37,32 +34,22 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Definir activity_main.xml como layout
         setContentView(R.layout.activity_main);
 
-        // Definir el Toolbar, la barra superior
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Definir la hamburguesa, las 3 lineas horizontales
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Definir el Navigation, el menú deslizante
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Si no venimos de un estado previo, i.e. inicio desde cero
-        // meter el FrameLayuot del menú como principal
         if (savedInstanceState == null) {
-
-            // Crear un nuevo Fragment para meter en la activity layout
             Fragment firstFragment = new MenuFragment();
-
-            // Agregar el Fragment
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content_frame, firstFragment).commit();
         }
@@ -101,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements
                 MapFragment mapFragment = new MapFragment();
                 fragment = mapFragment;
 
-                // Registrar escucha onMapReadyCallback
                 mapFragment.getMapAsync(this);
                 break;
             case R.id.nav_about:
@@ -110,40 +96,17 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         if (fragment != null) {
-            // Cambiar de Fragment
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit();
 
-            // Actualizar titulo
             if (getSupportActionBar() != null)
                 getSupportActionBar().setTitle(item.getTitle());
         }
 
-        // Cerrar el Navigation
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void newCard(String card) {
-        BalanceFragment fragment = (BalanceFragment)
-                getSupportFragmentManager().findFragmentById(R.id.content_frame);
-
-        if (fragment != null) {
-            fragment.newUser(card);
-        }
-    }
-
-    @Override
-    public void setName(String card, String name) {
-        BalanceFragment fragment = (BalanceFragment)
-                getSupportFragmentManager().findFragmentById(R.id.content_frame);
-
-        if (fragment != null) {
-            fragment.setName(card, name);
-        }
     }
 
     @Override

@@ -2,14 +2,15 @@ package com.uncmorfi.balance.model;
 
 import android.provider.BaseColumns;
 
-class UsersContract {
-    static abstract class UserEntry implements BaseColumns {
+
+public class UsersContract {
+    public static abstract class UserEntry implements BaseColumns {
         static final String TABLE_NAME ="user";
 
-        static final String CARD = "card";
-        static final String NAME = "name";
-        static final String TYPE = "type";
-        static final String IMAGE = "image";
-        static final String BALANCE = "balance";
+        public static final String CARD = "card";
+        public static final String NAME = "name";
+        public static final String TYPE = "type";
+        public static final String IMAGE = "image";
+        public static final String BALANCE = "balance";
     }
 }

@@ -55,16 +55,17 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
     private void refreshCounter() {
         if (ConnectionHelper.isOnline(getContext())) {
-            mProgressBar.setIndeterminate(true);
             hideRefreshButton();
             new RefreshCounterTask(this).execute();
         } else {
-            Snackbar.make(mRootView, R.string.connection_error, Snackbar.LENGTH_LONG)
+            showRefreshButton();
+            Snackbar.make(mRootView, R.string.no_connection, Snackbar.LENGTH_LONG)
                     .show();
         }
     }
 
     private void showRefreshButton() {
+        mProgressBar.setIndeterminate(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             final Interpolator interpolator = AnimationUtils.loadInterpolator(getContext(),
                     android.R.interpolator.fast_out_slow_in);
@@ -78,6 +79,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     }
 
     private void hideRefreshButton() {
+        mProgressBar.setIndeterminate(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             final Interpolator interpolator = AnimationUtils.loadInterpolator(getContext(),
                     android.R.interpolator.fast_out_slow_in);
@@ -93,7 +95,6 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     @Override
     public void onRefreshCounterSuccess(int percent) {
         if (isAdded()) {
-            mProgressBar.setIndeterminate(false);
             mProgressBar.setProgress(percent);
             mResumeView.setText(String.format(Locale.US, "%d raciones de %d", percent, FOOD_RATIONS));
             mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / FOOD_RATIONS));
@@ -108,8 +109,6 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     @Override
     public void onRefreshCounterFail() {
         if (isAdded()) {
-            mProgressBar.setIndeterminate(false);
-
             showRefreshButton();
 
             Snackbar.make(mRootView, R.string.connection_error, Snackbar.LENGTH_LONG)

@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.uncmorfi.R;
 import com.uncmorfi.balance.BalanceFragment;
 import com.uncmorfi.balance.UserCursorAdapter.UserViewHolder;
 import com.uncmorfi.balance.model.User;
@@ -38,14 +39,14 @@ public class UserOptionsDialog extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final CharSequence[] items = new CharSequence[3];
-        items[0] = "Actualizar";
-        items[1] = "Eliminar";
-        items[2] = "Modificar nombre";
+        items[0] = getString(R.string.balance_user_options_refresh);
+        items[1] = getString(R.string.balance_user_options_delete);
+        items[2] = getString(R.string.balance_user_options_set_name);
 
         final User user = (User) getArguments().getSerializable(ARG_USER);
 
         if (user != null) {
-            builder.setTitle("Tarjeta")
+            builder.setTitle(getString(R.string.balance_user_options_title))
                     .setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

@@ -77,7 +77,8 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
             mSwipeRefreshLayout.setRefreshing(true);
             new RefreshMenuTask(getActivity(), this).execute();
         } else {
-            Snackbar.make(mWebView, R.string.connection_error, Snackbar.LENGTH_LONG)
+            mSwipeRefreshLayout.setRefreshing(false);
+            Snackbar.make(mWebView, R.string.no_connection, Snackbar.LENGTH_LONG)
                     .show();
         }
     }

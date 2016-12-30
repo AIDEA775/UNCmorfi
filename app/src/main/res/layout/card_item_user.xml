@@ -62,7 +62,7 @@
             android:layout_alignStart="@+id/user_card" />
 
         <ImageView
-            android:contentDescription="@string/balance_info_image"
+            android:contentDescription="@string/balance_card_preview_info"
             android:id="@+id/user_image"
             android:scaleType="centerInside"
             android:padding="8dp"

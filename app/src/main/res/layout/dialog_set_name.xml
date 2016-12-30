@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dialog_margin"
-        android:text="@string/balance_dialog_set_name_title"
+        android:text="@string/balance_set_name_title"
         android:textColor="@color/primary_text"
         android:textSize="16sp"/>
 
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dialog_margin"
-        android:text="@string/balance_dialog_save"
+        android:text="@string/balance_set_name_positive"
         android:id="@+id/save_new_name_button"
         android:layout_gravity="end"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"/>

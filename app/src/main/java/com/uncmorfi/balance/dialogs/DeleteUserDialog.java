@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.uncmorfi.R;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
 
@@ -36,8 +37,8 @@ public class DeleteUserDialog extends DialogFragment {
         final User user = (User) getArguments().getSerializable(ARG_USER);
 
         if (user != null) {
-            builder.setMessage("Eliminar tarjeta de " + user.getName() + "?")
-                    .setPositiveButton("ELIMINAR", new DialogInterface.OnClickListener() {
+            builder.setMessage(String.format(getString(R.string.balance_delete_user_title), user.getName()))
+                    .setPositiveButton(getString(R.string.balance_delete_user_positive), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ContentResolver resolver = getActivity().getContentResolver();
@@ -49,7 +50,7 @@ public class DeleteUserDialog extends DialogFragment {
 
                         }
                     })
-                    .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.balance_delete_user_negative), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dismiss();

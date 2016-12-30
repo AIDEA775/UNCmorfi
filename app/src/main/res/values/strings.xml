@@ -10,32 +10,34 @@
     <string name="navigation_map">Mapa</string>
     <string name="navigation_about">Acerca de</string>
 
-    <!-- Toolbar -->
-    <string name="bar_info_add">Añadir una tarjeta nueva</string>
-    <string name="bar_info_sync_menu">Actualizar</string>
-    <string name="bar_info_sync_counter">Actualizar medidor</string>
-
     <!-- Menu -->
+    <string name="menu_action_refresh">Actualizar menú</string>
 
     <!-- Balance -->
-    <string name="balance_agree">Añadir</string>
-    <string name="balance_dialog_title">Añadir una tarjeta</string>
-    <string name="balance_info_image">Imagen del usuario</string>
-    <string name="balance_button_refresh_user">Actualizar</string>
-    <string name="balance_button_delete_user">Eliminar</string>
-    <string name="balance_action_new_user">Texto</string>
-    <string name="balance_action_new_user_camera">Camara</string>
-    <string name="balance_dialog_set_name_title">Nuevo nombre</string>
-    <string name="balance_dialog_save">Guardar</string>
+    <string name="balance_action_new_user">Añadir usuario con el teclado</string>
+    <string name="balance_action_new_user_camera">Añadir usuario con la camara</string>
+    <string name="balance_card_preview_info">Imagen del usuario</string>
+
+    <string name="balance_new_user_title">Añadir una tarjeta</string>
+    <string name="balance_new_user_positive">Añadir</string>
+
+    <string name="balance_set_name_title">Nuevo nombre</string>
+    <string name="balance_set_name_positive">Guardar</string>
+
+    <string name="balance_user_options_title">Tarjeta</string>
+    <string name="balance_user_options_refresh">Actualizar</string>
+    <string name="balance_user_options_delete">Eliminar</string>
+    <string name="balance_user_options_set_name">Modificar nombre</string>
+
+    <string name="balance_delete_user_title">Eliminar tarjeta de %1$s?</string>
+    <string name="balance_delete_user_positive">Eliminar</string>
+    <string name="balance_delete_user_negative">Cancelar</string>
 
     <!-- Counter -->
     <string name="counter_rations">Raciones</string>
     <string name="counter_percent_simbol">%</string>
 
-    <!-- Others? -->
-    <string name="icon_info_refresh">Sincronizando&#8230;</string>
-
-    <!-- Toast -->
+    <!-- Toast and SnackBar -->
     <string name="press_back_again">Presiona atrás de nuevo para salir</string>
     <string name="no_connection">No hay conexion</string>
     <string name="connection_error">Error de conexion</string>
@@ -43,4 +45,5 @@
     <string name="refresh_fail">No se pudo actualizar</string>
     <string name="new_user_success">Agregado</string>
     <string name="new_user_fail">Ocurrió un error</string>
+
 </resources>

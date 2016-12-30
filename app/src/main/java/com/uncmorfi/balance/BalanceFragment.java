@@ -30,6 +30,7 @@ import com.uncmorfi.balance.dialogs.UserOptionsDialog;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
 import com.uncmorfi.balance.model.UsersContract;
+import com.uncmorfi.helpers.ConnectionHelper;
 
 
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
@@ -146,11 +147,16 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 break;
             case REFRESH_USER_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    String card = data.getStringExtra(UserOptionsDialog.ARG_CARD);
-                    UserCursorAdapter.UserViewHolder holder = (UserCursorAdapter.UserViewHolder)
-                            data.getSerializableExtra(UserOptionsDialog.ARG_HOLDER);
+                    if (ConnectionHelper.isOnline(getContext())) {
+                        String card = data.getStringExtra(UserOptionsDialog.ARG_CARD);
+                        UserCursorAdapter.UserViewHolder holder = (UserCursorAdapter.UserViewHolder)
+                                data.getSerializableExtra(UserOptionsDialog.ARG_HOLDER);
 
-                    new RefreshUserAsyncTask(this, holder).execute(card);
+                        new RefreshUserAsyncTask(this, holder).execute(card);
+                    } else {
+                        Snackbar.make(mRootView, R.string.no_connection, Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
                 }
                 break;
             case UPDATE_REQUEST_CODE:
@@ -163,7 +169,12 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     private void newUser(String card) {
         Log.i("BalanceFragment", "New card " + card);
-        new DownloadUserAsyncTask(this).execute(card);
+        if (ConnectionHelper.isOnline(getContext())) {
+            new DownloadUserAsyncTask(this).execute(card);
+        } else {
+            Snackbar.make(mRootView, R.string.no_connection, Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override
@@ -172,8 +183,10 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
         onDataChanged();
 
-        Snackbar.make(mRootView, R.string.new_user_success, Snackbar.LENGTH_SHORT)
-                .show();
+        if (isAdded()) {
+            Snackbar.make(mRootView, R.string.new_user_success, Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override
@@ -189,14 +202,18 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
         onDataChanged();
 
-        Snackbar.make(mRootView, R.string.refresh_success, Snackbar.LENGTH_SHORT)
-                .show();
+        if (isAdded()) {
+            Snackbar.make(mRootView, R.string.refresh_success, Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override
     public void onUserDownloadFail() {
-        Snackbar.make(mRootView, R.string.new_user_fail, Snackbar.LENGTH_LONG)
-                .show();
+        if (isAdded()) {
+            Snackbar.make(mRootView, R.string.new_user_fail, Snackbar.LENGTH_LONG)
+                    .show();
+        }
     }
 
     public void onDataChanged() {

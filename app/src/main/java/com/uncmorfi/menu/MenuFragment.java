@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
@@ -34,12 +33,11 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        mWebView = (WebView) view.findViewById(R.id.menu_text);
-        mWebView.setBackgroundColor(Color.TRANSPARENT);
+        mWebView = (WebView) view.findViewById(R.id.menu_content);
         mWebView.loadData(MemoryHelper.readFromInternalMemory(getActivity(), MENU_FILE),
                 "text/html","UTF-8");
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.menu_swiperefresh);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.menu_swipe_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override

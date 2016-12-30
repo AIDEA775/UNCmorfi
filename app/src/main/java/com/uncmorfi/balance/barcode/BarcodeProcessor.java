@@ -6,15 +6,15 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 
 
-class BarcodeProcesor implements Detector.Processor<Barcode> {
-    private CallbackFound listener;
+class BarcodeProcessor implements Detector.Processor<Barcode> {
+    private CallbackFound mListener;
 
     interface CallbackFound {
         void onFound(String barcodeValue);
     }
 
-    BarcodeProcesor(CallbackFound listener){
-        this.listener = listener;
+    BarcodeProcessor(CallbackFound listener){
+        mListener = listener;
     }
 
     @Override
@@ -22,7 +22,7 @@ class BarcodeProcesor implements Detector.Processor<Barcode> {
         final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
         if (barcodes.size() != 0) {
-            listener.onFound(barcodes.valueAt(0).rawValue);
+            mListener.onFound(barcodes.valueAt(0).rawValue);
         }
     }
 

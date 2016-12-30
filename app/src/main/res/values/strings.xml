@@ -33,6 +33,8 @@
     <string name="balance_delete_user_positive">Eliminar</string>
     <string name="balance_delete_user_negative">Cancelar</string>
 
+    <string name="balance_barcode_permission_not_granted">Sin permisos de cámara</string>
+    
     <!-- Counter -->
     <string name="counter_rations">Raciones</string>
     <string name="counter_percent_simbol">%</string>

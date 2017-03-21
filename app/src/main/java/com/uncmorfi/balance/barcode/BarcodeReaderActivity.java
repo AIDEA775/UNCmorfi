@@ -134,7 +134,3 @@ public class BarcodeReaderActivity extends AppCompatActivity implements
     }
 
 }
-
-
-
-

@@ -15,10 +15,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends SupportMapFragment {
     GoogleMap map;
+    private static final LatLng CENTRAL = new LatLng(-31.439734, -64.189293);
+    private static final LatLng BELGRANO = new LatLng(-31.416686, -64.189000);
+    private static final LatLng CENTER = new LatLng(-31.428570, -64.184912);
 
-    public MapFragment() {
-        // Required empty public constructor
-    }
+    public MapFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,22 +35,24 @@ public class MapFragment extends SupportMapFragment {
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        LatLng central = new LatLng(-31.439734, -64.189293);
+
         map.addMarker(new MarkerOptions()
-                .position(central)
+                .position(CENTRAL)
                 .title("Sucursal Central"));
 
-        LatLng belgrano = new LatLng(-31.416686, -64.189000);
+
         map.addMarker(new MarkerOptions()
-                .position(belgrano)
+                .position(BELGRANO)
                 .title("Sucursal Belgrano"));
 
         CameraPosition cameraPosition = CameraPosition.builder()
-                .target(central)
-                .zoom(16)
+                .target(CENTER)
+                .zoom(10)
                 .build();
 
         map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        map.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+
     }
 
 }

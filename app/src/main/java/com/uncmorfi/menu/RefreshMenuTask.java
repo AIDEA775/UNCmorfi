@@ -14,6 +14,7 @@ import java.io.IOException;
 
 
 class RefreshMenuTask extends AsyncTask<Void, Void, String> {
+    private static final String URL = "https://www.unc.edu.ar/vida-estudiantil/menú-de-la-semana";
     private RefreshMenuListener mListener;
     private Context mContext;
 
@@ -31,30 +32,21 @@ class RefreshMenuTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         try {
             // Descargar el html
-            Document doc = Jsoup.connect("http://m.unc.edu.ar/vidaestudiantil/sae/comedor/menu")
-                    .get();
+            Document doc = Jsoup.connect(URL).get();
 
             // Seleccionar la parte del menú
-            Element menu = doc.getElementById("content-core").child(0).child(0);
-
-            // Seleccionar el texto en negrita
-            Elements bold = menu.select("strong");
-
-            // Colorear como texto primario
-            bold.wrap("<font size=4 color=\"#212121\"></font>");
+            Element menu = doc.select("div[property=content:encoded]").first();
 
             // Quitar la ultima parte
-            menu.child(0).lastElementSibling().remove();
+            Elements items = menu.child(0).siblingElements();
+            String lastTwo = ":gt(" + String.valueOf(items.size() - 2) + ")";
+            items.select(lastTwo).remove();
 
-            // Reemplazar simbolo del item y espacios vacios
-            String body = menu.html().replaceAll("•[ &nbsp;]*", "&#128523; ");
+            String body = menu.html();
 
-            // Agregar encabezado y color al texto
-            String result = "<html><head><style type=\"text/css\">body{color: #757575" +
-                    "}</style></head><body>" + body + "</body></html>";
+            MemoryHelper.saveToInternalMemory(mContext, MenuFragment.MENU_FILE, body);
 
-            MemoryHelper.saveToInternalMemory(mContext, MenuFragment.MENU_FILE, result);
-            return result;
+            return body;
         } catch (IOException t) {
             t.printStackTrace();
             return null;

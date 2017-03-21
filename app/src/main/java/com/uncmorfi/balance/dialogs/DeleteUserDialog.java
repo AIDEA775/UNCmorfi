@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -37,27 +38,44 @@ public class DeleteUserDialog extends DialogFragment {
         final User user = (User) getArguments().getSerializable(ARG_USER);
 
         if (user != null) {
-            builder.setMessage(String.format(getString(R.string.balance_delete_user_title), user.getName()))
-                    .setPositiveButton(getString(R.string.balance_delete_user_positive), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ContentResolver resolver = getActivity().getContentResolver();
-                            resolver.delete(
-                                    ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.getId()),
-                                    null,
-                                    null);
-                            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
+            DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    saveChanges(user);
+                    returnActivityResult();
+                }
+            };
 
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.balance_delete_user_negative), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dismiss();
-                        }
-                    });
+            DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dismiss();
+                }
+            };
+
+            builder.setMessage(String.format(getString(R.string.balance_delete_user_title), user.getName()))
+                    .setPositiveButton(getString(R.string.balance_delete_user_positive), positiveListener)
+                    .setNegativeButton(getString(R.string.balance_delete_user_negative), negativeListener);
         }
         return builder.create();
     }
 
+    private void saveChanges(User user) {
+        ContentResolver resolver = getActivity().getContentResolver();
+
+        resolver.delete(
+                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.getId()),
+                null,
+                null);
+    }
+
+    private void returnActivityResult() {
+        Intent intent = new Intent();
+        intent.putExtra("msg", getString(R.string.balance_delete_user_msg));
+
+        getTargetFragment().onActivityResult(
+                getTargetRequestCode(),
+                Activity.RESULT_OK,
+                intent);
+    }
 }

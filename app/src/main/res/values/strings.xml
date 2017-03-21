@@ -32,6 +32,7 @@
     <string name="balance_delete_user_title">Eliminar tarjeta de %1$s?</string>
     <string name="balance_delete_user_positive">Eliminar</string>
     <string name="balance_delete_user_negative">Cancelar</string>
+    <string name="balance_delete_user_msg">Tarjeta eliminada</string>
 
     <string name="balance_barcode_permission_not_granted">Sin permisos de cámara</string>
     

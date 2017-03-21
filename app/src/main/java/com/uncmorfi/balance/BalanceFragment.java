@@ -160,7 +160,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 }
                 break;
             case UPDATE_REQUEST_CODE:
-                onDataChanged();
+                onDataChanged(data.getStringExtra("msg"));
                 break;
             default:
                 break;
@@ -181,12 +181,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     public void onUserDownloaded(User user) {
         mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues());
 
-        onDataChanged();
-
-        if (isAdded()) {
-            Snackbar.make(mRootView, R.string.new_user_success, Snackbar.LENGTH_SHORT)
-                    .show();
-        }
+        onDataChanged(getString(R.string.new_user_success));
     }
 
     @Override
@@ -200,12 +195,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 null,
                 null);
 
-        onDataChanged();
-
-        if (isAdded()) {
-            Snackbar.make(mRootView, R.string.refresh_success, Snackbar.LENGTH_SHORT)
-                    .show();
-        }
+        onDataChanged(getString(R.string.refresh_success));
     }
 
     @Override
@@ -216,7 +206,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         }
     }
 
-    public void onDataChanged() {
+    public void onDataChanged(String msg) {
         mUserCursorAdapter.swapCursor(mContentResolver.query(
                 UserProvider.CONTENT_URI,
                 null,
@@ -224,6 +214,11 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 null,
                 null,
                 null));
+
+        if (isAdded() && msg != null) {
+            Snackbar.make(mRootView, msg, Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     private class RefreshUserAsyncTask extends DownloadUserAsyncTask {

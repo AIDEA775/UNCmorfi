@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,21 +32,26 @@ public class NewUserDialog extends DialogFragment {
 
         Button agree = (Button) v.findViewById(R.id.new_card_button);
         final EditText input = (EditText) v.findViewById(R.id.new_card_id);
+        input.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
 
         agree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(ARG_CARD, input.getText().toString());
-                getTargetFragment().onActivityResult(
-                        getTargetRequestCode(),
-                        Activity.RESULT_OK,
-                        intent);
+                returnActivityResult(input);
                 dismiss();
             }
         });
 
         return showKeyboard(builder.create());
+    }
+
+    private void returnActivityResult(EditText input) {
+        Intent intent = new Intent();
+        intent.putExtra(ARG_CARD, input.getText().toString());
+        getTargetFragment().onActivityResult(
+                getTargetRequestCode(),
+                Activity.RESULT_OK,
+                intent);
     }
 
     private AlertDialog showKeyboard(AlertDialog dialog) {

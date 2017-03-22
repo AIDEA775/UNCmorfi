@@ -14,7 +14,7 @@ import java.io.IOException;
 
 
 class RefreshMenuTask extends AsyncTask<Void, Void, String> {
-    private static final String URL = "https://www.unc.edu.ar/vida-estudiantil/menú-de-la-semana";
+    private static final String URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana";
     private RefreshMenuListener mListener;
     private Context mContext;
 

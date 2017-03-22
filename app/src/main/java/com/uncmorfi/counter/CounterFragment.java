@@ -75,6 +75,8 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
                     .scaleY(1)
                     .setInterpolator(interpolator)
                     .setDuration(600);
+        } else {
+            mRefreshFab.show();
         }
     }
 
@@ -89,6 +91,8 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
                     .scaleY(0)
                     .setInterpolator(interpolator)
                     .setDuration(300);
+        } else {
+            mRefreshFab.hide();
         }
     }
 
@@ -96,7 +100,8 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     public void onRefreshCounterSuccess(int percent) {
         if (isAdded()) {
             mProgressBar.setProgress(percent);
-            mResumeView.setText(String.format(Locale.US, "%d raciones de %d", percent, FOOD_RATIONS));
+            mResumeView.setText(String.format(getString(R.string.counter_rations_title), percent,
+                    FOOD_RATIONS));
             mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / FOOD_RATIONS));
 
             showRefreshButton();

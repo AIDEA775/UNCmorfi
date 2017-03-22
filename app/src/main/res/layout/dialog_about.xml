@@ -13,13 +13,13 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <TextView
-        android:text="APIO.v1.0"
+        android:text="@string/app_codename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <TextView
-        android:text="No es una app oficial"
+        android:text="@string/about_unofficial_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
@@ -55,7 +55,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 
     <TextView
-        android:text="Codigo fuente:"
+        android:text="@string/about_source_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

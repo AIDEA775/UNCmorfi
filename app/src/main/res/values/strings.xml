@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">UNCmorfi</string>
+    <string name="app_codename">Apio v1.0</string>
 
     <!-- Navigation -->
     <string name="navigation_open">Open navigation drawer</string>
@@ -34,11 +35,16 @@
     <string name="balance_delete_user_negative">Cancel</string>
     <string name="balance_delete_user_msg">Card deleted</string>
 
-    <string name="balance_barcode_permission_not_granted">Sin permisos de cámara</string>
+    <string name="balance_barcode_permission_not_granted">Permission not granted</string>
     
     <!-- Counter -->
     <string name="counter_rations">Rations</string>
+    <string name="counter_rations_title">%2$d rations of %2$d</string>
     <string name="counter_percent_simbol">%</string>
+
+    <!-- About -->
+    <string name="about_unofficial_app">This is an unofficial app</string>
+    <string name="about_source_code">Source code:</string>
 
     <!-- Toast and SnackBar -->
     <string name="press_back_again">Press back again to quit</string>

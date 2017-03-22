@@ -39,7 +39,7 @@
     
     <!-- Counter -->
     <string name="counter_rations">Rations</string>
-    <string name="counter_rations_title">%2$d rations of %2$d</string>
+    <string name="counter_rations_title">%1$d rations of %2$d</string>
     <string name="counter_percent_simbol">%</string>
 
     <!-- About -->

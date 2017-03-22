@@ -35,11 +35,9 @@ public class MapFragment extends SupportMapFragment {
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-
         map.addMarker(new MarkerOptions()
                 .position(CENTRAL)
                 .title("Sucursal Central"));
-
 
         map.addMarker(new MarkerOptions()
                 .position(BELGRANO)
@@ -47,12 +45,10 @@ public class MapFragment extends SupportMapFragment {
 
         CameraPosition cameraPosition = CameraPosition.builder()
                 .target(CENTER)
-                .zoom(10)
+                .zoom(14)
                 .build();
 
         map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        map.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
-
     }
 
 }

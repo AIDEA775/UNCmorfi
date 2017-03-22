@@ -97,7 +97,6 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
             // TODO: 11/29/16 crear y llamar al parser
             int left = response.indexOf("rows: [{c: [");
             int rigth = response.indexOf("]", left);
-            Log.d("JSwa", "left: " + String.valueOf(left) + " right: " + String.valueOf(rigth));
             String result = response.substring(left + 12, rigth - 2);
 
             return result.split("['},]*\\{v: '?");

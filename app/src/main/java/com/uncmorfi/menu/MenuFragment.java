@@ -1,6 +1,5 @@
 package com.uncmorfi.menu;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -16,6 +15,7 @@ import android.webkit.WebView;
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
+
 
 public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMenuListener {
     public static final String MENU_FILE = "menu.txt";
@@ -34,8 +34,6 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
         mWebView = (WebView) view.findViewById(R.id.menu_content);
-        mWebView.loadData(MemoryHelper.readFromInternalMemory(getActivity(), MENU_FILE),
-                "text/html","UTF-8");
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.menu_swipe_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(
@@ -46,6 +44,13 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
                     }
                 }
         );
+
+        String data = MemoryHelper.readFromInternalMemory(getActivity(), MENU_FILE);
+        if (data == null) {
+            refreshMenu();
+        } else {
+            mWebView.loadData(data, "text/html", "UTF-8");
+        }
 
         return view;
     }

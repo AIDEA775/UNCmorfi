@@ -9,9 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,18 +23,24 @@ import com.uncmorfi.menu.MenuFragment;
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
-    private static final int EXIT_INTERVAL_TIME = 2000;
-    private double mLastBackPressed;
-    private Toast mExitToast;
+    private boolean mMainFragment;
     private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
+        setToolbarAndNavigation();
+        if (savedInstanceState == null) {
+            setMainFragment();
+        }
+    }
+
+    private void setToolbarAndNavigation() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.navigation_menu);
         setSupportActionBar(toolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -45,38 +49,62 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+    }
 
-        if (savedInstanceState == null) {
-            Fragment firstFragment = new MenuFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, firstFragment).commit();
-        }
+    private void setMainFragment() {
+        mMainFragment = true;
+        Fragment firstFragment = new MenuFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.content_frame, firstFragment)
+                .commit();
     }
 
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (mLastBackPressed + EXIT_INTERVAL_TIME > System.currentTimeMillis()) {
-            mExitToast.cancel();
+        } else if (mMainFragment) {
             super.onBackPressed();
         } else {
-            mLastBackPressed = System.currentTimeMillis();
-            mExitToast = Toast.makeText(this, getString(R.string.press_back_again),
-                    Toast.LENGTH_SHORT);
-            mExitToast.show();
+            // Go to main fragment
+            replaceFragment(R.id.nav_menu);
+            mNavigationView.setCheckedItem(R.id.nav_menu);
+            setActionBarTitle(mNavigationView.getMenu().getItem(0));
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
+        if (!item.isChecked())
+            replaceFragment(item.getItemId());
 
-        switch (item.getItemId()) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        setActionBarTitle(item);
+        return true;
+    }
+
+    private void replaceFragment(int item) {
+        Fragment fragment = getFragmentById(item);
+
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+        }
+    }
+
+    private Fragment getFragmentById(int id) {
+        Fragment fragment = null;
+        mMainFragment = false;
+
+        switch (id) {
             case R.id.nav_menu:
                 fragment = new MenuFragment();
+                mMainFragment = true;
                 break;
             case R.id.nav_balance:
                 fragment = new BalanceFragment();
@@ -91,22 +119,15 @@ public class MainActivity extends AppCompatActivity implements
                 mapFragment.getMapAsync(this);
                 break;
             case R.id.nav_about:
-                new AboutDialog().show(getSupportFragmentManager(), "NewUserDialog");
+                new AboutDialog().show(getSupportFragmentManager(), "AboutDialog");
                 break;
         }
+        return fragment;
+    }
 
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit();
-
-            if (getSupportActionBar() != null)
-                getSupportActionBar().setTitle(item.getTitle());
-        }
-
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    private void setActionBarTitle(MenuItem item) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(item.getTitle());
     }
 
     @Override

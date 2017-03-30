@@ -40,14 +40,13 @@
     <!-- Counter -->
     <string name="counter_rations">Rations</string>
     <string name="counter_rations_title">%1$d rations of %2$d</string>
-    <string name="counter_percent_simbol">%</string>
+    <string name="counter_percent_symbol">%</string>
 
     <!-- About -->
     <string name="about_unofficial_app">This is an unofficial app</string>
     <string name="about_source_code">Source code:</string>
 
-    <!-- Toast and SnackBar -->
-    <string name="press_back_again">Press back again to quit</string>
+    <!-- SnackBar -->
     <string name="no_connection">No connection</string>
     <string name="connection_error">Connection error</string>
     <string name="refresh_success">Updated</string>

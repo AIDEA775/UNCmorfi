@@ -43,7 +43,7 @@
             android:textStyle="bold"
             android:textColor="@color/primary"
             android:textSize="64sp"
-            android:text="@string/counter_percent_simbol"
+            android:text="@string/counter_percent_symbol"
             android:layout_below="@+id/counter_bar"
             android:layout_centerHorizontal="true" />
 

@@ -24,13 +24,17 @@
         </activity>
 
         <activity
-            android:name=".balance.barcode.BarcodeReaderActivity"
+            android:name=".balance.BarcodeReaderActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCSp9NAfXyfp4RTPawVvfYcS_tZaWoXA_g" />
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode"/>
 
         <provider
             android:name=".balance.model.UserProvider"

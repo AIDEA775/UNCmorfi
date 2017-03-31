@@ -34,8 +34,6 @@
     <string name="balance_delete_user_positive">Delete</string>
     <string name="balance_delete_user_negative">Cancel</string>
     <string name="balance_delete_user_msg">Card deleted</string>
-
-    <string name="balance_barcode_permission_not_granted">Permission not granted</string>
     
     <!-- Counter -->
     <string name="counter_rations">Rations</string>
@@ -53,5 +51,8 @@
     <string name="refresh_fail">Update failed</string>
     <string name="new_user_success">Added</string>
     <string name="new_user_fail">An error occurred</string>
+
+    <string name="permission_not_granted">Permission not granted</string>
+    <string name="low_storage_error">Low storage available</string>
 
 </resources>

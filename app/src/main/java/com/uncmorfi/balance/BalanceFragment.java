@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.uncmorfi.R;
-import com.uncmorfi.balance.barcode.BarcodeReaderActivity;
 import com.uncmorfi.balance.dialogs.NewUserDialog;
 import com.uncmorfi.balance.dialogs.UserOptionsDialog;
 import com.uncmorfi.balance.model.User;

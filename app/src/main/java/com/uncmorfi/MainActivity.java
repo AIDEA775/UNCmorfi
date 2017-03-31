@@ -78,15 +78,19 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        boolean changed = true;
+
         if (!item.isChecked())
-            replaceFragment(item.getItemId());
+            changed = replaceFragment(item.getItemId());
+
+        if (changed)
+            setActionBarTitle(item);
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
-        setActionBarTitle(item);
-        return true;
+        return changed;
     }
 
-    private void replaceFragment(int item) {
+    private boolean replaceFragment(int item) {
         Fragment fragment = getFragmentById(item);
 
         if (fragment != null) {
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements
                     .replace(R.id.content_frame, fragment)
                     .commit();
         }
+        return fragment != null;
     }
 
     private Fragment getFragmentById(int id) {

@@ -56,6 +56,12 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.navigation_menu);
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         mSwipeRefreshLayout.setRefreshing(false);

@@ -91,6 +91,12 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.navigation_balance);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(),
                 UserProvider.CONTENT_URI,

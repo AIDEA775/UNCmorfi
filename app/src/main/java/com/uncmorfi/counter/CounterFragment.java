@@ -53,6 +53,12 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.navigation_counter);
+    }
+
     private void refreshCounter() {
         if (ConnectionHelper.isOnline(getContext())) {
             hideRefreshButton();

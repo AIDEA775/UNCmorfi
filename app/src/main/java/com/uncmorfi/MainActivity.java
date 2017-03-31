@@ -23,6 +23,7 @@ import com.uncmorfi.menu.MenuFragment;
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
+    private final static String ARG_STATE = "main_fragment_state";
     private boolean mMainFragment;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -35,12 +36,13 @@ public class MainActivity extends AppCompatActivity implements
         setToolbarAndNavigation();
         if (savedInstanceState == null) {
             setMainFragment();
+        } else {
+            mMainFragment = savedInstanceState.getBoolean(ARG_STATE);
         }
     }
 
     private void setToolbarAndNavigation() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.navigation_menu);
         setSupportActionBar(toolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -63,6 +65,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ARG_STATE, mMainFragment);
+    }
+
+    @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -72,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements
             // Go to main fragment
             replaceFragment(R.id.nav_menu);
             mNavigationView.setCheckedItem(R.id.nav_menu);
-            setActionBarTitle(mNavigationView.getMenu().getItem(0));
         }
     }
 
@@ -82,9 +89,6 @@ public class MainActivity extends AppCompatActivity implements
 
         if (!item.isChecked())
             changed = replaceFragment(item.getItemId());
-
-        if (changed)
-            setActionBarTitle(item);
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return changed;
@@ -128,11 +132,6 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
         return fragment;
-    }
-
-    private void setActionBarTitle(MenuItem item) {
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle(item.getTitle());
     }
 
     @Override

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">UNCmorfi</string>
-    <string name="app_codename">Apio v1.0</string>
 
     <!-- Navigation -->
     <string name="navigation_open">Open navigation drawer</string>

@@ -195,10 +195,11 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         values.put(UsersContract.UserEntry.BALANCE, user.getBalance());
 
         mContentResolver.update(
-                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.getId()),
+                UserProvider.CONTENT_URI,
                 values,
-                null,
-                null);
+                UsersContract.UserEntry.CARD + "=?",
+                new String[]{user.getCard()}
+        );
 
         onDataChanged(getString(R.string.refresh_success));
     }

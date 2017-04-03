@@ -12,7 +12,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:export-ydpi="96.000008"
    inkscape:export-xdpi="96.000008"
-   inkscape:export-filename="/home/aidea775/UNCmorfi-bannerv4e-darker.png"
+   inkscape:export-filename="/home/aidea775/UNCmorfi-bannerv4.1e.png"
    sodipodi:docname="UNCmorfi-bannerv4.svg"
    inkscape:version="0.92.1 r"
    id="svg8"
@@ -22,17 +22,17 @@
    width="1024">
   <sodipodi:namedview
      inkscape:window-maximized="0"
-     inkscape:window-y="0"
+     inkscape:window-y="24"
      inkscape:window-x="0"
-     inkscape:window-height="1052"
-     inkscape:window-width="1920"
+     inkscape:window-height="716"
+     inkscape:window-width="1366"
      units="px"
      showgrid="false"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      inkscape:document-units="mm"
-     inkscape:cy="270.45829"
-     inkscape:cx="417.70076"
-     inkscape:zoom="1"
+     inkscape:cy="278.78694"
+     inkscape:cx="436.6994"
+     inkscape:zoom="0.70710678"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -72,10 +72,10 @@
     </linearGradient>
     <linearGradient
        gradientUnits="userSpaceOnUse"
-       y2="472.98758"
+       y2="497.98758"
        x2="354.11313"
-       y1="264.63455"
-       x1="342.44174"
+       y1="383.75732"
+       x1="352.47055"
        id="linearGradient1644"
        xlink:href="#linearGradient1478"
        inkscape:collect="always" />
@@ -112,7 +112,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -141,16 +141,16 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot1040"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#030000;fill-opacity:0.39207076;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter2712)"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#030000;fill-opacity:0.58823532;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter2712);"
        transform="matrix(0.26458333,0,0,0.26458333,-20.283596,10.682904)"><flowRegion
          id="flowRegion1042"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#030000;fill-opacity:0.39207076"><rect
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#030000;fill-opacity:0.58823532;"><rect
            id="rect1044"
            width="542.85712"
            height="217.14285"
            x="484.28571"
            y="152.85715"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#030000;fill-opacity:0.39207076" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#030000;fill-opacity:0.58823532;" /></flowRegion><flowPara
          id="flowPara1046">UNCmorfi</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot1040-5"

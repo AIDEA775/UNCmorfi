@@ -71,7 +71,7 @@ public class DeleteUserDialog extends DialogFragment {
 
     private void returnActivityResult() {
         Intent intent = new Intent();
-        intent.putExtra("msg", getString(R.string.balance_delete_user_msg));
+        intent.putExtra("msg", R.string.balance_delete_user_msg);
 
         getTargetFragment().onActivityResult(
                 getTargetRequestCode(),

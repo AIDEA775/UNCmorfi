@@ -80,7 +80,7 @@ public class SetNameDialog extends DialogFragment {
 
     private void returnActivityResult() {
         Intent intent = new Intent();
-        intent.putExtra("msg", getString(R.string.refresh_success));
+        intent.putExtra("msg", R.string.refresh_success);
 
         getTargetFragment().onActivityResult(
                 getTargetRequestCode(),

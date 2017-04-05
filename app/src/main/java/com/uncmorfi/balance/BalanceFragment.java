@@ -159,13 +159,13 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
                         new RefreshUserAsyncTask(this, holder).execute(card);
                     } else {
-                        Snackbar.make(mRootView, R.string.no_connection, Snackbar.LENGTH_SHORT)
-                                .show();
+                        showShortSnackBarMsg(R.string.no_connection);
                     }
                 }
                 break;
             case UPDATE_REQUEST_CODE:
-                onDataChanged(data.getStringExtra("msg"));
+                onDataChanged();
+                showShortSnackBarMsg(data.getIntExtra("msg", 0));
                 break;
             default:
                 break;
@@ -177,8 +177,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         if (ConnectionHelper.isOnline(getContext())) {
             new DownloadUserAsyncTask(this).execute(card);
         } else {
-            Snackbar.make(mRootView, R.string.no_connection, Snackbar.LENGTH_SHORT)
-                    .show();
+            showShortSnackBarMsg(R.string.no_connection);
         }
     }
 
@@ -186,7 +185,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     public void onUserDownloaded(User user) {
         mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues());
 
-        onDataChanged(getString(R.string.new_user_success));
+        onDataChanged();
+        showShortSnackBarMsg(R.string.new_user_success);
     }
 
     @Override
@@ -200,8 +200,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 UsersContract.UserEntry.CARD + "=?",
                 new String[]{user.getCard()}
         );
-
-        onDataChanged(getString(R.string.refresh_success));
+        onDataChanged();
+        showShortSnackBarMsg(R.string.refresh_success);
     }
 
     @Override
@@ -212,7 +212,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         }
     }
 
-    public void onDataChanged(String msg) {
+    private void onDataChanged() {
         mUserCursorAdapter.swapCursor(mContentResolver.query(
                 UserProvider.CONTENT_URI,
                 null,
@@ -220,9 +220,11 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 null,
                 null,
                 null));
+    }
 
-        if (isAdded() && msg != null) {
-            Snackbar.make(mRootView, msg, Snackbar.LENGTH_SHORT)
+    private void showShortSnackBarMsg(int resId) {
+        if (getActivity() != null && isAdded() && resId != 0) {
+            Snackbar.make(mRootView, resId, Snackbar.LENGTH_SHORT)
                     .show();
         }
     }

@@ -50,7 +50,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     <TextView
-        android:text="Julieta Wieztort"
+        android:text="Julieta Wiesztort (KaySoohyun)"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

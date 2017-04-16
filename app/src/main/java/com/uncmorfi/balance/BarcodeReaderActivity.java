@@ -58,6 +58,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             // available.  The detectors will automatically become operational once the library
             // downloads complete on device.
             Log.w("BarcodeReader", "Detector dependencies are not yet available.");
+            Toast.makeText(this, "Detector dependencies are not yet available.", Toast.LENGTH_LONG).show();
 
             // Check for low storage.  If there is low storage, the native library will not be
             // downloaded, so detection will not become operational.

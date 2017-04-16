@@ -11,7 +11,7 @@
     <string name="navigation_about">About</string>
 
     <!-- Menu -->
-    <string name="menu_action_refresh">Refresh menu</string>
+    <string name="menu_action_update">Update menu</string>
 
     <!-- Balance -->
     <string name="balance_action_new_user">Add user with keyboard</string>
@@ -20,12 +20,13 @@
 
     <string name="balance_new_user_title">Add card</string>
     <string name="balance_new_user_positive">Add</string>
+    <string name="balance_new_user_adding">Adding&#8230;</string>
 
     <string name="balance_set_name_title">New name</string>
     <string name="balance_set_name_positive">Save</string>
 
     <string name="balance_user_options_title">Card</string>
-    <string name="balance_user_options_refresh">Refresh</string>
+    <string name="balance_user_options_update">Update</string>
     <string name="balance_user_options_delete">Delete</string>
     <string name="balance_user_options_set_name">Change name</string>
 
@@ -46,8 +47,9 @@
     <!-- SnackBar -->
     <string name="no_connection">No connection</string>
     <string name="connection_error">Connection error</string>
-    <string name="refresh_success">Updated</string>
-    <string name="refresh_fail">Update failed</string>
+    <string name="updating">Updating&#8230;</string>
+    <string name="update_success">Updated</string>
+    <string name="update_fail">Update failed</string>
     <string name="new_user_success">Added</string>
     <string name="new_user_fail">An error occurred</string>
 

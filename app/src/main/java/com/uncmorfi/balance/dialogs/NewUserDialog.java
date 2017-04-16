@@ -20,8 +20,6 @@ import com.uncmorfi.R;
 public class NewUserDialog extends DialogFragment {
     public static final String ARG_CARD = "card";
 
-    public NewUserDialog() {}
-
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {

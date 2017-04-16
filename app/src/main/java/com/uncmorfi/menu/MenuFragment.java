@@ -97,7 +97,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
         if (isAdded()) {
             mWebView.loadDataWithBaseURL(null, menu, "text/html", "UTF-8", null);
 
-            Snackbar.make(mWebView, R.string.refresh_success, Snackbar.LENGTH_LONG)
+            Snackbar.make(mWebView, R.string.update_success, Snackbar.LENGTH_LONG)
                     .show();
 
             mSwipeRefreshLayout.setRefreshing(false);
@@ -107,7 +107,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     @Override
     public void onRefreshMenuFail() {
         if (isAdded()) {
-            Snackbar.make(mWebView, R.string.refresh_fail, Snackbar.LENGTH_LONG)
+            Snackbar.make(mWebView, R.string.update_fail, Snackbar.LENGTH_LONG)
                     .show();
 
             mSwipeRefreshLayout.setRefreshing(false);

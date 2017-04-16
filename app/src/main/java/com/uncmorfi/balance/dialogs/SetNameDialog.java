@@ -1,11 +1,6 @@
 package com.uncmorfi.balance.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -17,20 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.uncmorfi.R;
-import com.uncmorfi.balance.model.User;
-import com.uncmorfi.balance.model.UserProvider;
-import com.uncmorfi.balance.model.UsersContract;
+import com.uncmorfi.balance.backend.BalanceBackend;
+
+import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
+import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
 
 public class SetNameDialog extends DialogFragment {
-    public static final String ARG_USER = "user";
 
-    public SetNameDialog() {}
-
-    public static SetNameDialog newInstance(User user) {
-
+    public static SetNameDialog newInstance(int userId, BalanceBackend backend) {
         Bundle args = new Bundle();
-        args.putSerializable(SetNameDialog.ARG_USER, user);
+
+        args.putInt(ARG_USER, userId);
+        args.putSerializable(ARG_BACKEND, backend);
 
         SetNameDialog fragment = new SetNameDialog();
         fragment.setArguments(args);
@@ -45,19 +39,19 @@ public class SetNameDialog extends DialogFragment {
         View v = View.inflate(getContext(), R.layout.dialog_set_name, null);
         builder.setView(v);
 
-        final User user = (User) getArguments().getSerializable(ARG_USER);
+        final int userId = getArguments().getInt(ARG_USER);
+        final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
         final EditText input = (EditText) v.findViewById(R.id.new_name_text);
         Button agree = (Button) v.findViewById(R.id.save_new_name_button);
 
-        if (user != null) {
-            input.append(user.getName());
+        if (backend != null) {
+            input.append(backend.getUserById(userId).getName());
 
             agree.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    saveChanges(input, user);
-                    returnActivityResult();
+                    backend.updateNameOfUser(userId, input.getText().toString());
                     dismiss();
                 }
             });
@@ -66,33 +60,10 @@ public class SetNameDialog extends DialogFragment {
         return showKeyboard(builder.create());
     }
 
-    private void saveChanges(EditText input, User user) {
-        ContentResolver resolver = getActivity().getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(UsersContract.UserEntry.NAME, input.getText().toString());
-        resolver.update(
-                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.getId()),
-                values,
-                null,
-                null
-        );
-    }
-
-    private void returnActivityResult() {
-        Intent intent = new Intent();
-        intent.putExtra("msg", R.string.refresh_success);
-
-        getTargetFragment().onActivityResult(
-                getTargetRequestCode(),
-                Activity.RESULT_OK,
-                intent);
-    }
-
     private AlertDialog showKeyboard(AlertDialog dialog) {
         Window window = dialog.getWindow();
         if (window != null)
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return dialog;
     }
-
 }

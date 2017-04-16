@@ -1,7 +1,6 @@
-package com.uncmorfi.balance;
+package com.uncmorfi.balance.backend;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.uncmorfi.balance.model.User;
 
@@ -15,11 +14,10 @@ import java.net.URL;
 
 
 class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
-    DownloadUserListener mListener;
+    private DownloadUserListener mListener;
 
     interface DownloadUserListener {
         void onUserDownloaded(User user);
-        void onUserRefresh(User user);
         void onUserDownloadFail();
     }
 

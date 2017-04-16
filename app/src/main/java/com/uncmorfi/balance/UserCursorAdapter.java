@@ -24,18 +24,18 @@ import java.io.Serializable;
 import java.util.Locale;
 
 
-public class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> {
+class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> {
     private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
     private Context mContext;
     private Cursor mCursor;
     private OnCardClickListener mListener;
 
     interface OnCardClickListener {
-        void onClick(UserViewHolder holder, int id);
+        void onClick(int position, int id);
     }
 
-    public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
-            Serializable{
+    class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            Serializable {
         TextView nameText;
         TextView cardText;
         TextView typeText;
@@ -58,9 +58,10 @@ public class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.Us
 
         @Override
         public void onClick(View v) {
-            mCursor.moveToPosition(this.getAdapterPosition());
+            int position = this.getAdapterPosition();
+            mCursor.moveToPosition(position);
             int id = mCursor.getInt(mCursor.getColumnIndex(UsersContract.UserEntry._ID));
-            mListener.onClick(this, id);
+            mListener.onClick(position, id);
         }
     }
 
@@ -80,12 +81,13 @@ public class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.Us
     public void onBindViewHolder(final UserViewHolder holder, int position) {
         mCursor.moveToPosition(position);
 
-        final User user = new User (mCursor);
+        final User user = new User(mCursor);
 
         holder.nameText.setText(user.getName());
         holder.cardText.setText(user.getCard());
         holder.typeText.setText(user.getType());
         holder.balanceText.setText(String.format(Locale.US, "$ %d", user.getBalance()));
+        holder.progressBar.setVisibility(View.GONE);
 
         Glide.with(mContext)
                 .load(USER_IMAGES_URL + user.getImage())
@@ -114,5 +116,4 @@ public class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.Us
         mCursor = newCursor;
         notifyDataSetChanged();
     }
-
 }

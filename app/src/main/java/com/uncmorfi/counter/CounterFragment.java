@@ -112,7 +112,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
             showRefreshButton();
 
-            Snackbar.make(mRootView, R.string.refresh_success, Snackbar.LENGTH_LONG)
+            Snackbar.make(mRootView, R.string.update_success, Snackbar.LENGTH_LONG)
                     .show();
         }
     }

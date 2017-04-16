@@ -1,31 +1,28 @@
 package com.uncmorfi.balance.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.uncmorfi.R;
-import com.uncmorfi.balance.BalanceFragment;
-import com.uncmorfi.balance.UserCursorAdapter.UserViewHolder;
-import com.uncmorfi.balance.model.User;
+import com.uncmorfi.balance.backend.BalanceBackend;
 
 
 public class UserOptionsDialog extends DialogFragment {
     public static final String ARG_USER = "user";
-    public static final String ARG_CARD = "card";
     public static final String ARG_HOLDER = "holder";
+    public static final String ARG_BACKEND = "backend";
 
 
-    public static UserOptionsDialog newInstance(User user, UserViewHolder holder) {
+    public static UserOptionsDialog newInstance(int userId, int position, BalanceBackend backend) {
         Bundle args = new Bundle();
 
-        args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_HOLDER, holder);
+        args.putInt(ARG_USER, userId);
+        args.putInt(ARG_HOLDER, position);
+        args.putSerializable(ARG_BACKEND, backend);
 
         UserOptionsDialog fragment = new UserOptionsDialog();
         fragment.setArguments(args);
@@ -39,26 +36,30 @@ public class UserOptionsDialog extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final CharSequence[] items = new CharSequence[3];
-        items[0] = getString(R.string.balance_user_options_refresh);
+        items[0] = getString(R.string.balance_user_options_update);
         items[1] = getString(R.string.balance_user_options_delete);
         items[2] = getString(R.string.balance_user_options_set_name);
 
-        final User user = (User) getArguments().getSerializable(ARG_USER);
+        final int userId =  getArguments().getInt(ARG_USER);
+        final int position = getArguments().getInt(ARG_HOLDER);
+        final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
-        if (user != null) {
+        if (backend != null) {
             builder.setTitle(getString(R.string.balance_user_options_title))
                     .setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case 0:
-                                    refreshUser(user.getCard());
+                                    backend.updateBalanceOfUser(userId, position);
                                     break;
                                 case 1:
-                                    showDeleteUserDialog(user);
+                                    DeleteUserDialog.newInstance(userId, backend)
+                                            .show(getFragmentManager(), "DeleteUserDialog");
                                     break;
                                 case 2:
-                                    showSetNameDialog(user);
+                                    SetNameDialog.newInstance(userId, backend)
+                                            .show(getFragmentManager(), "SetNameDialog");
                                     break;
                                 default:
                                     break;
@@ -69,33 +70,5 @@ public class UserOptionsDialog extends DialogFragment {
             builder.setTitle("No existe la tarjeta");
         }
         return builder.create();
-    }
-
-    private void refreshUser(String card) {
-        Intent intent = new Intent();
-        intent.putExtra(ARG_CARD, card);
-        intent.putExtra(ARG_HOLDER, getArguments().getSerializable(ARG_HOLDER));
-        getTargetFragment().onActivityResult(
-                getTargetRequestCode(),
-                Activity.RESULT_OK,
-                intent);
-    }
-
-    private void showDeleteUserDialog(User user) {
-        DeleteUserDialog deleteDialog = DeleteUserDialog.newInstance(user);
-
-        deleteDialog.setTargetFragment(getTargetFragment(),
-                BalanceFragment.UPDATE_REQUEST_CODE);
-
-        deleteDialog.show(getFragmentManager(), "DeleteUserDialog");
-    }
-
-    private void showSetNameDialog(User user) {
-        SetNameDialog setNameDialog = SetNameDialog.newInstance(user);
-
-        setNameDialog.setTargetFragment(getTargetFragment(),
-                BalanceFragment.UPDATE_REQUEST_CODE);
-
-        setNameDialog.show(getFragmentManager(), "SetNameDialog");
     }
 }

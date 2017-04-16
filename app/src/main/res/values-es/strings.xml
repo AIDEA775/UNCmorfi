@@ -11,21 +11,22 @@
     <string name="navigation_about">Acerca de</string>
 
     <!-- Menu -->
-    <string name="menu_action_refresh">Actualizar menú</string>
+    <string name="menu_action_update">Actualizar menú</string>
 
     <!-- Balance -->
-    <string name="balance_action_new_user">Añadir usuario con el teclado</string>
-    <string name="balance_action_new_user_camera">Añadir usuario con la cámara</string>
+    <string name="balance_action_new_user">Agregar tarjeta con el teclado</string>
+    <string name="balance_action_new_user_camera">Agregar tarjeta con la cámara</string>
     <string name="balance_card_preview_info">Imagen del usuario</string>
 
-    <string name="balance_new_user_title">Añadir una tarjeta</string>
-    <string name="balance_new_user_positive">Añadir</string>
+    <string name="balance_new_user_title">Agregar una tarjeta</string>
+    <string name="balance_new_user_positive">Agregar</string>
+    <string name="balance_new_user_adding">Agregando&#8230;</string>
 
     <string name="balance_set_name_title">Nuevo nombre</string>
     <string name="balance_set_name_positive">Guardar</string>
 
     <string name="balance_user_options_title">Tarjeta</string>
-    <string name="balance_user_options_refresh">Actualizar</string>
+    <string name="balance_user_options_update">Actualizar</string>
     <string name="balance_user_options_delete">Eliminar</string>
     <string name="balance_user_options_set_name">Modificar nombre</string>
 
@@ -46,8 +47,9 @@
     <!-- SnackBar -->
     <string name="no_connection">No hay conexion</string>
     <string name="connection_error">Error de conexion</string>
-    <string name="refresh_success">Actualizado</string>
-    <string name="refresh_fail">No se pudo actualizar</string>
+    <string name="updating">Actualizando&#8230;</string>
+    <string name="update_success">Actualizado</string>
+    <string name="update_fail">No se pudo actualizar</string>
     <string name="new_user_success">Agregado</string>
     <string name="new_user_fail">Ocurrió un error</string>
 

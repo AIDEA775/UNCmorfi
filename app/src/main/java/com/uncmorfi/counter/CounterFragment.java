@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
+import com.uncmorfi.helpers.SnackbarHelper;
 
 import java.util.Locale;
 
@@ -26,6 +27,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     private TextView mPercentView;
     private FloatingActionButton mRefreshFab;
     private View mRootView;
+    private Snackbar lastSnackBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,14 +61,20 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         getActivity().setTitle(R.string.navigation_counter);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (lastSnackBar != null && lastSnackBar.isShown())
+            lastSnackBar.dismiss();
+    }
+
     private void refreshCounter() {
         if (ConnectionHelper.isOnline(getContext())) {
             hideRefreshButton();
             new RefreshCounterTask(this).execute();
         } else {
             showRefreshButton();
-            Snackbar.make(mRootView, R.string.no_connection, Snackbar.LENGTH_LONG)
-                    .show();
+            showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);
         }
     }
 
@@ -111,9 +119,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
             mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / FOOD_RATIONS));
 
             showRefreshButton();
-
-            Snackbar.make(mRootView, R.string.update_success, Snackbar.LENGTH_LONG)
-                    .show();
+            showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
         }
     }
 
@@ -121,9 +127,12 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     public void onRefreshCounterFail() {
         if (isAdded()) {
             showRefreshButton();
-
-            Snackbar.make(mRootView, R.string.connection_error, Snackbar.LENGTH_LONG)
-                    .show();
+            showSnackBarMsg(R.string.connection_error, SnackbarHelper.SnackType.ERROR);
         }
+    }
+
+    private void showSnackBarMsg(int resId, SnackbarHelper.SnackType type) {
+        lastSnackBar = Snackbar.make(mRootView, resId, SnackbarHelper.getLength(type));
+        SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
     }
 }

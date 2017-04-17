@@ -5,13 +5,13 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
 import com.uncmorfi.balance.model.UsersContract;
+import com.uncmorfi.helpers.SnackbarHelper;
 import com.uncmorfi.helpers.ConnectionHelper;
 
 import java.io.Serializable;
@@ -24,7 +24,8 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
 
 
     public interface BalanceListener {
-        void showSnackBarMsg(int resId, int length);
+        
+        void showSnackBarMsg(int resId, SnackbarHelper.SnackType type);
         void onDataChanged(Cursor c);
         void showProgressBar(int position, boolean show);
     }
@@ -55,16 +56,16 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
     public void newUser(String card) {
         Log.i("Backend", "New card " + card);
         if (ConnectionHelper.isOnline(mContext)) {
-            mFragment.showSnackBarMsg(R.string.balance_new_user_adding, Snackbar.LENGTH_INDEFINITE);
+            mFragment.showSnackBarMsg(R.string.balance_new_user_adding, SnackbarHelper.SnackType.LOADING);
             new DownloadUserAsyncTask(this).execute(card);
         } else {
-            mFragment.showSnackBarMsg(R.string.no_connection, Snackbar.LENGTH_INDEFINITE);
+            mFragment.showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);
         }
     }
 
     public void updateBalanceOfUser(int userId, final int position) {
         if (ConnectionHelper.isOnline(mContext)) {
-            mFragment.showSnackBarMsg(R.string.updating, Snackbar.LENGTH_INDEFINITE);
+            mFragment.showSnackBarMsg(R.string.updating, SnackbarHelper.SnackType.LOADING);
 
             new DownloadUserAsyncTask(this) {
                 @Override
@@ -80,7 +81,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
                 }
             }.execute(getUserById(userId).getCard());
         } else {
-            mFragment.showSnackBarMsg(R.string.no_connection, Snackbar.LENGTH_INDEFINITE);
+            mFragment.showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);
         }
     }
 
@@ -90,7 +91,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
                 null,
                 null);
         mFragment.onDataChanged(getAllCards());
-        mFragment.showSnackBarMsg(R.string.balance_delete_user_msg, Snackbar.LENGTH_SHORT);
+        mFragment.showSnackBarMsg(R.string.balance_delete_user_msg, SnackbarHelper.SnackType.FINISH);
     }
 
     public void updateNameOfUser(int userId, String name) {
@@ -103,7 +104,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
                 null
         );
         mFragment.onDataChanged(getAllCards());
-        mFragment.showSnackBarMsg(R.string.update_success, Snackbar.LENGTH_SHORT);
+        mFragment.showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
     }
 
     @Override
@@ -113,17 +114,17 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         // Si una fila fue afectada, entonces se actualizó el balance del usuario
         // sinó, insertar el nuevo usuario
         if (rows == 1) {
-            mFragment.showSnackBarMsg(R.string.update_success, Snackbar.LENGTH_SHORT);
+            mFragment.showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
         } else {
             insertUser(user);
-            mFragment.showSnackBarMsg(R.string.new_user_success, Snackbar.LENGTH_SHORT);
+            mFragment.showSnackBarMsg(R.string.new_user_success, SnackbarHelper.SnackType.FINISH);
         }
         mFragment.onDataChanged(getAllCards());
     }
 
     @Override
     public void onUserDownloadFail() {
-        mFragment.showSnackBarMsg(R.string.new_user_fail, Snackbar.LENGTH_LONG);
+        mFragment.showSnackBarMsg(R.string.new_user_fail, SnackbarHelper.SnackType.ERROR);
     }
 
     private void insertUser(User user) {

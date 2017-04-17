@@ -23,6 +23,7 @@ import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.dialogs.NewUserDialog;
 import com.uncmorfi.balance.dialogs.UserOptionsDialog;
 import com.uncmorfi.balance.model.UserProvider;
+import com.uncmorfi.helpers.SnackbarHelper;
 
 
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
@@ -142,11 +143,10 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void showSnackBarMsg(int resId, int length) {
+    public void showSnackBarMsg(int resId, SnackbarHelper.SnackType type) {
         if (getActivity() != null && isAdded() && resId != 0) {
-            lastSnackBar = Snackbar.make(mRootView, resId, length)
-                    .setAction(resId, null);
-            lastSnackBar.show();
+            lastSnackBar = Snackbar.make(mRootView, resId, SnackbarHelper.getLength(type));
+            SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
         }
     }
 

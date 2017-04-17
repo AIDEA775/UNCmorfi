@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.uncmorfi.R;
+import com.uncmorfi.helpers.SnackbarHelper;
 import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
 
@@ -21,6 +22,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     public static final String MENU_FILE = "menu.txt";
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WebView mWebView;
+    private Snackbar lastSnackBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -45,6 +47,13 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
                 }
         );
 
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(
+                R.color.accent);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.white,
+                R.color.primary_light
+        );
+
         String data = MemoryHelper.readFromInternalMemory(getActivity(), MENU_FILE);
         if (data == null) {
             refreshMenu();
@@ -65,6 +74,8 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     public void onStop() {
         super.onStop();
         mSwipeRefreshLayout.setRefreshing(false);
+        if (lastSnackBar != null && lastSnackBar.isShown())
+            lastSnackBar.dismiss();
     }
 
     @Override
@@ -86,31 +97,31 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
             mSwipeRefreshLayout.setRefreshing(true);
             new RefreshMenuTask(getActivity(), this).execute();
         } else {
-            mSwipeRefreshLayout.setRefreshing(false);
-            Snackbar.make(mWebView, R.string.no_connection, Snackbar.LENGTH_LONG)
-                    .show();
+            showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);
         }
     }
 
     @Override
     public void onRefreshMenuSuccess(String menu) {
-        if (isAdded()) {
+        if (getActivity() != null && isAdded()) {
             mWebView.loadDataWithBaseURL(null, menu, "text/html", "UTF-8", null);
 
-            Snackbar.make(mWebView, R.string.update_success, Snackbar.LENGTH_LONG)
-                    .show();
-
-            mSwipeRefreshLayout.setRefreshing(false);
+            showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
         }
     }
 
     @Override
     public void onRefreshMenuFail() {
-        if (isAdded()) {
-            Snackbar.make(mWebView, R.string.update_fail, Snackbar.LENGTH_LONG)
-                    .show();
+        showSnackBarMsg(R.string.update_fail, SnackbarHelper.SnackType.ERROR);
+    }
+
+    private void showSnackBarMsg(int resId, SnackbarHelper.SnackType type) {
+        if (getActivity() != null && isAdded() && resId != 0) {
+            lastSnackBar = Snackbar.make(mWebView, resId, SnackbarHelper.getLength(type));
+            SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
 
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
+
 }

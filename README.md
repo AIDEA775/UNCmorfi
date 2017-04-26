@@ -12,14 +12,6 @@ Una app para Android para consultar todo lo referido con el comedor universitari
 Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https://github.com/AIDEA775/UNCmorfi/issues/new).
 
 
-## TODO
-- [ ] Codigo mas legible (siguiendo principios del Clean Code de Robert Cecil Martin).
-- [ ] Implementar un parser para la consulta de saldo y el medidor.
-- [ ] Refactorizar los `layouts` usando `dimens.xml`.
-- [ ] Hacer mas intuitivos los botones para agregar una tarjeta.
-- [ ] Actualizar el menú automaticamente despues de una semana.
-
-
 ## Agradecimientos
 * [KaySoohyun](https://github.com/KaySoohyun) por el icono
 * A los que contribuyeron y reportaron bugs!

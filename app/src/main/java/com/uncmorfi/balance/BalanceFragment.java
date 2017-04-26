@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -23,6 +24,7 @@ import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.dialogs.NewUserDialog;
 import com.uncmorfi.balance.dialogs.UserOptionsDialog;
 import com.uncmorfi.balance.model.UserProvider;
+import com.uncmorfi.helpers.FABHelper;
 import com.uncmorfi.helpers.SnackbarHelper;
 
 
@@ -35,6 +37,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     private View mRootView;
     private BalanceBackend mBackend;
     private RecyclerView mRecyclerView;
+    private FloatingActionButton mAddFab;
     private Snackbar lastSnackBar;
 
 
@@ -49,16 +52,40 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_balance, container, false);
 
-        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.user_list);
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.balance_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
         mRecyclerView.setAdapter(mUserCursorAdapter);
-
+        mAddFab = (FloatingActionButton) mRootView.findViewById(R.id.balance_fab);
+        mAddFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayNewUser();
+            }
+        });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx,int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    // Scroll Down
+                    FABHelper.hideFAB(getContext(), mAddFab);
+                } else if (dy < 0 && mAddFab.getScaleX() == 0) {
+                    // Scroll Up
+                    FABHelper.showFAB(getContext(), mAddFab);
+                }
+            }
+        });
         mBackend = new BalanceBackend(this, getContext());
 
         getLoaderManager().initLoader(0, null, this);
 
         return mRootView;
+    }
+
+    private void displayNewUser() {
+        Intent i = new Intent(getActivity(), BarcodeReaderActivity.class);
+        startActivityForResult(i, BARCODE_REQUEST_CODE);
     }
 
     @Override

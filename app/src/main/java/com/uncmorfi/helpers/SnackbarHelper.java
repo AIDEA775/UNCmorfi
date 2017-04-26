@@ -1,11 +1,11 @@
 package com.uncmorfi.helpers;
 
-
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 
 import com.uncmorfi.R;
+
 
 public abstract class SnackbarHelper {
     public enum SnackType {

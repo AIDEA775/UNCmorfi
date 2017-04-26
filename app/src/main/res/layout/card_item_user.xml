@@ -3,12 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="2dp"
-    android:layout_marginLeft="6dp"
-    android:layout_marginRight="6dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
     card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="2dp"
+    card_view:cardElevation="1.5dp"
     card_view:cardBackgroundColor="@color/cardview_light_background"
     card_view:cardUseCompatPadding="true">
 

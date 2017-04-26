@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
+import com.uncmorfi.helpers.FABHelper;
 import com.uncmorfi.helpers.SnackbarHelper;
 
 import java.util.Locale;
@@ -80,34 +81,12 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
     private void showRefreshButton() {
         mProgressBar.setIndeterminate(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final Interpolator interpolator = AnimationUtils.loadInterpolator(getContext(),
-                    android.R.interpolator.fast_out_slow_in);
-
-            mRefreshFab.animate()
-                    .scaleX(1)
-                    .scaleY(1)
-                    .setInterpolator(interpolator)
-                    .setDuration(600);
-        } else {
-            mRefreshFab.show();
-        }
+        FABHelper.showFAB(getContext(), mRefreshFab);
     }
 
     private void hideRefreshButton() {
         mProgressBar.setIndeterminate(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final Interpolator interpolator = AnimationUtils.loadInterpolator(getContext(),
-                    android.R.interpolator.fast_out_slow_in);
-
-            mRefreshFab.animate()
-                    .scaleX(0)
-                    .scaleY(0)
-                    .setInterpolator(interpolator)
-                    .setDuration(300);
-        } else {
-            mRefreshFab.hide();
-        }
+        FABHelper.hideFAB(getContext(), mRefreshFab);
     }
 
     @Override

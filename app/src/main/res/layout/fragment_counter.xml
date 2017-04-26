@@ -56,6 +56,6 @@
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_refresh"
         app:fabSize="normal"
-        android:layout_margin="24dp" />
+        android:layout_margin="@dimen/fab_margin" />
 
 </android.support.design.widget.CoordinatorLayout>

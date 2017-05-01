@@ -29,7 +29,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
-            <android.support.v7.widget.AppCompatEditText
+            <EditText
                 android:id="@+id/new_card_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:textColor="@color/primary_text"
                 android:textColorHint="@color/secondary_text" />
 
-            <android.support.v7.widget.AppCompatImageButton
+            <ImageButton
                 android:id="@+id/new_card_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

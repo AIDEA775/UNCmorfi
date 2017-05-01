@@ -14,13 +14,9 @@
     <string name="menu_action_update">Update menu</string>
 
     <!-- Balance -->
-    <string name="balance_action_new_user">Add user with keyboard</string>
-    <string name="balance_action_new_user_camera">Add user with camera</string>
-    <string name="balance_card_preview_info">User image</string>
-
-    <string name="balance_new_user_title">Add card</string>
-    <string name="balance_new_user_positive">Add</string>
-    <string name="balance_new_user_adding">Adding&#8230;</string>
+    <string name="balance_new_user_button_info">Done</string>
+    <string name="balance_new_user_hint">Add card manually</string>
+    <string name="balance_new_user_adding">Adding card %1$s&#8230;</string>
 
     <string name="balance_set_name_title">New name</string>
     <string name="balance_set_name_positive">Save</string>
@@ -53,7 +49,9 @@
     <string name="new_user_success">Added</string>
     <string name="new_user_fail">An error occurred</string>
 
+    <string name="detector_not_available">Barcode dependencies are not yet available.</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="low_storage_error">Low storage available</string>
+    <string name="align_barcode">Align barcode</string>
 
 </resources>

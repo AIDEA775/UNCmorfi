@@ -14,13 +14,9 @@
     <string name="menu_action_update">Actualizar menú</string>
 
     <!-- Balance -->
-    <string name="balance_action_new_user">Agregar tarjeta con el teclado</string>
-    <string name="balance_action_new_user_camera">Agregar tarjeta con la cámara</string>
-    <string name="balance_card_preview_info">Imagen del usuario</string>
-
-    <string name="balance_new_user_title">Agregar una tarjeta</string>
-    <string name="balance_new_user_positive">Agregar</string>
-    <string name="balance_new_user_adding">Agregando&#8230;</string>
+    <string name="balance_new_user_button_info">Listo</string>
+    <string name="balance_new_user_hint">Agregar tarjeta manualmente</string>
+    <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
 
     <string name="balance_set_name_title">Nuevo nombre</string>
     <string name="balance_set_name_positive">Guardar</string>
@@ -53,7 +49,9 @@
     <string name="new_user_success">Agregado</string>
     <string name="new_user_fail">Ocurrió un error</string>
 
+    <string name="detector_not_available">Dependencias del lector de barras no disponibles</string>
     <string name="permission_not_granted">Sin permisos de cámara</string>
     <string name="low_storage_error">Poca memoria disponible</string>
+    <string name="align_barcode">Alinea el codigo de barras</string>
 
 </resources>

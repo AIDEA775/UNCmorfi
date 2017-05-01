@@ -15,6 +15,7 @@ import com.uncmorfi.helpers.SnackbarHelper;
 import com.uncmorfi.helpers.ConnectionHelper;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 
 public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListener, Serializable{
@@ -24,8 +25,8 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
 
 
     public interface BalanceListener {
-        
         void showSnackBarMsg(int resId, SnackbarHelper.SnackType type);
+        void showSnackBarMsg(String msg, SnackbarHelper.SnackType type);
         void onDataChanged(Cursor c);
         void showProgressBar(int position, boolean show);
     }
@@ -53,10 +54,14 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         return result;
     }
 
+    private String getNewUserMsg(String card) {
+        return String.format(Locale.US, mContext.getString(R.string.balance_new_user_adding), card);
+    }
+
     public void newUser(String card) {
         Log.i("Backend", "New card " + card);
         if (ConnectionHelper.isOnline(mContext)) {
-            mFragment.showSnackBarMsg(R.string.balance_new_user_adding, SnackbarHelper.SnackType.LOADING);
+            mFragment.showSnackBarMsg(getNewUserMsg(card), SnackbarHelper.SnackType.LOADING);
             new DownloadUserAsyncTask(this).execute(card);
         } else {
             mFragment.showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);

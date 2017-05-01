@@ -27,7 +27,7 @@
         <activity
             android:name=".balance.BarcodeReaderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.Transparent">
         </activity>
 
         <meta-data

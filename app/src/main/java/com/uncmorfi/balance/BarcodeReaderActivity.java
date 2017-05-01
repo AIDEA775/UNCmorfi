@@ -2,6 +2,7 @@ package com.uncmorfi.balance;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -10,10 +11,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
@@ -32,6 +42,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
     private CameraSource mCameraSource;
     private SurfaceView mCameraView;
+    private EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +52,31 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         if (!checkPermission())
             requestPermissionCamera();
 
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
+
         mCameraView = (SurfaceView) findViewById(R.id.camera_view);
+        mEditText = (EditText) findViewById(R.id.new_card_input);
+        ImageButton button = (ImageButton) findViewById(R.id.new_card_button);
+
+        hideKeyboard();
+        mEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    returnResult(textView.getText().toString());
+                }
+                return false;
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnResult(mEditText.getText().toString());
+            }
+        });
 
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.CODE_39)
@@ -58,7 +93,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             // available.  The detectors will automatically become operational once the library
             // downloads complete on device.
             Log.w("BarcodeReader", "Detector dependencies are not yet available.");
-            Toast.makeText(this, "Detector dependencies are not yet available.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.detector_not_available, Toast.LENGTH_LONG).show();
 
             // Check for low storage.  If there is low storage, the native library will not be
             // downloaded, so detection will not become operational.
@@ -71,6 +106,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             }
         }
 
+        Toast.makeText(this, R.string.align_barcode, Toast.LENGTH_LONG).show();
+
         mCameraSource = new CameraSource
                 .Builder(this, barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
@@ -81,6 +118,22 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         barcodeDetector.setProcessor(new BarcodeProcessor());
         mCameraView.getHolder().addCallback(new SurfaceHolderCallback());
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        hideKeyboard();
+        return super.onTouchEvent(event);
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        mEditText.clearFocus();
     }
 
     @Override
@@ -123,16 +176,22 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                 REQUEST_PERMISSION_CAMERA);
     }
 
+    private void returnResult(String barcode) {
+        if (!barcode.equals("")) {
+            Intent data = new Intent();
+            data.putExtra(ARG_BARCODE_CARD, barcode);
+            setResult(Activity.RESULT_OK, data);
+            finish();
+        }
+    }
+
     private class BarcodeProcessor implements Detector.Processor<Barcode> {
         @Override
         public void receiveDetections (Detector.Detections<Barcode> detections) {
             final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
             if (barcodes.size() != 0) {
-                Intent data = new Intent();
-                data.putExtra(ARG_BARCODE_CARD, barcodes.valueAt(0).rawValue);
-                setResult(Activity.RESULT_OK, data);
-                finish();
+                returnResult(barcodes.valueAt(0).rawValue);
             }
         }
 

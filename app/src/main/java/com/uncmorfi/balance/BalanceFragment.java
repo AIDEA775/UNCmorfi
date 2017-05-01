@@ -13,25 +13,19 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
-import com.uncmorfi.balance.dialogs.NewUserDialog;
 import com.uncmorfi.balance.dialogs.UserOptionsDialog;
 import com.uncmorfi.balance.model.UserProvider;
-import com.uncmorfi.helpers.FABHelper;
 import com.uncmorfi.helpers.SnackbarHelper;
 
 
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, BalanceBackend.BalanceListener {
-    private static final int BARCODE_REQUEST_CODE = 1;
-    private static final int NEW_USER_REQUEST_CODE = 2;
+    private static final int NEW_USER_REQUEST_CODE = 1;
 
     private UserCursorAdapter mUserCursorAdapter;
     private View mRootView;
@@ -39,13 +33,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     private RecyclerView mRecyclerView;
     private FloatingActionButton mAddFab;
     private Snackbar lastSnackBar;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,10 +56,10 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
                     // Scroll Down
-                    FABHelper.hideFAB(getContext(), mAddFab);
+                    mAddFab.hide();
                 } else if (dy < 0 && mAddFab.getScaleX() == 0) {
                     // Scroll Up
-                    FABHelper.showFAB(getContext(), mAddFab);
+                    mAddFab.show();
                 }
             }
         });
@@ -85,28 +72,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     private void displayNewUser() {
         Intent i = new Intent(getActivity(), BarcodeReaderActivity.class);
-        startActivityForResult(i, BARCODE_REQUEST_CODE);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.balance, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_new_user:
-                NewUserDialog newUser = new NewUserDialog();
-                newUser.setTargetFragment(this, NEW_USER_REQUEST_CODE);
-                newUser.show(getFragmentManager(), "NewUserDialog");
-                break;
-            case R.id.action_new_user_camera:
-                Intent i = new Intent(getActivity(), BarcodeReaderActivity.class);
-                startActivityForResult(i, BARCODE_REQUEST_CODE);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+        startActivityForResult(i, NEW_USER_REQUEST_CODE);
     }
 
     @Override
@@ -150,18 +116,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case BARCODE_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK)
-                    mBackend.newUser(data.getStringExtra(BarcodeReaderActivity.ARG_BARCODE_CARD));
-                break;
-            case NEW_USER_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK)
-                    mBackend.newUser(data.getStringExtra(NewUserDialog.ARG_CARD));
-                break;
-            default:
-                break;
-        }
+        if (requestCode == NEW_USER_REQUEST_CODE && resultCode == Activity.RESULT_OK)
+            mBackend.newUser(data.getStringExtra(BarcodeReaderActivity.ARG_BARCODE_CARD));
     }
 
     @Override
@@ -173,6 +129,14 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     public void showSnackBarMsg(int resId, SnackbarHelper.SnackType type) {
         if (getActivity() != null && isAdded() && resId != 0) {
             lastSnackBar = Snackbar.make(mRootView, resId, SnackbarHelper.getLength(type));
+            SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
+        }
+    }
+
+    @Override
+    public void showSnackBarMsg(String msg, SnackbarHelper.SnackType type) {
+        if (getActivity() != null && isAdded() && msg != null) {
+            lastSnackBar = Snackbar.make(mRootView, msg, SnackbarHelper.getLength(type));
             SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
         }
     }

@@ -1,6 +1,5 @@
 package com.uncmorfi.counter;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,14 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Interpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
-import com.uncmorfi.helpers.FABHelper;
 import com.uncmorfi.helpers.SnackbarHelper;
 
 import java.util.Locale;
@@ -81,12 +77,12 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
     private void showRefreshButton() {
         mProgressBar.setIndeterminate(false);
-        FABHelper.showFAB(getContext(), mRefreshFab);
+        mRefreshFab.show();
     }
 
     private void hideRefreshButton() {
         mProgressBar.setIndeterminate(true);
-        FABHelper.hideFAB(getContext(), mRefreshFab);
+        mRefreshFab.hide();
     }
 
     @Override

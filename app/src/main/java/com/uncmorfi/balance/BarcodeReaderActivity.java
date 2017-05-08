@@ -60,7 +60,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         mEditText = (EditText) findViewById(R.id.new_card_input);
         ImageButton button = (ImageButton) findViewById(R.id.new_card_button);
 
-        hideKeyboard();
         mEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -106,8 +105,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             }
         }
 
-        Toast.makeText(this, R.string.align_barcode, Toast.LENGTH_LONG).show();
-
         mCameraSource = new CameraSource
                 .Builder(this, barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
@@ -136,6 +133,13 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         mEditText.clearFocus();
     }
 
+    private void showKeyboard() {
+        mEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -144,10 +148,11 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                hideKeyboard();
                 startCameraSource();
             } else {
+                showKeyboard();
                 Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_LONG).show();
-                finish();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -159,6 +164,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             if (!checkPermission()) {
                 return;
             }
+            Toast.makeText(this, R.string.align_barcode, Toast.LENGTH_LONG).show();
             mCameraSource.start(mCameraView.getHolder());
         } catch (IOException e) {
             e.printStackTrace();

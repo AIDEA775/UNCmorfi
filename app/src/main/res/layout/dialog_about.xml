@@ -11,7 +11,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:text="@string/app_name"
@@ -33,35 +34,6 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-
-    <TextView
-        android:text="Alejandro Ismael Silva"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
-
-    <TextView
-        android:text="alex.sai95@gmail.com"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoLink="email"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-    <TextView
-        android:text="Julieta Wiesztort (KaySoohyun)"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-    <TextView
-        android:text="juli.nana.07@gmail.com"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoLink="email"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 
     <TextView
         android:text="@string/about_source_code"

@@ -23,7 +23,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_menu"
         app:itemIconTint="@color/accent"
-        app:itemTextColor="@color/icon"
+        app:itemTextColor="@color/primary_text"
         app:menu="@menu/navigation" />
 
 </android.support.v4.widget.DrawerLayout>

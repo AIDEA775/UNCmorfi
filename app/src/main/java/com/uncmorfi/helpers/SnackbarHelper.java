@@ -33,7 +33,7 @@ public abstract class SnackbarHelper {
                 color = ContextCompat.getColor(context, R.color.accent);
                 break;
             case LOADING:
-                color = ContextCompat.getColor(context, R.color.secondary_text);
+                color = ContextCompat.getColor(context, R.color.primary_text);
                 break;
             case FINISH:
                 color = ContextCompat.getColor(context, R.color.primary_dark);

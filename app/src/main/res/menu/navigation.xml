@@ -23,6 +23,14 @@
             android:icon="@drawable/nav_map_black"
             android:title="@string/navigation_map" />
         <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/nav_help_black"
+            android:title="@string/navigation_help" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_person_black"
+            android:title="@string/navigation_contact" />
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/nav_about_black"
             android:title="@string/navigation_about" />

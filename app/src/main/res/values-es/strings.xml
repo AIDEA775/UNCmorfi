@@ -8,6 +8,8 @@
     <string name="navigation_balance">Saldo</string>
     <string name="navigation_counter">Medidor</string>
     <string name="navigation_map">Mapa</string>
+    <string name="navigation_help">Ayuda</string>
+    <string name="navigation_contact">Contacto</string>
     <string name="navigation_about">Acerca de</string>
 
     <!-- Menu -->
@@ -41,17 +43,91 @@
     <string name="about_source_code">Codigo fuente:</string>
 
     <!-- SnackBar -->
-    <string name="no_connection">No hay conexion</string>
-    <string name="connection_error">Error de conexion</string>
+    <string name="no_connection">No hay conexión</string>
+    <string name="connection_error">Error de conexión</string>
     <string name="updating">Actualizando&#8230;</string>
     <string name="update_success">Actualizado</string>
     <string name="update_fail">No se pudo actualizar</string>
     <string name="new_user_success">Agregado</string>
     <string name="new_user_fail">Ocurrió un error</string>
 
+    <!-- Toast -->
     <string name="detector_not_available">Dependencias del lector de barras no disponibles</string>
     <string name="permission_not_granted">Sin permisos de cámara</string>
     <string name="low_storage_error">Poca memoria disponible</string>
     <string name="align_barcode">Alinea el codigo de barras</string>
+
+    <!-- Help -->
+    <string-array name="help_string_array_questions">
+        <item>¿Quiénes somos?</item>
+        <item>¿Por qué el menú no se actualiza?</item>
+        <item>¿De dónde obtienen la información del Saldo y el Medidor?</item>
+        <item>¿Por qué piden permisos de internet y de cámara?</item>
+        <item>¿Qué significa \"Dependencias del lector de barras no disponibles\"?</item>
+        <item>¿Necesito internet para consultar el saldo de mi tarjeta?</item>
+        <item>¿Cómo puedo colaborar?</item>
+        <item>¿Qué versiones hubo antes?</item>
+    </string-array>
+
+    <string-array name="help_string_array_answers" formatted="false">
+        <item>
+            Somos dos estudiantes de FaMAF con mucha hambre.\n
+            La app inició sólo como hobbie para aprender el lenguaje de programación Java/Android,
+            por lo que nos esforzamos por pulirla lo más que podemos en nuestros tiempos
+            libres.\n\n
+            Desarrollo: Alejandro Ismael Silva\n
+                alex.sai95@gmail.com\n\n
+            Icono, banner y multitud de opiniones: Julieta Wiesztort\n
+                juli.nana.07@gmail.com
+        </item>
+        <item>
+            Al menú lo obtenemos desde la web de la universidad:\n\n
+            https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
+            Si el menú no está actualizado debe ser porque la universidad no lo actualizó.
+        </item>
+        <item>
+            De las webs del comedor:\n\n
+            Saldo: http://comedor.unc.edu.ar/autoconsulta.php\n\n
+            Medidor: http://comedor.unc.edu.ar/cocina.php
+        </item>
+        <item>
+            El permiso de internet es necesario para actualizar el menú, el saldo y el medidor.\n
+            El permiso de cámara es para agregar la tarjeta escanendo el codigo de barras.
+        </item>
+        <item>
+            Para agregar una tarjeta usando la cámara, usamos la librería \"Vision\" de
+            Google Play Services. Si esta librería no está disponible en el dispositivo,
+            se descargará automáticamente en segundo plano (Tené en cuenta que se necesita espacio
+            de almacenamiento disponible para la descarga, si no tenés sufiente aparecerá un aviso).
+            Volvé a intentarlo después de unos minutos. Si estás apurado o no tenés
+            Google Play Services, podés agregarlo manualmente ingresando el
+            código con el teclado.
+        </item>
+        <item>
+            Todos los datos se almacenan en el dispositivo para poder consultarlos sin conexión,
+            pero necesitás estar conectado a internet para actualizarlos.
+        </item>
+        <item>
+            Si sabés programar, podes colaborar con código en el repositorio de Github:\n
+                github.com/AIDEA775/UNCmorfi\n\n
+            Si tenés una sugerencia o duda, podés enviarla por e-mail en la opción \"Contacto\"
+            del menú lateral.\n\n
+            Sino, podés recomendar la app a cualquiera que veas en la fila del comedor ;)
+        </item>
+        <item>
+            [v2.0 Bolognesa]\n
+            * Agregadas las secciones Ayuda y Contacto.\n
+            * Mejorada la UI del Saldo\n
+            * Avisos con colores.\n
+            * Otros arreglos y mejoras menores\n\n
+            [v1.1 Arroz]\n
+            * Arreglado el primer inicio de la cámara en android 6.0 o superior.\n
+            * Quitado el aviso "Presiona atrás de nuevo para salir".\n
+            * Arreglado la actualización del saldo.\n
+            * Otros arreglos menores.\n\n
+            [v1.0 Apio]\n
+            * Primera version beta.
+        </item>
+    </string-array>
 
 </resources>

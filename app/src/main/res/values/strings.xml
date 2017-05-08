@@ -8,6 +8,8 @@
     <string name="navigation_balance">Balance</string>
     <string name="navigation_counter">Counter</string>
     <string name="navigation_map">Map</string>
+    <string name="navigation_help">Help</string>
+    <string name="navigation_contact">Contact</string>
     <string name="navigation_about">About</string>
 
     <!-- Menu -->
@@ -30,7 +32,7 @@
     <string name="balance_delete_user_positive">Delete</string>
     <string name="balance_delete_user_negative">Cancel</string>
     <string name="balance_delete_user_msg">Card deleted</string>
-    
+
     <!-- Counter -->
     <string name="counter_rations">Rations</string>
     <string name="counter_rations_title">%1$d rations of %2$d</string>
@@ -49,9 +51,81 @@
     <string name="new_user_success">Added</string>
     <string name="new_user_fail">An error occurred</string>
 
+    <!-- Toast -->
     <string name="detector_not_available">Barcode dependencies are not yet available.</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="low_storage_error">Low storage available</string>
     <string name="align_barcode">Align barcode</string>
+
+    <!-- Help -->
+    <string-array name="help_string_array_questions">
+        <item>Who we are?</item>
+        <item>Why is the menu not updated?</item>
+        <item>Where do they get Balance and Meter information?</item>
+        <item>Why need permission of internet and camera?</item>
+        <item>What\'s mean \"Barcode dependencies are not yet available.\"?</item>
+        <item>Do I need internet to check my card balance?</item>
+        <item>How can I collaborate?</item>
+        <item>What versions were there before?</item>
+    </string-array>
+
+    <string-array name="help_string_array_answers" formatted="false">
+        <item>
+            We are two FaMAF students with very hungry.\n
+            The app started just as a hobby to learn the Java/Android programming language,
+            so we strive to polish it as much as we can in our free time.\n\n
+            Development: Alejandro Ismael Silva\n
+                alex.sai95@gmail.com\n\n
+            Icon, banner and a multitude of opinions: Julieta Wiesztort\n
+                juli.nana.07@gmail.com
+        </item>
+        <item>
+            We get the menu of the university web:\n\n
+            https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
+            If the menu isn\'t refresh must be because the university did not update it.
+        </item>
+        <item>
+            From the webs of the university dining room:\n\n
+            Balance: http://comedor.unc.edu.ar/autoconsulta.php\n\n
+            Meter: http://comedor.unc.edu.ar/cocina.php
+        </item>
+        <item>
+            The internet permission is necessary to update the menu, the balance and the measurer.\n
+            The camera permission is for add the card by scanning the barcode.
+        </item>
+        <item>
+            To add a card using the camera, we use the \"Vision\" library of Google Play Services.
+            If this library is not available on the device, it will be downloaded automatically in
+            background (Keep in mind that you need storage space available for download, if you
+            don\'t have enough, a warning will appear). Try again after a few minutes.
+            If you are hurry or don\'t have Google Play Services, you can add it manually by
+            entering the code with the keyboard.
+        </item>
+        <item>
+            All data is stored on the device to consults offline, but you need to be connected to
+            the internet to update them.
+        </item>
+        <item>
+            If you are developer, you can collaborate with code in the Github repository:\n
+                github.com/AIDEA775/UNCmorfi\n\n
+            If you have a suggestion or doubt, you can send it by e-mail in the \"Contact\"
+            option of the navigation bar menu.\n\n
+            Otherwise, you can recommend the app to anyone you see in the dining room row ;)
+        </item>
+        <item>
+            [v2.0 Bolognesa]\n
+            * Added the sections Help and Contact.\n\n
+            * Improved UI of Balance\n\n
+            * Notifications with colors.
+            * Other minor fixes and improvements
+            [v1.1 Arroz]\n
+            * Fixed the first start of the camera on android 6.0 or higher.\n
+            * Removed the "Press back again to exit".\n
+            * Fixed balance update.\n
+            * Other small fixes.\n\n
+            [v1.0 Apio]\n
+            * First beta version.
+        </item>
+    </string-array>
 
 </resources>

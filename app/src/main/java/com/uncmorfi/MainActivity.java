@@ -1,5 +1,7 @@
 package com.uncmorfi;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.uncmorfi.about.AboutDialog;
 import com.uncmorfi.balance.BalanceFragment;
 import com.uncmorfi.counter.CounterFragment;
+import com.uncmorfi.help.HelpFragment;
 import com.uncmorfi.map.MapFragment;
 import com.uncmorfi.menu.MenuFragment;
 
@@ -114,11 +117,27 @@ public class MainActivity extends AppCompatActivity implements
 
                 mapFragment.getMapAsync(this);
                 break;
+            case R.id.nav_help:
+                fragment = new HelpFragment();
+                break;
+            case R.id.nav_contact:
+                sendEmail();
+                break;
             case R.id.nav_about:
                 new AboutDialog().show(getSupportFragmentManager(), "AboutDialog");
                 break;
         }
         return fragment;
+    }
+
+    private void sendEmail() {
+        Intent i = new Intent(Intent.ACTION_SENDTO);
+        i.setData(Uri.parse("mailto:"));
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"alex.sai95@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "[UNCmorfi]");
+
+        if (i.resolveActivity(getPackageManager()) != null)
+            startActivity(i);
     }
 
     @Override

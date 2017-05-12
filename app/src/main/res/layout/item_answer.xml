@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="1.5dp"
-    card_view:cardUseCompatPadding="true">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/help_answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="32dp"
+        android:paddingLeft="32dp"
+        android:paddingEnd="12dp"
+        android:paddingRight="12dp"
+        android:textIsSelectable="true"
         android:autoLink="web|email"
+        android:textColor="@color/secondary_text"
         tools:text="Answer here"/>
 
-</android.support.v7.widget.CardView>
+</LinearLayout>

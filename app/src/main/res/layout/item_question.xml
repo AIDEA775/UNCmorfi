@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/help_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_arrow_down"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:ignore="contentDescription"/>
 
     <TextView
         android:id="@+id/help_question"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:padding="12dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:textColor="@color/primary_text"
         tools:text="Question here"/>
 
 </LinearLayout>

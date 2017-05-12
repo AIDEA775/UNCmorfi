@@ -5,11 +5,9 @@
     android:orientation="vertical"
     tools:context="com.uncmorfi.help.HelpFragment">
 
-    <ExpandableListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="1dp"
         android:id="@+id/help_list"/>
 
 </LinearLayout>

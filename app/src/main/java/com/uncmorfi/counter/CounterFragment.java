@@ -88,12 +88,12 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     @Override
     public void onRefreshCounterSuccess(int percent) {
         if (isAdded()) {
+            showRefreshButton();
             mProgressBar.setProgress(percent);
             mResumeView.setText(String.format(getString(R.string.counter_rations_title), percent,
                     FOOD_RATIONS));
             mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / FOOD_RATIONS));
 
-            showRefreshButton();
             showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
         }
     }

@@ -115,10 +115,12 @@
         </item>
         <item>
             [v2.0 Bolognesa]\n
-            * Added the sections Help and Contact.\n\n
-            * Improved UI of Balance\n\n
+            * Added the sections Help and Contact.\n
+            * Improved UI of Balance\n
             * Notifications with colors.
-            * Other minor fixes and improvements
+            * Update all cards at once.\n
+            * Allow application to be installed on the external storage.\n
+            * Other minor fixes and improvements\n\n
             [v1.1 Arroz]\n
             * Fixed the first start of the camera on android 6.0 or higher.\n
             * Removed the "Press back again to exit".\n

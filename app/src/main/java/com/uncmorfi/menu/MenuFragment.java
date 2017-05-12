@@ -85,7 +85,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() ==  R.id.action_sync_menu) {
+        if (item.getItemId() ==  R.id.menu_update) {
             refreshMenu();
             return true;
         }

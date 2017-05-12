@@ -7,15 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".balance.BalanceFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/balance_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/balance_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="80dp"
-        android:clipToPadding="false"
-        android:scrollbarStyle="outsideOverlay"
-        android:divider="@null">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/balance_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"
+            android:divider="@null">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/balance_fab"

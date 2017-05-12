@@ -11,15 +11,17 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
+import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_POS;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
 
 public class DeleteUserDialog extends DialogFragment {
 
-    public static DeleteUserDialog newInstance(int userId, BalanceBackend backend) {
+    public static DeleteUserDialog newInstance(int userId, int position, BalanceBackend backend) {
         Bundle args = new Bundle();
 
         args.putInt(ARG_USER, userId);
+        args.putInt(ARG_POS, position);
         args.putSerializable(ARG_BACKEND, backend);
 
         DeleteUserDialog fragment = new DeleteUserDialog();
@@ -33,13 +35,14 @@ public class DeleteUserDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         final int userId = getArguments().getInt(ARG_USER);
+        final int position = getArguments().getInt(ARG_POS);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
         if (backend != null) {
             DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    backend.deleteUser(userId);
+                    backend.deleteUser(userId, position);
                     dismiss();
                 }
             };

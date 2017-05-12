@@ -15,15 +15,17 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
+import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_POS;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
 
 public class SetNameDialog extends DialogFragment {
 
-    public static SetNameDialog newInstance(int userId, BalanceBackend backend) {
+    public static SetNameDialog newInstance(int userId, int position, BalanceBackend backend) {
         Bundle args = new Bundle();
 
         args.putInt(ARG_USER, userId);
+        args.putInt(ARG_POS, position);
         args.putSerializable(ARG_BACKEND, backend);
 
         SetNameDialog fragment = new SetNameDialog();
@@ -40,6 +42,7 @@ public class SetNameDialog extends DialogFragment {
         builder.setView(v);
 
         final int userId = getArguments().getInt(ARG_USER);
+        final int position = getArguments().getInt(ARG_POS);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
         final EditText input = (EditText) v.findViewById(R.id.new_name_text);
@@ -51,7 +54,7 @@ public class SetNameDialog extends DialogFragment {
             agree.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    backend.updateNameOfUser(userId, input.getText().toString());
+                    backend.updateNameOfUser(userId, position, input.getText().toString());
                     dismiss();
                 }
             });

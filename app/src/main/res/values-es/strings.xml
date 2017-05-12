@@ -16,6 +16,7 @@
     <string name="menu_action_update">Actualizar menú</string>
 
     <!-- Balance -->
+    <string name="balance_action_update">Actualzar tarjetas</string>
     <string name="balance_new_user_button_info">Listo</string>
     <string name="balance_new_user_hint">Agregar tarjeta manualmente</string>
     <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
@@ -98,7 +99,8 @@
             Para agregar una tarjeta usando la cámara, usamos la librería \"Vision\" de
             Google Play Services. Si esta librería no está disponible en el dispositivo,
             se descargará automáticamente en segundo plano (Tené en cuenta que se necesita espacio
-            de almacenamiento disponible para la descarga, si no tenés sufiente aparecerá un aviso).
+            de almacenamiento disponible para la descarga, si no tenés sufiente aparecerá un
+            aviso).\n\n
             Volvé a intentarlo después de unos minutos. Si estás apurado o no tenés
             Google Play Services, podés agregarlo manualmente ingresando el
             código con el teclado.

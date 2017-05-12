@@ -13,7 +13,7 @@ import com.uncmorfi.balance.backend.BalanceBackend;
 
 public class UserOptionsDialog extends DialogFragment {
     public static final String ARG_USER = "user";
-    public static final String ARG_HOLDER = "holder";
+    public static final String ARG_POS = "position";
     public static final String ARG_BACKEND = "backend";
 
 
@@ -21,7 +21,7 @@ public class UserOptionsDialog extends DialogFragment {
         Bundle args = new Bundle();
 
         args.putInt(ARG_USER, userId);
-        args.putInt(ARG_HOLDER, position);
+        args.putInt(ARG_POS, position);
         args.putSerializable(ARG_BACKEND, backend);
 
         UserOptionsDialog fragment = new UserOptionsDialog();
@@ -41,7 +41,7 @@ public class UserOptionsDialog extends DialogFragment {
         items[2] = getString(R.string.balance_user_options_set_name);
 
         final int userId =  getArguments().getInt(ARG_USER);
-        final int position = getArguments().getInt(ARG_HOLDER);
+        final int position = getArguments().getInt(ARG_POS);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
         if (backend != null) {
@@ -54,11 +54,11 @@ public class UserOptionsDialog extends DialogFragment {
                                     backend.updateBalanceOfUser(userId, position);
                                     break;
                                 case 1:
-                                    DeleteUserDialog.newInstance(userId, backend)
+                                    DeleteUserDialog.newInstance(userId, position, backend)
                                             .show(getFragmentManager(), "DeleteUserDialog");
                                     break;
                                 case 2:
-                                    SetNameDialog.newInstance(userId, backend)
+                                    SetNameDialog.newInstance(userId, position, backend)
                                             .show(getFragmentManager(), "SetNameDialog");
                                     break;
                                 default:

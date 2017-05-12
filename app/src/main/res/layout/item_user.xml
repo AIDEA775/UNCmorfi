@@ -80,7 +80,7 @@
             tools:ignore="ContentDescription" />
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/user_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

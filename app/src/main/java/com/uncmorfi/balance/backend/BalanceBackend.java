@@ -22,19 +22,22 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
     private BalanceListener mFragment;
     private Context mContext;
     private ContentResolver mContentResolver;
-
+    private int mUpdateAsyncTaskCount;
 
     public interface BalanceListener {
         void showSnackBarMsg(int resId, SnackbarHelper.SnackType type);
         void showSnackBarMsg(String msg, SnackbarHelper.SnackType type);
-        void onDataChanged(Cursor c);
         void showProgressBar(int position, boolean show);
+        void onItemAdded(Cursor c);
+        void onItemChanged(int position, Cursor c);
+        void onItemDeleted(int position, Cursor c);
     }
 
-    public BalanceBackend(BalanceListener listener, Context context) {
+    public BalanceBackend(Context context, BalanceListener listener) {
         mFragment = listener;
         mContext = context;
         mContentResolver = context.getContentResolver();
+        mUpdateAsyncTaskCount = 0;
     }
 
     public User getUserById(int id) {
@@ -62,7 +65,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         Log.i("Backend", "New card " + card);
         if (ConnectionHelper.isOnline(mContext)) {
             mFragment.showSnackBarMsg(getNewUserMsg(card), SnackbarHelper.SnackType.LOADING);
-            new DownloadUserAsyncTask(this).execute(card);
+            new DownloadUserAsyncTask(this, 0).execute(card);
         } else {
             mFragment.showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);
         }
@@ -72,15 +75,17 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         if (ConnectionHelper.isOnline(mContext)) {
             mFragment.showSnackBarMsg(R.string.updating, SnackbarHelper.SnackType.LOADING);
 
-            new DownloadUserAsyncTask(this) {
+            new DownloadUserAsyncTask(this, position) {
                 @Override
                 public void onPreExecute() {
                     super.onPreExecute();
+                    mUpdateAsyncTaskCount++;
                     mFragment.showProgressBar(position, true);
                 }
 
                 @Override
                 public void onPostExecute(User user) {
+                    mUpdateAsyncTaskCount--;
                     mFragment.showProgressBar(position, false);
                     super.onPostExecute(user);
                 }
@@ -90,16 +95,16 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         }
     }
 
-    public void deleteUser(int userId) {
+    public void deleteUser(int userId, int position) {
         mContentResolver.delete(
                 ContentUris.withAppendedId(UserProvider.CONTENT_URI, userId),
                 null,
                 null);
-        mFragment.onDataChanged(getAllCards());
+        mFragment.onItemDeleted(position, getAllUsers());
         mFragment.showSnackBarMsg(R.string.balance_delete_user_msg, SnackbarHelper.SnackType.FINISH);
     }
 
-    public void updateNameOfUser(int userId, String name) {
+    public void updateNameOfUser(int userId, int position, String name) {
         ContentValues values = new ContentValues();
         values.put(UsersContract.UserEntry.NAME, name);
         mContentResolver.update(
@@ -108,23 +113,25 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
                 null,
                 null
         );
-        mFragment.onDataChanged(getAllCards());
+        mFragment.onItemChanged(position, getAllUsers());
         mFragment.showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
     }
 
     @Override
-    public void onUserDownloaded(User user) {
+    public void onUserDownloaded(User user, int position) {
         int rows = updateUserBalance(user);
 
         // Si una fila fue afectada, entonces se actualizó el balance del usuario
         // sinó, insertar el nuevo usuario
         if (rows == 1) {
-            mFragment.showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
-        } else {
+            mFragment.onItemChanged(position, getAllUsers());
+            if (mUpdateAsyncTaskCount == 0)
+                mFragment.showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
+        } else if (rows == 0){
             insertUser(user);
+            mFragment.onItemAdded(getAllUsers());
             mFragment.showSnackBarMsg(R.string.new_user_success, SnackbarHelper.SnackType.FINISH);
         }
-        mFragment.onDataChanged(getAllCards());
     }
 
     @Override
@@ -148,7 +155,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         );
     }
 
-    private Cursor getAllCards() {
+    private Cursor getAllUsers() {
         return mContentResolver.query(
                 UserProvider.CONTENT_URI,
                 null,

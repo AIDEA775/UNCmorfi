@@ -20,7 +20,10 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UsersContract;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -28,14 +31,14 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
     private Context mContext;
     private Cursor mCursor;
+    private List<Boolean> mUpdateInProgress = new ArrayList<>();
     private OnCardClickListener mListener;
 
     interface OnCardClickListener {
-        void onClick(int position, int id);
+        void onClick(int userId, int position);
     }
 
-    class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
-            Serializable {
+    class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nameText;
         TextView cardText;
         TextView typeText;
@@ -51,7 +54,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
             typeText = (TextView) v.findViewById(R.id.user_type);
             balanceText = (TextView) v.findViewById(R.id.user_balance);
             userImage = (ImageView) v.findViewById(R.id.user_image);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+            progressBar = (ProgressBar) v.findViewById(R.id.user_bar);
 
             v.setOnClickListener(this);
         }
@@ -59,9 +62,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         @Override
         public void onClick(View v) {
             int position = this.getAdapterPosition();
-            mCursor.moveToPosition(position);
-            int id = mCursor.getInt(mCursor.getColumnIndex(UsersContract.UserEntry._ID));
-            mListener.onClick(position, id);
+            mListener.onClick(getItemIdFromCursor(position), position);
         }
     }
 
@@ -80,29 +81,42 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     @Override
     public void onBindViewHolder(final UserViewHolder holder, int position) {
         mCursor.moveToPosition(position);
+        User user = new User(mCursor);
 
-        final User user = new User(mCursor);
+        setHolder(holder, user);
+        setProgressBar(holder, position);
+        setImage(holder, user);
+    }
 
+    private void setHolder(UserViewHolder holder, User user) {
         holder.nameText.setText(user.getName());
         holder.cardText.setText(user.getCard());
         holder.typeText.setText(user.getType());
         holder.balanceText.setText(String.format(Locale.US, "$ %d", user.getBalance()));
-        holder.progressBar.setVisibility(View.GONE);
+    }
 
+    private void setProgressBar(UserViewHolder holder, int position) {
+        if (mUpdateInProgress.get(position))
+            holder.progressBar.setVisibility(View.VISIBLE);
+        else
+            holder.progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void setImage(final UserViewHolder holder, User user) {
         Glide.with(mContext)
                 .load(USER_IMAGES_URL + user.getImage())
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(new BitmapImageViewTarget(holder.userImage) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                holder.userImage.setImageDrawable(circularBitmapDrawable);
-            }
-        });
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        holder.userImage.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
     }
 
     @Override
@@ -112,8 +126,28 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         return 0;
     }
 
-    void swapCursor(Cursor newCursor) {
+    void setCursor(Cursor newCursor) {
         mCursor = newCursor;
-        notifyDataSetChanged();
+        resizeUpdateInProgress();
+    }
+
+    private void resizeUpdateInProgress() {
+        if (mCursor != null) {
+            int diff = mCursor.getCount() - mUpdateInProgress.size();
+            if (diff > 0) {
+                List<Boolean> list = Arrays.asList(new Boolean[diff]);
+                Collections.fill(list, Boolean.FALSE);
+                mUpdateInProgress.addAll(list);
+            }
+        }
+    }
+
+    void setInProgress(int position, boolean show) {
+        mUpdateInProgress.set(position, show);
+    }
+
+    int getItemIdFromCursor(int position) {
+        mCursor.moveToPosition(position);
+        return mCursor.getInt(mCursor.getColumnIndex(UsersContract.UserEntry._ID));
     }
 }

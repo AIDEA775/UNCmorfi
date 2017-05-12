@@ -16,6 +16,7 @@
     <string name="menu_action_update">Update menu</string>
 
     <!-- Balance -->
+    <string name="balance_action_update">Update all cards</string>
     <string name="balance_new_user_button_info">Done</string>
     <string name="balance_new_user_hint">Add card manually</string>
     <string name="balance_new_user_adding">Adding card %1$s&#8230;</string>
@@ -97,9 +98,9 @@
             To add a card using the camera, we use the \"Vision\" library of Google Play Services.
             If this library is not available on the device, it will be downloaded automatically in
             background (Keep in mind that you need storage space available for download, if you
-            don\'t have enough, a warning will appear). Try again after a few minutes.
-            If you are hurry or don\'t have Google Play Services, you can add it manually by
-            entering the code with the keyboard.
+            don\'t have enough, a warning will appear).\n\n
+            Try again after a few minutes. If you are hurry or don\'t have Google Play Services,
+            you can add it manually by entering the code with the keyboard.
         </item>
         <item>
             All data is stored on the device to consults offline, but you need to be connected to

@@ -15,14 +15,16 @@ import java.net.URL;
 
 class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
     private DownloadUserListener mListener;
+    private int mPosition;
 
     interface DownloadUserListener {
-        void onUserDownloaded(User user);
+        void onUserDownloaded(User user, int position);
         void onUserDownloadFail();
     }
 
-    DownloadUserAsyncTask(DownloadUserListener listener) {
+    DownloadUserAsyncTask(DownloadUserListener listener, int position) {
         mListener = listener;
+        mPosition = position;
     }
 
     @Override
@@ -51,7 +53,7 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
     @Override
     protected void onPostExecute(User user) {
         if (user == null) mListener.onUserDownloadFail();
-        else mListener.onUserDownloaded(user);
+        else mListener.onUserDownloaded(user, mPosition);
     }
 
     private String[] downloadUser(String card) throws IOException {

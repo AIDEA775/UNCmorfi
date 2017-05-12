@@ -4,15 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,47 +30,93 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         LoaderManager.LoaderCallbacks<Cursor>, BalanceBackend.BalanceListener {
     private static final int NEW_USER_REQUEST_CODE = 1;
 
-    private UserCursorAdapter mUserCursorAdapter;
     private View mRootView;
+    private UserCursorAdapter mUserCursorAdapter;
     private BalanceBackend mBackend;
-    private RecyclerView mRecyclerView;
-    private FloatingActionButton mAddFab;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private Snackbar lastSnackBar;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_balance, container, false);
 
-        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.balance_list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setSwipeRefreshLayout();
+        setRecyclerAndAdapter();
+        setFloatingActionButton();
+
+        mBackend = new BalanceBackend(getContext(), this);
+        getLoaderManager().initLoader(0, null, this);
+
+        return mRootView;
+    }
+
+    private void setSwipeRefreshLayout() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.balance_swipe_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        updateAllUsers();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(
+                R.color.accent);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.white,
+                R.color.primary_light
+        );
+    }
+
+    private void setRecyclerAndAdapter() {
+        RecyclerView recyclerView = (RecyclerView) mRootView.findViewById(R.id.balance_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
-        mRecyclerView.setAdapter(mUserCursorAdapter);
-        mAddFab = (FloatingActionButton) mRootView.findViewById(R.id.balance_fab);
-        mAddFab.setOnClickListener(new View.OnClickListener() {
+        recyclerView.setAdapter(mUserCursorAdapter);
+    }
+
+    private void setFloatingActionButton() {
+        (mRootView.findViewById(R.id.balance_fab)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 displayNewUser();
             }
         });
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx,int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    // Scroll Down
-                    mAddFab.hide();
-                } else if (dy < 0 && mAddFab.getScaleX() == 0) {
-                    // Scroll Up
-                    mAddFab.show();
-                }
-            }
-        });
-        mBackend = new BalanceBackend(this, getContext());
+    }
 
-        getLoaderManager().initLoader(0, null, this);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.balance, menu);
+    }
 
-        return mRootView;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() ==  R.id.balance_update) {
+            updateAllUsers();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(int userId, int position) {
+        UserOptionsDialog.newInstance(userId, position, mBackend)
+                .show(getFragmentManager(), "UserOptionsDialog");
+    }
+
+    private void updateAllUsers() {
+        for (int pos = 0; pos < mUserCursorAdapter.getItemCount(); pos++) {
+            int userId = mUserCursorAdapter.getItemIdFromCursor(pos);
+            mBackend.updateBalanceOfUser(userId, pos);
+        }
     }
 
     private void displayNewUser() {
@@ -84,6 +133,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     @Override
     public void onStop() {
         super.onStop();
+        mSwipeRefreshLayout.setRefreshing(false);
         if (lastSnackBar != null && lastSnackBar.isShown())
             lastSnackBar.dismiss();
     }
@@ -100,18 +150,16 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (mUserCursorAdapter != null) mUserCursorAdapter.swapCursor(data);
+        if (mUserCursorAdapter != null) {
+            mUserCursorAdapter.setCursor(data);
+            mUserCursorAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mUserCursorAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onClick(int position, int userId) {
-        UserOptionsDialog userOptions = UserOptionsDialog.newInstance(userId, position, mBackend);
-        userOptions.show(getFragmentManager(), "UserOptionsDialog");
+        mUserCursorAdapter.setCursor(null);
+        mUserCursorAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -121,8 +169,22 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void onDataChanged(Cursor c) {
-        mUserCursorAdapter.swapCursor(c);
+    public void onItemAdded(Cursor c) {
+        mUserCursorAdapter.setCursor(c);
+        mUserCursorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemChanged(int position, Cursor c) {
+        mUserCursorAdapter.setCursor(c);
+        mUserCursorAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onItemDeleted(int position, Cursor c) {
+        mUserCursorAdapter.setCursor(c);
+        mUserCursorAdapter.notifyItemRemoved(position);
+
     }
 
     @Override
@@ -143,12 +205,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public void showProgressBar(int position, boolean show) {
-        UserCursorAdapter.UserViewHolder holder = (UserCursorAdapter.UserViewHolder)
-                mRecyclerView.findViewHolderForAdapterPosition(position);
-
-        if (holder != null) {
-            if (show) holder.progressBar.setVisibility(View.VISIBLE);
-            else holder.progressBar.setVisibility(View.GONE);
-        }
+        mUserCursorAdapter.setInProgress(position, show);
+        mUserCursorAdapter.notifyItemChanged(position);
     }
 }

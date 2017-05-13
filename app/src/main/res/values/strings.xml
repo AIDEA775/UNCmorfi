@@ -72,55 +72,56 @@
 
     <string-array name="help_string_array_answers" formatted="false">
         <item>
-            We are two FaMAF students with very hungry.\n
-            The app started just as a hobby to learn the Java/Android programming language,
+            \tWe are two FaMAF students with very hungry.\n\n
+            \tThe app started just as a hobby to learn the Java/Android programming language,
             so we strive to polish it as much as we can in our free time.\n\n
             Development: Alejandro Ismael Silva\n
-                alex.sai95@gmail.com\n\n
+                \t\talex.sai95@gmail.com\n\n
             Icon, banner and a multitude of opinions: Julieta Wiesztort\n
-                juli.nana.07@gmail.com
+                \t\tjuli.nana.07@gmail.com
         </item>
         <item>
-            We get the menu of the university web:\n\n
-            https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
-            If the menu isn\'t refresh must be because the university did not update it.
+            \tWe get the menu of the university web:\n\n
+            www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
+            \tIf the menu isn\'t refresh must be because the university did not update it.
         </item>
         <item>
-            From the webs of the university dining room:\n\n
-            Balance: http://comedor.unc.edu.ar/autoconsulta.php\n\n
-            Meter: http://comedor.unc.edu.ar/cocina.php
+            \tFrom the webs of the university dining room:\n\n
+            \tBalance: comedor.unc.edu.ar/autoconsulta.php\n\n
+            \tMeter: comedor.unc.edu.ar/cocina.php
         </item>
         <item>
-            The internet permission is necessary to update the menu, the balance and the measurer.\n
-            The camera permission is for add the card by scanning the barcode.
+            \tThe internet permission is necessary to update the menu, the balance and the
+            measurer.\n
+            \tThe camera permission is for add the card by scanning the barcode.
         </item>
         <item>
-            To add a card using the camera, we use the \"Vision\" library of Google Play Services.
+            \tTo add a card using the camera, we use the \"Vision\" library of Google Play Services.
             If this library is not available on the device, it will be downloaded automatically in
             background (Keep in mind that you need storage space available for download, if you
             don\'t have enough, a warning will appear).\n\n
-            Try again after a few minutes. If you are hurry or don\'t have Google Play Services,
+            \tTry again after a few minutes. If you are hurry or don\'t have Google Play Services,
             you can add it manually by entering the code with the keyboard.
         </item>
         <item>
-            All data is stored on the device to consults offline, but you need to be connected to
+            \tAll data is stored on the device to consults offline, but you need to be connected to
             the internet to update them.
         </item>
         <item>
-            If you are developer, you can collaborate with code in the Github repository:\n
-                github.com/AIDEA775/UNCmorfi\n\n
-            If you have a suggestion or doubt, you can send it by e-mail in the \"Contact\"
+            \tIf you are developer, you can collaborate with code in the Github repository:\n
+                \t\tgithub.com/AIDEA775/UNCmorfi\n\n
+            \tIf you have a suggestion or doubt, you can send it by e-mail in the \"Contact\"
             option of the navigation bar menu.\n\n
-            Otherwise, you can recommend the app to anyone you see in the dining room row ;)
+            \tOtherwise, you can recommend the app to anyone you see in the dining room row ;)
         </item>
         <item>
             [v2.0 Bolognesa]\n
             * Added the sections Help and Contact.\n
-            * Improved UI of Balance\n
-            * Notifications with colors.
+            * Improved UI of Balance.\n
+            * Notifications with colors.\n
             * Update all cards at once.\n
             * Allow application to be installed on the external storage.\n
-            * Other minor fixes and improvements\n\n
+            * Other minor fixes and improvements.\n\n
             [v1.1 Arroz]\n
             * Fixed the first start of the camera on android 6.0 or higher.\n
             * Removed the "Press back again to exit".\n

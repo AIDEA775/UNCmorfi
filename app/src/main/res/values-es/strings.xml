@@ -72,58 +72,58 @@
 
     <string-array name="help_string_array_answers" formatted="false">
         <item>
-            Somos dos estudiantes de FaMAF con mucha hambre.\n
-            La app inició sólo como hobbie para aprender el lenguaje de programación Java/Android,
-            por lo que nos esforzamos por pulirla lo más que podemos en nuestros tiempos
-            libres.\n\n
+            \tSomos dos estudiantes de FaMAF con mucha hambre.\n\n
+            \tLa app inició sólo como hobbie para aprender el lenguaje de programación
+            Java/Android, por lo que nos esforzamos por pulirla lo más que podemos en nuestros
+            tiempos libres.\n\n
             Desarrollo: Alejandro Ismael Silva\n
-                alex.sai95@gmail.com\n\n
+                \t\talex.sai95@gmail.com\n\n
             Icono, banner y multitud de opiniones: Julieta Wiesztort\n
-                juli.nana.07@gmail.com
+                \t\tjuli.nana.07@gmail.com
         </item>
         <item>
-            Al menú lo obtenemos desde la web de la universidad:\n\n
-            https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
-            Si el menú no está actualizado debe ser porque la universidad no lo actualizó.
+            \tAl menú lo obtenemos desde la web de la universidad:\n\n
+            www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
+            \tSi el menú no está actualizado debe ser porque la universidad no lo actualizó.
         </item>
         <item>
-            De las webs del comedor:\n\n
-            Saldo: http://comedor.unc.edu.ar/autoconsulta.php\n\n
-            Medidor: http://comedor.unc.edu.ar/cocina.php
+            \tDe las webs del comedor:\n\n
+            \tSaldo: comedor.unc.edu.ar/autoconsulta.php\n\n
+            \tMedidor: comedor.unc.edu.ar/cocina.php
         </item>
         <item>
-            El permiso de internet es necesario para actualizar el menú, el saldo y el medidor.\n
-            El permiso de cámara es para agregar la tarjeta escanendo el codigo de barras.
+            \tEl permiso de internet es necesario para actualizar el menú, el saldo y el medidor.\n
+            \tEl permiso de cámara es para agregar la tarjeta escanendo el codigo de barras.
         </item>
         <item>
-            Para agregar una tarjeta usando la cámara, usamos la librería \"Vision\" de
+            \tPara agregar una tarjeta usando la cámara, usamos la librería \"Vision\" de
             Google Play Services. Si esta librería no está disponible en el dispositivo,
             se descargará automáticamente en segundo plano (Tené en cuenta que se necesita espacio
             de almacenamiento disponible para la descarga, si no tenés sufiente aparecerá un
             aviso).\n\n
-            Volvé a intentarlo después de unos minutos. Si estás apurado o no tenés
+            \tVolvé a intentarlo después de unos minutos. Si estás apurado o no tenés
             Google Play Services, podés agregarlo manualmente ingresando el
             código con el teclado.
         </item>
         <item>
-            Todos los datos se almacenan en el dispositivo para poder consultarlos sin conexión,
+            \tTodos los datos se almacenan en el dispositivo para poder consultarlos sin conexión,
             pero necesitás estar conectado a internet para actualizarlos.
         </item>
         <item>
-            Si sabés programar, podes colaborar con código en el repositorio de Github:\n
-                github.com/AIDEA775/UNCmorfi\n\n
-            Si tenés una sugerencia o duda, podés enviarla por e-mail en la opción \"Contacto\"
+            \tSi sabés programar, podes colaborar con código en el repositorio de Github:\n
+                \t\tgithub.com/AIDEA775/UNCmorfi\n\n
+            \tSi tenés una sugerencia o duda, podés enviarla por e-mail en la opción \"Contacto\"
             del menú lateral.\n\n
-            Sino, podés recomendar la app a cualquiera que veas en la fila del comedor ;)
+            \tSino, podés recomendar la app a cualquiera que veas en la fila del comedor ;)
         </item>
         <item>
             [v2.0 Bolognesa]\n
             * Agregadas las secciones Ayuda y Contacto.\n
-            * Mejorada la UI del Saldo\n
+            * Mejorada la UI del Saldo.\n
             * Avisos con colores.\n
             * Actualiza todas las tarjetas de una vez.\n
             * Ahora se puede instalar la aplicacion en la SD.\n
-            * Otros arreglos y mejoras menores\n\n
+            * Otros arreglos y mejoras menores.\n\n
             [v1.1 Arroz]\n
             * Arreglado el primer inicio de la cámara en android 6.0 o superior.\n
             * Quitado el aviso "Presiona atrás de nuevo para salir".\n

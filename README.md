@@ -1,4 +1,4 @@
-![](resources/UNCmorfi-banner-v4.png)
+![](resources/UNCmorfi-bannerv5.png)
 
 Una app para Android para consultar todo lo referido con el comedor universitario de la Universidad Nacional de Córdoba, Argentina.
 

@@ -12,8 +12,8 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:export-ydpi="96.000008"
    inkscape:export-xdpi="96.000008"
-   inkscape:export-filename="/home/aidea775/UNCmorfi-bannerv4.1e.png"
-   sodipodi:docname="UNCmorfi-bannerv4.svg"
+   inkscape:export-filename="/home/aidea775/UNCmorfi-bannerv5.png"
+   sodipodi:docname="UNCmorfi-bannerv5.svg"
    inkscape:version="0.92.1 r"
    id="svg8"
    version="1.1"
@@ -22,16 +22,16 @@
    width="1024">
   <sodipodi:namedview
      inkscape:window-maximized="0"
-     inkscape:window-y="24"
+     inkscape:window-y="0"
      inkscape:window-x="0"
-     inkscape:window-height="716"
+     inkscape:window-height="740"
      inkscape:window-width="1366"
      units="px"
      showgrid="false"
      inkscape:current-layer="layer2"
      inkscape:document-units="mm"
-     inkscape:cy="278.78694"
-     inkscape:cx="436.6994"
+     inkscape:cy="256.33492"
+     inkscape:cx="499.97967"
      inkscape:zoom="0.70710678"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -90,19 +90,6 @@
        id="radialGradient2517"
        xlink:href="#linearGradient2515"
        inkscape:collect="always" />
-    <filter
-       height="1.6903894"
-       y="-0.34519472"
-       width="1.111505"
-       x="-0.055752493"
-       id="filter2712"
-       style="color-interpolation-filters:sRGB"
-       inkscape:collect="always">
-      <feGaussianBlur
-         id="feGaussianBlur2714"
-         stdDeviation="11.888543"
-         inkscape:collect="always" />
-    </filter>
   </defs>
   <metadata
      id="metadata5">
@@ -112,7 +99,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -140,30 +127,17 @@
      style="display:inline">
     <flowRoot
        xml:space="preserve"
-       id="flowRoot1040"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#030000;fill-opacity:0.58823532;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter2712);"
-       transform="matrix(0.26458333,0,0,0.26458333,-20.283596,10.682904)"><flowRegion
-         id="flowRegion1042"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#030000;fill-opacity:0.58823532;"><rect
-           id="rect1044"
-           width="542.85712"
-           height="217.14285"
-           x="484.28571"
-           y="152.85715"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#030000;fill-opacity:0.58823532;" /></flowRegion><flowPara
-         id="flowPara1046">UNCmorfi</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
        id="flowRoot1040-5"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;vector-effect:none;fill:#f0f0f0;fill-opacity:1;stroke:none;stroke-width:1.96555233;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;vector-effect:none;fill:#f0f0f0;fill-opacity:1;stroke:none;stroke-width:1.96555233;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
        transform="matrix(0.26458333,0,0,0.26458333,-20.283596,10.682904)"><flowRegion
          id="flowRegion1042-6"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';vector-effect:none;fill:#f0f0f0;fill-opacity:1;stroke-width:1.96555233;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"><rect
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';vector-effect:none;fill:#f0f0f0;fill-opacity:1;stroke-width:1.96555233;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"><rect
            id="rect1044-2"
            width="542.85712"
            height="217.14285"
            x="484.28571"
            y="152.85715"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';vector-effect:none;fill:#f0f0f0;fill-opacity:1;stroke-width:1.96555233;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:106.66667175px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';vector-effect:none;fill:#f0f0f0;fill-opacity:1;stroke-width:1.96555233;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;" /></flowRegion><flowPara
          id="flowPara1046-9">UNCmorfi</flowPara></flowRoot>  </g>
   <g
      inkscape:groupmode="layer"

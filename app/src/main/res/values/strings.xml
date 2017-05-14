@@ -121,6 +121,7 @@
             * Notifications with colors.\n
             * Update all cards at once.\n
             * Allow application to be installed on the external storage.\n
+            * Reduce application size.\n
             * Other minor fixes and improvements.\n\n
             [v1.1 Arroz]\n
             * Fixed the first start of the camera on android 6.0 or higher.\n

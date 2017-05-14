@@ -15,3 +15,10 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontobfuscate
+-keep class com.uncmorfi.** {
+    public <fields>;
+    private <fields>;
+}
+-keep class com.uncmorfi.balance.model.UsersContract$* { *; }

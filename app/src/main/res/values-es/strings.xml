@@ -16,7 +16,7 @@
     <string name="menu_action_update">Actualizar menú</string>
 
     <!-- Balance -->
-    <string name="balance_action_update">Actualzar tarjetas</string>
+    <string name="balance_action_update">Actualizar tarjetas</string>
     <string name="balance_new_user_button_info">Listo</string>
     <string name="balance_new_user_hint">Agregar tarjeta manualmente</string>
     <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>

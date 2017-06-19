@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,8 @@ import java.util.Locale;
 
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> {
     private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
+    private static final float SCALE_USER_IMAGE_SIZE = 0.9f;
+    private static final int SCALE_USER_IMAGE_TIME = 500;
     private Context mContext;
     private Cursor mCursor;
     private List<Boolean> mUpdateInProgress = new ArrayList<>();
@@ -84,8 +87,8 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         User user = new User(mCursor);
 
         setHolder(holder, user);
-        setProgressBar(holder, position);
         setImage(holder, user);
+        setProgressBar(holder, position);
     }
 
     private void setHolder(UserViewHolder holder, User user) {
@@ -96,10 +99,35 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     }
 
     private void setProgressBar(UserViewHolder holder, int position) {
-        if (mUpdateInProgress.get(position))
+        if (mUpdateInProgress.get(position)) {
             holder.progressBar.setVisibility(View.VISIBLE);
-        else
+            setUserImageProgressMode(holder);
+        } else {
             holder.progressBar.setVisibility(View.INVISIBLE);
+            setUserImageNormalMode(holder);
+        }
+    }
+
+    private void setUserImageProgressMode(UserViewHolder holder) {
+        holder.userImage.setScaleX(1);
+        holder.userImage.setScaleY(1);
+        holder.userImage.animate()
+                .scaleX(SCALE_USER_IMAGE_SIZE)
+                .scaleY(SCALE_USER_IMAGE_SIZE)
+                .setInterpolator(new LinearOutSlowInInterpolator())
+                .setDuration(SCALE_USER_IMAGE_TIME)
+                .start();
+    }
+
+    private void setUserImageNormalMode(UserViewHolder holder) {
+        holder.userImage.setScaleX(SCALE_USER_IMAGE_SIZE);
+        holder.userImage.setScaleY(SCALE_USER_IMAGE_SIZE);
+        holder.userImage.animate()
+                .scaleX(1)
+                .scaleY(1)
+                .setInterpolator(new LinearOutSlowInInterpolator())
+                .setDuration(SCALE_USER_IMAGE_TIME)
+                .start();
     }
 
     private void setImage(final UserViewHolder holder, User user) {

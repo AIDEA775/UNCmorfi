@@ -29,7 +29,7 @@
     <string name="balance_user_options_delete">Delete</string>
     <string name="balance_user_options_set_name">Change name</string>
 
-    <string name="balance_delete_user_title">Delete card of %1$s?</string>
+    <string name="balance_delete_user_title">Delete %1$s\'s card?</string>
     <string name="balance_delete_user_positive">Delete</string>
     <string name="balance_delete_user_negative">Cancel</string>
     <string name="balance_delete_user_msg">Card deleted</string>
@@ -63,16 +63,16 @@
         <item>Who we are?</item>
         <item>Why is the menu not updated?</item>
         <item>Where do they get Balance and Meter information?</item>
-        <item>Why need permission of internet and camera?</item>
-        <item>What\'s mean \"Barcode dependencies are not yet available.\"?</item>
-        <item>Do I need internet to check my card balance?</item>
+        <item>Why are Internet and camera permissions needed?</item>
+        <item>What does \"Barcode dependencies are not yet available.\" mean?</item>
+        <item>Do I need Internet to check my card balance?</item>
         <item>How can I collaborate?</item>
         <item>What versions were there before?</item>
     </string-array>
 
     <string-array name="help_string_array_answers" formatted="false">
         <item>
-            \tWe are two FaMAF students with very hungry.\n\n
+            \tWe are two very hungry FaMAF students.\n\n
             \tThe app started just as a hobby to learn the Java/Android programming language,
             so we strive to polish it as much as we can in our free time.\n\n
             Development: Alejandro Ismael Silva\n
@@ -81,31 +81,31 @@
                 \t\tjuli.nana.07@gmail.com
         </item>
         <item>
-            \tWe get the menu of the university web:\n\n
+            \tWe get the menu from the university's website:\n\n
             www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
-            \tIf the menu isn\'t refresh must be because the university did not update it.
+            \tIf the menu doesn\'t refresh, it must be because the university did not update it.
         </item>
         <item>
-            \tFrom the webs of the university dining room:\n\n
+            \tFrom the university dining room\'s website:\n\n
             \tBalance: comedor.unc.edu.ar/autoconsulta.php\n\n
             \tMeter: comedor.unc.edu.ar/cocina.php
         </item>
         <item>
-            \tThe internet permission is necessary to update the menu, the balance and the
+            \tInternet access is necessary for updating the menu, the balance and the
             measurer.\n
-            \tThe camera permission is for add the card by scanning the barcode.
+            \tCamera access is for adding the card by scanning the barcode on it.
         </item>
         <item>
-            \tTo add a card using the camera, we use the \"Vision\" library of Google Play Services.
+            \tTo add a card using the camera, we use Google Play Services\'s \"Vision\" library.
             If this library is not available on the device, it will be downloaded automatically in
-            background (Keep in mind that you need storage space available for download, if you
-            don\'t have enough, a warning will appear).\n\n
-            \tTry again after a few minutes. If you are hurry or don\'t have Google Play Services,
+            the background (keep in mind that you need storage space available for the download, if you
+            don\'t have enough room, a warning will appear).\n\n
+            \tTry again after a few minutes. If you are in a hurry or don\'t have Google Play Services,
             you can add it manually by entering the code with the keyboard.
         </item>
         <item>
-            \tAll data is stored on the device to consults offline, but you need to be connected to
-            the internet to update them.
+            \tAll the data is stored on the device to check offline, but you need to be connected to
+            the Internet to get it updated.
         </item>
         <item>
             \tIf you are developer, you can collaborate with code in the Github repository:\n
@@ -118,11 +118,11 @@
             [v3.0 Cazuela]
             [v2.0 Bolognesa]\n
             * Added the sections Help and Contact.\n
-            * Improved UI of Balance.\n
-            * Notifications with colors.\n
+            * Improved the Balance UI.\n
+            * Colored notifications.\n
             * Update all cards at once.\n
-            * Allow application to be installed on the external storage.\n
-            * Reduce application size.\n
+            * Allow application to be installed on external storage.\n
+            * Reduced application size.\n
             * Other minor fixes and improvements.\n\n
             [v1.1 Arroz]\n
             * Fixed the first start of the camera on android 6.0 or higher.\n

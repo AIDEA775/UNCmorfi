@@ -1,4 +1,4 @@
-![](resources/UNCmorfi-bannerv5.png)
+![](resources/UNCmorfi-banner.png)
 
 Una app para Android para consultar todo lo referido con el comedor universitario de la Universidad Nacional de Córdoba, Argentina.
 
@@ -25,6 +25,7 @@ Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https
 * Google: [Design support](https://developer.android.com/topic/libraries/support-library/features.html#design)
 * Google: [Play services maps](https://developers.google.com/maps/documentation/android-api/)
 * Google: [Play services vision](https://developers.google.com/vision/)
+* bignerdranch: [Expandable-recycler-view](https://github.com/bignerdranch/expandable-recycler-view/tree/v2.1.1)
 * Bumtech: [Glide](https://github.com/bumptech/glide)
 * Jhy: [Jsoup](https://github.com/jhy/jsoup)
 

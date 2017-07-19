@@ -183,6 +183,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     }
 
     private void returnResult(String barcode) {
+        // tomar solo la primera palabra
+        barcode = barcode.split(" ")[0];
         if (!barcode.equals("")) {
             Intent data = new Intent();
             data.putExtra(ARG_BARCODE_CARD, barcode);

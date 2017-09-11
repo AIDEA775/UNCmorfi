@@ -2,6 +2,9 @@ package com.uncmorfi.counter;
 
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,13 +13,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-class RefreshCounterTask extends AsyncTask<Void, Void, Integer> {
+class RefreshCounterTask extends AsyncTask<Void, Void, JSONArray> {
     private RefreshCounterListener mListener;
     private static final String URL =
-            "http://comedor.unc.edu.ar/comedor/1.0/gv-ds.php?accion=1&sede=0475&tqx=reqId:0";
+            "http://comedor.unc.edu.ar/gv-ds_test.php?json=true&accion=1&sede=0475";
 
     interface RefreshCounterListener {
-        void onRefreshCounterSuccess(int percent);
+        void onRefreshCounterSuccess(JSONArray result);
         void onRefreshCounterFail();
     }
 
@@ -25,7 +28,7 @@ class RefreshCounterTask extends AsyncTask<Void, Void, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(Void... params) {
+    protected JSONArray doInBackground(Void... params) {
         try {
             InputStream is = null;
 
@@ -50,30 +53,10 @@ class RefreshCounterTask extends AsyncTask<Void, Void, Integer> {
 
                 String resp = response.toString();
 
-                // TODO: 11/29/16 crear y llamar al parser que devuele un HashMap
-                // Buscar las columnas con datos
-                int left = resp.indexOf("rows: [");
-                int right = resp.lastIndexOf("]");
+                return new JSONArray(resp);
 
-                try {
-                    resp = resp.substring(left + 17, right - 3);
-                } catch (StringIndexOutOfBoundsException e) {
-                    return 0;
-                }
-
-                // Dividir los datos
-                // response tiene la forma:
-                // 12:04:00'},{v: 12}]},...{c: [{v: 'hora'},{v: num}]},...{c: [{v: '13:16:00'},{v: 4
-                String[] tokens = resp.split("[\\}\\]']*\\},\\{[c: \\[\\{v']*");
-
-                // Calcular el total
-                // tokens tiene la forma: ["12:04:00", "12", ... , "hora", "num"]
-                int result = 0;
-                for (int i = 1; i < tokens.length; i+=2) {
-                    result += Integer.parseInt(tokens[i]);
-                }
-                return result;
-
+            } catch (JSONException e) {
+                e.printStackTrace();
             } finally {
                 if (is != null) {
                     try {
@@ -87,12 +70,13 @@ class RefreshCounterTask extends AsyncTask<Void, Void, Integer> {
             e.printStackTrace();
             return null;
         }
+        return null;
     }
 
     @Override
-    protected void onPostExecute(Integer percent) {
-        super.onPostExecute(percent);
-        if (percent == null) mListener.onRefreshCounterFail();
-        else mListener.onRefreshCounterSuccess(percent);
+    protected void onPostExecute(JSONArray result) {
+        super.onPostExecute(result);
+        if (result == null) mListener.onRefreshCounterFail();
+        else mListener.onRefreshCounterSuccess(result);
     }
 }

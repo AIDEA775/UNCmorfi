@@ -8,23 +8,49 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.SnackbarHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
-public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener {
+public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener,
+        SeekBar.OnSeekBarChangeListener {
     private final static int FOOD_RATIONS = 1500;
+    private DateFormat mDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
     private TextView mResumeView;
     private ProgressBar mProgressBar;
     private TextView mPercentView;
     private FloatingActionButton mRefreshFab;
     private View mRootView;
     private Snackbar lastSnackBar;
+    private LineChart mChart;
+    private SeekBar mSeekBar;
+    private TextView mEstimateView;
+    private TextView mDistanceView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +62,11 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         mProgressBar.setMax(FOOD_RATIONS);
         mPercentView = (TextView) view.findViewById(R.id.counter_percent);
         mRootView = view.findViewById(R.id.counter_coordinator);
+        mEstimateView = (TextView) view.findViewById(R.id.counter_estimate);
+        mDistanceView = (TextView) view.findViewById(R.id.counter_distance);
+        mSeekBar = (SeekBar) view.findViewById(R.id.counter_seek);
+        mSeekBar.setOnSeekBarChangeListener(this);
+        mSeekBar.setProgress(0);
 
         mRefreshFab = (FloatingActionButton) view.findViewById(R.id.counter_fab);
         mRefreshFab.setScaleX(0);
@@ -46,6 +77,24 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
                 refreshCounter();
             }
         });
+
+        mChart = (LineChart) view.findViewById(R.id.counter_chart);
+        mChart.getLegend().setEnabled(false);
+        mChart.setAutoScaleMinMaxEnabled(true);
+        mChart.setScaleYEnabled(false);
+        mChart.setDescription(null);
+        mChart.setDrawGridBackground(false);
+        mChart.setDrawBorders(false);
+        mChart.setHighlightPerTapEnabled(false);
+        mChart.setHighlightPerDragEnabled(false);
+
+        YAxis rightAxis = mChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        IAxisValueFormatter xAxisFormatter = new HourAxisValueFormatter();
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setValueFormatter(xAxisFormatter);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
 
         refreshCounter();
 
@@ -86,16 +135,97 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     }
 
     @Override
-    public void onRefreshCounterSuccess(int percent) {
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        progress += 1;
+
+        long estimateTime = (long) getEstimateFromSeek(progress) * 1000;
+        long currentTime = new Date().getTime();
+
+        Date estimateDate = new Date(estimateTime);
+        Date timeDate = new Date(currentTime + estimateTime);
+
+        String estimate = mDateFormat.format(estimateDate);
+        String time = mDateFormat.format(timeDate);
+
+        mEstimateView.setText(String.format(getString(R.string.counter_estimate), estimate, time));
+        mDistanceView.setText(String.format(getString(R.string.counter_distance), progress));
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {}
+
+    // Devolver el tiempo estimado en segundos
+    // Dependiendo de la distancia
+    private double getEstimateFromSeek(int x) {
+        return (x * (0.0010384 * x + 0.0216058) - 0.0365136) * 3600;
+    }
+
+    @Override
+    public void onRefreshCounterSuccess(JSONArray result) {
+        int total = 0;
+        List<Entry> data = new ArrayList<>();
+
+        for (int i = 0; i < result.length(); i++) {
+            try {
+                JSONObject item = result.getJSONObject(i);
+
+                Date date = parseStringToDate(item.getString("fecha"));
+                int ration = Integer.parseInt(item.getString("raciones"));
+
+                if (date != null) data.add(new Entry(date.getTime(), ration));
+                total += ration;
+            } catch (JSONException|NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
         if (isAdded()) {
             showRefreshButton();
-            mProgressBar.setProgress(percent);
-            mResumeView.setText(String.format(getString(R.string.counter_rations_title), percent,
-                    FOOD_RATIONS));
-            mPercentView.setText(String.format(Locale.US, "%d%%", (percent*100) / FOOD_RATIONS));
+
+            updateText(total);
+            updateChart(data);
 
             showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
         }
+    }
+
+    private Date parseStringToDate(String string) {
+        try {
+            return mDateFormat.parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void updateText(int total) {
+        mProgressBar.setProgress(total);
+        mResumeView.setText(String.format(getString(R.string.counter_rations_title), total,
+                FOOD_RATIONS));
+        mPercentView.setText(String.format(Locale.US, "%d%%", (total*100) / FOOD_RATIONS));
+    }
+
+    private void updateChart(List<Entry> data) {
+        if (data != null && !data.isEmpty()) {
+            LineDataSet dataSet = new LineDataSet(data, null);
+            setLineDataSetStyle(dataSet);
+
+            LineData lineData = new LineData(dataSet);
+            mChart.setData(lineData);
+            mChart.setVisibleXRangeMinimum(1000000f);
+            mChart.invalidate();
+        }
+    }
+
+    private void setLineDataSetStyle(LineDataSet dataSet) {
+        dataSet.setColors(new int[] {R.color.accent}, getContext());
+        dataSet.setCircleColors(new int[] {R.color.accent}, getContext());
+        dataSet.setLineWidth(2f);
+        dataSet.setCircleRadius(5);
+        dataSet.setDrawValues(false);
     }
 
     @Override
@@ -109,5 +239,14 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     private void showSnackBarMsg(int resId, SnackbarHelper.SnackType type) {
         lastSnackBar = Snackbar.make(mRootView, resId, SnackbarHelper.getLength(type));
         SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
+    }
+
+    private class HourAxisValueFormatter implements IAxisValueFormatter {
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            Date valueDate = (new Date((long) value));
+            return mDateFormat.format(valueDate);
+        }
     }
 }

@@ -3,10 +3,12 @@ package com.uncmorfi.balance;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +23,24 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UsersContract;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> {
     private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
-    private static final float SCALE_USER_IMAGE_SIZE = 0.9f;
+    private static final float SCALE_USER_IMAGE_SIZE = 0.8f;
     private static final int SCALE_USER_IMAGE_TIME = 500;
+    private static final int WARNING_USER_BALANCE = 20;
+    private static final int WARNING_USER_EXPIRE = 6;
+    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
     private Context mContext;
     private Cursor mCursor;
     private List<Boolean> mUpdateInProgress = new ArrayList<>();
@@ -48,6 +57,8 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         TextView balanceText;
         ImageView userImage;
         ProgressBar progressBar;
+        TextView expirationText;
+        TextView lastUpdateText;
 
         UserViewHolder(View v) {
             super(v);
@@ -58,6 +69,8 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
             balanceText = (TextView) v.findViewById(R.id.user_balance);
             userImage = (ImageView) v.findViewById(R.id.user_image);
             progressBar = (ProgressBar) v.findViewById(R.id.user_bar);
+            expirationText = (TextView) v.findViewById(R.id.user_expiration);
+            lastUpdateText = (TextView) v.findViewById(R.id.user_last_update);
 
             v.setOnClickListener(this);
         }
@@ -96,19 +109,40 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         holder.cardText.setText(user.getCard());
         holder.typeText.setText(user.getType());
         holder.balanceText.setText(String.format(Locale.US, "$ %d", user.getBalance()));
+
+        holder.balanceText.setTextColor(ContextCompat.getColor(mContext,
+                user.getBalance() < WARNING_USER_BALANCE ? R.color.accent : R.color.primary_dark));
+
+        holder.expirationText.setText(String.format(
+                mContext.getString(R.string.balance_expiration),
+                mDateFormat.format(new Date(user.getExpiration()))));
+
+        holder.expirationText.setTextColor(ContextCompat.getColor(mContext,
+                warningExpiration(user.getExpiration()) ? R.color.accent : R.color.secondary_text));
+
+        holder.lastUpdateText.setText(String.format(
+                mContext.getString(R.string.balance_last_update),
+                DateUtils.getRelativeTimeSpanString(user.getLastUpdate()).toString().toLowerCase()));
+    }
+
+    private boolean warningExpiration(long expiration) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MONTH, WARNING_USER_EXPIRE);
+        return (new Date(expiration)).before(cal.getTime());
     }
 
     private void setProgressBar(UserViewHolder holder, int position) {
         if (mUpdateInProgress.get(position)) {
             holder.progressBar.setVisibility(View.VISIBLE);
-            setUserImageProgressMode(holder);
+            setUserImageUpdatingMode(holder);
         } else {
             holder.progressBar.setVisibility(View.INVISIBLE);
             setUserImageNormalMode(holder);
         }
     }
 
-    private void setUserImageProgressMode(UserViewHolder holder) {
+    private void setUserImageUpdatingMode(UserViewHolder holder) {
         holder.userImage.setScaleX(1);
         holder.userImage.setScaleY(1);
         holder.userImage.animate()

@@ -10,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -81,6 +82,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
         recyclerView.setAdapter(mUserCursorAdapter);
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
     private void setFloatingActionButton() {
@@ -171,7 +174,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     @Override
     public void onItemAdded(Cursor c) {
         mUserCursorAdapter.setCursor(c);
-        mUserCursorAdapter.notifyDataSetChanged();
+        mUserCursorAdapter.notifyItemInserted(mUserCursorAdapter.getItemCount());
     }
 
     @Override

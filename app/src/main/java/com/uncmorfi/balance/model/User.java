@@ -13,6 +13,8 @@ public class User implements Serializable {
     private String type;
     private String image;
     private int balance;
+    private long expiration;
+    private long lastUpdate;
 
     public User() {}
 
@@ -23,6 +25,8 @@ public class User implements Serializable {
         this.type = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.TYPE));
         this.image = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.IMAGE));
         this.balance = cursor.getInt(cursor.getColumnIndex(UsersContract.UserEntry.BALANCE));
+        this.expiration = cursor.getLong(cursor.getColumnIndex(UsersContract.UserEntry.EXPIRATION));
+        this.lastUpdate = cursor.getLong(cursor.getColumnIndex(UsersContract.UserEntry.LAST_UPDATE));
     }
 
     public long getId() {
@@ -49,6 +53,14 @@ public class User implements Serializable {
         return image;
     }
 
+    public long getExpiration() {
+        return expiration;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
+    }
+
     public void setBalance(int balance) {
         this.balance = balance;
     }
@@ -69,6 +81,14 @@ public class User implements Serializable {
         this.image = image;
     }
 
+    public void setExpiration(long expiration) {
+        this.expiration = expiration;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     public ContentValues toContentValues () {
         ContentValues values = new ContentValues();
         values.put(UsersContract.UserEntry.CARD, this.card);
@@ -76,6 +96,8 @@ public class User implements Serializable {
         values.put(UsersContract.UserEntry.TYPE, this.type);
         values.put(UsersContract.UserEntry.IMAGE, this.image);
         values.put(UsersContract.UserEntry.BALANCE, this.balance);
+        values.put(UsersContract.UserEntry.EXPIRATION, this.expiration);
+        values.put(UsersContract.UserEntry.LAST_UPDATE, this.lastUpdate);
         return values;
     }
 }

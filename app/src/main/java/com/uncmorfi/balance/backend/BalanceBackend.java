@@ -146,6 +146,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
     private int updateUserBalance(User user) {
         ContentValues values = new ContentValues();
         values.put(UsersContract.UserEntry.BALANCE, user.getBalance());
+        values.put(UsersContract.UserEntry.LAST_UPDATE, user.getLastUpdate());
 
         return mContentResolver.update(
                 UserProvider.CONTENT_URI,

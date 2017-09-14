@@ -3,19 +3,27 @@ package com.uncmorfi.balance.backend;
 import android.os.AsyncTask;
 
 import com.uncmorfi.balance.model.User;
+import com.uncmorfi.helpers.ConnectionHelper;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
     private DownloadUserListener mListener;
     private int mPosition;
+    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
+    private static final String URL =
+            "http://comedor.unc.edu.ar/gv-ds_test.php?json=true&accion=4&codigo=";
 
     interface DownloadUserListener {
         void onUserDownloaded(User user, int position);
@@ -31,20 +39,25 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
     protected User doInBackground(String... params) {
         try {
             String card = params[0];
-            String[] tokens = downloadUser(card);
+            String result = ConnectionHelper.downloadFromUrlByGet(URL + card);
 
-            if (tokens == null || tokens.length < 2)
-                return null;
+            JSONObject json = new JSONArray(result).getJSONObject(0);
 
             User user = new User();
-            user.setBalance(Integer.parseInt(tokens[6]));
-            user.setCard(card);
-            user.setName(tokens[17]);
-            user.setType(tokens[9]);
-            user.setImage(tokens[25]);
 
+            user.setCard(card);
+            user.setName(json.getString("nombre"));
+            user.setType(json.getString("tipo_cliente"));
+            user.setImage(json.getString("foto"));
+            user.setBalance(Integer.parseInt(json.getString("saldo")));
+
+            Date expireDate = mDateFormat.parse(json.getString("fecha_hasta"));
+            user.setExpiration(expireDate.getTime());
+
+            Date currentTime = Calendar.getInstance().getTime();
+            user.setLastUpdate(currentTime.getTime());
             return user;
-        } catch (IOException e) {
+        } catch (IOException|ParseException|JSONException|NumberFormatException e) {
             e.printStackTrace();
             return null;
         }
@@ -54,60 +67,5 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
     protected void onPostExecute(User user) {
         if (user == null) mListener.onUserDownloadFail();
         else mListener.onUserDownloaded(user, mPosition);
-    }
-
-    private String[] downloadUser(String card) throws IOException {
-        String urlParameters = "accion=4&responseHandler=setDatos&codigo=" + card;
-
-        URL url;
-        HttpURLConnection connection = null;
-        try {
-            //Create connection
-            url = new URL("http://comedor.unc.edu.ar/gv-ds.php");
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-
-            connection.setRequestProperty("Content-Length", "" +
-                    Integer.toString(urlParameters.getBytes().length));
-
-            connection.setUseCaches(false);
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-
-            //Send request
-            DataOutputStream wr = new DataOutputStream(
-                    connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
-
-            //Get Response
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            String line;
-            StringBuilder response = new StringBuilder();
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-
-            // TODO: 11/29/16 crear y llamar al parser
-            int left = response.indexOf("rows: [{c: [");
-            int rigth = response.indexOf("]", left);
-            String result = response.substring(left + 12, rigth - 2);
-
-            return result.split("['},]*\\{v: '?");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
     }
 }

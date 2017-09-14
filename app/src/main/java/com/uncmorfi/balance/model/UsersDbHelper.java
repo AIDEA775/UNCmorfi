@@ -8,7 +8,7 @@ import com.uncmorfi.balance.model.UsersContract.UserEntry;
 
 
 class UsersDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Users.db";
 
     UsersDbHelper(Context context) {
@@ -24,6 +24,8 @@ class UsersDbHelper extends SQLiteOpenHelper {
                 + UserEntry.TYPE + " TEXT NOT NULL,"
                 + UserEntry.IMAGE + " TEXT NOT NULL,"
                 + UserEntry.BALANCE + " INTEGER,"
+                + UserEntry.EXPIRATION + "INTEGER,"
+                + UserEntry.LAST_UPDATE + "INTEGER,"
                 + "UNIQUE (" + UserEntry.CARD + "))");
     }
 
@@ -31,5 +33,11 @@ class UsersDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
+        if (oldVersion < 2) {
+            sqLiteDatabase.execSQL("ALTER TABLE " + UserEntry.TABLE_NAME + " ADD COLUMN "
+                    + UserEntry.EXPIRATION + " INTEGER");
+            sqLiteDatabase.execSQL("ALTER TABLE " + UserEntry.TABLE_NAME + " ADD COLUMN "
+                    + UserEntry.LAST_UPDATE + " INTEGER");
+        }
     }
 }

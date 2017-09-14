@@ -12,5 +12,7 @@ public class UsersContract {
         public static final String TYPE = "type";
         public static final String IMAGE = "image";
         public static final String BALANCE = "balance";
+        public static final String EXPIRATION = "expiration";
+        public static final String LAST_UPDATE = "last_update";
     }
 }

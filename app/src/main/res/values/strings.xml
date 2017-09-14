@@ -17,12 +17,16 @@
 
     <!-- Balance -->
     <string name="balance_action_update">Update all cards</string>
+
+    <string name="balance_expiration">Expiration date: %1$s</string>
+    <string name="balance_last_update">Last update %1$s</string>
+
     <string name="balance_new_user_button_info">Done</string>
     <string name="balance_new_user_hint">Add card manually</string>
     <string name="balance_new_user_adding">Adding card %1$s&#8230;</string>
 
     <string name="balance_set_name_title">New name</string>
-    <string name="balance_set_name_positive">Save</string>
+    <string name="balance_set_name_save">Save</string>
 
     <string name="balance_user_options_title">Card</string>
     <string name="balance_user_options_update">Update</string>
@@ -31,14 +35,13 @@
 
     <string name="balance_delete_user_title">Delete %1$s\'s card?</string>
     <string name="balance_delete_user_positive">Delete</string>
-    <string name="balance_delete_user_negative">Cancel</string>
     <string name="balance_delete_user_msg">Card deleted</string>
 
     <!-- Counter -->
     <string name="counter_rations">Rations</string>
     <string name="counter_rations_title">%1$d rations of %2$d</string>
     <string name="counter_percent_symbol">%</string>
-    <string name="counter_estimate">Remaining time approximately %1$s (%2$s)</string>
+    <string name="counter_estimate">Approximately %1$d minutes left (%2$s)</string>
     <string name="counter_distance">Window %1$d</string>
 
     <!-- About -->

@@ -1,98 +1,123 @@
-<android.support.v7.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="1.5dp"
-    card_view:cardUseCompatPadding="true"
     android:focusable="true"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/user_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="4dp"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:scaleType="centerInside"
+        tools:ignore="ContentDescription" />
 
-        <ImageView
-            android:id="@+id/user_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_centerVertical="true"
-            android:layout_margin="6dp"
-            android:adjustViewBounds="false"
-            android:cropToPadding="false"
-            android:padding="4dp"
-            android:scaleType="centerInside"
-            tools:ignore="ContentDescription" />
+    <ProgressBar
+        android:id="@+id/user_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:indeterminateDrawable="@drawable/progressbar"
+        android:layout_alignBottom="@+id/user_image"
+        android:layout_alignLeft="@+id/user_image"
+        android:layout_alignStart="@+id/user_image"
+        android:layout_alignTop="@+id/user_image"
+        android:layout_alignRight="@+id/user_image"
+        android:layout_alignEnd="@+id/user_image" />
 
-        <ProgressBar
-            android:id="@+id/user_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="visible"
-            android:indeterminateDrawable="@drawable/progressbar"
-            android:layout_centerVertical="true"
-            android:layout_alignBottom="@+id/user_image"
-            android:layout_alignLeft="@+id/user_image"
-            android:layout_alignStart="@+id/user_image"
-            android:layout_alignTop="@+id/user_image"
-            android:layout_alignRight="@+id/user_image"
-            android:layout_alignEnd="@+id/user_image" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/user_image"
-            android:layout_toLeftOf="@+id/user_balance"
-            android:layout_toRightOf="@+id/user_image"
-            android:layout_toStartOf="@+id/user_balance" >
-
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                tools:text="Alejandro Ismael" />
-
-            <TextView
-                android:id="@+id/user_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="43217032843" />
-
-            <TextView
-                android:id="@+id/user_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="Estudiante de grado" />
-
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:gravity="center"
+        android:layout_alignTop="@+id/user_image"
+        android:layout_alignBottom="@+id/user_image"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/user_image"
+        android:layout_toEndOf="@+id/user_image"
+        android:id="@+id/linearLayout">
 
         <TextView
-            android:id="@+id/user_balance"
-            android:layout_width="wrap_content"
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginStart="12dp"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            tools:text="$ 56" />
+            android:fontFamily="sans-serif-light"
+            android:textSize="24sp"
+            tools:text="Alejandro Ismael" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/user_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="14sp"
+            tools:text="43217032843" />
 
-</android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:layout_below="@+id/user_image"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/user_detail"
+        android:layout_toLeftOf="@+id/user_balance"
+        android:layout_toStartOf="@+id/user_balance">
+
+        <TextView
+            android:id="@+id/user_last_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="12sp"
+            tools:text="Tiempo" />
+
+        <TextView
+            android:id="@+id/user_expiration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            tools:text="Fecha de expiracion" />
+
+        <TextView
+            android:id="@+id/user_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            tools:text="Estudiante de grado" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/user_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:textSize="34sp"
+        android:textColor="@color/primary_dark"
+        tools:text="$ 56"
+        android:layout_margin="8dp"
+        android:layout_below="@+id/user_image"
+        android:layout_alignRight="@+id/linearLayout"
+        android:layout_alignEnd="@+id/linearLayout" />
+
+</RelativeLayout>

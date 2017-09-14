@@ -31,8 +31,6 @@ class UsersDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
-        onCreate(sqLiteDatabase);
         if (oldVersion < 2) {
             sqLiteDatabase.execSQL("ALTER TABLE " + UserEntry.TABLE_NAME + " ADD COLUMN "
                     + UserEntry.EXPIRATION + " INTEGER");

@@ -56,8 +56,9 @@ public class DeleteUserDialog extends DialogFragment {
 
             builder.setMessage(String.format(getString(R.string.balance_delete_user_title),
                         backend.getUserById(userId).getName()))
-                    .setPositiveButton(getString(R.string.balance_delete_user_positive), positiveListener)
-                    .setNegativeButton(getString(R.string.balance_delete_user_negative), negativeListener);
+                    .setPositiveButton(getString(R.string.balance_delete_user_positive),
+                            positiveListener)
+                    .setNegativeButton(getString(android.R.string.cancel), negativeListener);
         }
         return builder.create();
     }

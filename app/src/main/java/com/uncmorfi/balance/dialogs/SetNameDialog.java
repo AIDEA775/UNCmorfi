@@ -45,16 +45,24 @@ public class SetNameDialog extends DialogFragment {
         final int position = getArguments().getInt(ARG_POS);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
-        final EditText input = (EditText) v.findViewById(R.id.new_name_text);
-        Button agree = (Button) v.findViewById(R.id.save_new_name_button);
+        final EditText input = (EditText) v.findViewById(R.id.set_name_input);
+        Button save = (Button) v.findViewById(R.id.set_name_save);
+        Button cancel = (Button) v.findViewById(R.id.set_name_cancel);
 
         if (backend != null) {
             input.append(backend.getUserById(userId).getName());
 
-            agree.setOnClickListener(new View.OnClickListener() {
+            save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     backend.updateNameOfUser(userId, position, input.getText().toString());
+                    dismiss();
+                }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     dismiss();
                 }
             });

@@ -82,6 +82,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
         recyclerView.setAdapter(mUserCursorAdapter);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }

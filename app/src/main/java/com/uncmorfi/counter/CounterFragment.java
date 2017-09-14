@@ -39,7 +39,7 @@ import java.util.Locale;
 public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener,
         SeekBar.OnSeekBarChangeListener {
     private final static int FOOD_RATIONS = 1500;
-    private DateFormat mDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+    private DateFormat mDateFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
 
     private TextView mResumeView;
     private ProgressBar mProgressBar;
@@ -138,16 +138,14 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         progress += 1;
 
-        long estimateTime = (long) getEstimateFromSeek(progress) * 1000;
+        long estimateMin = getEstimateFromPosition(progress);
         long currentTime = new Date().getTime();
 
-        Date estimateDate = new Date(estimateTime);
-        Date timeDate = new Date(currentTime + estimateTime);
+        Date estimateDate = new Date(currentTime + estimateMin * 60 * 1000);
+        String time = mDateFormat.format(estimateDate);
 
-        String estimate = mDateFormat.format(estimateDate);
-        String time = mDateFormat.format(timeDate);
-
-        mEstimateView.setText(String.format(getString(R.string.counter_estimate), estimate, time));
+        mEstimateView.setText(String.format(getString(R.string.counter_estimate),
+                estimateMin, time));
         mDistanceView.setText(String.format(getString(R.string.counter_distance), progress));
     }
 
@@ -157,10 +155,9 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {}
 
-    // Devolver el tiempo estimado en segundos
-    // Dependiendo de la distancia
-    private double getEstimateFromSeek(int x) {
-        return (x * (0.0010384 * x + 0.0216058) - 0.0365136) * 3600;
+    // Devolver el tiempo estimado en minutos dependiendo de la distancia x
+    private long getEstimateFromPosition(int x) {
+        return (long) (x * (x * 0.062307 + 1.296347) - 2.190814);
     }
 
     @Override

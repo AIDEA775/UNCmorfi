@@ -17,6 +17,10 @@ import com.uncmorfi.helpers.SnackbarHelper;
 import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
 
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMenuListener {
     public static final String MENU_FILE = "menu.txt";
@@ -54,11 +58,13 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
                 R.color.primary_light
         );
 
-        String data = MemoryHelper.readFromInternalMemory(getActivity(), MENU_FILE);
-        if (data == null) {
+        String menuSaved = MemoryHelper.readFileFromStorage(getContext(), MENU_FILE);
+        if (menuSaved != null) {
+            mWebView.loadData(menuSaved, "text/html", "UTF-8");
+        }
+
+        if (needRefreshMenu()) {
             refreshMenu();
-        } else {
-            mWebView.loadData(data, "text/html", "UTF-8");
         }
 
         return view;
@@ -95,7 +101,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     private void refreshMenu() {
         if (ConnectionHelper.isOnline(getContext())) {
             mSwipeRefreshLayout.setRefreshing(true);
-            new RefreshMenuTask(getActivity(), this).execute();
+            new RefreshMenuTask(this).execute();
         } else {
             showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);
         }
@@ -103,6 +109,10 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
 
     @Override
     public void onRefreshMenuSuccess(String menu) {
+        if (needSaveMenu(menu)) {
+            MemoryHelper.saveToStorage(getContext(), MenuFragment.MENU_FILE, menu);
+        }
+
         if (getActivity() != null && isAdded()) {
             mWebView.loadDataWithBaseURL(null, menu, "text/html", "UTF-8", null);
 
@@ -122,6 +132,28 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
 
             mSwipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private boolean needRefreshMenu() {
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
+        int nowWeek = now.get(Calendar.WEEK_OF_YEAR);
+
+        Calendar menu = Calendar.getInstance();
+        menu.setTimeInMillis(getMenuLastModified());
+        int menuWeek = menu.get(Calendar.WEEK_OF_YEAR);
+
+        return (menuWeek < nowWeek);
+    }
+
+    private long getMenuLastModified() {
+        File menuFile = new File(getContext().getFilesDir() + "/" + MENU_FILE);
+        return menuFile.lastModified();
+    }
+
+    private boolean needSaveMenu(String menu) {
+        String menuSaved = MemoryHelper.readHeadFromStorage(getContext(), MENU_FILE);
+        return (menuSaved == null || !menu.startsWith(menuSaved));
     }
 
 }

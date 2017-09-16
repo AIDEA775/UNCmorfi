@@ -1,9 +1,6 @@
 package com.uncmorfi.menu;
 
-import android.content.Context;
 import android.os.AsyncTask;
-
-import com.uncmorfi.helpers.MemoryHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,15 +13,13 @@ import java.io.IOException;
 class RefreshMenuTask extends AsyncTask<Void, Void, String> {
     private static final String URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana";
     private RefreshMenuListener mListener;
-    private Context mContext;
 
     interface RefreshMenuListener {
         void onRefreshMenuSuccess(String menu);
         void onRefreshMenuFail();
     }
 
-    RefreshMenuTask(Context context, RefreshMenuListener listener) {
-        mContext = context;
+    RefreshMenuTask(RefreshMenuListener listener) {
         mListener = listener;
     }
 
@@ -42,11 +37,7 @@ class RefreshMenuTask extends AsyncTask<Void, Void, String> {
             String lastTwo = ":gt(" + String.valueOf(items.size() - 2) + ")";
             items.select(lastTwo).remove();
 
-            String body = menu.html();
-
-            MemoryHelper.saveToInternalMemory(mContext, MenuFragment.MENU_FILE, body);
-
-            return body;
+            return menu.html();
         } catch (IOException t) {
             t.printStackTrace();
             return null;

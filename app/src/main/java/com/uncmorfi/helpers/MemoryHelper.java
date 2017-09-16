@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 
 public abstract class MemoryHelper {
 
-    public static void saveToInternalMemory(Context context, String file, String content) {
+    public static void saveToStorage(Context context, String file, String content) {
         if (content != null) {
             try {
                 OutputStreamWriter out =
@@ -27,7 +27,7 @@ public abstract class MemoryHelper {
         }
     }
 
-    public static String readFromInternalMemory(Context context, String file) {
+    public static String readFileFromStorage(Context context, String file) {
         try {
             BufferedReader in =
                     new BufferedReader(
@@ -41,6 +41,20 @@ public abstract class MemoryHelper {
             return read.toString();
         } catch (Exception ex) {
             Log.e("MemoryHelper", "Error reading in internal memory");
+            return null;
+        }
+    }
+
+    public static String readHeadFromStorage(Context context, String file) {
+        try {
+            BufferedReader in =
+                    new BufferedReader(
+                            new InputStreamReader(context.openFileInput(file)));
+            String line = in.readLine();
+            in.close();
+            return line;
+        } catch (Exception ex) {
+            Log.e("MemoryHelper", "Error reading head in internal memory");
             return null;
         }
     }

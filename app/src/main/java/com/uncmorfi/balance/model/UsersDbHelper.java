@@ -24,8 +24,8 @@ class UsersDbHelper extends SQLiteOpenHelper {
                 + UserEntry.TYPE + " TEXT NOT NULL,"
                 + UserEntry.IMAGE + " TEXT NOT NULL,"
                 + UserEntry.BALANCE + " INTEGER,"
-                + UserEntry.EXPIRATION + "INTEGER,"
-                + UserEntry.LAST_UPDATE + "INTEGER,"
+                + UserEntry.EXPIRATION + " INTEGER,"
+                + UserEntry.LAST_UPDATE + " INTEGER,"
                 + "UNIQUE (" + UserEntry.CARD + "))");
     }
 

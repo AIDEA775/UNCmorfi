@@ -7,6 +7,7 @@
     <string name="navigation_menu">Menú</string>
     <string name="navigation_balance">Saldo</string>
     <string name="navigation_counter">Medidor</string>
+    <string name="navigation_renovation">Renovación</string>
     <string name="navigation_map">Mapa</string>
     <string name="navigation_help">Ayuda</string>
     <string name="navigation_contact">Contacto</string>
@@ -44,6 +45,14 @@
     <string name="counter_estimate">Faltan aproximadamente %1$d minutos (%2$s)</string>
     <string name="counter_distance">Ventana %1$d</string>
 
+    <!-- Renovation -->
+    <string name="renovation_email_text">
+        \t¡No te olvides de adjuntar el certificado de alumno
+        regular si sos estudiante!\n\n
+
+        \tO carnet de Daspu, recibo de sueldo o certificado que acredite
+        relación con la UNC si eres Docente o No Docente.</string>
+
     <!-- About -->
     <string name="about_unofficial_app">Esta es una app no oficial</string>
     <string name="about_source_code">Codigo fuente:</string>
@@ -64,42 +73,73 @@
     <string name="align_barcode">Alinea el codigo de barras</string>
 
     <!-- Help -->
-    <string-array name="help_string_array_questions">
+    <string-array name="help_string_array" formatted="false">
         <item>¿Quiénes somos?</item>
-        <item>¿Por qué el menú no se actualiza?</item>
-        <item>¿De dónde obtienen la información del Saldo y el Medidor?</item>
-        <item>¿Por qué piden permisos de internet y de cámara?</item>
-        <item>¿Qué significa \"Dependencias del lector de barras no disponibles\"?</item>
-        <item>¿Necesito internet para consultar el saldo de mi tarjeta?</item>
-        <item>¿Cómo puedo colaborar?</item>
-        <item>¿Qué versiones hubo antes?</item>
-    </string-array>
-
-    <string-array name="help_string_array_answers" formatted="false">
         <item>
             \tSomos dos estudiantes de FaMAF con mucha hambre.\n\n
-            \tLa app inició sólo como hobbie para aprender el lenguaje de programación
-            Java/Android, por lo que nos esforzamos por pulirla lo más que podemos en nuestros
-            tiempos libres.\n\n
-            Desarrollo: Alejandro Ismael Silva\n
+            \tLa app inició sólo como hobbie, por lo que nos esforzamos por pulirla lo más que
+            podemos en nuestro tiempo libre.\n\n
+
+            Desarrollo:\n
+                \t\tAlejandro Ismael Silva\n
                 \t\talex.sai95@gmail.com\n\n
-            Icono, banner y multitud de opiniones: Julieta Wiesztort\n
-                \t\tjuli.nana.07@gmail.com
+
+            Icono y banner:\n
+                \t\tJulieta Wiesztort\n
+                \t\tjuli.nana.07@gmail.com\n\n
+
+            Corrección de la traducción en Español:\n
+                \t\tRosa Maria Peralta\n
+                \t\tmariarosaperalta95@gmail.com\n\n
+
+            Corrección de la traducción en Ingles:\n
+                \t\tGeorge Alegre\n
+                \t\tgithub.com/georgealegre\n\n
+
+            Con aportes de:\n
+                \t\tAndés Saravia\n
+                \t\tgithub.com/MinamiUruka
         </item>
+
+        <item>¿Por qué el menú no se actualiza?</item>
         <item>
             \tAl menú lo obtenemos desde la web de la universidad:\n\n
             www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
             \tSi el menú no está actualizado debe ser porque la universidad no lo actualizó.
         </item>
+
+        <item>¿De dónde obtienen la información del Saldo y el Medidor?</item>
         <item>
             \tDe las webs del comedor:\n\n
             \tSaldo: comedor.unc.edu.ar/autoconsulta.php\n\n
             \tMedidor: comedor.unc.edu.ar/cocina.php
         </item>
+
+        <item>¿Ventanas? ¿Cómo funcionan las estimaciones?</item>
         <item>
-            \tEl permiso de internet es necesario para actualizar el menú, el saldo y el medidor.\n
-            \tEl permiso de cámara es para agregar la tarjeta escanendo el codigo de barras.
+            \tA lo largo del comedor (cede central) hay \"ventanas\" (o mejor dicho columnas),
+            tenés que poner, en la barra deslizadora, el largo de la fila que hay delante tuyo,
+            medido en cantidad de ventanas.\n\n
+
+            \tPor ejemplo, a la altura de los baños de hombres son 5 ventanas (mujeres 6),
+            el largo total del comedor son 12 ventanas, la curva es 1 ventana,
+            y en la segunda entrada son 25 ventanas.\n\n
+
+            \tÉsta es una funcionalidad muy experimental.
+            Funciona con una simple función cuadratica calculada a partir de una estadistica.
+            Aunque mientras menos gente tengas delante más exacta es, por la naturaleza cambiante
+            de la fila del comedor es difícil dar una estimacion precisa.\n
+            \tElegimos \"las ventanas\" como medida porque estas nunca van a cambiar a lo largo del
+            tiempo, en cambio, las curvas y contracurvas de una fila siempre varian de un día a otro.
         </item>
+
+        <item>¿Cómo solicito la credencial? ¿Cómo puedo regenerar la credencial?</item>
+        <item>
+            \tLee la web del comedor:
+            https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial
+        </item>
+
+        <item>¿Qué significa \"Dependencias del lector de barras no disponibles\"?</item>
         <item>
             \tPara agregar una tarjeta usando la cámara, usamos la librería \"Vision\" de
             Google Play Services. Si esta librería no está disponible en el dispositivo,
@@ -108,21 +148,56 @@
             aviso).\n\n
             \tVolvé a intentarlo después de unos minutos. Si estás apurado o no tenés
             Google Play Services, podés agregarlo manualmente ingresando el
-            código con el teclado.
+            código de la tarjeta con el teclado.
         </item>
+
+        <item>¿Por qué piden permisos de internet y de cámara?</item>
+        <item>
+            \tEl permiso de internet es necesario para actualizar el menú, el saldo y el medidor.\n
+            \tEl permiso de cámara es para agregar la tarjeta escanendo el codigo de barras.
+        </item>
+
+        <item>¿Necesito internet para consultar el saldo de mi tarjeta?</item>
         <item>
             \tTodos los datos se almacenan en el dispositivo para poder consultarlos sin conexión,
             pero necesitás estar conectado a internet para actualizarlos.
         </item>
+
+        <item>¿Puedo comer dos veces en un día?</item>
         <item>
-            \tSi sabés programar, podes colaborar con código en el repositorio de Github:\n
-                \t\tgithub.com/AIDEA775/UNCmorfi\n\n
-            \tSi tenés una sugerencia o duda, podés enviarla por e-mail en la opción \"Contacto\"
-            del menú lateral.\n\n
-            \tSino, podés recomendar la app a cualquiera que veas en la fila del comedor ;)
+            No.
         </item>
+
+        <item>¿Qué es el timbre que suena cada cierto tiempo en el comedor?</item>
         <item>
-            [v3.0 Cazuela]
+            Cuenta la leyenda que el timbre indica rotación entre los cocineros.
+        </item>
+
+        <item>¿Cómo puedo colaborar?</item>
+        <item>
+            \tPodés enviar tu sugerencia por e-mail en la opción \"Contacto\" del menú lateral.\n\n
+
+            \tTambién podés pegarle una mirada al codigo fuente que está en Github:\n
+                \t\tgithub.com/AIDEA775/UNCmorfi\n\n
+
+            \tY además podés recomendar la app a cualquiera que veas en la fila del comedor ;)
+        </item>
+
+        <item>¿Qué versiones hubo antes?</item>
+        <item>
+            [v3.0 Cazuela]\n
+            * ¡Nuevo icono!\n
+            * Nuevo menu lateral.\n
+            * Ahora el menú se actualiza automaticamente cada semana.\n
+            * Nueva interfaz en Saldo.\n
+            * Consulta la fecha de vencimiento de tu tarjeta.\n
+            * Agregada la fecha de la última vez que consultaste el saldo.\n
+            * Agregado gráfico de raciones del medidor.\n
+            * (Experimental) Estimaciones de espera en la fila.\n
+            * Más temas en Ayuda.\n
+            * Agregada la sección Renovación.\n
+            * Muchos arreglos menores.\n\n
+
             [v2.0 Bolognesa]\n
             * Agregadas las secciones Ayuda y Contacto.\n
             * Mejorada la UI del Saldo.\n
@@ -131,14 +206,17 @@
             * Ahora se puede instalar la aplicacion en la SD.\n
             * Reducido el tamaño de la aplicacion.\n
             * Otros arreglos y mejoras menores.\n\n
+
             [v1.1 Arroz]\n
             * Arreglado el primer inicio de la cámara en android 6.0 o superior.\n
             * Quitado el aviso "Presiona atrás de nuevo para salir".\n
             * Arreglado la actualización del saldo.\n
             * Otros arreglos menores.\n\n
+
             [v1.0 Apio]\n
             * Primera version beta.
         </item>
+
     </string-array>
 
 </resources>

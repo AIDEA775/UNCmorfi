@@ -19,6 +19,7 @@
         android:textIsSelectable="true"
         android:autoLink="web|email"
         android:textColor="@color/secondary_text"
+        android:fontFamily="sans-serif-light"
         tools:text="Answer here"/>
 
 </LinearLayout>

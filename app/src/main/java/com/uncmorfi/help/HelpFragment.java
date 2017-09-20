@@ -33,12 +33,11 @@ public class HelpFragment extends Fragment {
     }
 
     private List<Question> getQuestionList() {
-        String[] questions = getResources().getStringArray(R.array.help_string_array_questions);
-        String[] answers = getResources().getStringArray(R.array.help_string_array_answers);
+        String[] questions = getResources().getStringArray(R.array.help_string_array);
 
         List<Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new Question(questions[i], answers[i]));
+        for (int i = 0; i < questions.length; i += 2) {
+            questionList.add(new Question(questions[i], questions[i+1]));
         }
         return questionList;
     }

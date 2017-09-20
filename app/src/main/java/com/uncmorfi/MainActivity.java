@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_counter:
                 fragment = new CounterFragment();
                 break;
+            case R.id.nav_renovation:
+                sendRenovationEmail();
+                break;
             case R.id.nav_map:
                 MapFragment mapFragment = new MapFragment();
                 fragment = mapFragment;
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements
                 fragment = new HelpFragment();
                 break;
             case R.id.nav_contact:
-                sendEmail();
+                sendContactEmail();
                 break;
             case R.id.nav_about:
                 new AboutDialog().show(getSupportFragmentManager(), "AboutDialog");
@@ -130,11 +133,22 @@ public class MainActivity extends AppCompatActivity implements
         return fragment;
     }
 
-    private void sendEmail() {
+    private void sendContactEmail() {
         Intent i = new Intent(Intent.ACTION_SENDTO);
         i.setData(Uri.parse("mailto:"));
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"alex.sai95@gmail.com"});
         i.putExtra(Intent.EXTRA_SUBJECT, "[UNCmorfi]");
+
+        if (i.resolveActivity(getPackageManager()) != null)
+            startActivity(i);
+    }
+
+    private void sendRenovationEmail() {
+        Intent i = new Intent(Intent.ACTION_SENDTO);
+        i.setData(Uri.parse("mailto:"));
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"credenciales@comedor.unc.edu.ar"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "RENOVAR");
+        i.putExtra(Intent.EXTRA_TEXT, getString(R.string.renovation_email_text));
 
         if (i.resolveActivity(getPackageManager()) != null)
             startActivity(i);

@@ -7,6 +7,7 @@
     <string name="navigation_menu">Menu</string>
     <string name="navigation_balance">Balance</string>
     <string name="navigation_counter">Counter</string>
+    <string name="navigation_renovation">Renovation</string>
     <string name="navigation_map">Map</string>
     <string name="navigation_help">Help</string>
     <string name="navigation_contact">Contact</string>
@@ -44,6 +45,13 @@
     <string name="counter_estimate">Approximately %1$d minutes left (%2$s)</string>
     <string name="counter_distance">Window %1$d</string>
 
+    <!-- Renovation -->
+    <string name="renovation_email_text">
+        \t¡Do not forget to attach the regular student certificate if you are a student!\n\n
+
+        \tOr Daspu card, salary receipt or certificate proving relationship with the UNC if you
+        are a Teacher or Non-Teacher.</string>
+
     <!-- About -->
     <string name="about_unofficial_app">This is an unofficial app</string>
     <string name="about_source_code">Source code:</string>
@@ -64,42 +72,60 @@
     <string name="align_barcode">Align barcode</string>
 
     <!-- Help -->
-    <string-array name="help_string_array_questions">
+    <string-array name="help_string_array" formatted="false">
         <item>Who we are?</item>
-        <item>Why is the menu not updated?</item>
-        <item>Where do they get Balance and Meter information?</item>
-        <item>Why are Internet and camera permissions needed?</item>
-        <item>What does \"Barcode dependencies are not yet available.\" mean?</item>
-        <item>Do I need Internet to check my card balance?</item>
-        <item>How can I collaborate?</item>
-        <item>What versions were there before?</item>
-    </string-array>
-
-    <string-array name="help_string_array_answers" formatted="false">
         <item>
             \tWe are two very hungry FaMAF students.\n\n
-            \tThe app started just as a hobby to learn the Java/Android programming language,
+            \tThe app started just as a hobby,
             so we strive to polish it as much as we can in our free time.\n\n
-            Development: Alejandro Ismael Silva\n
+
+            Development:\n
+                \t\tAlejandro Ismael Silva\n
                 \t\talex.sai95@gmail.com\n\n
-            Icon, banner and a multitude of opinions: Julieta Wiesztort\n
-                \t\tjuli.nana.07@gmail.com
+
+            Icon and banner:\n
+                \t\tJulieta Wiesztort\n
+                \t\tjuli.nana.07@gmail.com\n\n
+
+            Correction Spanish translation:\n
+                \t\tRosa Maria Peralta\n
+                \t\tmariarosaperalta95@gmail.com\n\n
+
+            Correction English translation:\n
+                \t\tGeorge Alegre\n
+                \t\tgithub.com/georgealegre\n\n
+
+            Contributors:\n
+                \t\tAndés Saravia\n
+                \t\tgithub.com/MinamiUruka
         </item>
+
+        <item>Why is the menu not updated?</item>
         <item>
             \tWe get the menu from the university\'s website:\n\n
             www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
             \tIf the menu doesn\'t refresh, it must be because the university did not update it.
         </item>
+
+        <item>Where do they get Balance and Meter information?</item>
         <item>
             \tFrom the university dining room\'s website:\n\n
             \tBalance: comedor.unc.edu.ar/autoconsulta.php\n\n
             \tMeter: comedor.unc.edu.ar/cocina.php
         </item>
+
+        <item>¿Windows? ¿How estimates work?</item>
         <item>
-            \tInternet access is necessary for updating the menu, the balance and the
-            measurer.\n
-            \tCamera access is for adding the card by scanning the barcode on it.
+            Needed translation.
         </item>
+
+        <item>How to apply for the credential? How can I regenerate the credential?</item>
+        <item>
+            \tRead the website of the dining room:\n
+            https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial
+        </item>
+
+        <item>What does \"Barcode dependencies are not yet available.\" mean?</item>
         <item>
             \tTo add a card using the camera, we use Google Play Services\'s \"Vision\" library.
             If this library is not available on the device, it will be downloaded automatically in
@@ -108,10 +134,31 @@
             \tTry again after a few minutes. If you are in a hurry or don\'t have Google Play Services,
             you can add it manually by entering the code with the keyboard.
         </item>
+
+        <item>Why are Internet and camera permissions needed?</item>
+        <item>
+            \tInternet access is necessary for updating the menu, the balance and the
+            measurer.\n
+            \tCamera access is for adding the card by scanning the barcode on it.
+        </item>
+
+        <item>Do I need Internet to check my card balance?</item>
         <item>
             \tAll the data is stored on the device to check offline, but you need to be connected to
             the Internet to get it updated.
         </item>
+
+        <item>I eat twice in one day?</item>
+        <item>
+            No.
+        </item>
+
+        <item>¿What is the bell that rings every so often in the dining room?</item>
+        <item>
+            Needed translation.
+        </item>
+
+        <item>How can I collaborate?</item>
         <item>
             \tIf you are developer, you can collaborate with code in the Github repository:\n
                 \t\tgithub.com/AIDEA775/UNCmorfi\n\n
@@ -119,8 +166,12 @@
             option of the navigation bar menu.\n\n
             \tOtherwise, you can recommend the app to anyone you see in the dining room row ;)
         </item>
+
+        <item>What versions were there before?</item>
         <item>
-            [v3.0 Cazuela]
+            [v3.0 Cazuela]\n
+            Needed translation.\n
+
             [v2.0 Bolognesa]\n
             * Added the sections Help and Contact.\n
             * Improved the Balance UI.\n
@@ -129,14 +180,17 @@
             * Allow application to be installed on external storage.\n
             * Reduced application size.\n
             * Other minor fixes and improvements.\n\n
+
             [v1.1 Arroz]\n
             * Fixed the first start of the camera on android 6.0 or higher.\n
             * Removed the "Press back again to exit".\n
             * Fixed balance update.\n
             * Other small fixes.\n\n
+
             [v1.0 Apio]\n
             * First beta version.
         </item>
+
     </string-array>
 
 </resources>

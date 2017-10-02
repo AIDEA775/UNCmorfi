@@ -35,10 +35,11 @@ public class UserOptionsDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        final CharSequence[] items = new CharSequence[3];
+        final CharSequence[] items = new CharSequence[4];
         items[0] = getString(R.string.balance_user_options_update);
         items[1] = getString(R.string.balance_user_options_delete);
-        items[2] = getString(R.string.balance_user_options_set_name);
+        items[2] = getString(R.string.balance_user_options_copy);
+        items[3] = getString(R.string.balance_user_options_set_name);
 
         final int userId =  getArguments().getInt(ARG_USER);
         final int position = getArguments().getInt(ARG_POS);
@@ -58,6 +59,9 @@ public class UserOptionsDialog extends DialogFragment {
                                             .show(getFragmentManager(), "DeleteUserDialog");
                                     break;
                                 case 2:
+                                    backend.copyCardToClipboard(userId);
+                                    break;
+                                case 3:
                                     SetNameDialog.newInstance(userId, position, backend)
                                             .show(getFragmentManager(), "SetNameDialog");
                                     break;

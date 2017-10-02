@@ -26,17 +26,20 @@
     <string name="balance_new_user_hint">Add card manually</string>
     <string name="balance_new_user_adding">Adding card %1$s&#8230;</string>
 
-    <string name="balance_set_name_title">New name</string>
-    <string name="balance_set_name_save">Save</string>
-
     <string name="balance_user_options_title">Card</string>
     <string name="balance_user_options_update">Update</string>
     <string name="balance_user_options_delete">Delete</string>
+    <string name="balance_user_options_copy">Copy</string>
     <string name="balance_user_options_set_name">Change name</string>
 
     <string name="balance_delete_user_title">Delete %1$s\'s card?</string>
     <string name="balance_delete_user_positive">Delete</string>
     <string name="balance_delete_user_msg">Card deleted</string>
+
+    <string name="balance_copy_msg">Number card copied</string>
+
+    <string name="balance_set_name_title">New name</string>
+    <string name="balance_set_name_save">Save</string>
 
     <!-- Counter -->
     <string name="counter_rations">Rations</string>

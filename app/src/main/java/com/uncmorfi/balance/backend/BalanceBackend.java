@@ -1,5 +1,7 @@
 package com.uncmorfi.balance.backend;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -115,6 +117,16 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         );
         mFragment.onItemChanged(position, getAllUsers());
         mFragment.showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
+    }
+
+    public void copyCardToClipboard(int userId) {
+        String card = getUserById(userId).getCard();
+
+        ClipboardManager clipboard = (ClipboardManager)
+                mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newPlainText("Card", card));
+
+        mFragment.showSnackBarMsg(R.string.balance_copy_msg, SnackbarHelper.SnackType.FINISH);
     }
 
     @Override

@@ -26,17 +26,20 @@
     <string name="balance_new_user_hint">Agregar tarjeta manualmente</string>
     <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
 
-    <string name="balance_set_name_title">Nuevo nombre</string>
-    <string name="balance_set_name_save">Guardar</string>
-
     <string name="balance_user_options_title">Tarjeta</string>
     <string name="balance_user_options_update">Actualizar</string>
     <string name="balance_user_options_delete">Eliminar</string>
     <string name="balance_user_options_set_name">Modificar nombre</string>
+    <string name="balance_user_options_copy">Copiar</string>
 
     <string name="balance_delete_user_title">Eliminar tarjeta de %1$s?</string>
     <string name="balance_delete_user_positive">Eliminar</string>
     <string name="balance_delete_user_msg">Tarjeta eliminada</string>
+
+    <string name="balance_copy_msg">Numero de tarjeta copiado</string>
+
+    <string name="balance_set_name_title">Nuevo nombre</string>
+    <string name="balance_set_name_save">Guardar</string>
 
     <!-- Counter -->
     <string name="counter_rations">Raciones</string>

@@ -168,6 +168,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         Glide.with(mContext)
                 .load(USER_IMAGES_URL + user.getImage())
                 .asBitmap()
+                .placeholder(R.drawable.person_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(new BitmapImageViewTarget(holder.userImage) {

@@ -8,11 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".balance.BalanceFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/balance_swipe_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -40,8 +35,6 @@
             </android.support.v7.widget.CardView>
 
         </android.support.v4.widget.NestedScrollView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/balance_fab"

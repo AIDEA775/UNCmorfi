@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +33,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     private View mRootView;
     private UserCursorAdapter mUserCursorAdapter;
     private BalanceBackend mBackend;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private Snackbar lastSnackBar;
 
     @Override
@@ -48,7 +46,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_balance, container, false);
 
-        setSwipeRefreshLayout();
         setRecyclerAndAdapter();
         setFloatingActionButton();
 
@@ -56,25 +53,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         getLoaderManager().initLoader(0, null, this);
 
         return mRootView;
-    }
-
-    private void setSwipeRefreshLayout() {
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.balance_swipe_refresh);
-        mSwipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        updateAllUsers();
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-        );
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(
-                R.color.accent);
-        mSwipeRefreshLayout.setColorSchemeResources(
-                R.color.white,
-                R.color.primary_light
-        );
     }
 
     private void setRecyclerAndAdapter() {
@@ -137,7 +115,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     @Override
     public void onStop() {
         super.onStop();
-        mSwipeRefreshLayout.setRefreshing(false);
         if (lastSnackBar != null && lastSnackBar.isShown())
             lastSnackBar.dismiss();
     }

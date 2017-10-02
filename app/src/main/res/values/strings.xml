@@ -46,7 +46,7 @@
     <string name="counter_rations_title">%1$d rations of %2$d</string>
     <string name="counter_percent_symbol">%</string>
     <string name="counter_estimate">Approximately %1$d minutes left (%2$s)</string>
-    <string name="counter_distance">Window %1$d</string>
+    <string name="counter_distance">Window %1$d (Read Help!)</string>
 
     <!-- Renovation -->
     <string name="renovation_email_text">
@@ -119,10 +119,19 @@
 
         <item>¿Windows? ¿How estimates work?</item>
         <item>
-            Needed translation.
+            \tThere are \"windows\" (or rather columns) along the dining room,
+            you have to put the length of the row in front of you, measured in number of windows,
+            on the slide bar. For example, at the height of the men's baths are 5 windows (women 6),
+            the total length of the dining room are 12 windows, the curve is 1 window,
+            and in the second entrance are 25 windows. This is very experimental functionality.
+            It works with a simple quadratic function calculated from a statistic.
+            Although the fewer people you have ahead the more accurate it is,
+            the changing nature of the dining room line is difficult to give an accurate estimate.
+            We choose "windows" as a measure because they will never change over time,
+            but curves and countercurves in a row always vary from day to day.
         </item>
 
-        <item>How to apply for the credential? How can I regenerate the credential?</item>
+        <item>How do I apply for the credential? How can I regenerate the credential?</item>
         <item>
             \tRead the website of the dining room:\n
             https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial
@@ -151,29 +160,40 @@
             the Internet to get it updated.
         </item>
 
-        <item>I eat twice in one day?</item>
+        <item>Do I can eat twice in one day?</item>
         <item>
             No.
         </item>
 
         <item>¿What is the bell that rings every so often in the dining room?</item>
         <item>
-            Needed translation.
+            Legend has it that when the bell rings there is rotation among the cooks.
         </item>
 
         <item>How can I collaborate?</item>
         <item>
-            \tIf you are developer, you can collaborate with code in the Github repository:\n
+            \tYou can send your suggestion by e-mail in the \"Contact\" option in the side menu.\n\n
+
+            \tYou can also have a look at the source code in Github:\n
                 \t\tgithub.com/AIDEA775/UNCmorfi\n\n
-            \tIf you have a suggestion or doubt, you can send it by e-mail in the \"Contact\"
-            option of the navigation bar menu.\n\n
-            \tOtherwise, you can recommend the app to anyone you see in the dining room row ;)
+
+            \tAnd you can recommend the app to anyone you see in the dining room line ;)
         </item>
 
         <item>What versions were there before?</item>
         <item>
             [v3.0 Cazuela]\n
-            Needed translation.\n
+            * New icon!\n
+            * New lateral menu.\n
+            * Now the menu is automatically updated every week.\n
+            * New interface in Balance.\n
+            * Check the expiration date of your card.\n
+            * Added the date from the last time you checked the balance.\n
+            * Added graph ration meter\n
+            * (Experimental) Waiting estimates in the line.\n
+            * More topics in Help.\n
+            * Added the section Renovation.\n
+            * Many other minor changes.\n\n
 
             [v2.0 Bolognesa]\n
             * Added the sections Help and Contact.\n
@@ -184,13 +204,13 @@
             * Reduced application size.\n
             * Other minor fixes and improvements.\n\n
 
-            [v1.1 Arroz]\n
+            [v1.0 Arroz]\n
             * Fixed the first start of the camera on android 6.0 or higher.\n
             * Removed the "Press back again to exit".\n
             * Fixed balance update.\n
             * Other small fixes.\n\n
 
-            [v1.0 Apio]\n
+            [v0.1 Apio]\n
             * First beta version.
         </item>
 

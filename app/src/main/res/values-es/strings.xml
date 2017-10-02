@@ -46,7 +46,7 @@
     <string name="counter_rations_title">%1$d raciones de %2$d</string>
     <string name="counter_percent_symbol">%</string>
     <string name="counter_estimate">Faltan aproximadamente %1$d minutos (%2$s)</string>
-    <string name="counter_distance">Ventana %1$d</string>
+    <string name="counter_distance">Ventana %1$d (¡Leer Ayuda!)</string>
 
     <!-- Renovation -->
     <string name="renovation_email_text">
@@ -80,8 +80,8 @@
         <item>¿Quiénes somos?</item>
         <item>
             \tSomos dos estudiantes de FaMAF con mucha hambre.\n\n
-            \tLa app inició sólo como hobbie, por lo que nos esforzamos por pulirla lo más que
-            podemos en nuestro tiempo libre.\n\n
+            \tLa app inició sólo como hobbie,
+            por lo que nos esforzamos por pulirla lo más que podemos en nuestro tiempo libre.\n\n
 
             Desarrollo:\n
                 \t\tAlejandro Ismael Silva\n
@@ -136,7 +136,7 @@
             tiempo, en cambio, las curvas y contracurvas de una fila siempre varian de un día a otro.
         </item>
 
-        <item>¿Cómo solicito la credencial? ¿Cómo puedo regenerar la credencial?</item>
+        <item>¿Cómo solicito la credencial? ¿Cómo puedo regenerar mi credencial?</item>
         <item>
             \tLee la web del comedor:
             https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial
@@ -178,9 +178,10 @@
 
         <item>¿Cómo puedo colaborar?</item>
         <item>
-            \tPodés enviar tu sugerencia por e-mail en la opción \"Contacto\" del menú lateral.\n\n
+            \tPodés enviar tu sugerencia por correo electrónico en la opción \"Contacto\" del menú
+            lateral.\n\n
 
-            \tTambién podés pegarle una mirada al codigo fuente que está en Github:\n
+            \tTambién podés pegarle una mirada al codigo fuente en Github:\n
                 \t\tgithub.com/AIDEA775/UNCmorfi\n\n
 
             \tY además podés recomendar la app a cualquiera que veas en la fila del comedor ;)
@@ -199,7 +200,7 @@
             * (Experimental) Estimaciones de espera en la fila.\n
             * Más temas en Ayuda.\n
             * Agregada la sección Renovación.\n
-            * Muchos arreglos menores.\n\n
+            * Muchos otros cambios menores.\n\n
 
             [v2.0 Bolognesa]\n
             * Agregadas las secciones Ayuda y Contacto.\n

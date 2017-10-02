@@ -25,7 +25,7 @@ public class AboutDialog extends DialogFragment {
     }
 
     public AlertDialog createNewCardDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         View v = View.inflate(getContext(), R.layout.dialog_about, null);
 

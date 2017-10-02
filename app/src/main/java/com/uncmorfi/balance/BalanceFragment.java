@@ -49,7 +49,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         setRecyclerAndAdapter();
         setFloatingActionButton();
 
-        mBackend = new BalanceBackend(getContext(), this);
+        mBackend = new BalanceBackend(getActivity().getApplicationContext(), this);
         getLoaderManager().initLoader(0, null, this);
 
         return mRootView;
@@ -121,7 +121,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(),
+        return new CursorLoader(getActivity().getApplicationContext(),
                 UserProvider.CONTENT_URI,
                 null,
                 null,

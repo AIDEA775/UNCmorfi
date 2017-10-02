@@ -32,7 +32,7 @@ public class DeleteUserDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final int userId = getArguments().getInt(ARG_USER);
         final int position = getArguments().getInt(ARG_POS);

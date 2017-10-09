@@ -13,50 +13,61 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
-class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
+class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
     private DownloadUserListener mListener;
-    private int mPosition;
+    private int[] mPosition;
     private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
     private static final String URL =
             "http://comedor.unc.edu.ar/gv-ds_test.php?json=true&accion=4&codigo=";
 
     interface DownloadUserListener {
-        void onUserDownloaded(User user, int position);
-        void onUserDownloadFail();
+        void onUsersDownloaded(List<User> users);
+        void onUsersDownloadFail(int[] positions);
     }
 
-    DownloadUserAsyncTask(DownloadUserListener listener, int position) {
+    DownloadUserAsyncTask(DownloadUserListener listener, int[] position) {
         mListener = listener;
         mPosition = position;
     }
 
     @Override
-    protected User doInBackground(String... params) {
+    protected List<User> doInBackground(String... params) {
         try {
             String card = params[0];
             String result = ConnectionHelper.downloadFromUrlByGet(URL + card);
 
-            JSONObject json = new JSONArray(result).getJSONObject(0);
+            List<User> users = new ArrayList<>();
+            JSONArray array = new JSONArray(result);
 
-            User user = new User();
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject item = array.getJSONObject(i);
+                User user = new User();
 
-            user.setCard(card);
-            user.setName(json.getString("nombre"));
-            user.setType(json.getString("tipo_cliente"));
-            user.setImage(json.getString("foto"));
-            user.setBalance(Integer.parseInt(json.getString("saldo")));
+                user.setCard(item.getString("codigo"));
+                user.setName(item.getString("nombre"));
+                user.setType(item.getString("tipo_cliente"));
+                user.setImage(item.getString("foto"));
+                user.setBalance(Integer.parseInt(item.getString("saldo")));
 
-            Date expireDate = mDateFormat.parse(json.getString("fecha_hasta"));
-            user.setExpiration(expireDate.getTime());
+                Date expireDate = mDateFormat.parse(item.getString("fecha_hasta"));
+                user.setExpiration(expireDate.getTime());
 
-            Date currentTime = Calendar.getInstance().getTime();
-            user.setLastUpdate(currentTime.getTime());
-            return user;
+                Date currentTime = Calendar.getInstance().getTime();
+                user.setLastUpdate(currentTime.getTime());
+
+                if (mPosition != null) user.setPosition(mPosition[i]);
+
+                users.add(user);
+            }
+
+            return users;
         } catch (IOException|ParseException|JSONException|NumberFormatException e) {
             e.printStackTrace();
             return null;
@@ -64,8 +75,8 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, User> {
     }
 
     @Override
-    protected void onPostExecute(User user) {
-        if (user == null) mListener.onUserDownloadFail();
-        else mListener.onUserDownloaded(user, mPosition);
+    protected void onPostExecute(List<User> users) {
+        if (users == null) mListener.onUsersDownloadFail(mPosition);
+        else mListener.onUsersDownloaded(users);
     }
 }

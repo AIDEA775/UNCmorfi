@@ -15,6 +15,7 @@ public class User implements Serializable {
     private int balance;
     private long expiration;
     private long lastUpdate;
+    private int position;
 
     public User() {}
 
@@ -61,6 +62,10 @@ public class User implements Serializable {
         return lastUpdate;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     public void setBalance(int balance) {
         this.balance = balance;
     }
@@ -87,6 +92,10 @@ public class User implements Serializable {
 
     public void setLastUpdate(long lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public ContentValues toContentValues () {

@@ -89,16 +89,21 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void onClick(int userId, int position) {
-        UserOptionsDialog.newInstance(userId, position, mBackend)
+    public void onClick(int userId, String userCard, int position) {
+        UserOptionsDialog.newInstance(userId, userCard, position, mBackend)
                 .show(getFragmentManager(), "UserOptionsDialog");
     }
 
     private void updateAllUsers() {
+        String cards = "";
+        int[] positions = new int[mUserCursorAdapter.getItemCount()];
+
         for (int pos = 0; pos < mUserCursorAdapter.getItemCount(); pos++) {
-            int userId = mUserCursorAdapter.getItemIdFromCursor(pos);
-            mBackend.updateBalanceOfUser(userId, pos);
+            String userCard = mUserCursorAdapter.getItemCardFromCursor(pos);
+            cards += (pos == 0 ? "" : "|") + userCard;
+            positions[pos] = pos;
         }
+        mBackend.updateBalanceOfUser(cards, positions);
     }
 
     private void displayNewUser() {
@@ -185,8 +190,10 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void showProgressBar(int position, boolean show) {
-        mUserCursorAdapter.setInProgress(position, show);
-        mUserCursorAdapter.notifyItemChanged(position);
+    public void showProgressBar(int[] positions, boolean show) {
+        for (int i : positions) {
+            mUserCursorAdapter.setInProgress(i, show);
+            mUserCursorAdapter.notifyItemChanged(i);
+        }
     }
 }

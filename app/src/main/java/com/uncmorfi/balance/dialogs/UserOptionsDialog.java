@@ -13,14 +13,17 @@ import com.uncmorfi.balance.backend.BalanceBackend;
 
 public class UserOptionsDialog extends DialogFragment {
     public static final String ARG_USER = "user";
+    public static final String ARG_CARD = "card";
     public static final String ARG_POS = "position";
     public static final String ARG_BACKEND = "backend";
 
 
-    public static UserOptionsDialog newInstance(int userId, int position, BalanceBackend backend) {
+    public static UserOptionsDialog newInstance(int userId, String userCard, int position,
+                                                BalanceBackend backend) {
         Bundle args = new Bundle();
 
         args.putInt(ARG_USER, userId);
+        args.putString(ARG_CARD, userCard);
         args.putInt(ARG_POS, position);
         args.putSerializable(ARG_BACKEND, backend);
 
@@ -41,7 +44,8 @@ public class UserOptionsDialog extends DialogFragment {
         items[2] = getString(R.string.balance_user_options_copy);
         items[3] = getString(R.string.balance_user_options_set_name);
 
-        final int userId =  getArguments().getInt(ARG_USER);
+        final int userId = getArguments().getInt(ARG_USER);
+        final String userCard =  getArguments().getString(ARG_CARD);
         final int position = getArguments().getInt(ARG_POS);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
@@ -52,14 +56,14 @@ public class UserOptionsDialog extends DialogFragment {
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case 0:
-                                    backend.updateBalanceOfUser(userId, position);
+                                    backend.updateBalanceOfUser(userCard, new int[]{position});
                                     break;
                                 case 1:
                                     DeleteUserDialog.newInstance(userId, position, backend)
                                             .show(getFragmentManager(), "DeleteUserDialog");
                                     break;
                                 case 2:
-                                    backend.copyCardToClipboard(userId);
+                                    backend.copyCardToClipboard(userCard);
                                     break;
                                 case 3:
                                     SetNameDialog.newInstance(userId, position, backend)

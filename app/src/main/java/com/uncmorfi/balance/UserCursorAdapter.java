@@ -47,7 +47,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     private OnCardClickListener mListener;
 
     interface OnCardClickListener {
-        void onClick(int userId, int position);
+        void onClick(int userId, String userCard, int position);
     }
 
     class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -77,8 +77,8 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
 
         @Override
         public void onClick(View v) {
-            int position = this.getAdapterPosition();
-            mListener.onClick(getItemIdFromCursor(position), position);
+            int pos = this.getAdapterPosition();
+            mListener.onClick(getItemIdFromCursor(pos), getItemCardFromCursor(pos), pos);
         }
     }
 
@@ -209,8 +209,13 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         mUpdateInProgress.set(position, show);
     }
 
-    int getItemIdFromCursor(int position) {
+    private int getItemIdFromCursor(int position) {
         mCursor.moveToPosition(position);
         return mCursor.getInt(mCursor.getColumnIndex(UsersContract.UserEntry._ID));
+    }
+
+    String getItemCardFromCursor(int position) {
+        mCursor.moveToPosition(position);
+        return mCursor.getString(mCursor.getColumnIndex(UsersContract.UserEntry.CARD));
     }
 }

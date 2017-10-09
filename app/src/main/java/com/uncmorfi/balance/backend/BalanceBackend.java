@@ -141,7 +141,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
 
     @Override
     public void onUsersDownloadFail(int[] positions) {
-        mFragment.showProgressBar(positions, false);
+        if (positions != null) mFragment.showProgressBar(positions, false);
         mFragment.showSnackBarMsg(R.string.new_user_fail, SnackbarHelper.SnackType.ERROR);
     }
 

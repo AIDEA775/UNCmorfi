@@ -39,7 +39,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     private static final float SCALE_USER_IMAGE_SIZE = 0.8f;
     private static final int SCALE_USER_IMAGE_TIME = 500;
     private static final int WARNING_USER_BALANCE = 20;
-    private static final int WARNING_USER_EXPIRE = 6;
+    private static final int WARNING_USER_EXPIRE = 1;
     private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
     private Context mContext;
     private Cursor mCursor;

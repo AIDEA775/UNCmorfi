@@ -100,7 +100,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
         for (int pos = 0; pos < mUserCursorAdapter.getItemCount(); pos++) {
             String userCard = mUserCursorAdapter.getItemCardFromCursor(pos);
-            cards += (pos == 0 ? "" : "|") + userCard;
+            cards += (pos == 0 ? "" : ",") + userCard;
             positions[pos] = pos;
         }
         mBackend.updateBalanceOfUser(cards, positions);

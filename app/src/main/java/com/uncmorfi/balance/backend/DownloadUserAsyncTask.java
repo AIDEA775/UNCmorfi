@@ -54,10 +54,10 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
                 user.setName(item.getString("nombre"));
                 user.setType(item.getString("tipo_cliente"));
                 user.setImage(item.getString("foto"));
-                user.setBalance(Integer.parseInt(item.getString("saldo")));
+                user.setBalance(parseStringToInt(item.getString("saldo")));
 
-                Date expireDate = mDateFormat.parse(item.getString("fecha_hasta"));
-                user.setExpiration(expireDate.getTime());
+                Date expireDate = parseStringToDate(item.getString("fecha_hasta"));
+                if (expireDate != null) user.setExpiration(expireDate.getTime());
 
                 Date currentTime = Calendar.getInstance().getTime();
                 user.setLastUpdate(currentTime.getTime());
@@ -68,7 +68,7 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
             }
 
             return users;
-        } catch (IOException|ParseException|JSONException|NumberFormatException e) {
+        } catch (IOException|JSONException e) {
             e.printStackTrace();
             return null;
         }
@@ -76,7 +76,25 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
 
     @Override
     protected void onPostExecute(List<User> users) {
-        if (users == null) mListener.onUsersDownloadFail(mPosition);
+        if (users == null || users.isEmpty()) mListener.onUsersDownloadFail(mPosition);
         else mListener.onUsersDownloaded(users);
+    }
+
+    private Date parseStringToDate(String string) {
+        try {
+            return mDateFormat.parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private int parseStringToInt(String string) {
+        try {
+            return Integer.parseInt(string);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }

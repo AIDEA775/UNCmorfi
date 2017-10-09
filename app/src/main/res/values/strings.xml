@@ -121,13 +121,13 @@
         <item>
             \tThere are \"windows\" (or rather columns) along the dining room,
             you have to put the length of the row in front of you, measured in number of windows,
-            on the slide bar. For example, at the height of the men's baths are 5 windows (women 6),
+            on the slide bar. For example, at the height of the men\'s baths are 5 windows (women 6),
             the total length of the dining room are 12 windows, the curve is 1 window,
             and in the second entrance are 25 windows. This is very experimental functionality.
             It works with a simple quadratic function calculated from a statistic.
             Although the fewer people you have ahead the more accurate it is,
             the changing nature of the dining room line is difficult to give an accurate estimate.
-            We choose "windows" as a measure because they will never change over time,
+            We choose \"windows\" as a measure because they will never change over time,
             but curves and countercurves in a row always vary from day to day.
         </item>
 

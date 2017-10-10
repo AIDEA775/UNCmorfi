@@ -1,6 +1,5 @@
 package com.uncmorfi.balance;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.dialogs.UserOptionsDialog;
@@ -107,8 +108,22 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     private void displayNewUser() {
-        Intent i = new Intent(getActivity(), BarcodeReaderActivity.class);
-        startActivityForResult(i, NEW_USER_REQUEST_CODE);
+        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setPrompt(getString(R.string.align_barcode));
+        integrator.setBeepEnabled(false);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null && result.getContents() != null) {
+            mBackend.newUser(result.getContents());
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -146,12 +161,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     public void onLoaderReset(Loader<Cursor> loader) {
         mUserCursorAdapter.setCursor(null);
         mUserCursorAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NEW_USER_REQUEST_CODE && resultCode == Activity.RESULT_OK)
-            mBackend.newUser(data.getStringExtra(BarcodeReaderActivity.ARG_BARCODE_CARD));
     }
 
     @Override

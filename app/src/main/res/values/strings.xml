@@ -30,6 +30,7 @@
     <string name="balance_user_options_update">Update</string>
     <string name="balance_user_options_delete">Delete</string>
     <string name="balance_user_options_copy">Copy</string>
+    <string name="balance_user_options_barcode">Barcode</string>
     <string name="balance_user_options_set_name">Change name</string>
 
     <string name="balance_delete_user_title">Delete %1$s\'s card?</string>

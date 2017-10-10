@@ -29,8 +29,9 @@
     <string name="balance_user_options_title">Tarjeta</string>
     <string name="balance_user_options_update">Actualizar</string>
     <string name="balance_user_options_delete">Eliminar</string>
-    <string name="balance_user_options_set_name">Modificar nombre</string>
     <string name="balance_user_options_copy">Copiar</string>
+    <string name="balance_user_options_barcode">Código de barras</string>
+    <string name="balance_user_options_set_name">Modificar nombre</string>
 
     <string name="balance_delete_user_title">Eliminar tarjeta de %1$s?</string>
     <string name="balance_delete_user_positive">Eliminar</string>

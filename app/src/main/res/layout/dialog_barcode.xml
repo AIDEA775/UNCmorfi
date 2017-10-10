@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/barcode_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:fontFamily="sans-serif-light"
+        android:textSize="20sp"
+        android:layout_marginTop="12dp"
+        tools:text="Card number" />
+
+    <ProgressBar
+        android:id="@+id/barcode_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:indeterminateDrawable="@drawable/progressbar" />
+
+    <ImageView
+        android:id="@+id/barcode_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        tools:ignore="ContentDescription" />
+</LinearLayout>

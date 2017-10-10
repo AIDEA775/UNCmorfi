@@ -70,9 +70,7 @@
     <string name="new_user_fail">An error occurred</string>
 
     <!-- Toast -->
-    <string name="detector_not_available">Barcode dependencies are not yet available.</string>
     <string name="permission_not_granted">Permission not granted</string>
-    <string name="low_storage_error">Low storage available</string>
     <string name="align_barcode">Align barcode</string>
 
     <!-- Help -->
@@ -136,16 +134,6 @@
         <item>
             \tRead the website of the dining room:\n
             https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial
-        </item>
-
-        <item>What does \"Barcode dependencies are not yet available.\" mean?</item>
-        <item>
-            \tTo add a card using the camera, we use Google Play Services\'s \"Vision\" library.
-            If this library is not available on the device, it will be downloaded automatically in
-            the background (keep in mind that you need storage space available for the download, if you
-            don\'t have enough room, a warning will appear).\n\n
-            \tTry again after a few minutes. If you are in a hurry or don\'t have Google Play Services,
-            you can add it manually by entering the code with the keyboard.
         </item>
 
         <item>Why are Internet and camera permissions needed?</item>

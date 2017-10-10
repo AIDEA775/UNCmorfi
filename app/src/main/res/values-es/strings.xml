@@ -71,9 +71,7 @@
     <string name="new_user_fail">Ocurrió un error</string>
 
     <!-- Toast -->
-    <string name="detector_not_available">Dependencias del lector de barras no disponibles</string>
     <string name="permission_not_granted">Sin permisos de cámara</string>
-    <string name="low_storage_error">Poca memoria disponible</string>
     <string name="align_barcode">Alinea el codigo de barras</string>
 
     <!-- Help -->
@@ -141,18 +139,6 @@
         <item>
             \tLee la web del comedor:
             https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial
-        </item>
-
-        <item>¿Qué significa \"Dependencias del lector de barras no disponibles\"?</item>
-        <item>
-            \tPara agregar una tarjeta usando la cámara, usamos la librería \"Vision\" de
-            Google Play Services. Si esta librería no está disponible en el dispositivo,
-            se descargará automáticamente en segundo plano (Tené en cuenta que se necesita espacio
-            de almacenamiento disponible para la descarga, si no tenés sufiente aparecerá un
-            aviso).\n\n
-            \tVolvé a intentarlo después de unos minutos. Si estás apurado o no tenés
-            Google Play Services, podés agregarlo manualmente ingresando el
-            código de la tarjeta con el teclado.
         </item>
 
         <item>¿Por qué piden permisos de internet y de cámara?</item>

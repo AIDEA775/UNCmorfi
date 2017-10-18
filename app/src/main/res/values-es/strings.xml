@@ -22,8 +22,7 @@
     <string name="balance_expiration">Fecha de vencimiento: %1$s</string>
     <string name="balance_last_update">Última actualización %1$s</string>
 
-    <string name="balance_new_user_button_info">Listo</string>
-    <string name="balance_new_user_hint">Agregar tarjeta manualmente</string>
+    <string name="balance_new_user_hint">Escribe el numero de la tarjeta</string>
     <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
 
     <string name="balance_user_options_title">Tarjeta</string>

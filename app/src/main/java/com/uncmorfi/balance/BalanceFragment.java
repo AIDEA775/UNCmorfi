@@ -1,5 +1,6 @@
 package com.uncmorfi.balance;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,12 +12,19 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -29,12 +37,12 @@ import com.uncmorfi.helpers.SnackbarHelper;
 
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, BalanceBackend.BalanceListener {
-    private static final int NEW_USER_REQUEST_CODE = 1;
 
     private View mRootView;
     private UserCursorAdapter mUserCursorAdapter;
     private BalanceBackend mBackend;
     private Snackbar lastSnackBar;
+    private EditText mEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -48,7 +56,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         mRootView = inflater.inflate(R.layout.fragment_balance, container, false);
 
         setRecyclerAndAdapter();
-        setFloatingActionButton();
+        setNewUserView();
 
         mBackend = new BalanceBackend(getActivity().getApplicationContext(), this);
         getLoaderManager().initLoader(0, null, this);
@@ -58,19 +66,35 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     private void setRecyclerAndAdapter() {
         RecyclerView recyclerView = (RecyclerView) mRootView.findViewById(R.id.balance_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setAutoMeasureEnabled(true);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setLayoutManager(layoutManager);
         mUserCursorAdapter = new UserCursorAdapter(getContext(), this);
         recyclerView.setAdapter(mUserCursorAdapter);
-        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
-    private void setFloatingActionButton() {
-        (mRootView.findViewById(R.id.balance_fab)).setOnClickListener(new View.OnClickListener() {
+    private void setNewUserView() {
+        mEditText = (EditText) mRootView.findViewById(R.id.new_user_input);
+        ImageButton scanner = (ImageButton) mRootView.findViewById(R.id.new_user_scanner);
+
+        mEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View view) {
-                displayNewUser();
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    hideKeyboard();
+                    mBackend.newUser(textView.getText().toString());
+                }
+                return false;
+            }
+        });
+        scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callScanner();
             }
         });
     }
@@ -95,27 +119,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 .show(getFragmentManager(), "UserOptionsDialog");
     }
 
-    private void updateAllUsers() {
-        String cards = "";
-        int[] positions = new int[mUserCursorAdapter.getItemCount()];
-
-        for (int pos = 0; pos < mUserCursorAdapter.getItemCount(); pos++) {
-            String userCard = mUserCursorAdapter.getItemCardFromCursor(pos);
-            cards += (pos == 0 ? "" : ",") + userCard;
-            positions[pos] = pos;
-        }
-        mBackend.updateBalanceOfUser(cards, positions);
-    }
-
-    private void displayNewUser() {
-        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt(getString(R.string.align_barcode));
-        integrator.setBeepEnabled(false);
-        integrator.setBarcodeImageEnabled(true);
-        integrator.initiateScan();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -135,6 +138,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     @Override
     public void onStop() {
         super.onStop();
+        hideKeyboard();
         if (lastSnackBar != null && lastSnackBar.isShown())
             lastSnackBar.dismiss();
     }
@@ -165,12 +169,14 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public void onItemAdded(Cursor c) {
+        mEditText.getText().clear();
         mUserCursorAdapter.setCursor(c);
         mUserCursorAdapter.notifyItemInserted(mUserCursorAdapter.getItemCount());
     }
 
     @Override
     public void onItemChanged(int position, Cursor c) {
+        mEditText.getText().clear();
         mUserCursorAdapter.setCursor(c);
         mUserCursorAdapter.notifyItemChanged(position);
     }
@@ -204,5 +210,36 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
             mUserCursorAdapter.setInProgress(i, show);
             mUserCursorAdapter.notifyItemChanged(i);
         }
+    }
+
+    private void updateAllUsers() {
+        String cards = "";
+        int[] positions = new int[mUserCursorAdapter.getItemCount()];
+
+        for (int pos = 0; pos < mUserCursorAdapter.getItemCount(); pos++) {
+            String userCard = mUserCursorAdapter.getItemCardFromCursor(pos);
+            cards += (pos == 0 ? "" : ",") + userCard;
+            positions[pos] = pos;
+        }
+        if (!cards.isEmpty()) mBackend.updateBalanceOfUser(cards, positions);
+    }
+
+    private void hideKeyboard() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)
+                    getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        mEditText.clearFocus();
+    }
+
+    private void callScanner() {
+        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setPrompt(getString(R.string.align_barcode));
+        integrator.setBeepEnabled(false);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
     }
 }

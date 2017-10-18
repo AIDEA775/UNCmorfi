@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewHolder> {
+class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder> {
     private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
     private static final float SCALE_USER_IMAGE_SIZE = 0.8f;
     private static final int SCALE_USER_IMAGE_TIME = 500;
@@ -50,7 +50,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         void onClick(int userId, String userCard, int position);
     }
 
-    class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class UserItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nameText;
         TextView cardText;
         TextView typeText;
@@ -60,7 +60,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         TextView expirationText;
         TextView lastUpdateText;
 
-        UserViewHolder(View v) {
+        UserItemViewHolder(View v) {
             super(v);
 
             nameText = (TextView) v.findViewById(R.id.user_name);
@@ -88,14 +88,14 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
     }
 
     @Override
-    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_user, parent, false);
-        return new UserViewHolder(v);
+                .inflate(R.layout.user_item, parent, false);
+        return new UserItemViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final UserViewHolder holder, int position) {
+    public void onBindViewHolder(final UserItemViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         User user = new User(mCursor);
 
@@ -104,7 +104,14 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         setProgressBar(holder, position);
     }
 
-    private void setHolder(UserViewHolder holder, User user) {
+    @Override
+    public int getItemCount() {
+        if (mCursor != null)
+            return mCursor.getCount();
+        return 0;
+    }
+
+    private void setHolder(UserItemViewHolder holder, User user) {
         holder.nameText.setText(user.getName());
         holder.cardText.setText(user.getCard());
         holder.typeText.setText(user.getType());
@@ -132,7 +139,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         return (new Date(expiration)).before(cal.getTime());
     }
 
-    private void setProgressBar(UserViewHolder holder, int position) {
+    private void setProgressBar(UserItemViewHolder holder, int position) {
         if (mUpdateInProgress.get(position)) {
             holder.progressBar.setVisibility(View.VISIBLE);
             setUserImageUpdatingMode(holder);
@@ -142,7 +149,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
         }
     }
 
-    private void setUserImageUpdatingMode(UserViewHolder holder) {
+    private void setUserImageUpdatingMode(UserItemViewHolder holder) {
         holder.userImage.setScaleX(1);
         holder.userImage.setScaleY(1);
         holder.userImage.animate()
@@ -153,7 +160,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
                 .start();
     }
 
-    private void setUserImageNormalMode(UserViewHolder holder) {
+    private void setUserImageNormalMode(UserItemViewHolder holder) {
         holder.userImage.setScaleX(SCALE_USER_IMAGE_SIZE);
         holder.userImage.setScaleY(SCALE_USER_IMAGE_SIZE);
         holder.userImage.animate()
@@ -164,7 +171,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
                 .start();
     }
 
-    private void setImage(final UserViewHolder holder, User user) {
+    private void setImage(final UserItemViewHolder holder, User user) {
         Glide.with(mContext)
                 .load(USER_IMAGES_URL + user.getImage())
                 .asBitmap()
@@ -180,13 +187,6 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserViewH
                         holder.userImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-    }
-
-    @Override
-    public int getItemCount() {
-        if (mCursor != null)
-            return mCursor.getCount();
-        return 0;
     }
 
     void setCursor(Cursor newCursor) {

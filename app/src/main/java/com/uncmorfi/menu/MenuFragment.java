@@ -110,7 +110,8 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     @Override
     public void onRefreshMenuSuccess(String menu) {
         if (needSaveMenu(menu)) {
-            MemoryHelper.saveToStorage(getContext(), MenuFragment.MENU_FILE, menu);
+            MemoryHelper.saveToStorage(getActivity().getApplicationContext(),
+                    MenuFragment.MENU_FILE, menu);
         }
 
         if (getActivity() != null && isAdded()) {

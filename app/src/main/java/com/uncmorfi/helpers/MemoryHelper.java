@@ -1,9 +1,12 @@
 package com.uncmorfi.helpers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -27,7 +30,7 @@ public abstract class MemoryHelper {
         }
     }
 
-    public static String readFileFromStorage(Context context, String file) {
+    public static String readStringFromStorage(Context context, String file) {
         try {
             BufferedReader in =
                     new BufferedReader(
@@ -58,4 +61,34 @@ public abstract class MemoryHelper {
             return null;
         }
     }
+
+    public static void saveBitmapToStorage(Context context, String file, Bitmap bitmap) {
+        if (bitmap != null) {
+            try {
+                FileOutputStream out = context.openFileOutput(file, Context.MODE_PRIVATE);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                out.close();
+                Log.i("MemoryHelper", "Written " + file + " success");
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("MemoryHelper", "Error writing barcode in internal memory");
+            }
+        }
+    }
+
+    public static Bitmap readBitmapFromStorage(Context context, String file) {
+        try {
+            return BitmapFactory.decodeStream(context.openFileInput(file));
+        } catch (IOException e) {
+            Log.i("MemoryHelper", "Error reading barcode in internal memory");
+            return null;
+        }
+    }
+
+    public static void deleteFileInStorage(Context context, String file) {
+        boolean result = context.deleteFile(file);
+        if (result) Log.i("MemoryHelper", "Deleted file " + file);
+        else Log.e("MemoryHelper", "Error deleting file " + file);
+    }
+
 }

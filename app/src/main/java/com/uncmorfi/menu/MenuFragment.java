@@ -58,7 +58,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
                 R.color.primary_light
         );
 
-        String menuSaved = MemoryHelper.readFileFromStorage(getContext(), MENU_FILE);
+        String menuSaved = MemoryHelper.readStringFromStorage(getContext(), MENU_FILE);
         if (menuSaved != null) {
             mWebView.loadData(menuSaved, "text/html", "UTF-8");
         }

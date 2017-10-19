@@ -11,16 +11,19 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
+import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_CARD;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_POS;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
 
 public class DeleteUserDialog extends DialogFragment {
 
-    public static DeleteUserDialog newInstance(int userId, int position, BalanceBackend backend) {
+    public static DeleteUserDialog newInstance(int userId, String userCard, int position,
+                                               BalanceBackend backend) {
         Bundle args = new Bundle();
 
         args.putInt(ARG_USER, userId);
+        args.putString(ARG_CARD, userCard);
         args.putInt(ARG_POS, position);
         args.putSerializable(ARG_BACKEND, backend);
 
@@ -35,6 +38,7 @@ public class DeleteUserDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final int userId = getArguments().getInt(ARG_USER);
+        final String userCard =  getArguments().getString(ARG_CARD);
         final int position = getArguments().getInt(ARG_POS);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
@@ -42,7 +46,7 @@ public class DeleteUserDialog extends DialogFragment {
             DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    backend.deleteUser(userId, position);
+                    backend.deleteUser(userId, userCard, position);
                     dismiss();
                 }
             };

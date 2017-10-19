@@ -7,12 +7,20 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.util.Log;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.uncmorfi.R;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
 import com.uncmorfi.balance.model.UsersContract;
+import com.uncmorfi.helpers.MemoryHelper;
 import com.uncmorfi.helpers.SnackbarHelper;
 import com.uncmorfi.helpers.ConnectionHelper;
 
@@ -22,6 +30,7 @@ import java.util.Locale;
 
 
 public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListener, Serializable{
+    private static final String BARCODE_PATH = "barcode-";
     private BalanceListener mFragment;
     private Context mContext;
     private ContentResolver mContentResolver;
@@ -85,11 +94,12 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         }
     }
 
-    public void deleteUser(int userId, int position) {
+    public void deleteUser(int userId, String card, int position) {
         mContentResolver.delete(
                 ContentUris.withAppendedId(UserProvider.CONTENT_URI, userId),
                 null,
                 null);
+        MemoryHelper.deleteFileInStorage(mContext, BARCODE_PATH + card);
         mFragment.onItemDeleted(position, getAllUsers());
         mFragment.showSnackBarMsg(R.string.balance_delete_user_msg, SnackbarHelper.SnackType.FINISH);
     }
@@ -167,5 +177,36 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
                 null,
                 null,
                 null);
+    }
+
+    public Bitmap getBarcodeBitmap(String card, int width, int height) {
+        Bitmap b = MemoryHelper.readBitmapFromStorage(mContext, BARCODE_PATH + card);
+        if (b == null) {
+            b = generateBarcode(card,width, height);
+            MemoryHelper.saveBitmapToStorage(mContext, BARCODE_PATH + card, b);
+        }
+        return b;
+    }
+
+    private Bitmap generateBarcode(String card, int w, int h) {
+        MultiFormatWriter writer = new MultiFormatWriter();
+
+        try {
+            BitMatrix bitMatrix = writer.encode(card, BarcodeFormat.CODE_39, w, h);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            return Bitmap.createBitmap(bmp, 0, 0, width, height, matrix, true);
+        } catch (WriterException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

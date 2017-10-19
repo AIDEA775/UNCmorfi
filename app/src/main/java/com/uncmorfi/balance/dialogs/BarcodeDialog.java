@@ -1,8 +1,7 @@
 package com.uncmorfi.balance.dialogs;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
@@ -14,27 +13,27 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.uncmorfi.R;
+import com.uncmorfi.balance.backend.BalanceBackend;
 
 
+import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_CARD;
 
 public class BarcodeDialog extends DialogFragment {
     String mUserCard;
+    BalanceBackend mBackend;
     View mRootView;
     TextView mText;
     ProgressBar mBar;
     ImageView mFrame;
     Handler mHandler;
+    Bitmap mBitmap;
 
-    public static BarcodeDialog newInstance(String userCard) {
+    public static BarcodeDialog newInstance(String userCard, BalanceBackend backend) {
         Bundle args = new Bundle();
-
         args.putString(ARG_CARD, userCard);
+        args.putSerializable(ARG_BACKEND, backend);
 
         BarcodeDialog fragment = new BarcodeDialog();
         fragment.setArguments(args);
@@ -45,6 +44,7 @@ public class BarcodeDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserCard =  getArguments().getString(ARG_CARD);
+        mBackend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
     }
 
     @Override
@@ -60,14 +60,21 @@ public class BarcodeDialog extends DialogFragment {
         new Thread(new Runnable() {
             @Override
             public void run () {
-                final Bitmap result = generateBarcode();
+                DisplayMetrics metrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                int w = metrics.heightPixels;
+                int h = (int) (metrics.widthPixels * 0.7);
+
+                mBitmap = mBackend.getBarcodeBitmap(mUserCard, w, h);
+
                 mHandler.post(new Runnable() {
                     @Override
                     public void run () {
                         mBar.setVisibility(View.GONE);
                         mText.setVisibility(View.VISIBLE);
                         mText.setText(mUserCard);
-                        mFrame.setImageBitmap(result);
+                        mFrame.setImageBitmap(mBitmap);
                     }
                 });
             }
@@ -76,31 +83,16 @@ public class BarcodeDialog extends DialogFragment {
         return mRootView;
     }
 
-    Bitmap generateBarcode() {
-        MultiFormatWriter writer = new MultiFormatWriter();
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        int h = (int) (metrics.widthPixels * 0.7);
-        int w = metrics.heightPixels;
-
-        try {
-            BitMatrix bitMatrix = writer.encode(mUserCard, BarcodeFormat.CODE_39, w, h);
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            return Bitmap.createBitmap(bmp, 0, 0, width, height, matrix, true);
-        } catch (WriterException e) {
-            e.printStackTrace();
-            return null;
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (mFrame != null) {
+            mFrame.setImageBitmap(null);
+            mFrame = null;
+        }
+        if (mBitmap != null) {
+            mBitmap.recycle();
+            mBitmap = null;
         }
     }
 }

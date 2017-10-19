@@ -60,14 +60,14 @@ public class UserOptionsDialog extends DialogFragment {
                                     backend.updateBalanceOfUser(userCard, new int[]{position});
                                     break;
                                 case 1:
-                                    DeleteUserDialog.newInstance(userId, position, backend)
+                                    DeleteUserDialog.newInstance(userId, userCard, position, backend)
                                             .show(getFragmentManager(), "DeleteUserDialog");
                                     break;
                                 case 2:
                                     backend.copyCardToClipboard(userCard);
                                     break;
                                 case 3:
-                                    BarcodeDialog.newInstance(userCard)
+                                    BarcodeDialog.newInstance(userCard, backend)
                                             .show(getFragmentManager(), "BarcodeDialog");
                                     break;
                                 case 4:
@@ -79,9 +79,8 @@ public class UserOptionsDialog extends DialogFragment {
                             }
                         }
                     });
-        } else {
-            builder.setTitle("No existe la tarjeta");
         }
+
         return builder.create();
     }
 }

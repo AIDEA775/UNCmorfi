@@ -13,19 +13,18 @@ import android.widget.EditText;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
+import com.uncmorfi.balance.model.User;
 
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
-import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_POS;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
 
 public class SetNameDialog extends DialogFragment {
 
-    public static SetNameDialog newInstance(int userId, int position, BalanceBackend backend) {
+    public static SetNameDialog newInstance(User user, BalanceBackend backend) {
         Bundle args = new Bundle();
 
-        args.putInt(ARG_USER, userId);
-        args.putInt(ARG_POS, position);
+        args.putSerializable(ARG_USER, user);
         args.putSerializable(ARG_BACKEND, backend);
 
         SetNameDialog fragment = new SetNameDialog();
@@ -41,21 +40,20 @@ public class SetNameDialog extends DialogFragment {
         View v = View.inflate(getContext(), R.layout.dialog_set_name, null);
         builder.setView(v);
 
-        final int userId = getArguments().getInt(ARG_USER);
-        final int position = getArguments().getInt(ARG_POS);
+        final User user = (User) getArguments().getSerializable(ARG_USER);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
         final EditText input = (EditText) v.findViewById(R.id.set_name_input);
         Button save = (Button) v.findViewById(R.id.set_name_save);
         Button cancel = (Button) v.findViewById(R.id.set_name_cancel);
 
-        if (backend != null) {
-            input.append(backend.getUserById(userId).getName());
+        if (backend != null && user != null) {
+            input.append(backend.getUserById(user.getId()).getName());
 
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    backend.updateNameOfUser(userId, position, input.getText().toString());
+                    backend.updateNameOfUser(user, input.getText().toString());
                     dismiss();
                 }
             });

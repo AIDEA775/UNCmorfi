@@ -9,22 +9,18 @@ import android.support.v7.app.AlertDialog;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
+import com.uncmorfi.balance.model.User;
 
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
-import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_CARD;
-import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_POS;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
 
 public class DeleteUserDialog extends DialogFragment {
 
-    public static DeleteUserDialog newInstance(int userId, String userCard, int position,
-                                               BalanceBackend backend) {
+    public static DeleteUserDialog newInstance(User user, BalanceBackend backend) {
         Bundle args = new Bundle();
 
-        args.putInt(ARG_USER, userId);
-        args.putString(ARG_CARD, userCard);
-        args.putInt(ARG_POS, position);
+        args.putSerializable(ARG_USER, user);
         args.putSerializable(ARG_BACKEND, backend);
 
         DeleteUserDialog fragment = new DeleteUserDialog();
@@ -37,16 +33,14 @@ public class DeleteUserDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        final int userId = getArguments().getInt(ARG_USER);
-        final String userCard =  getArguments().getString(ARG_CARD);
-        final int position = getArguments().getInt(ARG_POS);
+        final User user = (User) getArguments().getSerializable(ARG_USER);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
-        if (backend != null) {
+        if (backend != null && user != null) {
             DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    backend.deleteUser(userId, userCard, position);
+                    backend.deleteUser(user);
                     dismiss();
                 }
             };
@@ -59,7 +53,7 @@ public class DeleteUserDialog extends DialogFragment {
             };
 
             builder.setMessage(String.format(getString(R.string.balance_delete_user_title),
-                        backend.getUserById(userId).getName()))
+                        backend.getUserById(user.getId()).getName()))
                     .setPositiveButton(getString(R.string.balance_delete_user_positive),
                             positiveListener)
                     .setNegativeButton(getString(android.R.string.cancel), negativeListener);

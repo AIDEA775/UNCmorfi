@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 
 public class User implements Serializable {
-    private long id;
+    private int id;
     private String card;
     private String name;
     private String type;
@@ -20,7 +20,7 @@ public class User implements Serializable {
     public User() {}
 
     public User(Cursor cursor) {
-        this.id = cursor.getLong(cursor.getColumnIndex(UsersContract.UserEntry._ID));
+        this.id = cursor.getInt(cursor.getColumnIndex(UsersContract.UserEntry._ID));
         this.card = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.CARD));
         this.name = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.NAME));
         this.type = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.TYPE));
@@ -30,7 +30,7 @@ public class User implements Serializable {
         this.lastUpdate = cursor.getLong(cursor.getColumnIndex(UsersContract.UserEntry.LAST_UPDATE));
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -64,6 +64,10 @@ public class User implements Serializable {
 
     public int getPosition() {
         return position;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setBalance(int balance) {

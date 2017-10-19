@@ -9,22 +9,18 @@ import android.support.v7.app.AlertDialog;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
+import com.uncmorfi.balance.model.User;
 
 
 public class UserOptionsDialog extends DialogFragment {
     public static final String ARG_USER = "user";
-    public static final String ARG_CARD = "card";
-    public static final String ARG_POS = "position";
     public static final String ARG_BACKEND = "backend";
 
 
-    public static UserOptionsDialog newInstance(int userId, String userCard, int position,
-                                                BalanceBackend backend) {
+    public static UserOptionsDialog newInstance(User user, BalanceBackend backend) {
         Bundle args = new Bundle();
 
-        args.putInt(ARG_USER, userId);
-        args.putString(ARG_CARD, userCard);
-        args.putInt(ARG_POS, position);
+        args.putSerializable(ARG_USER, user);
         args.putSerializable(ARG_BACKEND, backend);
 
         UserOptionsDialog fragment = new UserOptionsDialog();
@@ -45,33 +41,32 @@ public class UserOptionsDialog extends DialogFragment {
         items[3] = getString(R.string.balance_user_options_barcode);
         items[4] = getString(R.string.balance_user_options_set_name);
 
-        final int userId = getArguments().getInt(ARG_USER);
-        final String userCard =  getArguments().getString(ARG_CARD);
-        final int position = getArguments().getInt(ARG_POS);
+        final User user = (User) getArguments().getSerializable(ARG_USER);
         final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
 
-        if (backend != null) {
+        if (backend != null && user != null) {
             builder.setTitle(getString(R.string.balance_user_options_title))
                     .setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case 0:
-                                    backend.updateBalanceOfUser(userCard, new int[]{position});
+                                    backend.updateBalanceOfUser(
+                                            user.getCard(), new int[]{user.getPosition()});
                                     break;
                                 case 1:
-                                    DeleteUserDialog.newInstance(userId, userCard, position, backend)
+                                    DeleteUserDialog.newInstance(user, backend)
                                             .show(getFragmentManager(), "DeleteUserDialog");
                                     break;
                                 case 2:
-                                    backend.copyCardToClipboard(userCard);
+                                    backend.copyCardToClipboard(user.getCard());
                                     break;
                                 case 3:
-                                    BarcodeDialog.newInstance(userCard, backend)
+                                    BarcodeDialog.newInstance(user, backend)
                                             .show(getFragmentManager(), "BarcodeDialog");
                                     break;
                                 case 4:
-                                    SetNameDialog.newInstance(userId, position, backend)
+                                    SetNameDialog.newInstance(user, backend)
                                             .show(getFragmentManager(), "SetNameDialog");
                                     break;
                                 default:

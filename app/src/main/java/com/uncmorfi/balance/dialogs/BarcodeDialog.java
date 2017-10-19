@@ -15,14 +15,16 @@ import android.widget.TextView;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
-
+import com.uncmorfi.balance.model.User;
 
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
-import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_CARD;
+import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
+
 
 public class BarcodeDialog extends DialogFragment {
-    String mUserCard;
     BalanceBackend mBackend;
+    String mUserCard;
+
     View mRootView;
     TextView mText;
     ProgressBar mBar;
@@ -30,9 +32,10 @@ public class BarcodeDialog extends DialogFragment {
     Handler mHandler;
     Bitmap mBitmap;
 
-    public static BarcodeDialog newInstance(String userCard, BalanceBackend backend) {
+    public static BarcodeDialog newInstance(User user, BalanceBackend backend) {
         Bundle args = new Bundle();
-        args.putString(ARG_CARD, userCard);
+
+        args.putSerializable(ARG_USER, user);
         args.putSerializable(ARG_BACKEND, backend);
 
         BarcodeDialog fragment = new BarcodeDialog();
@@ -43,7 +46,9 @@ public class BarcodeDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserCard =  getArguments().getString(ARG_CARD);
+        final User user = (User) getArguments().getSerializable(ARG_USER);
+
+        if (user != null) mUserCard =  user.getCard();
         mBackend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
     }
 

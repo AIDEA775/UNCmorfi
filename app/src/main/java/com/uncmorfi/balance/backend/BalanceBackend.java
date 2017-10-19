@@ -94,26 +94,26 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         }
     }
 
-    public void deleteUser(int userId, String card, int position) {
+    public void deleteUser(User user) {
         mContentResolver.delete(
-                ContentUris.withAppendedId(UserProvider.CONTENT_URI, userId),
+                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.getId()),
                 null,
                 null);
-        MemoryHelper.deleteFileInStorage(mContext, BARCODE_PATH + card);
-        mFragment.onItemDeleted(position, getAllUsers());
+        MemoryHelper.deleteFileInStorage(mContext, BARCODE_PATH + user.getCard());
+        mFragment.onItemDeleted(user.getPosition(), getAllUsers());
         mFragment.showSnackBarMsg(R.string.balance_delete_user_msg, SnackbarHelper.SnackType.FINISH);
     }
 
-    public void updateNameOfUser(int userId, int position, String name) {
+    public void updateNameOfUser(User user, String name) {
         ContentValues values = new ContentValues();
         values.put(UsersContract.UserEntry.NAME, name);
         mContentResolver.update(
-                ContentUris.withAppendedId(UserProvider.CONTENT_URI, userId),
+                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.getId()),
                 values,
                 null,
                 null
         );
-        mFragment.onItemChanged(position, getAllUsers());
+        mFragment.onItemChanged(user.getPosition(), getAllUsers());
         mFragment.showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
     }
 
@@ -136,11 +136,11 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
             // sinó, insertar el nuevo usuario
             if (rows == 1) {
                 mFragment.onItemChanged(u.getPosition(), getAllUsers());
+                mFragment.showProgressBar(new int[]{u.getPosition()}, false);
             } else if (rows == 0) {
                 insertUser(u);
                 mFragment.onItemAdded(getAllUsers());
             }
-            mFragment.showProgressBar(new int[]{u.getPosition()}, false);
         }
 
         if (rows == 1) {

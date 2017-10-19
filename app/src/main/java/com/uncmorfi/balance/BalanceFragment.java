@@ -31,6 +31,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.dialogs.UserOptionsDialog;
+import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
 import com.uncmorfi.helpers.SnackbarHelper;
 
@@ -115,7 +116,11 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public void onClick(int userId, String userCard, int position) {
-        UserOptionsDialog.newInstance(userId, userCard, position, mBackend)
+        User user = new User();
+        user.setId(userId);
+        user.setCard(userCard);
+        user.setPosition(position);
+        UserOptionsDialog.newInstance(user, mBackend)
                 .show(getFragmentManager(), "UserOptionsDialog");
     }
 

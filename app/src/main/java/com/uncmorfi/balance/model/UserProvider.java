@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 
 import com.uncmorfi.balance.model.UsersContract.UserEntry;
 
-
 public class UserProvider extends ContentProvider {
     private static final String authority = "com.uncmorfi";
 

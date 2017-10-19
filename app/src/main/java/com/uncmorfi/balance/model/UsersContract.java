@@ -2,10 +2,9 @@ package com.uncmorfi.balance.model;
 
 import android.provider.BaseColumns;
 
-
 public class UsersContract {
     public static abstract class UserEntry implements BaseColumns {
-        static final String TABLE_NAME ="user";
+        static final String TABLE_NAME = "user";
 
         public static final String CARD = "card";
         public static final String NAME = "name";

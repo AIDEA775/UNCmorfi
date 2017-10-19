@@ -20,7 +20,6 @@ import com.uncmorfi.balance.model.User;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
-
 public class BarcodeDialog extends DialogFragment {
     BalanceBackend mBackend;
     String mUserCard;
@@ -32,6 +31,10 @@ public class BarcodeDialog extends DialogFragment {
     Handler mHandler;
     Bitmap mBitmap;
 
+    /**
+     * @param user Puede no contener todos los datos del usuario, pero necesita:
+     *             {@link User#getCard()}
+     */
     public static BarcodeDialog newInstance(User user, BalanceBackend backend) {
         Bundle args = new Bundle();
 
@@ -76,10 +79,12 @@ public class BarcodeDialog extends DialogFragment {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run () {
-                        mBar.setVisibility(View.GONE);
-                        mText.setVisibility(View.VISIBLE);
-                        mText.setText(mUserCard);
-                        mFrame.setImageBitmap(mBitmap);
+                        if (getActivity() != null && isAdded()) {
+                            mBar.setVisibility(View.GONE);
+                            mText.setVisibility(View.VISIBLE);
+                            mText.setText(mUserCard);
+                            mFrame.setImageBitmap(mBitmap);
+                        }
                     }
                 });
             }

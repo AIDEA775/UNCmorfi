@@ -6,7 +6,6 @@ import android.widget.TextView;
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
 import com.uncmorfi.R;
 
-
 class AnswerViewHolder extends ChildViewHolder {
     private TextView mTextView;
 

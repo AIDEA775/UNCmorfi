@@ -41,6 +41,8 @@
     <string name="balance_set_name_title">New name</string>
     <string name="balance_set_name_save">Save</string>
 
+    <string name="balance_align_barcode">Align barcode</string>
+
     <!-- Counter -->
     <string name="counter_rations">Rations</string>
     <string name="counter_rations_title">%1$d rations of %2$d</string>
@@ -62,15 +64,11 @@
     <!-- SnackBar -->
     <string name="no_connection">No connection</string>
     <string name="connection_error">Connection error</string>
+    <string name="internal_error">An error occurred</string>
     <string name="updating">Updating&#8230;</string>
     <string name="update_success">Updated</string>
     <string name="update_fail">Update failed</string>
     <string name="new_user_success">Added</string>
-    <string name="new_user_fail">An error occurred</string>
-
-    <!-- Toast -->
-    <string name="permission_not_granted">Permission not granted</string>
-    <string name="align_barcode">Align barcode</string>
 
     <!-- Help -->
     <string-array name="help_string_array" formatted="false">
@@ -105,7 +103,7 @@
         <item>
             \tWe get the menu from the university\'s website:\n\n
             www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
-            \tIf the menu doesn\'t refresh, it must be because the university did not update it.
+            \tIf the menu doesn\'t refresh, it is be because the university did not update it.
         </item>
 
         <item>Where do they get Balance and Meter information?</item>
@@ -117,16 +115,18 @@
 
         <item>¿Windows? ¿How estimates work?</item>
         <item>
-            \tThere are \"windows\" (or rather columns) along the dining room,
-            you have to put the length of the row in front of you, measured in number of windows,
-            on the slide bar. For example, at the height of the men\'s baths are 5 windows (women 6),
-            the total length of the dining room are 12 windows, the curve is 1 window,
-            and in the second entrance are 25 windows. This is very experimental functionality.
-            It works with a simple quadratic function calculated from a statistic.
-            Although the fewer people you have ahead the more accurate it is,
-            the changing nature of the dining room line is difficult to give an accurate estimate.
-            We choose \"windows\" as a measure because they will never change over time,
-            but curves and countercurves in a row always vary from day to day.
+            Translation needed.
+        </item>
+
+        <item>I did not understand how the windows are counted</item>
+        <item>
+            Translation needed.
+        </item>
+
+        <item>¿Balance -1? ¿Expiration date in 1970?</item>
+        <item>
+            \tWe do not understand it. The dining room returns \"null\", which means \"unknown value\".\n\n
+            \tWe do not understand why the dining room allows a card has unknown balance.
         </item>
 
         <item>How do I apply for the credential? How can I regenerate the credential?</item>
@@ -137,15 +137,13 @@
 
         <item>Why are Internet and camera permissions needed?</item>
         <item>
-            \tInternet access is necessary for updating the menu, the balance and the
-            measurer.\n
+            \tInternet access is necessary for updating the menu, the balance and the measurer.\n
             \tCamera access is for adding the card by scanning the barcode on it.
         </item>
 
         <item>Do I need Internet to check my card balance?</item>
         <item>
-            \tAll the data is stored on the device to check offline, but you need to be connected to
-            the Internet to get it updated.
+            \tAll the data is stored on the device to check offline, but you need to be connected to the Internet to get it updated.
         </item>
 
         <item>Do I can eat twice in one day?</item>
@@ -161,10 +159,8 @@
         <item>How can I collaborate?</item>
         <item>
             \tYou can send your suggestion by e-mail in the \"Contact\" option in the side menu.\n\n
-
             \tYou can also have a look at the source code in Github:\n
                 \t\tgithub.com/AIDEA775/UNCmorfi\n\n
-
             \tAnd you can recommend the app to anyone you see in the dining room line ;)
         </item>
 
@@ -174,6 +170,7 @@
             * New icon!\n
             * New lateral menu.\n
             * Now the menu is automatically updated every week.\n
+            * Go to lunch showing the bar code from your cell phone.\n
             * New interface in Balance.\n
             * Check the expiration date of your card.\n
             * Added the date from the last time you checked the balance.\n

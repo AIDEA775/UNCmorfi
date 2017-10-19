@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -33,16 +32,22 @@ import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.dialogs.UserOptionsDialog;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
-import com.uncmorfi.helpers.SnackbarHelper;
+import com.uncmorfi.helpers.SnackbarHelper.SnackType;
 
+import static com.uncmorfi.helpers.SnackbarHelper.showSnack;
 
+/**
+ * Saldo de las tarjetas.
+ * Administra toda la UI.
+ * Usa a {@link UserCursorAdapter} para llenar el {@link RecyclerView}.
+ * Usa a {@link UserOptionsDialog} para que el usuario pueda modificar alguna tarjeta.
+ * Usa un {@link BalanceBackend} para el manejo de datos.
+ */
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, BalanceBackend.BalanceListener {
-
     private View mRootView;
     private UserCursorAdapter mUserCursorAdapter;
     private BalanceBackend mBackend;
-    private Snackbar lastSnackBar;
     private EditText mEditText;
 
     @Override
@@ -56,8 +61,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_balance, container, false);
 
-        setRecyclerAndAdapter();
-        setNewUserView();
+        initRecyclerAndAdapter();
+        initNewUserView();
 
         mBackend = new BalanceBackend(getActivity().getApplicationContext(), this);
         getLoaderManager().initLoader(0, null, this);
@@ -65,7 +70,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         return mRootView;
     }
 
-    private void setRecyclerAndAdapter() {
+    private void initRecyclerAndAdapter() {
         RecyclerView recyclerView = (RecyclerView) mRootView.findViewById(R.id.balance_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
@@ -77,7 +82,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
-    private void setNewUserView() {
+    private void initNewUserView() {
         mEditText = (EditText) mRootView.findViewById(R.id.new_user_input);
         ImageButton scanner = (ImageButton) mRootView.findViewById(R.id.new_user_scanner);
 
@@ -100,6 +105,19 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         });
     }
 
+    /**
+     * Inicia el lector de barras.
+     * Devuelve el resultado por {@link #onActivityResult(int, int, Intent)}.
+     */
+    private void callScanner() {
+        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setPrompt(getString(R.string.balance_align_barcode));
+        integrator.setBeepEnabled(false);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.balance, menu);
@@ -114,24 +132,41 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateAllUsers() {
+        String cards = "";
+        int[] positions = new int[mUserCursorAdapter.getItemCount()];
+
+        for (int pos = 0; pos < mUserCursorAdapter.getItemCount(); pos++) {
+            String userCard = mUserCursorAdapter.getItemCardFromCursor(pos);
+            cards += (pos == 0 ? "" : ",") + userCard;
+            positions[pos] = pos;
+        }
+        if (!cards.isEmpty())
+            mBackend.updateBalanceOfUser(cards, positions);
+    }
+
+    /**
+     * Callback del Adapter cuando se selecciona una tarjeta.
+     */
     @Override
     public void onClick(int userId, String userCard, int position) {
         User user = new User();
         user.setId(userId);
         user.setCard(userCard);
         user.setPosition(position);
-        UserOptionsDialog.newInstance(user, mBackend)
+
+        UserOptionsDialog
+                .newInstance(user, mBackend)
                 .show(getFragmentManager(), "UserOptionsDialog");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null && result.getContents() != null) {
+        if (result != null && result.getContents() != null)
             mBackend.newUser(result.getContents());
-        } else {
+        else
             super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
@@ -144,8 +179,16 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     public void onStop() {
         super.onStop();
         hideKeyboard();
-        if (lastSnackBar != null && lastSnackBar.isShown())
-            lastSnackBar.dismiss();
+    }
+
+    private void hideKeyboard() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)
+                    getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        mEditText.clearFocus();
     }
 
     @Override
@@ -174,14 +217,14 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public void onItemAdded(Cursor c) {
-        mEditText.getText().clear();
+        mEditText.getText().clear(); // se agregó la tarjeta, limpiar el EditText.
         mUserCursorAdapter.setCursor(c);
         mUserCursorAdapter.notifyItemInserted(mUserCursorAdapter.getItemCount());
     }
 
     @Override
     public void onItemChanged(int position, Cursor c) {
-        mEditText.getText().clear();
+        mEditText.getText().clear(); // tambien limpiar el EditText por las dudas.
         mUserCursorAdapter.setCursor(c);
         mUserCursorAdapter.notifyItemChanged(position);
     }
@@ -194,19 +237,15 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void showSnackBarMsg(int resId, SnackbarHelper.SnackType type) {
-        if (getActivity() != null && isAdded() && resId != 0) {
-            lastSnackBar = Snackbar.make(mRootView, resId, SnackbarHelper.getLength(type));
-            SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
-        }
+    public void showSnackBarMsg(int resId, SnackType type) {
+        if (getActivity() != null && isAdded() && resId != 0)
+            showSnack(getContext(), mRootView, resId, type);
     }
 
     @Override
-    public void showSnackBarMsg(String msg, SnackbarHelper.SnackType type) {
-        if (getActivity() != null && isAdded() && msg != null) {
-            lastSnackBar = Snackbar.make(mRootView, msg, SnackbarHelper.getLength(type));
-            SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
-        }
+    public void showSnackBarMsg(String msg, SnackType type) {
+        if (getActivity() != null && isAdded())
+            showSnack(getContext(), mRootView, msg, type);
     }
 
     @Override
@@ -217,34 +256,4 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         }
     }
 
-    private void updateAllUsers() {
-        String cards = "";
-        int[] positions = new int[mUserCursorAdapter.getItemCount()];
-
-        for (int pos = 0; pos < mUserCursorAdapter.getItemCount(); pos++) {
-            String userCard = mUserCursorAdapter.getItemCardFromCursor(pos);
-            cards += (pos == 0 ? "" : ",") + userCard;
-            positions[pos] = pos;
-        }
-        if (!cards.isEmpty()) mBackend.updateBalanceOfUser(cards, positions);
-    }
-
-    private void hideKeyboard() {
-        View view = getActivity().getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)
-                    getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-        mEditText.clearFocus();
-    }
-
-    private void callScanner() {
-        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt(getString(R.string.align_barcode));
-        integrator.setBeepEnabled(false);
-        integrator.setBarcodeImageEnabled(true);
-        integrator.initiateScan();
-    }
 }

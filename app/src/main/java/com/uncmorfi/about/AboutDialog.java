@@ -12,11 +12,9 @@ import android.widget.TextView;
 
 import com.uncmorfi.R;
 
-
 public class AboutDialog extends DialogFragment {
 
-    public AboutDialog() {
-    }
+    public AboutDialog() {}
 
     @Override
     @NonNull
@@ -29,16 +27,15 @@ public class AboutDialog extends DialogFragment {
 
         View v = View.inflate(getContext(), R.layout.dialog_about, null);
 
-        TextView versionNameView = (TextView) v.findViewById(R.id.version_name);
-        setVersionName(versionNameView);
+        TextView versionText = (TextView) v.findViewById(R.id.version_name);
+        versionText.setText(getVersionName());
 
         builder.setView(v);
         return builder.create();
     }
 
-    private void setVersionName(TextView v) {
+    private String getVersionName() {
         String versionName = "";
-
         try {
             PackageInfo packageInfo = getContext().getPackageManager()
                     .getPackageInfo(getContext().getPackageName(), 0);
@@ -46,7 +43,6 @@ public class AboutDialog extends DialogFragment {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
-        v.setText(versionName);
+        return versionName;
     }
 }

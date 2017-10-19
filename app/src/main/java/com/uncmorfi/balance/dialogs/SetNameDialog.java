@@ -18,9 +18,12 @@ import com.uncmorfi.balance.model.User;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
-
 public class SetNameDialog extends DialogFragment {
 
+    /**
+     * @param user Puede no contener todos los datos del usuario, pero necesita:
+     *             {@link User#getId()}
+     */
     public static SetNameDialog newInstance(User user, BalanceBackend backend) {
         Bundle args = new Bundle();
 

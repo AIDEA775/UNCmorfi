@@ -22,7 +22,6 @@ import com.uncmorfi.help.HelpFragment;
 import com.uncmorfi.map.MapFragment;
 import com.uncmorfi.menu.MenuFragment;
 
-
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
@@ -63,6 +62,17 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        boolean changed = true;
+
+        if (!item.isChecked())
+            changed = replaceFragment(item.getItemId());
+
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return changed;
+    }
+
+    @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -73,17 +83,6 @@ public class MainActivity extends AppCompatActivity implements
             replaceFragment(R.id.nav_menu);
             mNavigationView.setCheckedItem(R.id.nav_menu);
         }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        boolean changed = true;
-
-        if (!item.isChecked())
-            changed = replaceFragment(item.getItemId());
-
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return changed;
     }
 
     private boolean replaceFragment(int item) {
@@ -133,22 +132,22 @@ public class MainActivity extends AppCompatActivity implements
         return fragment;
     }
 
-    private void sendContactEmail() {
-        Intent i = new Intent(Intent.ACTION_SENDTO);
-        i.setData(Uri.parse("mailto:"));
-        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"alex.sai95@gmail.com"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "[UNCmorfi]");
-
-        if (i.resolveActivity(getPackageManager()) != null)
-            startActivity(i);
-    }
-
     private void sendRenovationEmail() {
         Intent i = new Intent(Intent.ACTION_SENDTO);
         i.setData(Uri.parse("mailto:"));
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"credenciales@comedor.unc.edu.ar"});
         i.putExtra(Intent.EXTRA_SUBJECT, "RENOVAR");
         i.putExtra(Intent.EXTRA_TEXT, getString(R.string.renovation_email_text));
+
+        if (i.resolveActivity(getPackageManager()) != null)
+            startActivity(i);
+    }
+
+    private void sendContactEmail() {
+        Intent i = new Intent(Intent.ACTION_SENDTO);
+        i.setData(Uri.parse("mailto:"));
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"alex.sai95@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "[UNCmorfi]");
 
         if (i.resolveActivity(getPackageManager()) != null)
             startActivity(i);

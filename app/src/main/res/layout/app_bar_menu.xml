@@ -25,17 +25,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-        </FrameLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
+    </FrameLayout>
 
 </android.support.v7.widget.LinearLayoutCompat>

@@ -41,6 +41,8 @@
     <string name="balance_set_name_title">Nuevo nombre</string>
     <string name="balance_set_name_save">Guardar</string>
 
+    <string name="balance_align_barcode">Alinea el codigo de barras</string>
+
     <!-- Counter -->
     <string name="counter_rations">Raciones</string>
     <string name="counter_rations_title">%1$d raciones de %2$d</string>
@@ -63,23 +65,18 @@
     <!-- SnackBar -->
     <string name="no_connection">No hay conexión</string>
     <string name="connection_error">Error de conexión</string>
+    <string name="internal_error">Ocurrió un error</string>
     <string name="updating">Actualizando&#8230;</string>
     <string name="update_success">Actualizado</string>
     <string name="update_fail">No se pudo actualizar</string>
     <string name="new_user_success">Agregado</string>
-    <string name="new_user_fail">Ocurrió un error</string>
-
-    <!-- Toast -->
-    <string name="permission_not_granted">Sin permisos de cámara</string>
-    <string name="align_barcode">Alinea el codigo de barras</string>
 
     <!-- Help -->
     <string-array name="help_string_array" formatted="false">
         <item>¿Quiénes somos?</item>
         <item>
             \tSomos dos estudiantes de FaMAF con mucha hambre.\n\n
-            \tLa app inició sólo como hobbie,
-            por lo que nos esforzamos por pulirla lo más que podemos en nuestro tiempo libre.\n\n
+            \tLa app inició sólo como hobbie, por lo que nos esforzamos por pulirla lo más que podemos en nuestro tiempo libre.\n\n
 
             Desarrollo:\n
                 \t\tAlejandro Ismael Silva\n
@@ -106,7 +103,7 @@
         <item>
             \tAl menú lo obtenemos desde la web de la universidad:\n\n
             www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana\n\n
-            \tSi el menú no está actualizado debe ser porque la universidad no lo actualizó.
+            \tSi el menú no está actualizado es porque la universidad no lo actualizó.
         </item>
 
         <item>¿De dónde obtienen la información del Saldo y el Medidor?</item>
@@ -118,25 +115,29 @@
 
         <item>¿Ventanas? ¿Cómo funcionan las estimaciones?</item>
         <item>
-            \tA lo largo del comedor (cede central) hay \"ventanas\" (o mejor dicho columnas),
-            tenés que poner, en la barra deslizadora, el largo de la fila que hay delante tuyo,
-            medido en cantidad de ventanas.\n\n
+            \tA lo largo del comedor (sede central) hay \"ventanas\" en ambos lados (o mejor dicho columnas), tenés que poner en la barra deslizadora el largo de la fila que hay adelante tuyo.
+            Se toma como parámetro de medida la cantidad de ventanas.\n\n
+            \tPor ejemplo, desde el molinete (por donde pasás la tarjeta) hasta la altura de los baños de hombres, la longitud de la fila son 5 ventanas, de una punta a la otra del comedor hay un total de  12 ventanas,
+            la curva (entrada principal) cuenta como una 1 ventana, y así seguís sumándolas hasta llegar al lugar donde te encuentres (hasta la entrada lateral son 25 ventanas).\n\n
+            \tEsta es una función muy experimental. Elegimos las ventanas como medida por la naturaleza cambiante de la fila, las curvas y contracurvas pueden variar de un día a otro.\n\n
+        </item>
 
-            \tPor ejemplo, a la altura de los baños de hombres son 5 ventanas (mujeres 6),
-            el largo total del comedor son 12 ventanas, la curva es 1 ventana,
-            y en la segunda entrada son 25 ventanas.\n\n
+        <item>No entendí como se cuentan las ventanas</item>
+        <item>
+            \tSeguro que lo entendés si te lo explicamos matemáticamente:\n\n
+            \tSea V la distancia que hay entre cualquier par de columnas consecutivas, sea D la distancia que tendrás que recorrer hasta que llegues a los molinetes y sea N un número natural:\n\n
+            \tEntonces estás a N ventanas si N*V es la mejor aproximación a D.
+        </item>
 
-            \tÉsta es una funcionalidad muy experimental.
-            Funciona con una simple función cuadratica calculada a partir de una estadistica.
-            Aunque mientras menos gente tengas delante más exacta es, por la naturaleza cambiante
-            de la fila del comedor es difícil dar una estimacion precisa.\n
-            \tElegimos \"las ventanas\" como medida porque estas nunca van a cambiar a lo largo del
-            tiempo, en cambio, las curvas y contracurvas de una fila siempre varian de un día a otro.
+        <item>¿Saldo -1? ¿Vencimiento en 1970?</item>
+        <item>
+            \tNosotros tampoco lo entendemos. El comedor nos devuelve \"null\", que significa \"valor desconocido\".\n\n
+            \tNo entendemos porqué el comedor permite que una tarjeta tenga saldo desconocido.
         </item>
 
         <item>¿Cómo solicito la credencial? ¿Cómo puedo regenerar mi credencial?</item>
         <item>
-            \tLee la web del comedor:
+            \tLee la web del comedor:\n\n
             https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial
         </item>
 
@@ -148,8 +149,7 @@
 
         <item>¿Necesito internet para consultar el saldo de mi tarjeta?</item>
         <item>
-            \tTodos los datos se almacenan en el dispositivo para poder consultarlos sin conexión,
-            pero necesitás estar conectado a internet para actualizarlos.
+            \tTodos los datos se almacenan en el dispositivo para consultarlos sin conexión, pero necesitás estar conectado a internet para actualizarlos.
         </item>
 
         <item>¿Puedo comer dos veces en un día?</item>
@@ -164,12 +164,9 @@
 
         <item>¿Cómo puedo colaborar?</item>
         <item>
-            \tPodés enviar tu sugerencia por correo electrónico en la opción \"Contacto\" del menú
-            lateral.\n\n
-
+            \tPodés enviar tu sugerencia por correo electrónico en la opción \"Contacto\" del menú lateral.\n\n
             \tTambién podés pegarle una mirada al codigo fuente en Github:\n
                 \t\tgithub.com/AIDEA775/UNCmorfi\n\n
-
             \tY además podés recomendar la app a cualquiera que veas en la fila del comedor ;)
         </item>
 
@@ -179,6 +176,7 @@
             * ¡Nuevo icono!\n
             * Nuevo menu lateral.\n
             * Ahora el menú se actualiza automaticamente cada semana.\n
+            * Pasá a comer mostrando el código de barras desde tu celular.\n
             * Nueva interfaz en Saldo.\n
             * Consulta la fecha de vencimiento de tu tarjeta.\n
             * Agregada la fecha de la última vez que consultaste el saldo.\n

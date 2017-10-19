@@ -1,7 +1,7 @@
 package com.uncmorfi.menu;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.uncmorfi.R;
-import com.uncmorfi.helpers.SnackbarHelper;
+import com.uncmorfi.helpers.SnackbarHelper.SnackType;
 import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
 
@@ -21,12 +21,19 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.uncmorfi.helpers.SnackbarHelper.showSnack;
 
+/**
+ * Menú de la semana.
+ * Administra la UI y el guardado persistente del menú.
+ * Usa a {@link RefreshMenuTask} para actualizar el mra la UI y el guardado persistente del menú.
+ * Usa a {@link RefreshMenuTask} para actualizar el menú.
+ */
 public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMenuListener {
     public static final String MENU_FILE = "menu.txt";
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WebView mWebView;
-    private Snackbar lastSnackBar;
+    private Context mApplicationContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -40,8 +47,19 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
         mWebView = (WebView) view.findViewById(R.id.menu_content);
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.menu_swipe_refresh);
+        mApplicationContext = getActivity().getApplicationContext();
+
+        initSwipeRefreshLayout();
+        initMenu();
+
+        if (needRefreshMenu())
+            refreshMenu();
+
+        return view;
+    }
+
+    private void initSwipeRefreshLayout() {
         mSwipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -57,17 +75,29 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
                 R.color.white,
                 R.color.primary_light
         );
+    }
 
+    private void initMenu() {
         String menuSaved = MemoryHelper.readStringFromStorage(getContext(), MENU_FILE);
-        if (menuSaved != null) {
-            mWebView.loadData(menuSaved, "text/html", "UTF-8");
-        }
+        if (menuSaved != null)
+            mWebView.loadDataWithBaseURL(null, menuSaved, "text/html", "UTF-8", null);
+    }
 
-        if (needRefreshMenu()) {
-            refreshMenu();
-        }
+    private boolean needRefreshMenu() {
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
+        int nowWeek = now.get(Calendar.WEEK_OF_YEAR);
 
-        return view;
+        Calendar menu = Calendar.getInstance();
+        menu.setTimeInMillis(getMenuLastModified());
+        int menuWeek = menu.get(Calendar.WEEK_OF_YEAR);
+
+        return (menuWeek < nowWeek);
+    }
+
+    private long getMenuLastModified() {
+        File menuFile = new File(getContext().getFilesDir() + "/" + MENU_FILE);
+        return menuFile.lastModified();
     }
 
     @Override
@@ -80,8 +110,6 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     public void onStop() {
         super.onStop();
         mSwipeRefreshLayout.setRefreshing(false);
-        if (lastSnackBar != null && lastSnackBar.isShown())
-            lastSnackBar.dismiss();
     }
 
     @Override
@@ -103,53 +131,25 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
             mSwipeRefreshLayout.setRefreshing(true);
             new RefreshMenuTask(this).execute();
         } else {
-            showSnackBarMsg(R.string.no_connection, SnackbarHelper.SnackType.ERROR);
+            showSnack(getContext(), mWebView, R.string.no_connection, SnackType.ERROR);
         }
     }
 
     @Override
     public void onRefreshMenuSuccess(String menu) {
-        if (needSaveMenu(menu)) {
-            MemoryHelper.saveToStorage(getActivity().getApplicationContext(),
-                    MenuFragment.MENU_FILE, menu);
-        }
+        if (needSaveMenu(menu))
+            MemoryHelper.saveToStorage(mApplicationContext, MenuFragment.MENU_FILE, menu);
 
         if (getActivity() != null && isAdded()) {
             mWebView.loadDataWithBaseURL(null, menu, "text/html", "UTF-8", null);
-
-            showSnackBarMsg(R.string.update_success, SnackbarHelper.SnackType.FINISH);
+            showSnack(getContext(), mWebView, R.string.update_success, SnackType.FINISH);
         }
     }
 
     @Override
     public void onRefreshMenuFail() {
-        showSnackBarMsg(R.string.update_fail, SnackbarHelper.SnackType.ERROR);
-    }
-
-    private void showSnackBarMsg(int resId, SnackbarHelper.SnackType type) {
-        if (getActivity() != null && isAdded() && resId != 0) {
-            lastSnackBar = Snackbar.make(mWebView, resId, SnackbarHelper.getLength(type));
-            SnackbarHelper.getColored(getContext(), lastSnackBar, type).show();
-
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    private boolean needRefreshMenu() {
-        Calendar now = Calendar.getInstance();
-        now.setTime(new Date());
-        int nowWeek = now.get(Calendar.WEEK_OF_YEAR);
-
-        Calendar menu = Calendar.getInstance();
-        menu.setTimeInMillis(getMenuLastModified());
-        int menuWeek = menu.get(Calendar.WEEK_OF_YEAR);
-
-        return (menuWeek < nowWeek);
-    }
-
-    private long getMenuLastModified() {
-        File menuFile = new File(getContext().getFilesDir() + "/" + MENU_FILE);
-        return menuFile.lastModified();
+        if (getActivity() != null && isAdded())
+            showSnack(getContext(), mWebView, R.string.update_fail, SnackType.ERROR);
     }
 
     private boolean needSaveMenu(String menu) {

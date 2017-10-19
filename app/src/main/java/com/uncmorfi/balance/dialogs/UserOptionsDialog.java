@@ -11,12 +11,19 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.model.User;
 
-
+/**
+ * Muestra las opciones disponibles para efectuar sobre un usuario.
+ */
 public class UserOptionsDialog extends DialogFragment {
     public static final String ARG_USER = "user";
     public static final String ARG_BACKEND = "backend";
 
-
+    /**
+     * @param user Puede no contener todos los datos del usuario,
+     *             pero necesita además de los datos que necesitan las demás opciones:
+     *             {@link User#getCard()}
+     *             {@link User#getPosition()}
+     */
     public static UserOptionsDialog newInstance(User user, BalanceBackend backend) {
         Bundle args = new Bundle();
 
@@ -75,7 +82,6 @@ public class UserOptionsDialog extends DialogFragment {
                         }
                     });
         }
-
         return builder.create();
     }
 }

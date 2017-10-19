@@ -9,7 +9,9 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-
+/**
+ * Descarga y parsea el menú de la semana.
+ */
 class RefreshMenuTask extends AsyncTask<Void, Void, String> {
     private static final String URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana";
     private RefreshMenuListener mListener;
@@ -26,7 +28,6 @@ class RefreshMenuTask extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... params) {
         try {
-            // Descargar el html
             Document doc = Jsoup.connect(URL).get();
 
             // Seleccionar la parte del menú
@@ -46,7 +47,9 @@ class RefreshMenuTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        if (result == null) mListener.onRefreshMenuFail();
-        else mListener.onRefreshMenuSuccess(result);
+        if (result == null)
+            mListener.onRefreshMenuFail();
+        else
+            mListener.onRefreshMenuSuccess(result);
     }
 }

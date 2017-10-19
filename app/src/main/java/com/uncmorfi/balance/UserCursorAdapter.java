@@ -33,7 +33,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * Llena un RecyclerView.
+ * El fragmento o actividad contenedora debería implementar {@link OnCardClickListener}.
+ */
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder> {
     private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
     private static final float SCALE_USER_IMAGE_SIZE = 0.8f;
@@ -104,13 +107,6 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
         setProgressBar(holder, position);
     }
 
-    @Override
-    public int getItemCount() {
-        if (mCursor != null)
-            return mCursor.getCount();
-        return 0;
-    }
-
     private void setHolder(UserItemViewHolder holder, User user) {
         holder.nameText.setText(user.getName());
         holder.cardText.setText(user.getCard());
@@ -137,6 +133,24 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
         cal.setTime(new Date());
         cal.add(Calendar.MONTH, WARNING_USER_EXPIRE);
         return (new Date(expiration)).before(cal.getTime());
+    }
+
+    private void setImage(final UserItemViewHolder holder, User user) {
+        Glide.with(mContext)
+                .load(USER_IMAGES_URL + user.getImage())
+                .asBitmap()
+                .placeholder(R.drawable.person_placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(holder.userImage) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        holder.userImage.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
     }
 
     private void setProgressBar(UserItemViewHolder holder, int position) {
@@ -171,22 +185,11 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
                 .start();
     }
 
-    private void setImage(final UserItemViewHolder holder, User user) {
-        Glide.with(mContext)
-                .load(USER_IMAGES_URL + user.getImage())
-                .asBitmap()
-                .placeholder(R.drawable.person_placeholder)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(new BitmapImageViewTarget(holder.userImage) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        holder.userImage.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+    @Override
+    public int getItemCount() {
+        if (mCursor != null)
+            return mCursor.getCount();
+        return 0;
     }
 
     void setCursor(Cursor newCursor) {

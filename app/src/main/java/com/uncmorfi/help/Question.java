@@ -5,7 +5,6 @@ import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 import java.util.Collections;
 import java.util.List;
 
-
 class Question implements ParentListItem {
     private String mQuestion;
     private String mAnswer;

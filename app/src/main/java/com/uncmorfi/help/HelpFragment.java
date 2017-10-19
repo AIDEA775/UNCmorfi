@@ -13,7 +13,10 @@ import com.uncmorfi.R;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Ayuda o FAQ.
+ * Usa a {@link HelpExpandableRecyclerAdapter} para llenar un {@link RecyclerView}
+ */
 public class HelpFragment extends Fragment {
 
     @Override

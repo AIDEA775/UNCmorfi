@@ -11,7 +11,6 @@ import com.uncmorfi.R;
 
 import java.util.List;
 
-
 class HelpExpandableRecyclerAdapter extends
         ExpandableRecyclerAdapter<QuestionViewHolder, AnswerViewHolder> {
     private LayoutInflater mInflater;
@@ -23,14 +22,14 @@ class HelpExpandableRecyclerAdapter extends
 
     @Override
     public QuestionViewHolder onCreateParentViewHolder(ViewGroup parentViewGroup) {
-        View recipeView = mInflater.inflate(R.layout.item_question, parentViewGroup, false);
-        return new QuestionViewHolder(recipeView);
+        View questionView = mInflater.inflate(R.layout.item_question, parentViewGroup, false);
+        return new QuestionViewHolder(questionView);
     }
 
     @Override
     public AnswerViewHolder onCreateChildViewHolder(ViewGroup childViewGroup) {
-        View ingredientView = mInflater.inflate(R.layout.item_answer, childViewGroup, false);
-        return new AnswerViewHolder(ingredientView);
+        View answerView = mInflater.inflate(R.layout.item_answer, childViewGroup, false);
+        return new AnswerViewHolder(answerView);
     }
 
     @Override

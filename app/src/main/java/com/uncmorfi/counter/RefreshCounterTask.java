@@ -2,22 +2,35 @@ package com.uncmorfi.counter;
 
 import android.os.AsyncTask;
 
+import com.github.mikephil.charting.data.Entry;
 import com.uncmorfi.helpers.ConnectionHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
-
-class RefreshCounterTask extends AsyncTask<Void, Void, JSONArray> {
-    private RefreshCounterListener mListener;
+/**
+ *  Descarga y parsea los datos obtenidos del medidor de raciones.
+ */
+class RefreshCounterTask extends AsyncTask<Void, Void, List<Entry>> {
     private static final String URL =
             "http://comedor.unc.edu.ar/gv-ds_test.php?json=true&accion=1&sede=0475";
+    private RefreshCounterListener mListener;
+    private DateFormat mDateFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
+    private int mErrorCode;
 
     interface RefreshCounterListener {
-        void onRefreshCounterSuccess(JSONArray result);
-        void onRefreshCounterFail();
+        void onRefreshCounterSuccess(List<Entry> result);
+        void onRefreshCounterFail(int errorCode);
     }
 
     RefreshCounterTask(RefreshCounterListener listener) {
@@ -25,20 +38,47 @@ class RefreshCounterTask extends AsyncTask<Void, Void, JSONArray> {
     }
 
     @Override
-    protected JSONArray doInBackground(Void... params) {
+    protected List<Entry> doInBackground(Void... params) {
         try {
-            String result = ConnectionHelper.downloadFromUrlByGet(URL);
-            return new JSONArray(result);
-        } catch (IOException|JSONException e) {
+            String download = ConnectionHelper.downloadFromUrlByGet(URL);
+            JSONArray result = new JSONArray(download);
+            List<Entry> data = new ArrayList<>();
+
+            for (int i = 0; i < result.length(); i++) {
+                    JSONObject item = result.getJSONObject(i);
+
+                    Date date = parseStringToDate(item.getString("fecha"));
+                    int ration = Integer.parseInt(item.getString("raciones"));
+
+                    if (date != null)
+                        data.add(new Entry(date.getTime(), ration));
+            }
+            return data;
+        } catch (IOException e) {
+            mErrorCode = ConnectionHelper.CONNECTION_ERROR;
+            return null;
+        } catch (JSONException|NumberFormatException e) {
+            mErrorCode = ConnectionHelper.INTERNAL_ERROR;
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Date parseStringToDate(String string) {
+        try {
+            return mDateFormat.parse(string);
+        } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    protected void onPostExecute(JSONArray result) {
+    protected void onPostExecute(List<Entry> result) {
         super.onPostExecute(result);
-        if (result == null) mListener.onRefreshCounterFail();
-        else mListener.onRefreshCounterSuccess(result);
+        if (result == null)
+            mListener.onRefreshCounterFail(mErrorCode);
+        else
+            mListener.onRefreshCounterSuccess(result);
     }
 }

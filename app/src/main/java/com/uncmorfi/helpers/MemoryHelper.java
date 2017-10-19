@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-
 public abstract class MemoryHelper {
 
     public static void saveToStorage(Context context, String file, String content) {
@@ -37,9 +36,10 @@ public abstract class MemoryHelper {
                             new InputStreamReader(context.openFileInput(file)));
             String line;
             StringBuilder read = new StringBuilder();
-            while((line = in.readLine()) != null) {
+
+            while((line = in.readLine()) != null)
                 read.append(line);
-            }
+
             in.close();
             return read.toString();
         } catch (Exception ex) {
@@ -87,8 +87,10 @@ public abstract class MemoryHelper {
 
     public static void deleteFileInStorage(Context context, String file) {
         boolean result = context.deleteFile(file);
-        if (result) Log.i("MemoryHelper", "Deleted file " + file);
-        else Log.e("MemoryHelper", "Error deleting file " + file);
+        if (result)
+            Log.i("MemoryHelper", "Deleted file " + file);
+        else
+            Log.e("MemoryHelper", "Error deleting file " + file);
     }
 
 }

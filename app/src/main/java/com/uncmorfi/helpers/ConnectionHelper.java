@@ -11,8 +11,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 public abstract class ConnectionHelper {
+    public static final int INTERNAL_ERROR = -1;
+    public static final int CONNECTION_ERROR = -2;
 
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager)

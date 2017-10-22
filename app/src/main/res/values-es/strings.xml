@@ -113,12 +113,12 @@
             \tMedidor: comedor.unc.edu.ar/cocina.php
         </item>
 
-        <item>¿Ventanas? ¿Cómo funcionan las estimaciones?</item>
+        <item>¿Ventanas? ¿Qué son las estimaciones?</item>
         <item>
-            \tA lo largo del comedor (sede central) hay \"ventanas\" en ambos lados (o mejor dicho columnas), tenés que poner en la barra deslizadora el largo de la fila que hay adelante tuyo.
-            Se toma como parámetro de medida la cantidad de ventanas.\n\n
-            \tPor ejemplo, desde el molinete (por donde pasás la tarjeta) hasta la altura de los baños de hombres, la longitud de la fila son 5 ventanas, de una punta a la otra del comedor hay un total de  12 ventanas,
-            la curva (entrada principal) cuenta como una 1 ventana, y así seguís sumándolas hasta llegar al lugar donde te encuentres (hasta la entrada lateral son 25 ventanas).\n\n
+            \tLas estimaciones son una burda aproximación de lo que quizá esperes en la fila del comedor, no es precisa, lo sabemos.\n\n
+            \tEn la barra deslizadora va la cantidad de ventanas que hay delante tuyo en la fila. Una ventana es la distancia que hay entre dos columnas que están a lo largo del comedor.\n\n
+            \tPor ejemplo, desde el molinete (por donde pasás la tarjeta) hasta la altura de los baños de hombres, la longitud de la fila son 6 ventanas, de una punta a la otra del comedor hay un total de  12 ventanas,
+            la curva (entrada principal) cuenta como una 1 ventana más, y así seguís sumándolas hasta llegar al lugar donde te encuentres (hasta la entrada lateral son 25 ventanas).\n\n
             \tEsta es una función muy experimental. Elegimos las ventanas como medida por la naturaleza cambiante de la fila, las curvas y contracurvas pueden variar de un día a otro.\n\n
         </item>
 

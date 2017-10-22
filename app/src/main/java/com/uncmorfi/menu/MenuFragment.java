@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.uncmorfi.R;
-import com.uncmorfi.helpers.SnackbarHelper.SnackType;
 import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
+import com.uncmorfi.helpers.SnackbarHelper.SnackType;
 
 import java.io.File;
 import java.util.Calendar;
@@ -141,6 +141,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
             MemoryHelper.saveToStorage(mApplicationContext, MenuFragment.MENU_FILE, menu);
 
         if (getActivity() != null && isAdded()) {
+            mSwipeRefreshLayout.setRefreshing(false);
             mWebView.loadDataWithBaseURL(null, menu, "text/html", "UTF-8", null);
             showSnack(getContext(), mWebView, R.string.update_success, SnackType.FINISH);
         }

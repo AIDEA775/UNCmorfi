@@ -7,14 +7,16 @@ Una app para Android para consultar todo lo referido con el comedor universitari
 </a>
 
 
-## Reportar un bug
+## Sugerencias
 
 Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https://github.com/AIDEA775/UNCmorfi/issues/new).
 
 
 ## Agradecimientos
-* [KaySoohyun](https://github.com/KaySoohyun) por el icono
-* A los que contribuyeron y reportaron bugs!
+* [KaySoohyun](https://github.com/KaySoohyun)
+* [George Alegre](github.com/georgealegre)
+* [Rosa Maria Peralta](mariarosaperalta95@gmail.com)
+* [Andés Saravia](github.com/MinamiUruka)
 
 
 ## Librerias
@@ -24,11 +26,11 @@ Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https
 * Google: [v7 recyclerview](https://developer.android.com/topic/libraries/support-library/features.html#v7-recyclerview)
 * Google: [Design support](https://developer.android.com/topic/libraries/support-library/features.html#design)
 * Google: [Play services maps](https://developers.google.com/maps/documentation/android-api/)
-* Google: [Play services vision](https://developers.google.com/vision/)
 * bignerdranch: [Expandable-recycler-view](https://github.com/bignerdranch/expandable-recycler-view/tree/v2.1.1)
 * Bumtech: [Glide](https://github.com/bumptech/glide)
 * Jhy: [Jsoup](https://github.com/jhy/jsoup)
-
+* PhilJay: [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+* journeyapps:[zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
 
 ## Licencia
 * [GNU General Public License v3.0](./LICENSE)

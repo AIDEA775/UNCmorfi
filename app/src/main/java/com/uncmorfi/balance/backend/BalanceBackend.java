@@ -175,6 +175,9 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
             case ConnectionHelper.INTERNAL_ERROR:
                 mFragment.showSnackBarMsg(R.string.internal_error, SnackType.ERROR);
                 break;
+            default:
+                mFragment.showSnackBarMsg(R.string.internal_error, SnackType.ERROR);
+                break;
         }
     }
 

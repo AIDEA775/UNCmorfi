@@ -71,7 +71,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     private void initRecyclerAndAdapter() {
-        RecyclerView recyclerView = (RecyclerView) mRootView.findViewById(R.id.balance_list);
+        RecyclerView recyclerView = mRootView.findViewById(R.id.balance_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
         recyclerView.setNestedScrollingEnabled(false);
@@ -83,8 +83,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     private void initNewUserView() {
-        mEditText = (EditText) mRootView.findViewById(R.id.new_user_input);
-        ImageButton scanner = (ImageButton) mRootView.findViewById(R.id.new_user_scanner);
+        mEditText = mRootView.findViewById(R.id.new_user_input);
+        ImageButton scanner = mRootView.findViewById(R.id.new_user_scanner);
 
         mEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -92,7 +92,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     hideKeyboard();
-                    mBackend.newUser(textView.getText().toString());
+                    mBackend.newUser(textView.getText().toString().replace(" ", ","));
                 }
                 return false;
             }

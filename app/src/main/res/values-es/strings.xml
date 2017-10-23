@@ -22,7 +22,7 @@
     <string name="balance_expiration">Fecha de vencimiento: %1$s</string>
     <string name="balance_last_update">Última actualización %1$s</string>
 
-    <string name="balance_new_user_hint">Escribe el numero de la tarjeta</string>
+    <string name="balance_new_user_hint">Escribe el número de la tarjeta</string>
     <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
 
     <string name="balance_user_options_title">Tarjeta</string>
@@ -36,12 +36,12 @@
     <string name="balance_delete_user_positive">Eliminar</string>
     <string name="balance_delete_user_msg">Tarjeta eliminada</string>
 
-    <string name="balance_copy_msg">Numero de tarjeta copiado</string>
+    <string name="balance_copy_msg">Número de tarjeta copiado</string>
 
     <string name="balance_set_name_title">Nuevo nombre</string>
     <string name="balance_set_name_save">Guardar</string>
 
-    <string name="balance_align_barcode">Alinea el codigo de barras</string>
+    <string name="balance_align_barcode">Alineá el código de barras</string>
 
     <!-- Counter -->
     <string name="counter_rations">Raciones</string>
@@ -55,12 +55,12 @@
         \t¡No te olvides de adjuntar el certificado de alumno
         regular si sos estudiante!\n\n
 
-        \tO carnet de Daspu, recibo de sueldo o certificado que acredite
+        \tO carné de Daspu, recibo de sueldo o certificado que acredite
         relación con la UNC si eres Docente o No Docente.</string>
 
     <!-- About -->
     <string name="about_unofficial_app">Esta es una app no oficial</string>
-    <string name="about_source_code">Codigo fuente:</string>
+    <string name="about_source_code">Código fuente:</string>
 
     <!-- SnackBar -->
     <string name="no_connection">No hay conexión</string>
@@ -90,7 +90,7 @@
                 \t\tRosa Maria Peralta\n
                 \t\tmariarosaperalta95@gmail.com\n\n
 
-            Corrección de la traducción en Ingles:\n
+            Corrección de la traducción en Inglés:\n
                 \t\tGeorge Alegre\n
                 \t\tgithub.com/georgealegre\n\n
 
@@ -115,10 +115,10 @@
 
         <item>¿Ventanas? ¿Qué son las estimaciones?</item>
         <item>
-            \tLas estimaciones son una burda aproximación de lo que quizá esperes en la fila del comedor, no es precisa, lo sabemos.\n\n
-            \tEn la barra deslizadora va la cantidad de ventanas que hay delante tuyo en la fila. Una ventana es la distancia que hay entre dos columnas que están a lo largo del comedor.\n\n
-            \tPor ejemplo, desde el molinete (por donde pasás la tarjeta) hasta la altura de los baños de hombres, la longitud de la fila son 6 ventanas, de una punta a la otra del comedor hay un total de  12 ventanas,
-            la curva (entrada principal) cuenta como una 1 ventana más, y así seguís sumándolas hasta llegar al lugar donde te encuentres (hasta la entrada lateral son 25 ventanas).\n\n
+            \tLas estimaciones son una aproximación tonta e inocente de lo que quizá esperes en la fila del comedor. No es precisa, lo sabemos.\n\n
+            \tEn la barra deslizadora va la cantidad de ventanas que hay delante tuyo en la fila. Una ventana es literalmente una ventana, también podés pensarlo como columnas, están a lo largo del comedor en ambos lados.\n\n
+            \tPor ejemplo, desde el molinete (por donde pasás la tarjeta) hasta la altura de los baños de hombres, la longitud de la fila son 6 ventanas (contalas), de una punta a la otra del comedor hay 12 ventanas,
+            la curva (de la entrada principal) cuenta como una 1 ventana más, y así seguís sumándolas hasta llegar al lugar donde te encuentres (hasta la entrada lateral son 25 ventanas).\n\n
             \tEsta es una función muy experimental. Elegimos las ventanas como medida por la naturaleza cambiante de la fila, las curvas y contracurvas pueden variar de un día a otro.\n\n
         </item>
 
@@ -165,7 +165,7 @@
         <item>¿Cómo puedo colaborar?</item>
         <item>
             \tPodés enviar tu sugerencia por correo electrónico en la opción \"Contacto\" del menú lateral.\n\n
-            \tTambién podés pegarle una mirada al codigo fuente en Github:\n
+            \tTambién podés pegarle una mirada al código fuente en Github:\n
                 \t\tgithub.com/AIDEA775/UNCmorfi\n\n
             \tY además podés recomendar la app a cualquiera que veas en la fila del comedor ;)
         </item>
@@ -174,8 +174,8 @@
         <item>
             [v3.0 Cazuela]\n
             * ¡Nuevo icono!\n
-            * Nuevo menu lateral.\n
-            * Ahora el menú se actualiza automaticamente cada semana.\n
+            * Nuevo menú lateral.\n
+            * Ahora el menú se actualiza automáticamente cada semana.\n
             * Pasá a comer mostrando el código de barras desde tu celular.\n
             * Nueva interfaz en Saldo.\n
             * Consulta la fecha de vencimiento de tu tarjeta.\n
@@ -184,7 +184,7 @@
             * (Experimental) Estimaciones de espera en la fila.\n
             * Más temas en Ayuda.\n
             * Agregada la sección Renovación.\n
-            * Muchos otros cambios menores.\n\n
+            * Y muchos otros cambios.\n\n
 
             [v2.0 Bolognesa]\n
             * Agregadas las secciones Ayuda y Contacto.\n

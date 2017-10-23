@@ -30,7 +30,7 @@ Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https
 * Bumtech: [Glide](https://github.com/bumptech/glide)
 * Jhy: [Jsoup](https://github.com/jhy/jsoup)
 * PhilJay: [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
-* journeyapps:[zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
+* journeyapps: [zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
 
 ## Licencia
 * [GNU General Public License v3.0](./LICENSE)

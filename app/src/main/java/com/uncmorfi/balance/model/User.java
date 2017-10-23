@@ -101,15 +101,17 @@ public class User implements Serializable {
         this.position = position;
     }
 
-    public ContentValues toContentValues () {
+    public ContentValues toContentValues (boolean complete) {
         ContentValues values = new ContentValues();
         values.put(UsersContract.UserEntry.CARD, this.card);
-        values.put(UsersContract.UserEntry.NAME, this.name);
-        values.put(UsersContract.UserEntry.TYPE, this.type);
-        values.put(UsersContract.UserEntry.IMAGE, this.image);
         values.put(UsersContract.UserEntry.BALANCE, this.balance);
         values.put(UsersContract.UserEntry.EXPIRATION, this.expiration);
         values.put(UsersContract.UserEntry.LAST_UPDATE, this.lastUpdate);
+        if (complete) {
+            values.put(UsersContract.UserEntry.NAME, this.name);
+            values.put(UsersContract.UserEntry.TYPE, this.type);
+            values.put(UsersContract.UserEntry.IMAGE, this.image);
+        }
         return values;
     }
 }

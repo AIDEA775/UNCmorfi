@@ -20,9 +20,9 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.balance.model.UserProvider;
 import com.uncmorfi.balance.model.UsersContract;
+import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
 import com.uncmorfi.helpers.SnackbarHelper.SnackType;
-import com.uncmorfi.helpers.ConnectionHelper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -179,13 +179,13 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
     }
 
     private void insertUser(User user) {
-        mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues());
+        mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues(true));
     }
 
     private int updateUserBalance(User user) {
         return mContentResolver.update(
                 UserProvider.CONTENT_URI,
-                user.toContentValues(),
+                user.toContentValues(false),
                 UsersContract.UserEntry.CARD + "=?",
                 new String[]{user.getCard()}
         );

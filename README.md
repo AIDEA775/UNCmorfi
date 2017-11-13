@@ -14,9 +14,9 @@ Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https
 
 ## Agradecimientos
 * [KaySoohyun](https://github.com/KaySoohyun)
-* [George Alegre](github.com/georgealegre)
-* [Rosa Maria Peralta](mariarosaperalta95@gmail.com)
-* [Andés Saravia](github.com/MinamiUruka)
+* [George Alegre](https://github.com/georgealegre)
+* [Rosa Maria Peralta](mailto:mariarosaperalta95@gmail.com)
+* [Andés Saravia](https://github.com/MinamiUruka)
 
 
 ## Librerias

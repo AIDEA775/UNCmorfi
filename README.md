@@ -14,7 +14,7 @@ Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https
 
 ## Aportes
 
-Todos los `Pull requests` son re bienvenidos.
+Todos los _pull requests_ son re bienvenidos.
 
 
 ## Agradecimientos

@@ -12,6 +12,11 @@ Una app para Android para consultar todo lo referido con el comedor universitari
 Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https://github.com/AIDEA775/UNCmorfi/issues/new).
 
 
+## Aportes
+
+Todos los `Pull requests` son re bienvenidos.
+
+
 ## Agradecimientos
 * [KaySoohyun](https://github.com/KaySoohyun)
 * [George Alegre](https://github.com/georgealegre)

@@ -46,14 +46,14 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        mWebView = (WebView) view.findViewById(R.id.menu_content);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.menu_swipe_refresh);
+        mWebView = view.findViewById(R.id.menu_content);
+        mSwipeRefreshLayout = view.findViewById(R.id.menu_swipe_refresh);
         mApplicationContext = getActivity().getApplicationContext();
 
         initSwipeRefreshLayout();
         initMenu();
 
-        if (needRefreshMenu())
+        if (needAutoRefreshMenu())
             refreshMenu();
 
         return view;
@@ -83,16 +83,18 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
             mWebView.loadDataWithBaseURL(null, menuSaved, "text/html", "UTF-8", null);
     }
 
-    private boolean needRefreshMenu() {
+    private boolean needAutoRefreshMenu() {
         Calendar now = Calendar.getInstance();
         now.setTime(new Date());
         int nowWeek = now.get(Calendar.WEEK_OF_YEAR);
+        int nowYear = now.get(Calendar.YEAR);
 
         Calendar menu = Calendar.getInstance();
         menu.setTimeInMillis(getMenuLastModified());
         int menuWeek = menu.get(Calendar.WEEK_OF_YEAR);
+        int menuYear = now.get(Calendar.YEAR);
 
-        return (menuWeek < nowWeek);
+        return (menuYear < nowYear || menuWeek < nowWeek);
     }
 
     private long getMenuLastModified() {

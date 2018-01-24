@@ -66,14 +66,14 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
         UserItemViewHolder(View v) {
             super(v);
 
-            nameText = (TextView) v.findViewById(R.id.user_name);
-            cardText = (TextView) v.findViewById(R.id.user_card);
-            typeText = (TextView) v.findViewById(R.id.user_type);
-            balanceText = (TextView) v.findViewById(R.id.user_balance);
-            userImage = (ImageView) v.findViewById(R.id.user_image);
-            progressBar = (ProgressBar) v.findViewById(R.id.user_bar);
-            expirationText = (TextView) v.findViewById(R.id.user_expiration);
-            lastUpdateText = (TextView) v.findViewById(R.id.user_last_update);
+            nameText = v.findViewById(R.id.user_name);
+            cardText = v.findViewById(R.id.user_card);
+            typeText = v.findViewById(R.id.user_type);
+            balanceText = v.findViewById(R.id.user_balance);
+            userImage = v.findViewById(R.id.user_image);
+            progressBar = v.findViewById(R.id.user_bar);
+            expirationText = v.findViewById(R.id.user_expiration);
+            lastUpdateText = v.findViewById(R.id.user_last_update);
 
             v.setOnClickListener(this);
         }
@@ -118,7 +118,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
 
         holder.expirationText.setText(String.format(
                 mContext.getString(R.string.balance_expiration),
-                mDateFormat.format(new Date(user.getExpiration()))));
+                textExpiration(user.getExpiration())));
 
         holder.expirationText.setTextColor(ContextCompat.getColor(mContext,
                 warningExpiration(user.getExpiration()) ? R.color.accent : R.color.secondary_text));
@@ -126,6 +126,13 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
         holder.lastUpdateText.setText(String.format(
                 mContext.getString(R.string.balance_last_update),
                 DateUtils.getRelativeTimeSpanString(user.getLastUpdate()).toString().toLowerCase()));
+    }
+
+    private String textExpiration(long expiration) {
+        if (expiration == 0)
+            return "?";
+        else
+            return mDateFormat.format(new Date(expiration));
     }
 
     private boolean warningExpiration(long expiration) {

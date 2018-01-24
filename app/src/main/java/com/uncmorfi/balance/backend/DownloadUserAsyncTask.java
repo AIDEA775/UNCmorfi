@@ -90,7 +90,7 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
             return Integer.parseInt(string);
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            return -1;
+            return 0;
         }
     }
 

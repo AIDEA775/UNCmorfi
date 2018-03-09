@@ -9,13 +9,15 @@ import android.webkit.WebView;
 
 import com.uncmorfi.R;
 
+import java.util.Locale;
+
 
 /**
  * Ayuda o FAQ.
  * Muestra una página web alojada en el mismo repositorio de github.
  */
 public class HelpFragment extends Fragment {
-    private static final String URL = "https://aidea775.github.io/UNCmorfi/resources/help/";
+    private static final String URL = "https://aidea775.github.io/UNCmorfi/help/index-";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,9 @@ public class HelpFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_help, container, false);
 
         WebView myWebView = v.findViewById(R.id.help_content);
-        myWebView.loadUrl(URL);
+
+        String language = Locale.getDefault().getLanguage();
+        myWebView.loadUrl(URL + language + ".html");
 
         return v;
     }

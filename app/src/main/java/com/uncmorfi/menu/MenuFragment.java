@@ -152,6 +152,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     @Override
     public void onRefreshMenuFail() {
         if (getActivity() != null && isAdded())
+            mSwipeRefreshLayout.setRefreshing(false);
             showSnack(getContext(), mWebView, R.string.update_fail, SnackType.ERROR);
     }
 

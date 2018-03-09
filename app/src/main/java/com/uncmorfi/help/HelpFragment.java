@@ -17,7 +17,7 @@ import java.util.Locale;
  * Muestra una página web alojada en el mismo repositorio de github.
  */
 public class HelpFragment extends Fragment {
-    private static final String URL = "https://aidea775.github.io/UNCmorfi/help/index-";
+    private static final String URL = "https://aidea775.github.io/UNCmorfi/help/index-%s.html";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class HelpFragment extends Fragment {
         WebView myWebView = v.findViewById(R.id.help_content);
 
         String language = Locale.getDefault().getLanguage();
-        myWebView.loadUrl(URL + language + ".html");
+        myWebView.loadUrl(String.format(URL, language));
 
         return v;
     }

@@ -1,9 +1,12 @@
 package com.uncmorfi.counter;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -48,7 +51,13 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     private SeekBar mSeekBar;
     private TextView mEstimateView;
     private LineChart mChart;
-    private FloatingActionButton mRefreshFab;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,31 +66,44 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
         setAllViews(view);
         setChartOptions();
+        initSwipeRefreshLayout();
 
         mProgressBar.setMax(FOOD_RATIONS);
         mSeekBar.setOnSeekBarChangeListener(this);
         mSeekBar.setProgress(0);
-        mRefreshFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                refreshCounter();
-            }
-        });
 
         refreshCounter();
         return view;
     }
 
+    private void initSwipeRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        refreshCounter();
+                    }
+                }
+        );
+
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(
+                R.color.accent);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.white,
+                R.color.primary_light
+        );
+    }
+
     private void setAllViews(View view) {
         mRootView = view.findViewById(R.id.counter_coordinator);
-        mResumeView = (TextView) view.findViewById(R.id.counter_resume);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.counter_bar);
-        mPercentView = (TextView) view.findViewById(R.id.counter_percent);
-        mDistanceView = (TextView) view.findViewById(R.id.counter_distance);
-        mSeekBar = (SeekBar) view.findViewById(R.id.counter_seek);
-        mEstimateView = (TextView) view.findViewById(R.id.counter_estimate);
-        mChart = (LineChart) view.findViewById(R.id.counter_chart);
-        mRefreshFab = (FloatingActionButton) view.findViewById(R.id.counter_fab);
+        mResumeView = view.findViewById(R.id.counter_resume);
+        mProgressBar = view.findViewById(R.id.counter_bar);
+        mPercentView = view.findViewById(R.id.counter_percent);
+        mDistanceView = view.findViewById(R.id.counter_distance);
+        mSeekBar = view.findViewById(R.id.counter_seek);
+        mEstimateView = view.findViewById(R.id.counter_estimate);
+        mChart = view.findViewById(R.id.counter_chart);
+        mSwipeRefreshLayout = view.findViewById(R.id.counter_swipe_refresh);
     }
 
     private void setChartOptions() {
@@ -105,10 +127,10 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
     private void refreshCounter() {
         if (ConnectionHelper.isOnline(getContext())) {
-            hideRefreshButton();
+            showRefreshStatus();
             new RefreshCounterTask(this).execute();
         } else {
-            showRefreshButton();
+            hideRefreshStatus();
             showSnack(getContext(), mRootView, R.string.no_connection, SnackType.ERROR);
         }
     }
@@ -117,6 +139,26 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     public void onResume() {
         super.onResume();
         getActivity().setTitle(R.string.navigation_counter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.counter, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() ==  R.id.counter_update) {
+            refreshCounter();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -155,7 +197,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
             for (Entry entry : result)
                 total += entry.getY();
 
-            showRefreshButton();
+            hideRefreshStatus();
             updateTextViews(total);
             updateChart(result);
 
@@ -166,7 +208,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     @Override
     public void onRefreshCounterFail(int errorCode) {
         if (isAdded()) {
-            showRefreshButton();
+            hideRefreshStatus();
             showError(errorCode);
         }
     }
@@ -198,14 +240,14 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         dataSet.setDrawValues(false);
     }
 
-    private void showRefreshButton() {
-        mProgressBar.setIndeterminate(false);
-        mRefreshFab.show();
+    private void showRefreshStatus() {
+        mProgressBar.setIndeterminate(true);
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
-    private void hideRefreshButton() {
-        mProgressBar.setIndeterminate(true);
-        mRefreshFab.hide();
+    private void hideRefreshStatus() {
+        mProgressBar.setIndeterminate(false);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void showError(int code) {

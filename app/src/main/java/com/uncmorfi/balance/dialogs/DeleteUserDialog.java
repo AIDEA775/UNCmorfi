@@ -4,27 +4,25 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.model.User;
 
-import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
-public class DeleteUserDialog extends DialogFragment {
+public class DeleteUserDialog extends AppCompatDialogFragment {
 
     /**
      * @param user Puede no contener todos los datos del usuario, pero necesita:
      *             {@link User#getId()}
      */
-    public static DeleteUserDialog newInstance(User user, BalanceBackend backend) {
+    public static DeleteUserDialog newInstance(User user) {
         Bundle args = new Bundle();
 
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_BACKEND, backend);
 
         DeleteUserDialog fragment = new DeleteUserDialog();
         fragment.setArguments(args);
@@ -37,7 +35,7 @@ public class DeleteUserDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final User user = (User) getArguments().getSerializable(ARG_USER);
-        final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
+        final BalanceBackend backend = BalanceBackend.getInstance(getContext());
 
         if (backend != null && user != null) {
             DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
@@ -62,5 +60,11 @@ public class DeleteUserDialog extends DialogFragment {
                     .setNegativeButton(getString(android.R.string.cancel), negativeListener);
         }
         return builder.create();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        dismiss();
     }
 }

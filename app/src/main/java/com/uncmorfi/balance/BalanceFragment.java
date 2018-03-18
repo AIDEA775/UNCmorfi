@@ -66,7 +66,9 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         initRecyclerAndAdapter();
         initNewUserView();
 
-        mBackend = new BalanceBackend(getActivity().getApplicationContext(), this);
+        mBackend = BalanceBackend.getInstance(getContext());
+        mBackend.setListener(this);
+
         getLoaderManager().initLoader(0, null, this);
 
         return mRootView;
@@ -196,7 +198,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         user.setPosition(position);
 
         UserOptionsDialog
-                .newInstance(user, mBackend)
+                .newInstance(user)
                 .show(getFragmentManager(), "UserOptionsDialog");
     }
 

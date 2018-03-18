@@ -4,8 +4,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 
 import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
@@ -14,9 +14,8 @@ import com.uncmorfi.balance.model.User;
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.
  */
-public class UserOptionsDialog extends DialogFragment {
+public class UserOptionsDialog extends AppCompatDialogFragment {
     public static final String ARG_USER = "user";
-    public static final String ARG_BACKEND = "backend";
 
     /**
      * @param user Puede no contener todos los datos del usuario,
@@ -24,11 +23,10 @@ public class UserOptionsDialog extends DialogFragment {
      *             {@link User#getCard()}
      *             {@link User#getPosition()}
      */
-    public static UserOptionsDialog newInstance(User user, BalanceBackend backend) {
+    public static UserOptionsDialog newInstance(User user) {
         Bundle args = new Bundle();
 
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_BACKEND, backend);
 
         UserOptionsDialog fragment = new UserOptionsDialog();
         fragment.setArguments(args);
@@ -49,7 +47,7 @@ public class UserOptionsDialog extends DialogFragment {
         items[4] = getString(R.string.balance_user_options_set_name);
 
         final User user = (User) getArguments().getSerializable(ARG_USER);
-        final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
+        final BalanceBackend backend = BalanceBackend.getInstance(getContext());
 
         if (backend != null && user != null) {
             builder.setTitle(getString(R.string.balance_user_options_title))
@@ -62,18 +60,18 @@ public class UserOptionsDialog extends DialogFragment {
                                             user.getCard(), new int[]{user.getPosition()});
                                     break;
                                 case 1:
-                                    DeleteUserDialog.newInstance(user, backend)
+                                    DeleteUserDialog.newInstance(user)
                                             .show(getFragmentManager(), "DeleteUserDialog");
                                     break;
                                 case 2:
                                     backend.copyCardToClipboard(user.getCard());
                                     break;
                                 case 3:
-                                    BarcodeDialog.newInstance(user, backend)
+                                    BarcodeDialog.newInstance(user)
                                             .show(getFragmentManager(), "BarcodeDialog");
                                     break;
                                 case 4:
-                                    SetNameDialog.newInstance(user, backend)
+                                    SetNameDialog.newInstance(user)
                                             .show(getFragmentManager(), "SetNameDialog");
                                     break;
                                 default:
@@ -83,5 +81,11 @@ public class UserOptionsDialog extends DialogFragment {
                     });
         }
         return builder.create();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        dismiss();
     }
 }

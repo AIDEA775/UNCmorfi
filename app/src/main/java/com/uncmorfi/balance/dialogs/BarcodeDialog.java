@@ -4,11 +4,12 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,10 +18,9 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.model.User;
 
-import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
-public class BarcodeDialog extends DialogFragment {
+public class BarcodeDialog extends AppCompatDialogFragment {
     BalanceBackend mBackend;
     String mUserCard;
 
@@ -35,11 +35,10 @@ public class BarcodeDialog extends DialogFragment {
      * @param user Puede no contener todos los datos del usuario, pero necesita:
      *             {@link User#getCard()}
      */
-    public static BarcodeDialog newInstance(User user, BalanceBackend backend) {
+    public static BarcodeDialog newInstance(User user) {
         Bundle args = new Bundle();
 
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_BACKEND, backend);
 
         BarcodeDialog fragment = new BarcodeDialog();
         fragment.setArguments(args);
@@ -52,7 +51,7 @@ public class BarcodeDialog extends DialogFragment {
         final User user = (User) getArguments().getSerializable(ARG_USER);
 
         if (user != null) mUserCard =  user.getCard();
-        mBackend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
+        mBackend = BalanceBackend.getInstance(getContext());
     }
 
     @Override
@@ -60,9 +59,9 @@ public class BarcodeDialog extends DialogFragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.dialog_barcode, container, false);
 
-        mText = (TextView) mRootView.findViewById(R.id.barcode_card);
-        mBar = (ProgressBar) mRootView.findViewById(R.id.barcode_bar);
-        mFrame = (ImageView) mRootView.findViewById(R.id.barcode_frame);
+        mText = mRootView.findViewById(R.id.barcode_card);
+        mBar = mRootView.findViewById(R.id.barcode_bar);
+        mFrame = mRootView.findViewById(R.id.barcode_frame);
 
         mHandler = new Handler();
         new Thread(new Runnable() {
@@ -84,6 +83,7 @@ public class BarcodeDialog extends DialogFragment {
                             mText.setVisibility(View.VISIBLE);
                             mText.setText(mUserCard);
                             mFrame.setImageBitmap(mBitmap);
+                            setBrightness(1f);
                         }
                     }
                 });
@@ -91,6 +91,12 @@ public class BarcodeDialog extends DialogFragment {
         }).start();
 
         return mRootView;
+    }
+
+    private void setBrightness(float value) {
+        WindowManager.LayoutParams layoutParams = getActivity().getWindow().getAttributes();
+        layoutParams.screenBrightness = value;
+        getActivity().getWindow().setAttributes(layoutParams);
     }
 
     @Override
@@ -104,5 +110,6 @@ public class BarcodeDialog extends DialogFragment {
             mBitmap.recycle();
             mBitmap = null;
         }
+        setBrightness(-1f);
     }
 }

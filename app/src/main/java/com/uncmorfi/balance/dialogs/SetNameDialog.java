@@ -15,7 +15,6 @@ import com.uncmorfi.R;
 import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.model.User;
 
-import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_BACKEND;
 import static com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER;
 
 public class SetNameDialog extends DialogFragment {
@@ -24,11 +23,10 @@ public class SetNameDialog extends DialogFragment {
      * @param user Puede no contener todos los datos del usuario, pero necesita:
      *             {@link User#getId()}
      */
-    public static SetNameDialog newInstance(User user, BalanceBackend backend) {
+    public static SetNameDialog newInstance(User user) {
         Bundle args = new Bundle();
 
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_BACKEND, backend);
 
         SetNameDialog fragment = new SetNameDialog();
         fragment.setArguments(args);
@@ -44,11 +42,11 @@ public class SetNameDialog extends DialogFragment {
         builder.setView(v);
 
         final User user = (User) getArguments().getSerializable(ARG_USER);
-        final BalanceBackend backend = (BalanceBackend) getArguments().getSerializable(ARG_BACKEND);
+        final BalanceBackend backend = BalanceBackend.getInstance(getContext());
 
-        final EditText input = (EditText) v.findViewById(R.id.set_name_input);
-        Button save = (Button) v.findViewById(R.id.set_name_save);
-        Button cancel = (Button) v.findViewById(R.id.set_name_cancel);
+        final EditText input = v.findViewById(R.id.set_name_input);
+        Button save = v.findViewById(R.id.set_name_save);
+        Button cancel = v.findViewById(R.id.set_name_cancel);
 
         if (backend != null && user != null) {
             input.append(backend.getUserById(user.getId()).getName());
@@ -77,5 +75,11 @@ public class SetNameDialog extends DialogFragment {
         if (window != null)
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return dialog;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        dismiss();
     }
 }

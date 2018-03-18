@@ -24,7 +24,6 @@ import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
 import com.uncmorfi.helpers.SnackbarHelper.SnackType;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,7 +34,8 @@ import java.util.Locale;
  * Un fragmento o actividad debería implementar {@link BalanceListener}.
  * Usa a {@link DownloadUserAsyncTask} para descargar los datos de los usuarios.
  */
-public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListener, Serializable{
+public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListener {
+    private static BalanceBackend mInstance;
     private static final String BARCODE_PATH = "barcode-";
     private BalanceListener mFragment;
     private Context mContext;
@@ -50,14 +50,20 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
         void onItemDeleted(int position, Cursor c);
     }
 
-    /**
-     * @param context Debido a que se hacen operaciones que pueden llevar mucho tiempo,
-     *                es necesario un {@link Context} que no dependa de la actividad.
-     */
-    public BalanceBackend(Context context, BalanceListener listener) {
-        mFragment = listener;
-        mContext = context;
+    private BalanceBackend(Context context) {
+        mContext = context.getApplicationContext();
         mContentResolver = context.getContentResolver();
+    }
+
+    public static synchronized BalanceBackend getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new BalanceBackend(context);
+        }
+        return mInstance;
+    }
+
+    public void setListener(BalanceListener listener) {
+        mFragment = listener;
     }
 
     public User getUserById(int id) {

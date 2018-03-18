@@ -11,7 +11,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,7 +50,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     private View mRootView;
     private UserCursorAdapter mUserCursorAdapter;
     private BalanceBackend mBackend;
-    private EditText mEditText;
+    private EditText mInputCard;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -83,21 +85,53 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     private void initNewUserView() {
-        mEditText = mRootView.findViewById(R.id.new_user_input);
-        ImageButton scanner = mRootView.findViewById(R.id.new_user_scanner);
+        mInputCard = mRootView.findViewById(R.id.new_user_input);
+        final ImageButton inputButton = mRootView.findViewById(R.id.new_user_scanner);
 
-        mEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mInputCard.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        mInputCard.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     hideKeyboard();
-                    mBackend.newUser(textView.getText().toString().replace(" ", ","));
+                    callNewUser();
                 }
                 return false;
             }
         });
-        scanner.setOnClickListener(new View.OnClickListener() {
+
+        mInputCard.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Cuando hay texto, cambia la función del botón por newUser.
+                if (s.length() > 0) {
+                    inputButton.setImageResource(R.drawable.ic_check);
+                    inputButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            hideKeyboard();
+                            callNewUser();
+                        }});
+                } else {
+                    inputButton.setImageResource(R.drawable.ic_barcode);
+                    inputButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            callScanner();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // Por defecto activa el lector
+        inputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callScanner();
@@ -116,6 +150,12 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         integrator.setBeepEnabled(false);
         integrator.setBarcodeImageEnabled(true);
         integrator.initiateScan();
+    }
+
+    private void callNewUser() {
+        String input = mInputCard.getText().toString().replace(" ", ",");
+        if (input.length() > 0)
+            mBackend.newUser(input);
     }
 
     @Override
@@ -188,7 +228,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                     getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        mEditText.clearFocus();
+        mInputCard.clearFocus();
     }
 
     @Override
@@ -217,14 +257,14 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
 
     @Override
     public void onItemAdded(Cursor c) {
-        mEditText.getText().clear(); // se agregó la tarjeta, limpiar el EditText.
+        mInputCard.getText().clear(); // se agregó la tarjeta, limpiar el EditText.
         mUserCursorAdapter.setCursor(c);
         mUserCursorAdapter.notifyItemInserted(mUserCursorAdapter.getItemCount());
     }
 
     @Override
     public void onItemChanged(int position, Cursor c) {
-        mEditText.getText().clear(); // tambien limpiar el EditText por las dudas.
+        mInputCard.getText().clear(); // tambien limpiar el EditText por las dudas.
         mUserCursorAdapter.setCursor(c);
         mUserCursorAdapter.notifyItemChanged(position);
     }

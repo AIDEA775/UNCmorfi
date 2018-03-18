@@ -23,6 +23,7 @@
     <string name="balance_last_update">Last update %1$s</string>
 
     <string name="balance_new_user_hint">Write number card</string>
+    <string name="balance_new_user_dumb">Check the input</string>
     <string name="balance_new_user_adding">Adding card %1$s&#8230;</string>
 
     <string name="balance_user_options_title">Card</string>

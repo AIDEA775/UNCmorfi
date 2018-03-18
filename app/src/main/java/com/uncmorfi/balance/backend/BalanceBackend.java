@@ -83,8 +83,9 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
 
     public void newUser(String card) {
         Log.i("Backend", "New card: " + card);
-        if (card.equals("")) return;
-        if (ConnectionHelper.isOnline(mContext)) {
+        if (card.length() < 15) {
+            mFragment.showSnackBarMsg(R.string.balance_new_user_dumb, SnackType.FINISH);
+        }else if (ConnectionHelper.isOnline(mContext)) {
             mFragment.showSnackBarMsg(getNewUserMsg(card), SnackType.LOADING);
             new DownloadUserAsyncTask(this, null).execute(card);
         } else {

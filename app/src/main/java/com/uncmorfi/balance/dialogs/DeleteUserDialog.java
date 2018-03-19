@@ -18,6 +18,7 @@ public class DeleteUserDialog extends AppCompatDialogFragment {
     /**
      * @param user Puede no contener todos los datos del usuario, pero necesita:
      *             {@link User#getId()}
+     *             {@link User#getName()}
      */
     public static DeleteUserDialog newInstance(User user) {
         Bundle args = new Bundle();
@@ -53,10 +54,8 @@ public class DeleteUserDialog extends AppCompatDialogFragment {
                 }
             };
 
-            builder.setMessage(String.format(getString(R.string.balance_delete_user_title),
-                        backend.getUserById(user.getId()).getName()))
-                    .setPositiveButton(getString(R.string.balance_delete_user_positive),
-                            positiveListener)
+            builder.setMessage(String.format(getString(R.string.balance_delete_user_title), user.getName()))
+                    .setPositiveButton(getString(R.string.balance_delete_user_positive), positiveListener)
                     .setNegativeButton(getString(android.R.string.cancel), negativeListener);
         }
         return builder.create();

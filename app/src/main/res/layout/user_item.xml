@@ -55,6 +55,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:textSize="24sp"
+            android:ellipsize="end"
+            android:maxLines="1"
             tools:text="Alejandro Ismael" />
 
         <TextView

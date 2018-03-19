@@ -2,14 +2,18 @@ package com.uncmorfi.balance.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 
 import com.uncmorfi.R;
+import com.uncmorfi.balance.BarcodeActivity;
 import com.uncmorfi.balance.backend.BalanceBackend;
 import com.uncmorfi.balance.model.User;
+
+import static com.uncmorfi.balance.BarcodeActivity.USER_ARG;
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.
@@ -22,6 +26,7 @@ public class UserOptionsDialog extends AppCompatDialogFragment {
      *             pero necesita además de los datos que necesitan las demás opciones:
      *             {@link User#getCard()}
      *             {@link User#getPosition()}
+     *             {@link User#getName()}
      */
     public static UserOptionsDialog newInstance(User user) {
         Bundle args = new Bundle();
@@ -67,8 +72,9 @@ public class UserOptionsDialog extends AppCompatDialogFragment {
                                     backend.copyCardToClipboard(user.getCard());
                                     break;
                                 case 3:
-                                    BarcodeDialog.newInstance(user)
-                                            .show(getFragmentManager(), "BarcodeDialog");
+                                    Intent intent = new Intent(getActivity(), BarcodeActivity.class);
+                                    intent.putExtra(USER_ARG, user);
+                                    startActivity(intent);
                                     break;
                                 case 4:
                                     SetNameDialog.newInstance(user)

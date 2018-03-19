@@ -192,9 +192,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
      */
     @Override
     public void onClick(int userId, String userCard, int position) {
-        User user = new User();
-        user.setId(userId);
-        user.setCard(userCard);
+        User user = mBackend.getUserById(userId);
         user.setPosition(position);
 
         UserOptionsDialog

@@ -21,7 +21,7 @@ public class SetNameDialog extends DialogFragment {
 
     /**
      * @param user Puede no contener todos los datos del usuario, pero necesita:
-     *             {@link User#getId()}
+     *             {@link User#getName()}
      */
     public static SetNameDialog newInstance(User user) {
         Bundle args = new Bundle();
@@ -49,7 +49,7 @@ public class SetNameDialog extends DialogFragment {
         Button cancel = v.findViewById(R.id.set_name_cancel);
 
         if (backend != null && user != null) {
-            input.append(backend.getUserById(user.getId()).getName());
+            input.append(user.getName());
 
             save.setOnClickListener(new View.OnClickListener() {
                 @Override

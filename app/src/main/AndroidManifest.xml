@@ -38,10 +38,9 @@
         <activity
             android:name=".balance.BarcodeActivity"
             android:screenOrientation="landscape"
-            android:label="@string/title_activity_barcode"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
+
     </application>
 
 </manifest>

@@ -53,9 +53,18 @@ public abstract class MemoryHelper {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(context.openFileInput(file)));
-            String line = in.readLine();
+
+            StringBuilder read = new StringBuilder();
+            String line;
+
+            // Leer las primeras 6 lineas
+            // Lo suficiente para que aparezca alguna fecha
+            for (int i = 0; i < 6; i++) {
+                line = in.readLine();
+                read.append(line);
+            }
             in.close();
-            return line;
+            return read.toString();
         } catch (Exception ex) {
             Log.e("MemoryHelper", "Error reading head in internal memory");
             return null;

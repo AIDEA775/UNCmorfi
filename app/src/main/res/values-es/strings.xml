@@ -23,6 +23,8 @@
     <string name="balance_last_update">Última actualización %1$s</string>
 
     <string name="balance_new_user_hint">Escribe el número de la tarjeta</string>
+    <string name="balance_new_user_button_enter">Agregar la tarjeta</string>
+    <string name="balance_new_user_button_code">Abrir lector de barras</string>
     <string name="balance_new_user_dumb">Fijate lo que pusiste</string>
     <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
 

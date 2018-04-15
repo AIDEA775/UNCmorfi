@@ -18,6 +18,7 @@
         android:adjustViewBounds="false"
         android:cropToPadding="false"
         android:scaleType="centerInside"
+        android:importantForAccessibility="no"
         tools:ignore="ContentDescription" />
 
     <ProgressBar
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="visible"
+        android:importantForAccessibility="no"
         android:indeterminateDrawable="@drawable/progressbar"
         android:layout_alignBottom="@+id/user_image"
         android:layout_alignLeft="@+id/user_image"
@@ -35,6 +37,7 @@
         android:layout_alignEnd="@+id/user_image" />
 
     <LinearLayout
+        android:id="@+id/user_name_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -46,8 +49,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/user_image"
-        android:layout_toEndOf="@+id/user_image"
-        android:id="@+id/linearLayout">
+        android:layout_toEndOf="@+id/user_image">
 
         <TextView
             android:id="@+id/user_name"
@@ -57,6 +59,7 @@
             android:textSize="24sp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:importantForAccessibility="yes"
             tools:text="Alejandro Ismael" />
 
         <TextView
@@ -65,12 +68,14 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textSize="14sp"
+            android:importantForAccessibility="no"
             tools:text="43217032843" />
 
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/user_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -78,7 +83,6 @@
         android:layout_below="@+id/user_image"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/user_detail"
         android:layout_toLeftOf="@+id/user_balance"
         android:layout_toStartOf="@+id/user_balance">
 
@@ -87,16 +91,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
+            android:importantForAccessibility="yes"
             android:textSize="12sp"
-            tools:text="Tiempo" />
+            tools:text="Last update" />
 
         <TextView
             android:id="@+id/user_expiration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
+            android:importantForAccessibility="yes"
             android:textSize="12sp"
-            tools:text="Fecha de expiracion" />
+            tools:text="Expiration date" />
 
         <TextView
             android:id="@+id/user_type"
@@ -104,8 +110,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:textSize="12sp"
-            tools:text="Estudiante de grado" />
-
+            android:importantForAccessibility="no"
+            tools:text="Grade student" />
     </LinearLayout>
 
     <TextView
@@ -116,10 +122,11 @@
         android:fontFamily="sans-serif-light"
         android:textSize="34sp"
         android:textColor="@color/primary_dark"
-        tools:text="$ 56"
+        android:importantForAccessibility="yes"
         android:layout_margin="8dp"
         android:layout_below="@+id/user_image"
-        android:layout_alignRight="@+id/linearLayout"
-        android:layout_alignEnd="@+id/linearLayout" />
+        android:layout_alignRight="@+id/user_name_layout"
+        android:layout_alignEnd="@+id/user_name_layout"
+        tools:text="$ 56"/>
 
 </RelativeLayout>

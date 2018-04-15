@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:focusable="true"
     android:padding="@dimen/dialog_margin">
 
     <ImageView

@@ -2,7 +2,6 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="1.5dp"
@@ -37,7 +36,7 @@
             android:maxLines="1"
             android:padding="16dp"
             android:src="@drawable/ic_barcode"
-            tools:ignore="contentDescription" />
+            android:contentDescription="@string/balance_new_user_button_code" />
 
     </LinearLayout>
 

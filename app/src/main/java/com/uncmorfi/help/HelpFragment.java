@@ -29,10 +29,10 @@ public class HelpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_help, container, false);
 
-        WebView myWebView = v.findViewById(R.id.help_content);
+        WebView webView = v.findViewById(R.id.help_content);
 
         String language = Locale.getDefault().getLanguage();
-        myWebView.loadUrl(String.format(URL, language));
+        webView.loadUrl(String.format(URL, language));
 
         return v;
     }

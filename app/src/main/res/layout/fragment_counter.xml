@@ -28,6 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
+                    android:focusable="true"
                     card_view:cardCornerRadius="2dp"
                     card_view:cardElevation="1.5dp"
                     card_view:cardUseCompatPadding="true">
@@ -51,9 +52,10 @@
 
                         <ProgressBar
                             android:id="@+id/counter_bar"
-                            style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            style="?android:attr/progressBarStyleHorizontal"/>
 
                         <TextView
                             android:id="@+id/counter_percent"
@@ -73,6 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
+                    android:focusable="true"
                     card_view:cardCornerRadius="2dp"
                     card_view:cardElevation="1.5dp"
                     card_view:cardUseCompatPadding="true">

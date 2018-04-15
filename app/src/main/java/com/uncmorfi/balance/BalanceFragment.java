@@ -108,6 +108,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                 // Cuando hay texto, cambia la función del botón por newUser.
                 if (s.length() > 0) {
                     inputButton.setImageResource(R.drawable.ic_check);
+                    inputButton.setContentDescription(getString(R.string.balance_new_user_button_enter));
                     inputButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -116,6 +117,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
                         }});
                 } else {
                     inputButton.setImageResource(R.drawable.ic_barcode);
+                    inputButton.setContentDescription(getString(R.string.balance_new_user_button_code));
                     inputButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -132,7 +134,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
             public void afterTextChanged(Editable s) {}
         });
 
-        // Por defecto activa el lector
+        // Por defecto llama al lector
         inputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

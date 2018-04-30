@@ -2,6 +2,7 @@ package com.uncmorfi.counter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -27,6 +27,7 @@ import com.uncmorfi.helpers.SnackbarHelper.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -50,7 +51,8 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     private TextView mDistanceView;
     private SeekBar mSeekBar;
     private TextView mEstimateView;
-    private LineChart mChart;
+    private LineChart mTimeChart;
+    private LineChart mCumulativeChart;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -65,8 +67,12 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         View view = inflater.inflate(R.layout.fragment_counter, container, false);
 
         setAllViews(view);
-        setChartOptions();
         initSwipeRefreshLayout();
+
+        setChartsOptionsBase(mTimeChart);
+        setChartsOptionsBase(mCumulativeChart);
+        setTimeChart();
+        setCumulativeChart();
 
         mProgressBar.setMax(FOOD_RATIONS);
         mSeekBar.setOnSeekBarChangeListener(this);
@@ -74,6 +80,19 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
         refreshCounter();
         return view;
+    }
+
+    private void setAllViews(View view) {
+        mRootView = view.findViewById(R.id.counter_coordinator);
+        mResumeView = view.findViewById(R.id.counter_resume);
+        mProgressBar = view.findViewById(R.id.counter_bar);
+        mPercentView = view.findViewById(R.id.counter_percent);
+        mDistanceView = view.findViewById(R.id.counter_distance);
+        mSeekBar = view.findViewById(R.id.counter_seek);
+        mEstimateView = view.findViewById(R.id.counter_estimate);
+        mTimeChart = view.findViewById(R.id.counter_time_chart);
+        mCumulativeChart = view.findViewById(R.id.counter_accumulated_chart);
+        mSwipeRefreshLayout = view.findViewById(R.id.counter_swipe_refresh);
     }
 
     private void initSwipeRefreshLayout() {
@@ -86,53 +105,43 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
                 }
         );
 
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(
-                R.color.accent);
-        mSwipeRefreshLayout.setColorSchemeResources(
-                R.color.white,
-                R.color.primary_light
-        );
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.accent);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.white, R.color.primary_light);
     }
 
-    private void setAllViews(View view) {
-        mRootView = view.findViewById(R.id.counter_coordinator);
-        mResumeView = view.findViewById(R.id.counter_resume);
-        mProgressBar = view.findViewById(R.id.counter_bar);
-        mPercentView = view.findViewById(R.id.counter_percent);
-        mDistanceView = view.findViewById(R.id.counter_distance);
-        mSeekBar = view.findViewById(R.id.counter_seek);
-        mEstimateView = view.findViewById(R.id.counter_estimate);
-        mChart = view.findViewById(R.id.counter_chart);
-        mSwipeRefreshLayout = view.findViewById(R.id.counter_swipe_refresh);
+    private void setChartsOptionsBase(LineChart chart) {
+        chart.setNoDataText(getString(R.string.counter_chart_empty));
+        chart.setScaleYEnabled(false);
+        chart.setDescription(null);
+
+        chart.setDrawGridBackground(false);
+        chart.setDrawBorders(false);
+
+        chart.setHighlightPerTapEnabled(false);
+        chart.setHighlightPerDragEnabled(false);
+
+        chart.getAxisLeft().setAxisMinimum(0f);
+        chart.getAxisLeft().setDrawAxisLine(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getAxisRight().setDrawGridLines(false);
+
+        chart.getXAxis().setDrawAxisLine(false);
+
+        chart.getLegend().setTextSize(14f);
+        chart.getLegend().setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setValueFormatter(new HourAxisValueFormatter());
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
     }
 
-    private void setChartOptions() {
-        mChart.getLegend().setEnabled(false);
-        mChart.setAutoScaleMinMaxEnabled(true);
-        mChart.setScaleYEnabled(false);
-        mChart.setDescription(null);
-        mChart.setDrawGridBackground(false);
-        mChart.setDrawBorders(false);
-        mChart.setHighlightPerTapEnabled(false);
-        mChart.setHighlightPerDragEnabled(false);
-
-        YAxis rightAxis = mChart.getAxisRight();
-        rightAxis.setEnabled(false);
-
-        IAxisValueFormatter xAxisFormatter = new HourAxisValueFormatter();
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setValueFormatter(xAxisFormatter);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+    private void setTimeChart() {
+        // Por ahora nada, pero en caso de que se agreguen más graficos, dejar las opciones comunes
+        // en setChartsOptionsBase, y las específicas en estas funciones.
     }
 
-    private void refreshCounter() {
-        if (ConnectionHelper.isOnline(getContext())) {
-            showRefreshStatus();
-            new RefreshCounterTask(this).execute();
-        } else {
-            hideRefreshStatus();
-            showSnack(getContext(), mRootView, R.string.no_connection, SnackType.ERROR);
-        }
+    private void setCumulativeChart() {
+        mCumulativeChart.getXAxis().setDrawGridLines(false);
     }
 
     @Override
@@ -159,6 +168,16 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshCounter() {
+        if (ConnectionHelper.isOnline(getContext())) {
+            showRefreshStatus();
+            new RefreshCounterTask(this).execute();
+        } else {
+            hideRefreshStatus();
+            showSnack(getContext(), mRootView, R.string.no_connection, SnackType.ERROR);
+        }
     }
 
     @Override
@@ -192,14 +211,11 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
     @Override
     public void onRefreshCounterSuccess(List<Entry> result) {
-        int total = 0;
+        result.remove(0);
         if (isAdded()) {
-            for (Entry entry : result)
-                total += entry.getY();
-
             hideRefreshStatus();
-            updateTextViews(total);
-            updateChart(result);
+            updateTextViews(result);
+            updateCharts(result);
 
             showSnack(getContext(), mRootView, R.string.update_success, SnackType.FINISH);
         }
@@ -213,31 +229,64 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         }
     }
 
-    private void updateTextViews(int total) {
+    private void updateTextViews(List<Entry> result) {
+        int total = 0;
+        for (Entry entry : result)
+            total += entry.getY();
+
         mProgressBar.setProgress(total);
         mResumeView.setText(String.format(getString(R.string.counter_rations_title), total,
                 FOOD_RATIONS));
         mPercentView.setText(String.format(Locale.US, "%d%%", (total*100) / FOOD_RATIONS));
     }
 
-    private void updateChart(List<Entry> data) {
+    private void updateCharts(List<Entry> data) {
         if (data != null && !data.isEmpty()) {
-            LineDataSet dataSet = new LineDataSet(data, null);
-            setLineDataSetStyle(dataSet);
+            List<Entry> accumulatedData = getAccumulate(data);
 
-            LineData lineData = new LineData(dataSet);
-            mChart.setData(lineData);
-            mChart.setVisibleXRangeMinimum(1000000f);
-            mChart.invalidate();
+            updateChart(mTimeChart, getTimeDataSet(data));
+            updateChart(mCumulativeChart, getAccumulatedDataSet(accumulatedData));
         }
     }
 
-    private void setLineDataSetStyle(LineDataSet dataSet) {
+    private List<Entry> getAccumulate(List<Entry> data) {
+        int accumulated = 0;
+        List<Entry> accumulatedData = new ArrayList<>();
+        for (Entry entry : data) {
+            accumulated += entry.getY();
+            accumulatedData.add(new Entry(entry.getX(), accumulated));
+        }
+        return accumulatedData;
+    }
+
+    private LineDataSet getTimeDataSet(List<Entry> data) {
+        LineDataSet dataSet = new LineDataSet(data, getString(R.string.counter_chart_label_time));
         dataSet.setColors(new int[] {R.color.accent}, getContext());
         dataSet.setCircleColors(new int[] {R.color.accent}, getContext());
         dataSet.setLineWidth(2f);
-        dataSet.setCircleRadius(5);
+        dataSet.setCircleRadius(3);
         dataSet.setDrawValues(false);
+        return dataSet;
+    }
+
+    private LineDataSet getAccumulatedDataSet(List<Entry> data) {
+        LineDataSet dataSet = new LineDataSet(data, getString(R.string.counter_chart_label_accumulated));
+        dataSet.setColors(new int[] {R.color.primary_dark}, getContext());
+        dataSet.setLineWidth(1f);
+        dataSet.setDrawValues(false);
+        dataSet.setDrawCircles(false);
+
+        dataSet.setDrawFilled(true);
+        dataSet.setFillAlpha(255);
+        dataSet.setFillColor(ContextCompat.getColor(getContext(), R.color.primary));
+
+        return dataSet;
+    }
+
+    private void updateChart(LineChart chart, LineDataSet dataSet) {
+        chart.setData(new LineData(dataSet));
+        chart.setVisibleXRangeMinimum(1000000f);
+        chart.invalidate();
     }
 
     private void showRefreshStatus() {

@@ -53,6 +53,9 @@
     <string name="counter_percent_symbol">%</string>
     <string name="counter_estimate">Approximately %1$d minutes left (%2$s)</string>
     <string name="counter_distance">Window %1$d (Read Help!)</string>
+    <string name="counter_chart_empty">Pull down to refresh</string>
+    <string name="counter_chart_label_time">Rations for time</string>
+    <string name="counter_chart_label_accumulated">Accumulated rations</string>
 
     <!-- Renovation -->
     <string name="renovation_email_text">

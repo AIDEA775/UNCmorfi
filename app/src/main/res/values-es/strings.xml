@@ -9,8 +9,7 @@
     <string name="navigation_counter">Medidor</string>
     <string name="navigation_renovation">Renovación</string>
     <string name="navigation_map">Mapa</string>
-    <string name="navigation_help">Ayuda</string>
-    <string name="navigation_contact">Contacto</string>
+    <string name="navigation_help">FAQ</string>
     <string name="navigation_about">Acerca de</string>
 
     <!-- Menu -->
@@ -58,7 +57,7 @@
     <string name="counter_chart_label_accumulated">Raciones acumuladas</string>
 
     <!-- Renovation -->
-    <string name="renovation_email_text">
+    <string name="renovation_email_body">
         \t¡No te olvides de adjuntar el certificado de alumno
         regular si sos estudiante!\n\n
 
@@ -68,6 +67,7 @@
     <!-- About -->
     <string name="about_unofficial_app">Esta es una app no oficial</string>
     <string name="about_source_code">Código fuente:</string>
+    <string name="about_fanpage">Fanpage:</string>
 
     <!-- SnackBar -->
     <string name="no_connection">No hay conexión</string>

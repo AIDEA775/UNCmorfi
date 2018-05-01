@@ -31,10 +31,6 @@
             android:icon="@drawable/nav_help_black"
             android:title="@string/navigation_help" />
         <item
-            android:id="@+id/nav_contact"
-            android:icon="@drawable/nav_contact_black"
-            android:title="@string/navigation_contact" />
-        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/nav_about_black"
             android:title="@string/navigation_about" />

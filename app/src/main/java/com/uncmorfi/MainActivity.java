@@ -40,16 +40,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setToolbarAndNavigation() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView = findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -122,9 +122,6 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_help:
                 fragment = new HelpFragment();
                 break;
-            case R.id.nav_contact:
-                sendContactEmail();
-                break;
             case R.id.nav_about:
                 new AboutDialog().show(getSupportFragmentManager(), "AboutDialog");
                 break;
@@ -136,18 +133,8 @@ public class MainActivity extends AppCompatActivity implements
         Intent i = new Intent(Intent.ACTION_SENDTO);
         i.setData(Uri.parse("mailto:"));
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"credenciales@comedor.unc.edu.ar"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "RENOVAR");
-        i.putExtra(Intent.EXTRA_TEXT, getString(R.string.renovation_email_text));
-
-        if (i.resolveActivity(getPackageManager()) != null)
-            startActivity(i);
-    }
-
-    private void sendContactEmail() {
-        Intent i = new Intent(Intent.ACTION_SENDTO);
-        i.setData(Uri.parse("mailto:"));
-        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"alex.sai95@gmail.com"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "[UNCmorfi]");
+        i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.renovation_email_subject));
+        i.putExtra(Intent.EXTRA_TEXT, getString(R.string.renovation_email_body));
 
         if (i.resolveActivity(getPackageManager()) != null)
             startActivity(i);

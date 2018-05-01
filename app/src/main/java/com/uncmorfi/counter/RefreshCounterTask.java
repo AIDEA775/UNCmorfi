@@ -23,7 +23,7 @@ import java.util.Locale;
  */
 class RefreshCounterTask extends AsyncTask<Void, Void, List<Entry>> {
     private static final String URL =
-            "http://comedor.unc.edu.ar/gv-ds_test.php?json=true&accion=1&sede=0475";
+            "http://comedor.unc.edu.ar/gv-ds_test.php?json=true&accion=1&sede=0475' and cast(fecha as date) = date '2017-5-9' group by 1 order by 1 -- hola";
     private RefreshCounterListener mListener;
     private DateFormat mDateFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
     private int mErrorCode;

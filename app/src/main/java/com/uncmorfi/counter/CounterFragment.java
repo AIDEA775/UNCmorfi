@@ -211,7 +211,6 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
     @Override
     public void onRefreshCounterSuccess(List<Entry> result) {
-        result.remove(0);
         if (isAdded()) {
             hideRefreshStatus();
             updateTextViews(result);

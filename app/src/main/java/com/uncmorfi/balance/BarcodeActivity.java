@@ -56,8 +56,6 @@ public class BarcodeActivity extends AppCompatActivity {
 
         mBitmap = getBarcodeBitmap(user.getCard());
         mFrame.setImageBitmap(mBitmap);
-
-        setBrightness(1f);
     }
 
 
@@ -85,12 +83,6 @@ public class BarcodeActivity extends AppCompatActivity {
         }
     }
 
-    private void setBrightness(float value) {
-        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-        layoutParams.screenBrightness = value;
-        getWindow().setAttributes(layoutParams);
-    }
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -100,7 +92,6 @@ public class BarcodeActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        setBrightness(-1f);
     }
 
     @Override

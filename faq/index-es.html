@@ -14,27 +14,51 @@
 
     <header class="site-header">
     <div class="wrapper">
-        <p class="site-title">Ayuda de UNCmorfi. Gracias por pasarte.</p>
+        <p class="site-title">FAQ de UNCmorfi. Gracias por pasarte.</p>
     </div>
     </header>
 
     <div class="page-content">
     <div class="wrapper">
     <div class="post">
-      <article class="post-content">
+    <div class="post-content">
 
-        <h3>¿Quiénes somos?</h3>
+        <div class="toc">
+            <h3>Índice</h3>
+            <ol>
+                <li><a href="#Quiénes_somos">¿Quiénes somos?</a></li>
+                <li><a href="#Puedo_colaborar">¿Puedo colaborar?</a></li>
+                <li><a href="#Por_qué_el_menú">¿Por qué el menú no se actualiza?</a></li>
+                <li><a href="#De_dónde_obtienen">¿De dónde obtienen la información del Saldo y el Medidor?</a></li>
+                <li><a href="#Ventanas">¿Ventanas? ¿Qué son las estimaciones?</a></li>
+                <li><a href="#No_entendí">No entendí como se cuentan las ventanas</a></li>
+                <li><a href="#Cómo_solicito">¿Cómo solicito la credencial? ¿Cómo puedo regenerar mi credencial?</a></li>
+                <li><a href="#Por_qué_piden">¿Por qué piden permisos de internet y de cámara?</a></li>
+                <li><a href="#Necesito_internet">¿Necesito internet para consultar el saldo de mi tarjeta?</a></li>
+                <li><a href="#Puedo_comer">¿Puedo comer dos veces en un día?</a></li>
+                <li><a href="#Qué_es_el_timbre">¿Qué es el timbre que suena cada cierto tiempo en el comedor?</a></li>
+                <li><a href="#Qué_hay_de_nuevo">¿Qué hay de nuevo en esta versión?</a></li>
+            </ol>
+        </div>
+
+        <h3 id="Quiénes_somos">¿Quiénes somos?</h3>
         <p>Somos dos estudiantes de FaMAF con mucha hambre.
         La app inició sólo como hobbie, por lo que nos esforzamos por pulirla lo más que podemos en nuestro tiempo libre.</p>
 
         <ul>
             <li>Desarrollo:
-                <a href="mailto:alex.sai95@gmail.com">Alejandro Ismael Silva</a>
+                <a href="https://github.com/AIDEA775">Alejandro Ismael Silva</a>
             </li>
 
             <li>Icono y banner:
-                <a href="mailto:juli.nana.07@gmail.com">Julieta Wiesztort</a>
+                <a href="mailto:julieta.raw@gmail.com">Julieta Wiesztort</a>
             </li>
+
+            <li>Versión para iOS:
+                <a href="https://github.com/georgealegre">George Alegre</a>
+            </li>
+
+            <p></p>
 
             <li>Corrección de la traducción en Español:
                 <a href="mailto:mariarosaperalta95@gmail.com">Rosa Maria Peralta</a>
@@ -45,18 +69,28 @@
             </li>
 
             <li>Con aportes de:
-                <a href="https://github.com/MinamiUruka">Andés Saravia</a>
+                <ul>
+                    <li><a href="https://github.com/MinamiUruka">Andrés Saravia</a></li>
+                </ul>
             </li>
         </ul>
 
-        <h3>¿Por qué el menú no se actualiza?</h3>
+        <h3 id="Puedo_colaborar">¿Puedo colaborar?</h3>
+        <ul>
+            <li><a href="mailto:alex.sai95@gmail.com?cc=julieta.raw@gmail.com&subject=%5BUNCmorfi%5D">Podés enviar tu sugerencia sobre la app por correo electrónico</a>.</li>
+            <li><a href="https://fb.me/UNCmorfi">O mandarnos un mensaje por la fanpage en Facebook</a>.</li>
+            <li><a href="https://github.com/AIDEA775/UNCmorfi">También podés pegarle una mirada al código fuente en Github</a>.</li>
+            <li>Y además podés recomendar la app a cualquiera que veas en la fila del comedor ;)</li>
+        </ul>
+
+        <h3 id="Por_qué_el_menú">¿Por qué el menú no se actualiza?</h3>
         <p>Al menú lo obtenemos desde la web de la universidad:</p>
         <ul>
             <li><a href="http://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana">www.unc.edu.ar/vida-estudiantil/menú-de-la-semana</a></li>
         </ul>
         <p>Si el menú no está actualizado es porque la universidad no lo actualizó.</p>
 
-        <h3>¿De dónde obtienen la información del Saldo y el Medidor?</h3>
+        <h3 id="De_dónde_obtienen">¿De dónde obtienen la información del Saldo y el Medidor?</h3>
         <p>De las webs del comedor:</p>
         <ul>
             <li>Saldo:
@@ -67,7 +101,7 @@
             </li>
         </ul>
 
-        <h3>¿Ventanas? ¿Qué son las estimaciones?</h3>
+        <h3 id="Ventanas">¿Ventanas? ¿Qué son las estimaciones?</h3>
         <p>
             Las estimaciones son una aproximación tonta e inocente de lo que quizá esperes en la fila del comedor. No es precisa, lo sabemos.
             En la barra deslizadora va la cantidad de ventanas que hay delante tuyo en la fila. Una ventana es literalmente una ventana, también podés pensarlo como columnas, están a lo largo del comedor en ambos lados.
@@ -76,52 +110,41 @@
             Esta es una función muy experimental. Elegimos las ventanas como medida por la naturaleza cambiante de la fila, las curvas y contracurvas pueden variar de un día a otro.
         </p>
 
-        <h3>No entendí como se cuentan las ventanas</h3>
+        <h3 id="No_entendí">No entendí como se cuentan las ventanas</h3>
         <p>
             Seguro que lo entendés si te lo explicamos matemáticamente:
             Sea V la distancia que hay entre cualquier par de columnas consecutivas, sea D la distancia que tendrás que recorrer hasta que llegues a los molinetes y sea N un número natural:
             Entonces estás a N ventanas si N*V es la mejor aproximación a D.
         </p>
 
-        <h3>¿Cómo solicito la credencial? ¿Cómo puedo regenerar mi credencial?</h3>
+        <h3 id="Cómo_solicito">¿Cómo solicito la credencial? ¿Cómo puedo regenerar mi credencial?</h3>
         <p>Lee la web del comedor:</p>
         <ul>
             <li><a href="https://www.unc.edu.ar/vida-estudiantil/c%C3%B3mo-solicitar-la-credencial">www.unc.edu.ar/vida-estudiantil/cómo-solicitar-la-credencial</a></li>
         </ul>
 
-        <h3>¿Por qué piden permisos de internet y de cámara?</h3>
+        <h3 id="Por_qué_piden">¿Por qué piden permisos de internet y de cámara?</h3>
         <ul>
             <li>El permiso de internet es necesario para actualizar el menú, el saldo y el medidor.</li>
             <li>El permiso de cámara es para agregar la tarjeta escanendo el codigo de barras.</li>
         </ul>
 
-        <h3>¿Necesito internet para consultar el saldo de mi tarjeta?</h3>
+        <h3 id="Necesito_internet">¿Necesito internet para consultar el saldo de mi tarjeta?</h3>
         <p>
             Todos los datos se almacenan en el dispositivo para consultarlos sin conexión, pero necesitás estar conectado a internet para actualizarlos.
         </p>
 
-        <h3>¿Puedo comer dos veces en un día?</h3>
+        <h3 id="Puedo_comer">¿Puedo comer dos veces en un día?</h3>
         <p>
             No.
         </p>
 
-        <h3>¿Qué es el timbre que suena cada cierto tiempo en el comedor?</h3>
+        <h3 id="Qué_es_el_timbre">¿Qué es el timbre que suena cada cierto tiempo en el comedor?</h3>
         <p>
             Cuenta la leyenda que el timbre indica rotación entre los cocineros.
         </p>
 
-        <h3>¿Puedo colaborar?</h3>
-        <ul>
-            <li>Podés enviar tu sugerencia por correo electrónico en la opción "Contacto" del menú lateral.</li>
-            <li>También podés pegarle una mirada al código fuente en Github:
-                <ul>
-                    <li><a href="https://github.com/AIDEA775/UNCmorfi">github.com/AIDEA775/UNCmorfi</a></li>
-                </ul>
-            </li>
-            <li>Y además podés recomendar la app a cualquiera que veas en la fila del comedor ;)</li>
-        </ul>
-
-        <h3>¿Qué hay de nuevo en ésta versión?</h3>
+        <h3 id="Qué_hay_de_nuevo">¿Qué hay de nuevo en esta versión?</h3>
         <h4>v3.0 Cazuela</h4>
         <ul>
             <li> ¡Nuevo icono!</li>
@@ -162,7 +185,7 @@
             <li> Primera version beta.</li>
         </ul>
 
-      </article>
+    </div>
     </div>
     </div>
     </div>

@@ -3,16 +3,25 @@ body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{
     padding:0
 }
 body{
-    font-family:Helvetica,Arial,sans-serif;
+    font-family:Noto Sans,Helvetica,sans-serif;
     font-size:16px;
     line-height:1.5;
     font-weight:300;
-    color:#111;
+    color:#424242;
     background-color:#fdfdfd;
     -webkit-text-size-adjust:100%
 }
 h1,h2,h3,h4,h5,h6,p,blockquote,pre,ul,ol,dl,figure,.highlight{
     margin-bottom:12px
+}
+a{
+    text-decoration:none
+}
+a:link, a:visited{
+   color:#ff9800;
+}
+a:hover, a:active{
+   color:#ff5252;
 }
 img{
     max-width:100%;
@@ -24,6 +33,21 @@ figure>img{
 figcaption{
     font-size:14px
 }
+#toc,.toc {
+ border:1pt solid #e8e8e8;
+ padding:10px;
+ display:table;
+ margin-bottom: 30px;
+}
+#toc ul, .toc ul {
+    margin-left: 10px;
+    margin-bottom: 0px;
+    list-style-type: none;
+    list-style-image: none;
+}
+p{
+    margin-bottom:12px
+}
 ul,ol{
     margin-left:30px
 }
@@ -32,17 +56,6 @@ li>ul,li>ol{
 }
 h1,h2,h3,h4,h5,h6{
     font-weight:300
-}
-a{
-    color:#2a7ae2;
-    text-decoration:none
-}
-a:visited{
-    color:#1756a9
-}
-a:hover{
-    color:#111;
-    text-decoration:underline
 }
 blockquote{
     color:#828282;

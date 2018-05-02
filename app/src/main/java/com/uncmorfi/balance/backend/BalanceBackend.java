@@ -29,7 +29,7 @@ import java.util.Locale;
  */
 public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListener {
     private static BalanceBackend mInstance;
-    public static final String BARCODE_PATH = "barcode-";
+    public static final String BARCODE_PATH = "barcode-land-";
     private BalanceListener mFragment;
     private Context mContext;
     private ContentResolver mContentResolver;

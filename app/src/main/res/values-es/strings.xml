@@ -57,6 +57,7 @@
     <string name="counter_chart_label_accumulated">Raciones acumuladas</string>
 
     <!-- Renovation -->
+    <string name="renovation_email_subject">RENOVAR</string>
     <string name="renovation_email_body">
         \t¡No te olvides de adjuntar el certificado de alumno
         regular si sos estudiante!\n\n

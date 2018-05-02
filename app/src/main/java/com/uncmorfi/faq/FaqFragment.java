@@ -1,4 +1,4 @@
-package com.uncmorfi.help;
+package com.uncmorfi.faq;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,11 +13,12 @@ import java.util.Locale;
 
 
 /**
- * Ayuda o FAQ.
+ * Preguntas frecuentes.
  * Muestra una página web alojada en el mismo repositorio de github.
+ * Depende del lenguaje del sistema operativo.
  */
-public class HelpFragment extends Fragment {
-    private static final String URL = "https://aidea775.github.io/UNCmorfi/help/index-%s.html";
+public class FaqFragment extends Fragment {
+    private static final String URL = "https://aidea775.github.io/UNCmorfi/faq/index-%s.html";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,9 +28,9 @@ public class HelpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_help, container, false);
+        View v = inflater.inflate(R.layout.fragment_faq, container, false);
 
-        WebView webView = v.findViewById(R.id.help_content);
+        WebView webView = v.findViewById(R.id.faq_content);
 
         String language = Locale.getDefault().getLanguage();
         webView.loadUrl(String.format(URL, language));
@@ -40,6 +41,6 @@ public class HelpFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(R.string.navigation_help);
+        getActivity().setTitle(R.string.navigation_faq);
     }
 }

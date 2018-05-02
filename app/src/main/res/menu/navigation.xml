@@ -27,9 +27,9 @@
             android:icon="@drawable/nav_map_black"
             android:title="@string/navigation_map" />
         <item
-            android:id="@+id/nav_help"
-            android:icon="@drawable/nav_help_black"
-            android:title="@string/navigation_help" />
+            android:id="@+id/nav_faq"
+            android:icon="@drawable/nav_faq_black"
+            android:title="@string/navigation_faq" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/nav_about_black"

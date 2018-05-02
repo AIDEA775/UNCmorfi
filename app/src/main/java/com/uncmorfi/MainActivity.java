@@ -18,7 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.uncmorfi.about.AboutDialog;
 import com.uncmorfi.balance.BalanceFragment;
 import com.uncmorfi.counter.CounterFragment;
-import com.uncmorfi.help.HelpFragment;
+import com.uncmorfi.faq.FaqFragment;
 import com.uncmorfi.map.MapFragment;
 import com.uncmorfi.menu.MenuFragment;
 
@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements
 
                 mapFragment.getMapAsync(this);
                 break;
-            case R.id.nav_help:
-                fragment = new HelpFragment();
+            case R.id.nav_faq:
+                fragment = new FaqFragment();
                 break;
             case R.id.nav_about:
                 new AboutDialog().show(getSupportFragmentManager(), "AboutDialog");

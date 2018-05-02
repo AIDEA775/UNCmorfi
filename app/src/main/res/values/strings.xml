@@ -9,7 +9,7 @@
     <string name="navigation_counter">Counter</string>
     <string name="navigation_renovation">Renovation</string>
     <string name="navigation_map">Map</string>
-    <string name="navigation_help">FAQ</string>
+    <string name="navigation_faq">FAQ</string>
     <string name="navigation_about">About</string>
 
     <!-- Menu -->
@@ -51,7 +51,7 @@
     <string name="counter_rations_title">%1$d rations of %2$d</string>
     <string name="counter_percent_symbol">%</string>
     <string name="counter_estimate">Approximately %1$d minutes left (%2$s)</string>
-    <string name="counter_distance">Window %1$d (Read Help!)</string>
+    <string name="counter_distance">Window %1$d (Read FAQ!)</string>
     <string name="counter_chart_empty">Pull down to refresh</string>
     <string name="counter_chart_label_time">Rations for time</string>
     <string name="counter_chart_label_accumulated">Accumulated rations</string>

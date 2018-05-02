@@ -27,7 +27,7 @@ public class AboutDialog extends DialogFragment {
 
         View v = View.inflate(getContext(), R.layout.dialog_about, null);
 
-        TextView versionText = (TextView) v.findViewById(R.id.version_name);
+        TextView versionText = v.findViewById(R.id.version_name);
         versionText.setText(getVersionName());
 
         builder.setView(v);

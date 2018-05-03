@@ -10,10 +10,10 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:export-ydpi="96.000008"
-   inkscape:export-xdpi="96.000008"
+   inkscape:export-ydpi="95.999992"
+   inkscape:export-xdpi="95.999992"
    inkscape:export-filename="/home/starlord/UNCmorfi-banner.png"
-   sodipodi:docname="UNCmorfi-banner-v2.svg"
+   sodipodi:docname="UNCmorfi-banner-v2.0.svg"
    inkscape:version="0.92.2 2405546, 2018-03-11"
    id="svg8"
    version="1.1"
@@ -28,11 +28,11 @@
      inkscape:window-width="1920"
      units="px"
      showgrid="false"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="g939"
      inkscape:document-units="mm"
-     inkscape:cy="336.38518"
-     inkscape:cx="357.66536"
-     inkscape:zoom="0.5"
+     inkscape:cy="290.52641"
+     inkscape:cx="628.61367"
+     inkscape:zoom="1"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -68,6 +68,26 @@
          offset="1"
          id="stop1476" />
     </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1478"
+       id="linearGradient5726"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-158.18945,-689.48242)"
+       x1="-5.1627598"
+       y1="888.39661"
+       x2="-5.1627598"
+       y2="948.50299" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1478"
+       id="linearGradient849"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-158.18945,-689.48242)"
+       x1="-5.1627598"
+       y1="888.39661"
+       x2="-5.1627598"
+       y2="948.50299" />
   </defs>
   <metadata
      id="metadata5">
@@ -147,10 +167,11 @@
        id="g939"
        transform="matrix(0.78564908,0,0,0.78564908,193.86072,-72.017486)">
       <path
-         inkscape:connector-curvature="0"
+         style="display:inline;opacity:1;vector-effect:none;fill:url(#linearGradient849);fill-opacity:1;stroke-width:0.66193968;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="m -109.67718,196.82545 c -37.79346,0.0962 -75.59599,0.0141 -113.39297,0.0414 6.26434,10.5817 16.30887,18.05171 24.54768,26.98029 11.72028,11.72761 23.42987,23.46592 35.17026,35.17341 h 117.605792 l -62.100662,-62.15352 -0.35046,0.0316 -1.47964,-0.0731 z"
          id="path6288-3"
-         d="m -109.67718,196.82545 c -1.11712,0.0212 -2.40286,0.13361 -3.3079,0.0414 h -110.08507 c 2.7215,4.44967 5.82889,8.61977 9.69324,12.13427 16.69186,16.65553 33.32768,33.36921 50.0247,50.01943 h 117.605792 c -0.47939,-0.46397 -0.96375,-0.92506 -1.37338,-1.42627 -1.01848,-0.86136 -1.7988,-1.8499 -2.81957,-2.70901 -0.71307,-0.88509 -1.68665,-1.62787 -2.40095,-2.51153 -0.93708,-0.85126 -1.82112,-1.72971 -2.64308,-2.6427 -1.01973,-0.85995 -1.79369,-1.85277 -2.81905,-2.7099 -0.75825,-0.9273 -1.76948,-1.71835 -2.53353,-2.64306 -0.91794,-0.82705 -1.77056,-1.68945 -2.57735,-2.57706 -0.97838,-0.81389 -1.69894,-1.7664 -2.68653,-2.57696 -0.75953,-0.92593 -1.76486,-1.72139 -2.53335,-2.64311 -0.9776,-0.81473 -1.70076,-1.76681 -2.68718,-2.57693 -0.6683,-0.84051 -1.59038,-1.54474 -2.26865,-2.37909 -0.95085,-0.79558 -1.65947,-1.72189 -2.62132,-2.5111 -0.70987,-0.88547 -1.67993,-1.63181 -2.40086,-2.51116 -0.89006,-0.80776 -1.72663,-1.64599 -2.51087,-2.51082 -0.91285,-0.82968 -1.76929,-1.69062 -2.57747,-2.57732 -0.92876,-0.77248 -1.61093,-1.6792 -2.55467,-2.44491 -0.73411,-0.90507 -1.71849,-1.67874 -2.46758,-2.57672 -0.88855,-0.80962 -1.72601,-1.64601 -2.51084,-2.51147 -0.86428,-0.78837 -1.68396,-1.60116 -2.44487,-2.44494 -0.86447,-0.78836 -1.68384,-1.60116 -2.44498,-2.44496 -0.90186,-0.7533 -1.56867,-1.63506 -2.48877,-2.37839 -0.59859,-0.77577 -1.4526,-1.41499 -2.071122,-2.18074 -0.84191,-0.76669 -1.63557,-1.55862 -2.37818,-2.37906 -0.86483,-0.78799 -1.68006,-1.60263 -2.44507,-2.44495 -0.84023,-0.76753 -1.63824,-1.55855 -2.37897,-2.37904 -0.22798,-0.4555 -1.17565,-0.52516 -2.29257,-0.50385 z"
-         style="display:inline;opacity:1;vector-effect:none;fill:#010101;fill-opacity:0.15679441;stroke-width:0.4292894;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccc" />
       <g
          id="g893"
          style="display:inline"

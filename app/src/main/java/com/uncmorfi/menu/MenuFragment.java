@@ -133,6 +133,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
             mSwipeRefreshLayout.setRefreshing(true);
             new RefreshMenuTask(this).execute();
         } else {
+            mSwipeRefreshLayout.setRefreshing(false);
             showSnack(getContext(), mWebView, R.string.no_connection, SnackType.ERROR);
         }
     }

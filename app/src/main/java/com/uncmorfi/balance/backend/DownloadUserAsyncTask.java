@@ -9,7 +9,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,9 +23,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.net.URL;
 
 /**
  * Descarga y parsea uno o más usuarios a partir del codigo de la tarjeta.
+ *
+ * Nota Agosto 2018: Durante un tiempo se usó un backend que devolvía los datos en JSON
+ * (ver repo sobre Huemul: https://github.com/AIDEA775/Huemul).
+ * Ante la posibilidad de poder usar ese formato de nuevo, dejaré el código comentado.
  */
 class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
     private static final String URL =
@@ -48,9 +58,14 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
     protected List<User> doInBackground(String... params) {
         try {
             String card = params[0];
-            String result = ConnectionHelper.downloadFromUrlByGet(URL + card);
 
             List<User> users = new ArrayList<>();
+
+            // Usando el parseo viejo, sólo podemos procesar un usuario
+            users.add(downloadUser(card));
+
+            /*
+            String result = ConnectionHelper.downloadFromUrlByGet(URL + card);
             JSONArray array = new JSONArray(result);
 
             for (int i = 0; i < array.length(); i++) {
@@ -73,16 +88,20 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
 
                 users.add(user);
             }
+            */
 
             return users;
-        } catch (IOException e) {
+        } catch (Exception e) {
+            mErrorCode = ConnectionHelper.INTERNAL_ERROR;
+            return null;
+        } /*catch (IOException e) {
             mErrorCode = ConnectionHelper.CONNECTION_ERROR;
             return null;
         } catch (JSONException e) {
             mErrorCode = ConnectionHelper.INTERNAL_ERROR;
             e.printStackTrace();
             return null;
-        }
+        }*/
     }
 
     private int parseStringToInt(String string) {
@@ -109,6 +128,80 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
             mListener.onUsersDownloadFail(mErrorCode, mPosition);
         else
             mListener.onUsersDownloaded(users);
+    }
+
+    // TODO: 18/08/18 Remover el parseo viejo.
+    private User downloadUser(String card) {
+        String urlParameters = "accion=4&responseHandler=setDatos&codigo=" + card;
+
+        URL url;
+        HttpURLConnection connection = null;
+        try {
+            //Create connection
+            url = new URL("http://comedor.unc.edu.ar/gv-ds.php");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type",
+                    "application/x-www-form-urlencoded");
+
+            connection.setRequestProperty("Content-Length", "" +
+                    Integer.toString(urlParameters.getBytes().length));
+
+            connection.setUseCaches(false);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            //Send request
+            DataOutputStream wr = new DataOutputStream(
+                    connection.getOutputStream());
+            wr.writeBytes(urlParameters);
+            wr.flush();
+            wr.close();
+
+            //Get Response
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuilder response = new StringBuilder();
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+
+            int left = response.indexOf("rows: [{c: [");
+            int rigth = response.indexOf("]", left);
+            String result = response.substring(left + 12, rigth - 2);
+
+            String[] tokens = result.split("['},]*\\{v: '?");
+
+            if (tokens.length < 2)
+                return null;
+
+            User user = new User();
+            user.setBalance(Integer.parseInt(tokens[6]));
+            user.setCard(card);
+            user.setName(tokens[17]);
+            user.setType(tokens[9]);
+            user.setImage(tokens[25]);
+
+            Date expireDate = parseStringToDate(tokens[5]);
+            if (expireDate != null) user.setExpiration(expireDate.getTime());
+
+            Date currentTime = Calendar.getInstance().getTime();
+            user.setLastUpdate(currentTime.getTime());
+
+            if (mPosition != null) user.setPosition(mPosition[0]);
+
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
     }
 
 }

@@ -171,6 +171,9 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     }
 
     private void refreshCounter() {
+        showSnack(getContext(), mRootView, R.string.disabled_function, SnackType.ERROR);
+        hideRefreshStatus();
+        /*
         if (ConnectionHelper.isOnline(getContext())) {
             showRefreshStatus();
             new RefreshCounterTask(this).execute();
@@ -178,6 +181,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
             hideRefreshStatus();
             showSnack(getContext(), mRootView, R.string.no_connection, SnackType.ERROR);
         }
+        */
     }
 
     @Override

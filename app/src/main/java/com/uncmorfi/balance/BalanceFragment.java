@@ -177,6 +177,8 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     private void updateAllUsers() {
+        showSnack(getContext(), mRootView, R.string.disabled_function, SnackType.ERROR);
+        /*
         String cards = "";
         int[] positions = new int[mUserCursorAdapter.getItemCount()];
 
@@ -187,6 +189,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         }
         if (!cards.isEmpty())
             mBackend.updateBalanceOfUser(cards, positions);
+        */
     }
 
     /**

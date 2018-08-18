@@ -78,5 +78,6 @@
     <string name="update_success">Actualizado</string>
     <string name="update_fail">No se pudo actualizar</string>
     <string name="new_user_success">Agregado</string>
+    <string name="disabled_function">Función deshabilitada, leé el FAQ!</string>
 
 </resources>

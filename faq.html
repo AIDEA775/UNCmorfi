@@ -38,7 +38,7 @@ resource: false
       </div>
     </div>
 
-    {% assign pages=site.pages | where:"resource", true | sort: 'pos' %}
+    {% assign pages=site.pages | where:"resource", true %}
     <div class="container">
       <div class="flow-text">
         <h4>Índice</h4>

@@ -48,19 +48,19 @@ resource: false
         {% endfor %}
         </ol>
       </div>
-    </div>
 
-    {% for p in pages %}
-    <h4 id="{{p.title}}">{{p.title}}</h4>
-    <div class="flow-text">
-      {{p.content}}
-    </div>
-    {% endfor %}
+      {% for p in pages %}
+      <h4 id="{{p.title}}">{{p.title}}</h4>
+      <div class="flow-text">
+        {{p.content}}
+      </div>
+      {% endfor %}
 
-    <div onclick="topFunction()" id="FAB" class="fixed-action-btn scale-transition scale-out">
-      <a class="btn-floating btn-large waves-effect waves-light red">
-        <i class="material-icons">arrow_upward</i>
-      </a>
+      <div onclick="topFunction()" id="FAB" class="fixed-action-btn scale-transition scale-out">
+        <a class="btn-floating btn-large waves-effect waves-light red">
+          <i class="material-icons">arrow_upward</i>
+        </a>
+      </div>
     </div>
   
     <script>

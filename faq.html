@@ -44,15 +44,15 @@ resource: false
         <h5>Índice</h5>
         <ol>
         {% for p in pages %}
-          <li><a href="{{ p.url }}">{{ p.title }}</a></li>
+          <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
         {% endfor %}
         </ol>
       </div>
 
       {% for p in pages %}
-      <h4 id="{{p.title}}">{{p.title}}</h4>
+      <h4 id="{{ p.ref }}">{{ p.title }}</h4>
       <div class="flow-text">
-        {{p.content}}
+        {{ p.content }}
       </div>
       {% endfor %}
 

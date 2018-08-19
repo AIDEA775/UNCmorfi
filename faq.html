@@ -38,7 +38,7 @@ resource: false
       </div>
     </div>
 
-    {% assign pages=site.pages | where:"resource", true %}
+    {% assign pages=site.pages | where:"resource", true | sort: 'ref' %}
     <div class="container">
       <div class="flow-text">
         <h4>Índice</h4>
@@ -50,7 +50,7 @@ resource: false
       </div>
 
       {% for p in pages %}
-      <h4 id="#{{ p.ref }}">{{ p.title }}</h4>
+      <h4 id="{{ p.ref }}">{{ p.title }}</h4>
       <div class="flow-text">
         {{ p.content }}
       </div>

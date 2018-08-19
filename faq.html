@@ -1,0 +1,18 @@
+
+
+
+{% assign pages=site.pages %}
+<ul>
+{% for p in pages %}
+  <li>
+    <a href="{{ p.url }}">{{ p.title }}</a>
+  </li>
+{% endfor %}
+</ul>
+
+{% for p in pages %}
+  <h1>{{p.title}}</h1>
+  <div class="flow-text">
+    {{p.content}}
+  </div>
+{% endfor %}

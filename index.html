@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Page Redirection</title>
+    </head>
+    <body>
+        <script>
+            var lang = navigator.language || navigator.userLanguage;
+            if (lang.indexOf('en') == 0)
+                window.location = '/en/';
+            else
+                window.location = '/es/';
+        </script>
+    </body>
+</html>

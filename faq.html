@@ -1,9 +1,11 @@
 ---
 title: faq
+resource: false
 ---
 
 
-{% assign pages=site.pages %}
+{% assign pages=site.pages | where:"resource", true %}
+Indice:
 <ul>
 {% for p in pages %}
   <li>
@@ -12,6 +14,7 @@ title: faq
 {% endfor %}
 </ul>
 
+Lo demas:
 {% for p in pages %}
   <h1>{{p.title}}</h1>
   <div class="flow-text">

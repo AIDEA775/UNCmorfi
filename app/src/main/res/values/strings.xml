@@ -64,6 +64,10 @@
         \tOr Daspu card, salary receipt or certificate proving relationship with the UNC if you
         are a Teacher or Non-Teacher.</string>
 
+    <!-- FAQ -->
+    <string name="faq_action_share">Share</string>
+    <string name="faq_action_browser">Open with&#8230;</string>
+
     <!-- About -->
     <string name="about_unofficial_app">This is an unofficial app</string>
     <string name="about_source_code">Source code:</string>

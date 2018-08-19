@@ -65,6 +65,10 @@
         \tO carné de Daspu, recibo de sueldo o certificado que acredite
         relación con la UNC si eres Docente o No Docente.</string>
 
+    <!-- FAQ -->
+    <string name="faq_action_share">Compartir</string>
+    <string name="faq_action_browser">Abrir en&#8230;</string>
+
     <!-- About -->
     <string name="about_unofficial_app">Esta es una app no oficial</string>
     <string name="about_source_code">Código fuente:</string>

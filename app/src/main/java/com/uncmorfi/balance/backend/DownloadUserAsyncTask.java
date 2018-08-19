@@ -170,8 +170,8 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
             rd.close();
 
             int left = response.indexOf("rows: [{c: [");
-            int rigth = response.indexOf("]", left);
-            String result = response.substring(left + 12, rigth - 2);
+            int right = response.indexOf("]", left);
+            String result = response.substring(left + 12, right - 2);
 
             String[] tokens = result.split("['},]*\\{v: '?");
 
@@ -179,7 +179,11 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
                 return null;
 
             User user = new User();
-            user.setBalance(Integer.parseInt(tokens[6]));
+            try {
+                user.setBalance(Integer.parseInt(tokens[6]));
+            } catch (NumberFormatException e) {
+                user.setBalance(0);
+            }
             user.setCard(card);
             user.setName(tokens[17]);
             user.setType(tokens[9]);

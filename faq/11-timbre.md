@@ -4,4 +4,5 @@ ref: timbre
 lang: es
 resource : true
 ---
-<p>Cuenta la leyenda que el timbre indica rotación entre los cocineros.</p>
+
+Cuenta la leyenda que el timbre indica rotación entre los cocineros.

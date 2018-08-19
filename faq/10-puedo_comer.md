@@ -5,4 +5,4 @@ lang: es
 resource : true
 ---
 
-<p>No.</p>
+No.

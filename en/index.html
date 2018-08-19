@@ -4,7 +4,7 @@ resource: false
 ---
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
   <head>
     <meta charset="utf-8">
@@ -21,7 +21,7 @@ resource: false
   <body>
     <nav class="nav-extended grey lighten-4">
       <div class="nav-content">
-        <span class="nav-title grey-text text-darken-1"><h4>FAQ de UNCmorfi. Gracias por pasarte.</h4></span>
+        <span class="nav-title grey-text text-darken-1"><h4>Help of UNCmorfi. Thank you.</h4></span>
       </div>
     </nav>
 
@@ -30,18 +30,18 @@ resource: false
         <div class="card-panel red accent-2">
           <span class="white-text flow-text">
             <h1>:(</h1>
-            UNCmorfi ha dejado de funcionar.
+            UNCmorfi has stopped working.
             <br>
-            Estamos buscando posibles soluciones.
+            We are searching for possible solutions.
           </span>
         </div>
       </div>
     </div>
 
-    {% assign pages=site.pages | where:"resource", true %}
+    {% assign pages=site.pages | where:"resource", true | where:"lang", page.lang %}
     <div class="container">
       <div class="flow-text">
-        <h4>Índice</h4>
+        <h4>Indice</h4>
         <ol>
         {% for p in pages %}
           <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>

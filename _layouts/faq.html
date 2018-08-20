@@ -14,13 +14,24 @@
   </head>
 
   <body>
+    {% assign header = site.data.headers[page.lang] %}
+    <nav class="nav-extended grey lighten-4">
+      <div class="nav-content">
+        <span class="nav-title grey-text text-darken-1"><h4>{{ header.title }}</h4></span>
+        {% if page.lang == 'es' }
+        <a href="{{ '/en' | absolute_url }}">en</a>
+        {% else %}
+        <a href="{{ '/es' | absolute_url }}">es</a>
+        {% endif %}
+      </div>
+    </nav>
 
     {{ content }}
 
     {% assign pages=site.pages | where:"resource", true | where:"lang", page.lang %}
     <div class="container">
       <div class="flow-text">
-        <h4>Índice</h4>
+        <h4>{{ header.indice }}</h4>
         <ol>
         {% for p in pages %}
           <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>

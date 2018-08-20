@@ -15,12 +15,12 @@
 
   <body>
     {% assign headers = site.data.headers[page.lang] %}
-    <nav class="grey lighten-4">
-      <div class="nav-wrapper">
-        <span class="nav-title grey-text text-darken-1">
-          <h4>{{ headers.faq-title }}</h4>
-          <a href="{{ headers.lang-selector | absolute_url }}" class="right hide-on-med-and-down">{{ headers.lang-selector }}</a></li>
-        </span>
+    <nav>
+      <div class="nav-wrapper grey lighten-4">
+        <a class="brand-logo grey-text text-darken-1">{{ headers.faq-title }}</a>
+        <ul id="nav-mobile" class="right">
+          <li><a href="{{ headers.lang-selector | absolute_url }}" class="btn-flat waves-effect waves-orange">{{ headers.lang-selector }}</a></li>
+        </ul>
       </div>
     </nav>
 

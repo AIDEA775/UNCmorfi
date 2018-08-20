@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.uncmorfi.R;
 
@@ -24,8 +25,7 @@ import java.util.Locale;
  * Depende del lenguaje del sistema operativo.
  */
 public class FaqFragment extends Fragment {
-    private static final String URL = "https://aidea775.github.io/UNCmorfi/faq/index-%s.html";
-    private String mUrl;
+    private static final String URL = "https://aidea775.github.io/UNCmorfi";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,11 +38,9 @@ public class FaqFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_faq, container, false);
         WebView webView = v.findViewById(R.id.faq_content);
-
-        mUrl = String.format(URL, Locale.getDefault().getLanguage());
-
+        webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(mUrl);
+        webView.loadUrl(URL);
         return v;
     }
 
@@ -63,11 +61,11 @@ public class FaqFragment extends Fragment {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
             i.putExtra(Intent.EXTRA_SUBJECT, "UNCmorfi FAQ");
-            i.putExtra(Intent.EXTRA_TEXT, mUrl);
+            i.putExtra(Intent.EXTRA_TEXT, URL);
             startActivity(Intent.createChooser(i, "share"));
             return true;
         } else if (item.getItemId() == R.id.faq_browser) {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
             startActivity(i);
             return true;
         }

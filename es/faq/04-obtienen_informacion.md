@@ -8,5 +8,4 @@ resource : true
 De las webs del comedor:
 
 > Saldo: [comedor.unc.edu.ar/autoconsulta.php](http://comedor.unc.edu.ar/autoconsulta.php)
-
 > Medidor: [comedor.unc.edu.ar/cocina.php](http://comedor.unc.edu.ar/cocina.php)

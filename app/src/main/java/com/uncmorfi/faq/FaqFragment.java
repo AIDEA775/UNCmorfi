@@ -16,8 +16,6 @@ import android.webkit.WebViewClient;
 
 import com.uncmorfi.R;
 
-import java.util.Locale;
-
 
 /**
  * Preguntas frecuentes.

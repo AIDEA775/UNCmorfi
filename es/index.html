@@ -1,85 +1,25 @@
 ---
 title: faq
+layout: faq
 resource: false
+lang: es
 ---
 
-<!DOCTYPE html>
-<html>
+<nav class="nav-extended grey lighten-4">
+  <div class="nav-content">
+    <span class="nav-title grey-text text-darken-1"><h4>FAQ de UNCmorfi. Gracias por pasarte.</h4></span>
+  </div>
+</nav>
 
-  <head>
-    <meta charset="utf-8">
-    <title>UNCmorfi</title>
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-    <link rel="stylesheet" href="css/main.css">
-
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  </head>
-
-  <body>
-    <nav class="nav-extended grey lighten-4">
-      <div class="nav-content">
-        <span class="nav-title grey-text text-darken-1"><h4>FAQ de UNCmorfi. Gracias por pasarte.</h4></span>
-      </div>
-    </nav>
-
-    <div class="row">
-      <div class="col s12">
-        <div class="card-panel red accent-2">
-          <span class="white-text flow-text">
-            <h1>:(</h1>
-            UNCmorfi ha dejado de funcionar.
-            <br>
-            Estamos buscando posibles soluciones.
-          </span>
-        </div>
-      </div>
+<div class="row">
+  <div class="col s12">
+    <div class="card-panel red accent-2">
+      <span class="white-text flow-text">
+        <h1>:(</h1>
+        UNCmorfi ha dejado de funcionar.
+        <br>
+        Estamos buscando posibles soluciones.
+      </span>
     </div>
-
-    {% assign pages=site.pages | where:"resource", true | where:"lang", es %}
-    <div class="container">
-      <div class="flow-text">
-        <h4>Índice</h4>
-        <ol>
-        {% for p in pages %}
-          <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
-        {% endfor %}
-        </ol>
-      </div>
-
-      {% for p in pages %}
-      <h4 id="{{ p.ref }}">{{ p.title }}</h4>
-      <div class="flow-text">
-        {{ p.content }}
-      </div>
-      {% endfor %}
-
-      <div onclick="topFunction()" id="FAB" class="fixed-action-btn scale-transition scale-out">
-        <a class="btn-floating btn-large waves-effect waves-light red">
-          <i class="material-icons">arrow_upward</i>
-        </a>
-      </div>
-    </div>
-  
-    <script>
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function() {scrollFunction()};
-
-    function scrollFunction() {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("FAB").classList.replace("scale-out", "scale-in");
-      } else {
-        document.getElementById("FAB").classList.replace("scale-in", "scale-out");
-      }
-    }
-
-    // When the user clicks on the button, scroll to the top of the document
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-    </script>
-  </body>
-</html>
+  </div>
+</div>

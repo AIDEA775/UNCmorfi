@@ -15,15 +15,13 @@
 
   <body>
     {% assign headers = site.data.headers[page.lang] %}
-    <nav class="nav-extended grey lighten-4">
-      <div class="nav-content">
-        <span class="nav-title grey-text text-darken-1"><h4>{{ headers.faq-title }}</h4></span>
-        {% if page.lang == es }
-        <a href="{{ '/en' | absolute_url }}">en</a>
-        {% else %}
-        <a href="{{ '/es' | absolute_url }}">es</a>
-        {% endif %}
-      </div>
+    <nav class="nav-wrapper grey lighten-4">
+      <span class="nav-title grey-text text-darken-1">
+        <h4>{{ headers.faq-title }}</h4>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="{{ '/{{ headers.lang-selector }}' | absolute_url }}">{{ headers.lang-selector }}</a></li>
+        </ul>
+      </span>
     </nav>
 
     {{ content }}

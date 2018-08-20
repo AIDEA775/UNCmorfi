@@ -1,7 +1,9 @@
 es:
-  faq-title: FAQ de UNCmorfi. Gracias por pasarte.
+  faq-title: Gracias por pasarte.
   faq-indice: Índice
+  lang-selector: en
 
 en:
-  faq-title: Help of UNCmorfi. Thank you.
+  faq-title: Thank you for read.
   faq-indice: Indice
+  lang-selector: es

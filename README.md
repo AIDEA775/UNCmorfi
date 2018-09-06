@@ -6,33 +6,25 @@ Una app para Android para consultar todo lo referido con el comedor universitari
   <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200"/>
 </a>
 
-
 ## Sugerencias
-
 Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https://github.com/AIDEA775/UNCmorfi/issues/new).
 
-
 ## Aportes
-
 Todos los _pull requests_ son re bienvenidos.
 
-
 ## Paleta de colores
-* Rojo (accent): ![#FF5252](https://placehold.it/15/FF5252/000000?text=+) `#FF5252`
-* Naraja 1 (primary_light): ![#FFB74D](https://placehold.it/15/FFB74D/000000?text=+) `#FFB74D`
-* Naraja 2 (primary): ![#FFA726](https://placehold.it/15/FFA726/000000?text=+) `#FFA726`
-* Naraja 3 (primary_dark): ![#FF9800](https://placehold.it/15/FF9800/000000?text=+) `#FF9800`
-* Gris 1 (primary_text): ![#424242](https://placehold.it/15/424242/000000?text=+) `#424242`
-* Gris 2 (secondary_text): ![#757575](https://placehold.it/15/757575/000000?text=+) `#757575`
-* Blanco (white): ![#FFFFFF](https://placehold.it/15/FFFFFF/000000?text=+) `#FFFFFF`
+Color | Code | Preview | Hex
+--- | --- | --- | ---
+Rojo | accent | ![#FF5252](https://placehold.it/15/FF5252/000000?text=+) | #FF5252
+Naraja 1 | primary_light | ![#FFB74D](https://placehold.it/15/FFB74D/000000?text=+) | #FFB74D
+Naraja 2 | primary | ![#FFA726](https://placehold.it/15/FFA726/000000?text=+) | #FFA726
+Naraja 3 | primary_dark | ![#FF9800](https://placehold.it/15/FF9800/000000?text=+) | #FF9800
+Gris 1 | primary_text | ![#424242](https://placehold.it/15/424242/000000?text=+) | #424242
+Gris 2 | secondary_text | ![#757575](https://placehold.it/15/757575/000000?text=+) | #757575
+Blanco | white | ![#FFFFFF](https://placehold.it/15/FFFFFF/000000?text=+) | #FFFFFF
 
-
-## Agradecimientos
-* [KaySoohyun](https://github.com/KaySoohyun)
-* [George Alegre](https://github.com/georgealegre)
-* [Rosa Maria Peralta](mailto:mariarosaperalta95@gmail.com)
-* [Andés Saravia](https://github.com/MinamiUruka)
-
+## FAQ
+Está alojado en la rama `gh-pages`, [podés leerlo acá](https://aidea775.github.io/UNCmorfi/).
 
 ## Librerias
 * Google: [v4 support](https://developer.android.com/topic/libraries/support-library/features.html#v4)

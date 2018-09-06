@@ -17,6 +17,16 @@ Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https
 Todos los _pull requests_ son re bienvenidos.
 
 
+## Paleta de colores
+* Rojo (accent): ![#FF5252](https://placehold.it/15/FF5252/000000?text=+) `#FF5252`
+* Naraja 1 (primary_light): ![#FFB74D](https://placehold.it/15/FFB74D/000000?text=+) `#FFB74D`
+* Naraja 2 (primary): ![#FFA726](https://placehold.it/15/FFA726/000000?text=+) `#FFA726`
+* Naraja 3 (primary_dark): ![#FF9800](https://placehold.it/15/FF9800/000000?text=+) `#FF9800`
+* Gris 1 (primary_text): ![#424242](https://placehold.it/15/424242/000000?text=+) `#424242`
+* Gris 2 (secondary_text): ![#757575](https://placehold.it/15/757575/000000?text=+) `#757575`
+* Blanco (white): ![#FFFFFF](https://placehold.it/15/FFFFFF/000000?text=+) `#FFFFFF`
+
+
 ## Agradecimientos
 * [KaySoohyun](https://github.com/KaySoohyun)
 * [George Alegre](https://github.com/georgealegre)
@@ -31,7 +41,6 @@ Todos los _pull requests_ son re bienvenidos.
 * Google: [v7 recyclerview](https://developer.android.com/topic/libraries/support-library/features.html#v7-recyclerview)
 * Google: [Design support](https://developer.android.com/topic/libraries/support-library/features.html#design)
 * Google: [Play services maps](https://developers.google.com/maps/documentation/android-api/)
-* bignerdranch: [Expandable-recycler-view](https://github.com/bignerdranch/expandable-recycler-view/tree/v2.1.1)
 * Bumtech: [Glide](https://github.com/bumptech/glide)
 * Jhy: [Jsoup](https://github.com/jhy/jsoup)
 * PhilJay: [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)

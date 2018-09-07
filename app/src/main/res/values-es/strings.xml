@@ -14,6 +14,7 @@
 
     <!-- Menu -->
     <string name="menu_action_update">Actualizar menú</string>
+    <string name="menu_copy_msg">Menú copiado</string>
 
     <!-- Balance -->
     <string name="balance_action_update">Actualizar tarjetas</string>
@@ -67,14 +68,13 @@
 
     <!-- FAQ -->
     <string name="faq_action_share">Compartir</string>
-    <string name="faq_action_browser">Abrir en&#8230;</string>
 
     <!-- About -->
     <string name="about_unofficial_app">Esta es una app no oficial</string>
     <string name="about_source_code">Código fuente:</string>
     <string name="about_fanpage">Fanpage:</string>
 
-    <!-- SnackBar -->
+    <!-- Cualquiera -->
     <string name="no_connection">No hay conexión</string>
     <string name="connection_error">Error de conexión</string>
     <string name="internal_error">Ocurrió un error</string>
@@ -82,6 +82,6 @@
     <string name="update_success">Actualizado</string>
     <string name="update_fail">No se pudo actualizar</string>
     <string name="new_user_success">Agregado</string>
-    <string name="disabled_function">Función deshabilitada, leé el FAQ!</string>
+    <string name="action_browser">Abrir en&#8230;</string>
 
 </resources>

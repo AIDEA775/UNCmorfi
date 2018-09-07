@@ -1,55 +1,62 @@
 package com.uncmorfi.menu;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.uncmorfi.helpers.ConnectionHelper;
+import com.uncmorfi.helpers.MemoryHelper;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.List;
+
+import static com.uncmorfi.menu.MenuFragment.MENU_FILE;
 
 /**
  * Descarga y parsea el menú de la semana.
  */
-class RefreshMenuTask extends AsyncTask<Void, Void, String> {
-    private static final String URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana";
+class RefreshMenuTask extends AsyncTask<Void, Void, List<DayMenu>> {
+    private static final String URL = "http://uncmorfi.georgealegre.com/menu";
     private RefreshMenuListener mListener;
+    private WeakReference<Context> mContext;
 
     interface RefreshMenuListener {
-        void onRefreshMenuSuccess(String menu);
+        void onRefreshMenuSuccess(List<DayMenu> menu);
         void onRefreshMenuFail();
     }
 
-    RefreshMenuTask(RefreshMenuListener listener) {
+    RefreshMenuTask(Context context, RefreshMenuListener listener) {
+        mContext = new WeakReference<>(context);
         mListener = listener;
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected List<DayMenu> doInBackground(Void... params) {
         try {
-            Document doc = Jsoup.connect(URL).get();
+            String download = ConnectionHelper.downloadFromUrlByGet(URL);
 
-            // Seleccionar la parte del menú
-            Element menu = doc.select("div[property=content:encoded]").first();
+            Context context = mContext.get();
+            if (context != null && needSaveMenu(context, download) ) {
+                MemoryHelper.saveToStorage(context, MENU_FILE, download);
+            }
 
-            // Quitar la ultima parte
-            Elements items = menu.child(0).siblingElements();
-            String lastTwo = ":gt(" + String.valueOf(items.size() - 2) + ")";
-            items.select(lastTwo).remove();
-
-            return menu.html();
-        } catch (IOException t) {
-            t.printStackTrace();
+            return DayMenu.fromJson(download);
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(List<DayMenu> result) {
         if (result == null)
             mListener.onRefreshMenuFail();
         else
             mListener.onRefreshMenuSuccess(result);
+    }
+
+    private boolean needSaveMenu(Context context, String menu) {
+        String menuSaved = MemoryHelper.readHeadFromStorage(context, MENU_FILE);
+        return (menuSaved == null || !menu.startsWith(menuSaved));
     }
 }

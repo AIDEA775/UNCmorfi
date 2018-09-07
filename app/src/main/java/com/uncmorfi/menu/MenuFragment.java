@@ -1,25 +1,36 @@
 package com.uncmorfi.menu;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 
 import com.uncmorfi.R;
 import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
+import com.uncmorfi.helpers.RecyclerTouchListener;
 import com.uncmorfi.helpers.SnackbarHelper.SnackType;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static com.uncmorfi.helpers.SnackbarHelper.showSnack;
 
@@ -30,9 +41,12 @@ import static com.uncmorfi.helpers.SnackbarHelper.showSnack;
  * Usa a {@link RefreshMenuTask} para actualizar el menú.
  */
 public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMenuListener {
-    public static final String MENU_FILE = "menu.txt";
+    private static final String URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana";
+    public static final String MENU_FILE = "menu";
+    private View mRootView;
+    private MenuAdapter mMenuAdapter;
+    private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private WebView mWebView;
     private Context mApplicationContext;
 
     @Override
@@ -42,21 +56,21 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        mWebView = view.findViewById(R.id.menu_content);
-        mSwipeRefreshLayout = view.findViewById(R.id.menu_swipe_refresh);
+        mSwipeRefreshLayout = mRootView.findViewById(R.id.menu_swipe_refresh);
         mApplicationContext = getActivity().getApplicationContext();
 
         initSwipeRefreshLayout();
+        initRecyclerAndAdapter();
         initMenu();
 
         if (needAutoRefreshMenu())
             refreshMenu();
 
-        return view;
+        return mRootView;
     }
 
     private void initSwipeRefreshLayout() {
@@ -77,10 +91,44 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
         );
     }
 
+    private void initRecyclerAndAdapter() {
+        mRecyclerView = mRootView.findViewById(R.id.menu_list);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(mApplicationContext, DividerItemDecoration.VERTICAL));
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(mApplicationContext,
+                mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, final int position) { }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                List food = mMenuAdapter.getMenuList().get(position).getFood();
+                String result = TextUtils.join(", ", food) + "\n\n#UNCmorfi";
+                ClipboardManager clipboard = (ClipboardManager)
+                        mApplicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Food", result);
+                clipboard.setPrimaryClip(clip);
+                showSnack(getContext(), mRootView, R.string.menu_copy_msg, SnackType.FINISH);
+            }
+        }));
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+    }
+
     private void initMenu() {
         String menuSaved = MemoryHelper.readStringFromStorage(getContext(), MENU_FILE);
+        List<DayMenu> menuList;
+
         if (menuSaved != null)
-            mWebView.loadDataWithBaseURL(null, menuSaved, "text/html", "UTF-8", null);
+            menuList = DayMenu.fromJson(menuSaved);
+        else
+            menuList = new ArrayList<>();
+
+        mMenuAdapter = new MenuAdapter(mApplicationContext, menuList);
+        mRecyclerView.setAdapter(mMenuAdapter);
     }
 
     private boolean needAutoRefreshMenu() {
@@ -124,29 +172,31 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
         if (item.getItemId() ==  R.id.menu_update) {
             refreshMenu();
             return true;
+        } else if (item.getItemId() == R.id.menu_browser) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
+            startActivity(i);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void refreshMenu() {
-        if (ConnectionHelper.isOnline(getContext())) {
+        if (ConnectionHelper.isOnline(mApplicationContext)) {
             mSwipeRefreshLayout.setRefreshing(true);
-            new RefreshMenuTask(this).execute();
+            new RefreshMenuTask(mApplicationContext,this).execute();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
-            showSnack(getContext(), mWebView, R.string.no_connection, SnackType.ERROR);
+            showSnack(getContext(), mRootView, R.string.no_connection, SnackType.ERROR);
         }
     }
 
     @Override
-    public void onRefreshMenuSuccess(String menu) {
-        if (needSaveMenu(menu))
-            MemoryHelper.saveToStorage(mApplicationContext, MenuFragment.MENU_FILE, menu);
+    public void onRefreshMenuSuccess(List<DayMenu> menuList) {
 
         if (getActivity() != null && isAdded()) {
             mSwipeRefreshLayout.setRefreshing(false);
-            mWebView.loadDataWithBaseURL(null, menu, "text/html", "UTF-8", null);
-            showSnack(getContext(), mWebView, R.string.update_success, SnackType.FINISH);
+            mMenuAdapter.updateMenu(menuList);
+            showSnack(getContext(), mRootView, R.string.update_success, SnackType.FINISH);
         }
     }
 
@@ -154,12 +204,7 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
     public void onRefreshMenuFail() {
         if (getActivity() != null && isAdded())
             mSwipeRefreshLayout.setRefreshing(false);
-            showSnack(getContext(), mWebView, R.string.update_fail, SnackType.ERROR);
-    }
-
-    private boolean needSaveMenu(String menu) {
-        String menuSaved = MemoryHelper.readHeadFromStorage(getContext(), MENU_FILE);
-        return (menuSaved == null || !menu.startsWith(menuSaved));
+            showSnack(getContext(), mRootView, R.string.update_fail, SnackType.ERROR);
     }
 
 }

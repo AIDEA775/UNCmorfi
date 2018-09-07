@@ -5,4 +5,9 @@
         android:id="@+id/menu_update"
         android:title="@string/menu_action_update"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_browser"
+        android:title="@string/action_browser"
+        app:showAsAction="never" />
 </menu>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground" >
+
+    <LinearLayout
+        android:id="@+id/menu_day"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/menu_day_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="24sp"
+            tools:text="01" />
+
+        <TextView
+            android:id="@+id/menu_day_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="16sp"
+            tools:text="Lun." />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/menu_food"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignTop="@+id/menu_day"
+        android:layout_alignBottom="@+id/menu_day"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/menu_day"
+        android:layout_toEndOf="@+id/menu_day">
+
+        <TextView
+            android:id="@+id/menu_food1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textSize="18sp"
+            tools:text="Costeleta con salsa criolla" />
+
+        <TextView
+            android:id="@+id/menu_food2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18sp"
+            tools:text="Puré Mixto o ensalada" />
+
+        <TextView
+            android:id="@+id/menu_food3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="14sp"
+            tools:text="Fruta de estación" />
+    </LinearLayout>
+
+
+</RelativeLayout>

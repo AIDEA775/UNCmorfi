@@ -5,4 +5,9 @@
         android:id="@+id/balance_update"
         android:title="@string/balance_action_update"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/balance_browser"
+        android:title="@string/action_browser"
+        app:showAsAction="never" />
 </menu>

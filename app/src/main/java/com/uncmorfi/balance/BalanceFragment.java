@@ -3,7 +3,9 @@ package com.uncmorfi.balance;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -47,6 +49,7 @@ import static com.uncmorfi.helpers.SnackbarHelper.showSnack;
  */
 public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCardClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, BalanceBackend.BalanceListener {
+    private final static String URL = "http://comedor.unc.edu.ar/autoconsulta.php";
     private View mRootView;
     private UserCursorAdapter mUserCursorAdapter;
     private BalanceBackend mBackend;
@@ -59,7 +62,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_balance, container, false);
 
@@ -172,13 +175,15 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         if (item.getItemId() ==  R.id.balance_update) {
             updateAllUsers();
             return true;
+        } else if (item.getItemId() == R.id.balance_browser) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
+            startActivity(i);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void updateAllUsers() {
-        showSnack(getContext(), mRootView, R.string.disabled_function, SnackType.ERROR);
-        /*
         String cards = "";
         int[] positions = new int[mUserCursorAdapter.getItemCount()];
 
@@ -189,7 +194,6 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
         }
         if (!cards.isEmpty())
             mBackend.updateBalanceOfUser(cards, positions);
-        */
     }
 
     /**
@@ -237,7 +241,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public @NonNull Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity().getApplicationContext(),
                 UserProvider.CONTENT_URI,
                 null,
@@ -247,7 +251,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         if (mUserCursorAdapter != null) {
             mUserCursorAdapter.setCursor(data);
             mUserCursorAdapter.notifyDataSetChanged();
@@ -255,7 +259,7 @@ public class BalanceFragment extends Fragment implements UserCursorAdapter.OnCar
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mUserCursorAdapter.setCursor(null);
         mUserCursorAdapter.notifyDataSetChanged();
     }

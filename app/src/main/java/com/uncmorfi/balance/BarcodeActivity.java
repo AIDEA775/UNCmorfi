@@ -3,12 +3,17 @@ package com.uncmorfi.balance;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -22,6 +27,7 @@ import com.uncmorfi.helpers.MemoryHelper;
 import java.util.EnumMap;
 import java.util.Map;
 
+import static com.uncmorfi.balance.UserCursorAdapter.USER_IMAGES_URL;
 import static com.uncmorfi.balance.backend.BalanceBackend.BARCODE_PATH;
 
 public class BarcodeActivity extends AppCompatActivity {
@@ -49,10 +55,12 @@ public class BarcodeActivity extends AppCompatActivity {
 
         TextView userName = findViewById(R.id.user_name);
         TextView userCard = findViewById(R.id.user_card);
+        TextView userType = findViewById(R.id.user_type);
         mFrame = findViewById(R.id.barcode_frame);
 
         userName.setText(user.getName());
         userCard.setText(user.getCard());
+        userType.setText(user.getType());
 
         mBitmap = getBarcodeBitmap(user.getCard());
         mFrame.setImageBitmap(mBitmap);

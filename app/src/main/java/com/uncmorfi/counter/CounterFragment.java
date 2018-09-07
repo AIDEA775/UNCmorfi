@@ -1,5 +1,7 @@
 package com.uncmorfi.counter;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -42,7 +44,8 @@ import static com.uncmorfi.helpers.SnackbarHelper.showSnack;
 public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener,
         SeekBar.OnSeekBarChangeListener {
     private final static int FOOD_RATIONS = 1500;
-    private DateFormat mDateFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
+    private final static String URL = "http://comedor.unc.edu.ar/cocina.php";
+    private DateFormat mDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     private View mRootView;
     private TextView mResumeView;
@@ -166,14 +169,17 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         if (item.getItemId() ==  R.id.counter_update) {
             refreshCounter();
             return true;
+        } else if (item.getItemId() == R.id.counter_browser) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
+            startActivity(i);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void refreshCounter() {
-        showSnack(getContext(), mRootView, R.string.disabled_function, SnackType.ERROR);
         hideRefreshStatus();
-        /*
+
         if (ConnectionHelper.isOnline(getContext())) {
             showRefreshStatus();
             new RefreshCounterTask(this).execute();
@@ -181,7 +187,6 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
             hideRefreshStatus();
             showSnack(getContext(), mRootView, R.string.no_connection, SnackType.ERROR);
         }
-        */
     }
 
     @Override

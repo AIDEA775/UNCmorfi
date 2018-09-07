@@ -3,6 +3,7 @@ package com.uncmorfi.balance;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -38,7 +39,7 @@ import java.util.Locale;
  * El fragmento o actividad contenedora debería implementar {@link OnCardClickListener}.
  */
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder> {
-    private static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
+    public static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
     private static final float SCALE_USER_IMAGE_SIZE = 0.8f;
     private static final int SCALE_USER_IMAGE_TIME = 500;
     private static final int WARNING_USER_BALANCE = 20;
@@ -91,14 +92,14 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
     }
 
     @Override
-    public UserItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public @NonNull UserItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.user_item, parent, false);
         return new UserItemViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final UserItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final UserItemViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         User user = new User(mCursor);
 

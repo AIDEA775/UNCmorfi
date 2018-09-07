@@ -5,4 +5,9 @@
         android:id="@+id/counter_update"
         android:title="@string/counter_action_update"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/counter_browser"
+        android:title="@string/action_browser"
+        app:showAsAction="never" />
 </menu>

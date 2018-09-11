@@ -10,14 +10,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  *  Descarga y parsea los datos obtenidos del medidor de raciones.
@@ -25,7 +22,6 @@ import java.util.Locale;
 class RefreshCounterTask extends AsyncTask<Void, Void, List<Entry>> {
     private static final String URL = "http://uncmorfi.georgealegre.com/servings";
     private RefreshCounterListener mListener;
-    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT);
     private int mErrorCode;
 
     interface RefreshCounterListener {
@@ -55,6 +51,7 @@ class RefreshCounterTask extends AsyncTask<Void, Void, List<Entry>> {
                 if (date != null)
                     data.add(new Entry(date.getTime(), ration));
             }
+            Collections.sort(data, new ParserHelper.CounterEntryComparator());
             return data;
         } catch (IOException e) {
             mErrorCode = ConnectionHelper.CONNECTION_ERROR;

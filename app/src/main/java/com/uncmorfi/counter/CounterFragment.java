@@ -3,6 +3,7 @@ package com.uncmorfi.counter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,9 +44,10 @@ import static com.uncmorfi.helpers.SnackbarHelper.showSnack;
  */
 public class CounterFragment extends Fragment implements RefreshCounterTask.RefreshCounterListener,
         SeekBar.OnSeekBarChangeListener {
-    private final static int FOOD_RATIONS = 1500;
-    private final static String URL = "http://comedor.unc.edu.ar/cocina.php";
-    private DateFormat mDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private static final int FOOD_RATIONS = 1500;
+    private static final int FOOD_LIMIT = 200;
+    private static final String URL = "http://comedor.unc.edu.ar/cocina.php";
+    private static final DateFormat DATE_FMT = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     private View mRootView;
     private TextView mResumeView;
@@ -65,7 +67,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_counter, container, false);
 
@@ -197,7 +199,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         long currentTime = new Date().getTime();
 
         Date timeStamp = new Date(currentTime + minutes * 60 * 1000);
-        String text = mDateFormat.format(timeStamp);
+        String text = DATE_FMT.format(timeStamp);
 
         mDistanceView.setText(String.format(getString(R.string.counter_distance), progress));
         mEstimateView.setText(String.format(getString(R.string.counter_estimate), minutes, text));
@@ -242,10 +244,14 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         for (Entry entry : result)
             total += entry.getY();
 
+        mPercentView.setTextColor(ContextCompat.getColor(getContext(),
+                total > FOOD_RATIONS - FOOD_LIMIT ? R.color.accent : R.color.primary_dark));
+
         mProgressBar.setProgress(total);
-        mResumeView.setText(String.format(getString(R.string.counter_rations_title), total,
-                FOOD_RATIONS));
-        mPercentView.setText(String.format(Locale.US, "%d%%", (total*100) / FOOD_RATIONS));
+        mResumeView.setText(String.format(
+                getString(R.string.counter_rations_title), total, FOOD_RATIONS));
+        mPercentView.setText(String.format(
+                Locale.US, "%d%%", (total*100) / FOOD_RATIONS));
     }
 
     private void updateCharts(List<Entry> data) {
@@ -322,7 +328,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             Date valueDate = (new Date((long) value));
-            return mDateFormat.format(valueDate);
+            return DATE_FMT.format(valueDate);
         }
     }
 }

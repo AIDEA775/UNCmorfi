@@ -49,6 +49,7 @@
                             android:paddingBottom="@dimen/activity_vertical_margin"
                             android:text="@string/counter_rations"
                             android:textSize="24sp"
+                            android:textColor="@color/primary_text"
                             android:textStyle="bold" />
 
                         <ProgressBar
@@ -63,7 +64,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/counter_percent_symbol"
-                            android:textColor="@color/primary"
+                            android:textColor="@color/primary_dark"
                             android:textSize="64sp"
                             android:textStyle="bold" />
 
@@ -93,6 +94,7 @@
                             android:id="@+id/counter_distance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/primary_text"
                             android:paddingBottom="@dimen/activity_vertical_margin"
                             tools:text="Distance" />
 
@@ -108,6 +110,7 @@
                             android:id="@+id/counter_estimate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/primary_text"
                             tools:text="Estimate"/>
 
                     </LinearLayout>

@@ -1,5 +1,6 @@
 package com.uncmorfi.helpers;
 
+import com.github.mikephil.charting.data.Entry;
 import com.uncmorfi.menu.DayMenu;
 
 import java.text.DateFormat;
@@ -25,6 +26,13 @@ public abstract class ParserHelper {
     {
         public int compare(DayMenu left, DayMenu right) {
             return left.getDate().compareTo(right.getDate());
+        }
+    }
+
+    public static class CounterEntryComparator implements Comparator<Entry>
+    {
+        public int compare(Entry left, Entry right) {
+            return (int) ((long) left.getX() - (long) right.getX());
         }
     }
 }

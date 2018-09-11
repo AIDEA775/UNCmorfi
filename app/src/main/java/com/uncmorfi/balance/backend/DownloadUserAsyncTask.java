@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.uncmorfi.balance.model.User;
 import com.uncmorfi.helpers.ConnectionHelper;
+import com.uncmorfi.helpers.ParserHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +31,6 @@ import java.net.URL;
  */
 class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
     private static final String URL = "http://uncmorfi.georgealegre.com/users?codes=";
-    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
     private DownloadUserListener mListener;
     private int[] mPosition;
     private int mErrorCode;
@@ -64,14 +64,12 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
 
                 user.setCard(item.getString("code"));
                 user.setName(item.getString("name"));
-                // TODO: 06/09/18
-                user.setType("?");
-                //user.setType(item.getString("tipo_cliente"));
-                user.setImage(item.getString("imageCode"));
-                user.setBalance(parseStringToInt(item.getString("balance")));
+                user.setType(item.getString("type"));
+                user.setImage(item.getString("imageURL"));
+                user.setBalance(item.getInt("balance"));
 
-                //Date expireDate = parseStringToDate(item.getString("fecha_hasta")); // TODO: 06/09/18
-                //if (expireDate != null) user.setExpiration(expireDate.getTime());
+                Date expireDate = ParserHelper.stringToDate(item.getString("expirationDate"));
+                if (expireDate != null) user.setExpiration(expireDate.getTime());
 
                 Date currentTime = Calendar.getInstance().getTime();
                 user.setLastUpdate(currentTime.getTime());
@@ -86,24 +84,6 @@ class DownloadUserAsyncTask extends AsyncTask<String, Void, List<User>> {
             return null;
         } catch (JSONException e) {
             mErrorCode = ConnectionHelper.INTERNAL_ERROR;
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private int parseStringToInt(String string) {
-        try {
-            return Integer.parseInt(string);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    private Date parseStringToDate(String string) {
-        try {
-            return mDateFormat.parse(string);
-        } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }

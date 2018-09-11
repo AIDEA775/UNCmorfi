@@ -107,10 +107,10 @@ public class User implements Serializable {
         values.put(UsersContract.UserEntry.BALANCE, this.balance);
         values.put(UsersContract.UserEntry.EXPIRATION, this.expiration);
         values.put(UsersContract.UserEntry.LAST_UPDATE, this.lastUpdate);
+        values.put(UsersContract.UserEntry.IMAGE, this.image);
+        values.put(UsersContract.UserEntry.TYPE, this.type);
         if (complete) {
             values.put(UsersContract.UserEntry.NAME, this.name);
-            values.put(UsersContract.UserEntry.TYPE, this.type);
-            values.put(UsersContract.UserEntry.IMAGE, this.image);
         }
         return values;
     }

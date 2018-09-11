@@ -39,7 +39,6 @@ import java.util.Locale;
  * El fragmento o actividad contenedora debería implementar {@link OnCardClickListener}.
  */
 class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder> {
-    public static final String USER_IMAGES_URL = "https://asiruws.unc.edu.ar/foto/";
     private static final float SCALE_USER_IMAGE_SIZE = 0.8f;
     private static final int SCALE_USER_IMAGE_TIME = 500;
     private static final int WARNING_USER_BALANCE = 20;
@@ -145,7 +144,7 @@ class UserCursorAdapter extends RecyclerView.Adapter<UserCursorAdapter.UserItemV
 
     private void setImage(final UserItemViewHolder holder, User user) {
         Glide.with(mContext)
-                .load(USER_IMAGES_URL + user.getImage())
+                .load(user.getImage())
                 .asBitmap()
                 .placeholder(R.drawable.person_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

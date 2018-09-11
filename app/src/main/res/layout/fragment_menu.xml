@@ -15,6 +15,7 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay" >
@@ -22,9 +23,9 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
-                android:layout_marginTop="6dp"
                 card_view:cardCornerRadius="1.5dp"
                 card_view:cardElevation="1.5dp"
                 card_view:cardUseCompatPadding="true" >

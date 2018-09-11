@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +37,7 @@ public class DayMenu {
     }
 
     public static List<DayMenu> fromJson(String source) {
-        ArrayList<DayMenu> menuList = new ArrayList<DayMenu>();
+        ArrayList<DayMenu> menuList = new ArrayList<>();
 
         try {
             JSONObject result = new JSONObject(source);
@@ -51,6 +52,7 @@ public class DayMenu {
             e.printStackTrace();
         }
 
+        Collections.sort(menuList, new ParserHelper.MenuDayComparator());
         return menuList;
     }
 }

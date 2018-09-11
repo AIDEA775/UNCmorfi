@@ -192,7 +192,6 @@ public class MenuFragment extends Fragment implements RefreshMenuTask.RefreshMen
 
     @Override
     public void onRefreshMenuSuccess(List<DayMenu> menuList) {
-
         if (getActivity() != null && isAdded()) {
             mSwipeRefreshLayout.setRefreshing(false);
             mMenuAdapter.updateMenu(menuList);

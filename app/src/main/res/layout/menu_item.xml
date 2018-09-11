@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
     android:focusable="true"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground" >
@@ -12,7 +13,7 @@
     <LinearLayout
         android:id="@+id/menu_day"
         android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -20,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
+            android:gravity="center"
             android:textSize="24sp"
             tools:text="01" />
 
@@ -28,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
+            android:gravity="center"
             android:textSize="16sp"
             tools:text="Lun." />
     </LinearLayout>
@@ -39,7 +42,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignTop="@+id/menu_day"
-        android:layout_alignBottom="@+id/menu_day"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/menu_day"
@@ -59,7 +61,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:textSize="18sp"
-            tools:text="Puré Mixto o ensalada" />
+            tools:text="Papas a las Finas Hierbas o Ensalada de Zanahoria y choclo" />
 
         <TextView
             android:id="@+id/menu_food3"

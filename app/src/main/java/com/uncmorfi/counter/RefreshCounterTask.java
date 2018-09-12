@@ -10,11 +10,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *  Descarga y parsea los datos obtenidos del medidor de raciones.
@@ -45,11 +48,12 @@ class RefreshCounterTask extends AsyncTask<Void, Void, List<Entry>> {
             Iterator<?> keys = items.keys();
             while(keys.hasNext()) {
                 String key = (String) keys.next();
+
                 Date date = ParserHelper.stringToDate(key);
                 int ration =  items.getInt(key);
 
                 if (date != null)
-                    data.add(new Entry(date.getTime(), ration));
+                    data.add(new Entry(ParserHelper.clearDate(date), ration));
             }
             Collections.sort(data, new ParserHelper.CounterEntryComparator());
             return data;

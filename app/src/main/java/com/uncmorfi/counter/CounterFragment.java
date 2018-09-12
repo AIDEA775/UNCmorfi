@@ -299,7 +299,7 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
 
     private void updateChart(LineChart chart, LineDataSet dataSet) {
         chart.setData(new LineData(dataSet));
-        chart.setVisibleXRangeMinimum(1000000f);
+        chart.setVisibleXRangeMinimum(200f);
         chart.invalidate();
     }
 
@@ -324,10 +324,9 @@ public class CounterFragment extends Fragment implements RefreshCounterTask.Refr
     }
 
     private class HourAxisValueFormatter implements IAxisValueFormatter {
-
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            Date valueDate = (new Date((long) value));
+            Date valueDate = (new Date((long) value * 1000));
             return DATE_FMT.format(valueDate);
         }
     }

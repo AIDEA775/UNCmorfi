@@ -18,6 +18,8 @@ import com.uncmorfi.helpers.ConnectionHelper;
 import com.uncmorfi.helpers.MemoryHelper;
 import com.uncmorfi.helpers.SnackbarHelper.SnackType;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -137,7 +139,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
     }
 
     @Override
-    public void onUsersDownloaded(@NonNull List<? extends User> users) {
+    public void onUsersDownloaded(@NotNull List<User> users) {
         int rows = -1;
 
         for (User u : users) {

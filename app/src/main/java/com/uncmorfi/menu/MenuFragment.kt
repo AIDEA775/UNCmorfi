@@ -100,7 +100,7 @@ class MenuFragment : Fragment(), RefreshMenuTask.RefreshMenuListener {
     }
 
     private fun initMenu() {
-        val menuSaved = MemoryHelper.readStringFromStorage(context, MENU_FILE)
+        val menuSaved = MemoryHelper.readStringFromStorage(requireActivity(), MENU_FILE)
         val menuList: List<DayMenu>
 
         menuList = if (menuSaved != null)

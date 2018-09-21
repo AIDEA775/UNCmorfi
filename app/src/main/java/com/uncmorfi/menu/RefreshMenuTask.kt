@@ -9,8 +9,6 @@ import com.uncmorfi.helpers.MemoryHelper
 import java.io.IOException
 import java.lang.ref.WeakReference
 
-import com.uncmorfi.menu.MenuFragment.MENU_FILE
-
 /**
  * Descarga y parsea el menú de la semana.
  */
@@ -30,7 +28,7 @@ internal class RefreshMenuTask(context: Context, private val mListener: RefreshM
 
             val context = mContext.get()
             if (context != null && needSaveMenu(context, download)) {
-                MemoryHelper.saveToStorage(context, MENU_FILE, download)
+                MemoryHelper.saveToStorage(context, MenuFragment.MENU_FILE, download)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -48,7 +46,7 @@ internal class RefreshMenuTask(context: Context, private val mListener: RefreshM
     }
 
     private fun needSaveMenu(context: Context, menu: String): Boolean {
-        val menuSaved = MemoryHelper.readHeadFromStorage(context, MENU_FILE)
+        val menuSaved = MemoryHelper.readHeadFromStorage(context, MenuFragment.MENU_FILE)
         return menuSaved == null || !menu.startsWith(menuSaved)
     }
 

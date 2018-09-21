@@ -71,7 +71,7 @@ class BalanceFragment : Fragment(), UserCursorAdapter.OnCardClickListener,
         }
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.layoutManager = layoutManager
-        mUserCursorAdapter = UserCursorAdapter(context, this)
+        mUserCursorAdapter = UserCursorAdapter(requireContext(), this)
         recyclerView.adapter = mUserCursorAdapter
         recyclerView.addItemDecoration(
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
@@ -167,7 +167,7 @@ class BalanceFragment : Fragment(), UserCursorAdapter.OnCardClickListener,
     /**
      * Callback del Adapter cuando se selecciona una tarjeta.
      */
-    override fun onClick(userId: Int, userCard: String, position: Int) {
+    override fun onClick(userId: Int, userCard: String?, position: Int) {
         val user = mBackend.getUserById(userId)
         user.position = position
 

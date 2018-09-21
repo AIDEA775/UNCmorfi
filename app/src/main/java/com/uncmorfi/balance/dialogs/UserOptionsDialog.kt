@@ -34,7 +34,7 @@ class UserOptionsDialog : AppCompatDialogFragment() {
 
         if (user != null) {
             builder.setTitle(getString(R.string.balance_user_options_title))
-                    .setItems(items) { dialog, which ->
+                    .setItems(items) { _, which ->
                         when (which) {
                             0 -> backend.updateBalanceOfUser(
                                     user.card, intArrayOf(user.position))

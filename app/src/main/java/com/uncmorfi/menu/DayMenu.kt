@@ -11,7 +11,7 @@ import java.util.Collections
 import java.util.Date
 
 class DayMenu internal constructor(date: String, foods: JSONArray) {
-    lateinit var date: Date
+    var date: Date? = null
     private lateinit var mFood: MutableList<String>
 
     val food: List<String>

@@ -7,6 +7,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.uncmorfi.R;
@@ -136,7 +137,7 @@ public class BalanceBackend implements DownloadUserAsyncTask.DownloadUserListene
     }
 
     @Override
-    public void onUsersDownloaded(List<User> users) {
+    public void onUsersDownloaded(@NonNull List<? extends User> users) {
         int rows = -1;
 
         for (User u : users) {

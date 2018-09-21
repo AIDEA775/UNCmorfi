@@ -19,7 +19,7 @@ class User : Serializable {
     constructor()
 
     constructor(cursor: Cursor) {
-        this.id = cursor.getInt(cursor.getColumnIndex(UsersContract.UserEntry._ID))
+        this.id = cursor.getInt(cursor.getColumnIndex(UsersContract.UserEntry.ID))
         this.card = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.CARD))
         this.name = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.NAME))
         this.type = cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.TYPE))

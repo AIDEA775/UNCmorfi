@@ -34,7 +34,7 @@ class UserProvider : ContentProvider() {
             USER_ID -> c = db.query(
                     UserEntry.TABLE_NAME,
                     projection,
-                    UserEntry._ID + "=" + uri.lastPathSegment,
+                    UserEntry.ID + "=" + uri.lastPathSegment,
                     selectionArgs, null, null,
                     sortOrder)
             else -> throw IllegalArgumentException("URI not supported: $uri")
@@ -64,7 +64,7 @@ class UserProvider : ContentProvider() {
         var where = selection
 
         if (mUriMatcher.match(uri) == USER_ID) {
-            where = UserEntry._ID + "=" + uri.lastPathSegment
+            where = UserEntry.ID + "=" + uri.lastPathSegment
         }
 
         val db = mUsersDbHelper!!.writableDatabase
@@ -79,7 +79,7 @@ class UserProvider : ContentProvider() {
         var where = selection
 
         if (mUriMatcher.match(uri) == USER_ID) {
-            where = UserEntry._ID + "=" + uri.lastPathSegment
+            where = UserEntry.ID + "=" + uri.lastPathSegment
         }
 
         val db = mUsersDbHelper!!.writableDatabase

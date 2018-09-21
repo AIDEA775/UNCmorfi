@@ -30,20 +30,18 @@ object SnackbarHelper {
     }
 
     private fun getLength(type: SnackType): Int {
-        when (type) {
-            SnackbarHelper.SnackType.ERROR -> return Snackbar.LENGTH_INDEFINITE
-            SnackbarHelper.SnackType.LOADING -> return Snackbar.LENGTH_INDEFINITE
-            SnackbarHelper.SnackType.FINISH -> return Snackbar.LENGTH_SHORT
-            else -> return Snackbar.LENGTH_SHORT
+        return when (type) {
+            SnackbarHelper.SnackType.ERROR -> Snackbar.LENGTH_INDEFINITE
+            SnackbarHelper.SnackType.LOADING -> Snackbar.LENGTH_INDEFINITE
+            SnackbarHelper.SnackType.FINISH -> Snackbar.LENGTH_SHORT
         }
     }
 
     private fun setColored(context: Context, snackbar: Snackbar, type: SnackType) {
-        var color = 0
-        when (type) {
-            SnackbarHelper.SnackType.ERROR -> color = ContextCompat.getColor(context, R.color.accent)
-            SnackbarHelper.SnackType.LOADING -> color = ContextCompat.getColor(context, R.color.primary_text)
-            SnackbarHelper.SnackType.FINISH -> color = ContextCompat.getColor(context, R.color.primary_dark)
+        val color = when (type) {
+            SnackbarHelper.SnackType.ERROR -> ContextCompat.getColor(context, R.color.accent)
+            SnackbarHelper.SnackType.LOADING -> ContextCompat.getColor(context, R.color.primary_text)
+            SnackbarHelper.SnackType.FINISH -> ContextCompat.getColor(context, R.color.primary_dark)
         }
         snackbar.view.setBackgroundColor(color)
     }

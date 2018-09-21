@@ -31,7 +31,6 @@ class DayMenu internal constructor(date: String, foods: JSONArray) {
     }
 
     companion object {
-        @JvmStatic
         fun fromJson(source: String): List<DayMenu> {
             val menuList = ArrayList<DayMenu>()
 

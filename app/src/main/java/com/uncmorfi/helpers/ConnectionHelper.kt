@@ -12,7 +12,6 @@ object ConnectionHelper {
     const val INTERNAL_ERROR = -1
     const val CONNECTION_ERROR = -2
 
-    @JvmStatic
     fun isOnline(context: Context): Boolean {
         val connectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

@@ -178,7 +178,7 @@ class MenuFragment : Fragment(), RefreshMenuTask.RefreshMenuListener {
 
     companion object {
         private const val URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana"
-        @JvmStatic val MENU_FILE = "menu"
+        const val MENU_FILE = "menu"
     }
 
 }

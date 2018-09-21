@@ -60,7 +60,6 @@ class SetNameDialog : DialogFragment() {
          * @param user Puede no contener todos los datos del usuario, pero necesita:
          * [User.name]
          */
-        @JvmStatic
         fun newInstance(user: User): SetNameDialog {
             val args = Bundle()
 

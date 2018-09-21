@@ -15,7 +15,6 @@ object SnackbarHelper {
         FINISH
     }
 
-    @JvmStatic
     fun showSnack(context: Context, view: View, resId: Int, type: SnackType): Snackbar {
         val bar = Snackbar.make(view, resId, getLength(type))
         setColored(context, bar, type)
@@ -23,7 +22,6 @@ object SnackbarHelper {
         return bar
     }
 
-    @JvmStatic
     fun showSnack(context: Context, view: View, msg: String, type: SnackType): Snackbar {
         val bar = Snackbar.make(view, msg, getLength(type))
         setColored(context, bar, type)

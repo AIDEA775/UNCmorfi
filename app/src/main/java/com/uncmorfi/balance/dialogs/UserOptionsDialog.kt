@@ -62,7 +62,7 @@ class UserOptionsDialog : AppCompatDialogFragment() {
     }
 
     companion object {
-        @JvmField val ARG_USER = "user"
+        const val ARG_USER = "user"
 
         /**
          * @param user Puede no contener todos los datos del usuario,
@@ -71,7 +71,6 @@ class UserOptionsDialog : AppCompatDialogFragment() {
          * [User.getPosition]
          * [User.getName]
          */
-        @JvmStatic
         fun newInstance(user: User): UserOptionsDialog {
             val args = Bundle()
 

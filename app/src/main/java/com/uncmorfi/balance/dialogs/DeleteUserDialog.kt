@@ -45,7 +45,6 @@ class DeleteUserDialog : AppCompatDialogFragment() {
          * [User.id]
          * [User.name]
          */
-        @JvmStatic
         fun newInstance(user: User): DeleteUserDialog {
             val args = Bundle()
 

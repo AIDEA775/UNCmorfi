@@ -92,7 +92,7 @@ class UserProvider : ContentProvider() {
     companion object {
         private const val authority = "com.uncmorfi"
 
-        @JvmField val CONTENT_URI: Uri = Uri.parse("content://$authority/users")
+        val CONTENT_URI: Uri = Uri.parse("content://$authority/users")
 
         private const val USERS = 1
         private const val USER_ID = 2

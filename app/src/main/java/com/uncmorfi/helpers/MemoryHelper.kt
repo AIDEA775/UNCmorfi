@@ -27,7 +27,6 @@ object MemoryHelper {
         }
     }
 
-    @JvmStatic
     fun readStringFromStorage(context: Context, file: String): String? {
         try {
             val rd = BufferedReader(
@@ -72,7 +71,6 @@ object MemoryHelper {
 
     }
 
-    @JvmStatic
     fun saveBitmapToStorage(context: Context, file: String, bitmap: Bitmap?) {
         if (bitmap != null) {
             try {
@@ -88,7 +86,6 @@ object MemoryHelper {
         }
     }
 
-    @JvmStatic
     fun readBitmapFromStorage(context: Context, file: String): Bitmap? {
         val bitmap: Bitmap
         try {
@@ -101,7 +98,6 @@ object MemoryHelper {
         return bitmap
     }
 
-    @JvmStatic
     fun deleteFileInStorage(context: Context, file: String) {
         val result = context.deleteFile(file)
         if (result)

@@ -54,7 +54,7 @@ class BalanceFragment : Fragment(), UserCursorAdapter.OnCardClickListener,
         initRecyclerAndAdapter()
         initNewUserView()
 
-        mBackend = BalanceBackend.getInstance(context)
+        mBackend = BalanceBackend.getInstance(requireContext())
         mBackend.setListener(this)
 
         loaderManager.initLoader(0, null, this)
@@ -169,11 +169,14 @@ class BalanceFragment : Fragment(), UserCursorAdapter.OnCardClickListener,
      */
     override fun onClick(userId: Int, userCard: String?, position: Int) {
         val user = mBackend.getUserById(userId)
-        user.position = position
 
-        UserOptionsDialog
-                .newInstance(user)
-                .show(fragmentManager, "UserOptionsDialog")
+        if (user != null) {
+            user.position = position
+
+            UserOptionsDialog
+                    .newInstance(user)
+                    .show(fragmentManager, "UserOptionsDialog")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

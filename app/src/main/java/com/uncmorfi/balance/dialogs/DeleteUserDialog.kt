@@ -16,9 +16,9 @@ class DeleteUserDialog : AppCompatDialogFragment() {
         val builder = AlertDialog.Builder(context!!)
 
         val user = arguments?.getSerializable(UserOptionsDialog.ARG_USER) as User?
-        val backend = BalanceBackend.getInstance(context)
+        val backend = BalanceBackend.getInstance(requireContext())
 
-        if (backend != null && user != null) {
+        if (user != null) {
             val positiveListener = DialogInterface.OnClickListener { _, _ ->
                 backend.deleteUser(user)
                 dismiss()

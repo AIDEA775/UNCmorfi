@@ -30,9 +30,9 @@ class UserOptionsDialog : AppCompatDialogFragment() {
         items[4] = getString(R.string.balance_user_options_set_name)
 
         val user = arguments?.getSerializable(ARG_USER) as User?
-        val backend = BalanceBackend.getInstance(context)
+        val backend = BalanceBackend.getInstance(requireContext())
 
-        if (backend != null && user != null) {
+        if (user != null) {
             builder.setTitle(getString(R.string.balance_user_options_title))
                     .setItems(items) { dialog, which ->
                         when (which) {

@@ -23,13 +23,13 @@ class SetNameDialog : DialogFragment() {
         builder.setView(v)
 
         val user = arguments?.getSerializable(UserOptionsDialog.ARG_USER) as User?
-        val backend = BalanceBackend.getInstance(context)
+        val backend = BalanceBackend.getInstance(requireContext())
 
         val input = v.findViewById<EditText>(R.id.set_name_input)
         val save = v.findViewById<Button>(R.id.set_name_save)
         val cancel = v.findViewById<Button>(R.id.set_name_cancel)
 
-        if (backend != null && user != null) {
+        if (user != null) {
             input.append(user.name)
 
             save.setOnClickListener {

@@ -12,7 +12,7 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.uncmorfi.R
-import com.uncmorfi.balance.backend.BalanceBackend.BARCODE_PATH
+import com.uncmorfi.balance.backend.BalanceBackend
 import com.uncmorfi.balance.model.User
 import com.uncmorfi.helpers.MemoryHelper
 import java.util.*
@@ -52,10 +52,12 @@ class BarcodeActivity : AppCompatActivity() {
     }
 
     private fun getBarcodeBitmap(card: String?): Bitmap? {
-        var b = MemoryHelper.readBitmapFromStorage(applicationContext, BARCODE_PATH + card)
+        var b = MemoryHelper.readBitmapFromStorage(
+                applicationContext, BalanceBackend.BARCODE_PATH + card)
         if (b == null) {
             b = generateBarcode(card)
-            MemoryHelper.saveBitmapToStorage(applicationContext, BARCODE_PATH + card, b)
+            MemoryHelper.saveBitmapToStorage(
+                    applicationContext, BalanceBackend.BARCODE_PATH + card, b)
         }
         return b
     }

@@ -1,5 +1,5 @@
 ---
-title: Where do they get Balance and Meter information?
+title: Where do we get Balance and Meter information?
 ref: obtienen_infomacion
 lang: en
 resource : true

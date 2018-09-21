@@ -5,7 +5,7 @@ lang: en
 resource : true
 ---
 
-We are two very hungry FaMAF students.
+We' re two very hungry FaMAF students.
 The app started just as a hobby, so we strive to polish it as much as we can in our free time.
 
 * Development: [Alejandro Ismael Silva](https://github.com/AIDEA775)

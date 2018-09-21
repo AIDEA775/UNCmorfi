@@ -64,9 +64,9 @@ class UserOptionsDialog : AppCompatDialogFragment() {
         /**
          * @param user Puede no contener todos los datos del usuario,
          * pero necesita además de los datos que necesitan las demás opciones:
-         * [User.getCard]
-         * [User.getPosition]
-         * [User.getName]
+         * [User.card]
+         * [User.position]
+         * [User.name]
          */
         fun newInstance(user: User): UserOptionsDialog {
             val args = Bundle()

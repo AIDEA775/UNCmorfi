@@ -21,15 +21,14 @@ class UserProvider : ContentProvider() {
                        selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
         val db = mUsersDbHelper!!.readableDatabase
 
-        val c: Cursor
-        when (mUriMatcher.match(uri)) {
-            USERS -> c = db.query(
+        return when (mUriMatcher.match(uri)) {
+            USERS -> db.query(
                     UserEntry.TABLE_NAME,
                     projection,
                     selection,
                     selectionArgs, null, null,
                     sortOrder)
-            USER_ID -> c = db.query(
+            USER_ID -> db.query(
                     UserEntry.TABLE_NAME,
                     projection,
                     UserEntry.ID + "=" + uri.lastPathSegment,
@@ -37,14 +36,13 @@ class UserProvider : ContentProvider() {
                     sortOrder)
             else -> throw IllegalArgumentException("URI not supported: $uri")
         }
-        return c
     }
 
     override fun getType(uri: Uri): String? {
-        when (mUriMatcher.match(uri)) {
-            USERS -> return "vnd.android.cursor.dir/vnd.$authority/users"
-            USER_ID -> return "vnd.android.cursor.item/vnd.$authority/users"
-            else -> return null
+        return when (mUriMatcher.match(uri)) {
+            USERS -> "vnd.android.cursor.dir/vnd.$authority/users"
+            USER_ID -> "vnd.android.cursor.item/vnd.$authority/users"
+            else -> null
         }
     }
 

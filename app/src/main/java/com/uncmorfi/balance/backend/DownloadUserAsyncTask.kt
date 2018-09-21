@@ -17,7 +17,8 @@ internal class DownloadUserAsyncTask
  * @param position Posiciones de usuarios en el [com.uncmorfi.balance.UserCursorAdapter]
  * Necesario para actualizar la interfaz de los item de los usuarios.
  */
-(private val mListener: DownloadUserListener, private val mPosition: IntArray?) : AsyncTask<String, Void, List<User>>() {
+(private val mListener: DownloadUserListener, private val mPosition: IntArray?) :
+        AsyncTask<String, Void, List<User>>() {
     private var mErrorCode: Int = 0
 
     internal interface DownloadUserListener {

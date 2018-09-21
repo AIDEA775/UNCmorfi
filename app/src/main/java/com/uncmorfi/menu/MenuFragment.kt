@@ -91,7 +91,7 @@ class MenuFragment : Fragment(), RefreshMenuTask.RefreshMenuListener {
                         getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Food", result)
                 clipboard.primaryClip = clip
-                showSnack(context, mRootView, R.string.menu_copy_msg, SnackType.FINISH)
+                showSnack(requireContext(), mRootView, R.string.menu_copy_msg, SnackType.FINISH)
             }
         }))
 
@@ -158,7 +158,7 @@ class MenuFragment : Fragment(), RefreshMenuTask.RefreshMenuListener {
             RefreshMenuTask(mApplicationContext, this).execute()
         } else {
             mSwipeRefreshLayout.isRefreshing = false
-            showSnack(context, mRootView, R.string.no_connection, SnackType.ERROR)
+            showSnack(requireContext(), mRootView, R.string.no_connection, SnackType.ERROR)
         }
     }
 
@@ -166,14 +166,14 @@ class MenuFragment : Fragment(), RefreshMenuTask.RefreshMenuListener {
         if (activity != null && isAdded) {
             mSwipeRefreshLayout.isRefreshing = false
             mMenuAdapter.updateMenu(menu)
-            showSnack(context, mRootView, R.string.update_success, SnackType.FINISH)
+            showSnack(requireContext(), mRootView, R.string.update_success, SnackType.FINISH)
         }
     }
 
     override fun onRefreshMenuFail() {
         if (activity != null && isAdded)
             mSwipeRefreshLayout.isRefreshing = false
-        showSnack(context, mRootView, R.string.update_fail, SnackType.ERROR)
+        showSnack(requireContext(), mRootView, R.string.update_fail, SnackType.ERROR)
     }
 
     companion object {

@@ -14,8 +14,6 @@ import com.uncmorfi.R
 import com.uncmorfi.balance.backend.BalanceBackend
 import com.uncmorfi.balance.model.User
 
-import com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER
-
 class SetNameDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -24,7 +22,7 @@ class SetNameDialog : DialogFragment() {
         val v = View.inflate(context, R.layout.dialog_set_name, null)
         builder.setView(v)
 
-        val user = arguments?.getSerializable(ARG_USER) as User?
+        val user = arguments?.getSerializable(UserOptionsDialog.ARG_USER) as User?
         val backend = BalanceBackend.getInstance(context)
 
         val input = v.findViewById<EditText>(R.id.set_name_input)
@@ -66,7 +64,7 @@ class SetNameDialog : DialogFragment() {
         fun newInstance(user: User): SetNameDialog {
             val args = Bundle()
 
-            args.putSerializable(ARG_USER, user)
+            args.putSerializable(UserOptionsDialog.ARG_USER, user)
 
             val fragment = SetNameDialog()
             fragment.arguments = args

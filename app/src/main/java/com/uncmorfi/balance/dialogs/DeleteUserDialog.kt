@@ -10,14 +10,12 @@ import com.uncmorfi.R
 import com.uncmorfi.balance.backend.BalanceBackend
 import com.uncmorfi.balance.model.User
 
-import com.uncmorfi.balance.dialogs.UserOptionsDialog.ARG_USER
-
 class DeleteUserDialog : AppCompatDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(context!!)
 
-        val user = arguments?.getSerializable(ARG_USER) as User?
+        val user = arguments?.getSerializable(UserOptionsDialog.ARG_USER) as User?
         val backend = BalanceBackend.getInstance(context)
 
         if (backend != null && user != null) {
@@ -51,7 +49,7 @@ class DeleteUserDialog : AppCompatDialogFragment() {
         fun newInstance(user: User): DeleteUserDialog {
             val args = Bundle()
 
-            args.putSerializable(ARG_USER, user)
+            args.putSerializable(UserOptionsDialog.ARG_USER, user)
 
             val fragment = DeleteUserDialog()
             fragment.arguments = args

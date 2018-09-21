@@ -1,14 +1,10 @@
 package com.uncmorfi.menu
 
 import com.uncmorfi.helpers.ParserHelper
-
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-
-import java.util.ArrayList
-import java.util.Collections
-import java.util.Date
+import java.util.*
 
 class DayMenu internal constructor(date: String, foods: JSONArray) {
     var date: Date? = null

@@ -1,22 +1,17 @@
 package com.uncmorfi.balance.backend
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.ContentResolver
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
+import android.content.*
 import android.database.Cursor
 import android.util.Log
-
 import com.uncmorfi.R
+import com.uncmorfi.balance.backend.BalanceBackend.BalanceListener
 import com.uncmorfi.balance.model.User
 import com.uncmorfi.balance.model.UserProvider
 import com.uncmorfi.balance.model.UsersContract
 import com.uncmorfi.helpers.ConnectionHelper
 import com.uncmorfi.helpers.MemoryHelper
 import com.uncmorfi.helpers.SnackbarHelper.SnackType
-import java.util.Locale
+import java.util.*
 
 /**
  * Se encarga del manejo de datos de los usuarios/tarjetas.

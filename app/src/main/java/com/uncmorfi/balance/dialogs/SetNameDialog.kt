@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
-
 import com.uncmorfi.R
 import com.uncmorfi.balance.backend.BalanceBackend
 import com.uncmorfi.balance.model.User

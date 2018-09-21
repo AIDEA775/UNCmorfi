@@ -1,18 +1,15 @@
 package com.uncmorfi.balance.dialogs
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialogFragment
-
 import com.uncmorfi.R
 import com.uncmorfi.balance.BarcodeActivity
+import com.uncmorfi.balance.BarcodeActivity.Companion.USER_ARG
 import com.uncmorfi.balance.backend.BalanceBackend
 import com.uncmorfi.balance.model.User
-
-import com.uncmorfi.balance.BarcodeActivity.Companion.USER_ARG
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.

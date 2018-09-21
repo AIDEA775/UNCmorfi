@@ -1,8 +1,10 @@
 package com.uncmorfi
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
@@ -11,7 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-
+import android.view.View
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.uncmorfi.about.AboutDialog
@@ -20,10 +22,6 @@ import com.uncmorfi.counter.CounterFragment
 import com.uncmorfi.faq.FaqFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
-
-import android.app.Activity
-import android.support.annotation.IdRes
-import android.view.View
 
 class MainActivity :
         AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {

@@ -107,7 +107,7 @@ class CounterFragment :
         chart.xAxis.setDrawAxisLine(false)
 
         chart.legend.textSize = 14f
-        chart.legend.textColor = ContextCompat.getColor(context!!, R.color.primary_text)
+        chart.legend.textColor = ContextCompat.getColor(requireContext(), R.color.primary_text)
 
         val xAxis = chart.xAxis
         xAxis.valueFormatter = HourAxisValueFormatter()
@@ -133,8 +133,8 @@ class CounterFragment :
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.counter, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.counter, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -152,12 +152,12 @@ class CounterFragment :
     private fun refreshCounter() {
         hideRefreshStatus()
 
-        if (ConnectionHelper.isOnline(context!!)) {
+        if (ConnectionHelper.isOnline(requireContext())) {
             showRefreshStatus()
             RefreshCounterTask(this).execute()
         } else {
             hideRefreshStatus()
-            showSnack(context, mRootView, R.string.no_connection, SnackType.ERROR)
+            showSnack(requireContext(), mRootView, R.string.no_connection, SnackType.ERROR)
         }
     }
 
@@ -193,7 +193,7 @@ class CounterFragment :
             updateTextViews(result)
             updateCharts(result)
 
-            showSnack(context, mRootView, R.string.update_success, SnackType.FINISH)
+            showSnack(requireContext(), mRootView, R.string.update_success, SnackType.FINISH)
         }
     }
 
@@ -209,7 +209,7 @@ class CounterFragment :
         for (entry in result)
             total += entry.y.toInt()
 
-        mPercentView.setTextColor(ContextCompat.getColor(context!!,
+        mPercentView.setTextColor(ContextCompat.getColor(requireContext(),
                 if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark))
 
         mProgressBar.progress = total
@@ -257,7 +257,7 @@ class CounterFragment :
 
         dataSet.setDrawFilled(true)
         dataSet.fillAlpha = 255
-        dataSet.fillColor = ContextCompat.getColor(context!!, R.color.primary)
+        dataSet.fillColor = ContextCompat.getColor(requireContext(), R.color.primary)
 
         return dataSet
     }
@@ -281,10 +281,10 @@ class CounterFragment :
     private fun showError(code: Int) {
         when (code) {
             ConnectionHelper.CONNECTION_ERROR -> {
-                showSnack(context, mRootView, R.string.connection_error, SnackType.ERROR)
+                showSnack(requireContext(), mRootView, R.string.connection_error, SnackType.ERROR)
             }
             ConnectionHelper.INTERNAL_ERROR -> {
-                showSnack(context, mRootView, R.string.internal_error, SnackType.ERROR)
+                showSnack(requireContext(), mRootView, R.string.internal_error, SnackType.ERROR)
             }
         }
     }

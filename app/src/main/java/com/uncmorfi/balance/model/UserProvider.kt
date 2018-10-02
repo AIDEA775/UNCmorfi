@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
+import com.uncmorfi.BuildConfig
 import com.uncmorfi.balance.model.UsersContract.UserEntry
 
 class UserProvider : ContentProvider() {
@@ -86,7 +87,7 @@ class UserProvider : ContentProvider() {
     }
 
     companion object {
-        private const val authority = "com.uncmorfi"
+        private const val authority = BuildConfig.APPLICATION_ID + ".provider"
 
         val CONTENT_URI: Uri = Uri.parse("content://$authority/users")
 

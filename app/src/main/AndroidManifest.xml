@@ -33,7 +33,7 @@
 
         <provider
             android:name=".balance.model.UserProvider"
-            android:authorities="com.uncmorfi"
+            android:authorities="${applicationId}.provider"
             android:exported="false" />
 
         <activity

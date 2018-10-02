@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">UNCmorfi</string>
 
     <!-- Navigation -->
     <string name="navigation_open">Abrir menú deslizable</string>

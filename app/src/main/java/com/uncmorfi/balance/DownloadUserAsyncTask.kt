@@ -1,4 +1,4 @@
-package com.uncmorfi.balance.backend
+package com.uncmorfi.balance
 
 import android.os.AsyncTask
 import com.uncmorfi.balance.model.User
@@ -56,6 +56,7 @@ internal class DownloadUserAsyncTask
             }
             return users
         } catch (e: IOException) {
+            e.printStackTrace()
             mErrorCode = ConnectionHelper.CONNECTION_ERROR
             return null
         } catch (e: JSONException) {

@@ -12,11 +12,9 @@ object ConnectionHelper {
     const val INTERNAL_ERROR = -1
     const val CONNECTION_ERROR = -2
 
-    fun isOnline(context: Context): Boolean {
-        val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
+    fun isOnline(context: Context?): Boolean {
+        return (context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+                .activeNetworkInfo.isConnected
     }
 
     @Throws(IOException::class)

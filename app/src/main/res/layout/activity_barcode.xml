@@ -29,12 +29,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/user_image"
-                android:layout_toEndOf="@+id/user_image"
+                android:layout_toRightOf="@+id/userImage"
+                android:layout_toEndOf="@+id/userImage"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/userName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -47,7 +47,7 @@
                     tools:text="Alejandro Ismael" />
 
                 <TextView
-                    android:id="@+id/user_card"
+                    android:id="@+id/userCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
@@ -59,7 +59,7 @@
                     tools:text="43217032843" />
 
                 <TextView
-                    android:id="@+id/user_type"
+                    android:id="@+id/userType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -73,7 +73,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <ImageView
-            android:id="@+id/barcode_frame"
+            android:id="@+id/barcodeFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="12dp"

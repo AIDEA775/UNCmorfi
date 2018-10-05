@@ -8,7 +8,7 @@
     android:foreground="?android:attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/user_image"
+        android:id="@+id/userImage"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginLeft="8dp"
@@ -22,19 +22,19 @@
         tools:ignore="ContentDescription" />
 
     <ProgressBar
-        android:id="@+id/user_bar"
+        android:id="@+id/userBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="visible"
         android:importantForAccessibility="no"
         android:indeterminateDrawable="@drawable/progressbar"
-        android:layout_alignBottom="@+id/user_image"
-        android:layout_alignLeft="@+id/user_image"
-        android:layout_alignStart="@+id/user_image"
-        android:layout_alignTop="@+id/user_image"
-        android:layout_alignRight="@+id/user_image"
-        android:layout_alignEnd="@+id/user_image" />
+        android:layout_alignBottom="@+id/userImage"
+        android:layout_alignLeft="@+id/userImage"
+        android:layout_alignStart="@+id/userImage"
+        android:layout_alignTop="@+id/userImage"
+        android:layout_alignRight="@+id/userImage"
+        android:layout_alignEnd="@+id/userImage" />
 
     <LinearLayout
         android:id="@+id/user_name_layout"
@@ -44,15 +44,15 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:gravity="center"
-        android:layout_alignTop="@+id/user_image"
-        android:layout_alignBottom="@+id/user_image"
+        android:layout_alignTop="@+id/userImage"
+        android:layout_alignBottom="@+id/userImage"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/user_image"
-        android:layout_toEndOf="@+id/user_image">
+        android:layout_toRightOf="@+id/userImage"
+        android:layout_toEndOf="@+id/userImage">
 
         <TextView
-            android:id="@+id/user_name"
+            android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -63,7 +63,7 @@
             tools:text="Alejandro Ismael" />
 
         <TextView
-            android:id="@+id/user_card"
+            android:id="@+id/userCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
@@ -79,14 +79,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="8dp"
-        android:layout_below="@+id/user_image"
+        android:layout_below="@+id/userImage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/user_balance"
-        android:layout_toStartOf="@+id/user_balance">
+        android:layout_toLeftOf="@+id/userBalance"
+        android:layout_toStartOf="@+id/userBalance">
 
         <TextView
-            android:id="@+id/user_last_update"
+            android:id="@+id/userLastUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
@@ -95,7 +95,7 @@
             tools:text="Last update" />
 
         <TextView
-            android:id="@+id/user_expiration"
+            android:id="@+id/userExpiration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -104,7 +104,7 @@
             tools:text="Expiration date" />
 
         <TextView
-            android:id="@+id/user_type"
+            android:id="@+id/userType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -114,7 +114,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/user_balance"
+        android:id="@+id/userBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -123,7 +123,7 @@
         android:textColor="@color/primary_dark"
         android:importantForAccessibility="yes"
         android:layout_margin="8dp"
-        android:layout_below="@+id/user_image"
+        android:layout_below="@+id/userImage"
         android:layout_alignRight="@+id/user_name_layout"
         android:layout_alignEnd="@+id/user_name_layout"
         tools:text="$ 56"/>

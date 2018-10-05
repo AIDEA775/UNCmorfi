@@ -14,7 +14,7 @@
         android:background="?attr/selectableItemBackgroundBorderless" >
 
         <EditText
-            android:id="@+id/new_user_input"
+            android:id="@+id/newUserInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,7 +29,7 @@
             android:textColorHint="@color/secondary_text" />
 
         <ImageButton
-            android:id="@+id/new_user_scanner"
+            android:id="@+id/newUserScanner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"

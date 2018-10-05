@@ -2,41 +2,30 @@ package com.uncmorfi.balance.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
 import com.uncmorfi.R
-import com.uncmorfi.balance.backend.BalanceBackend
 import com.uncmorfi.balance.model.User
+import kotlinx.android.synthetic.main.dialog_set_name.view.*
 
-class SetNameDialog : DialogFragment() {
+class SetNameDialog : BaseDialogHelper() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(requireContext())
-
+        super.init()
         val v = View.inflate(context, R.layout.dialog_set_name, null)
         builder.setView(v)
 
-        val user = arguments?.getSerializable(UserOptionsDialog.ARG_USER) as User?
-        val backend = BalanceBackend.getInstance(requireContext())
+        v.setNameInput.append(user.name)
 
-        val input = v.findViewById<EditText>(R.id.set_name_input)
-        val save = v.findViewById<Button>(R.id.set_name_save)
-        val cancel = v.findViewById<Button>(R.id.set_name_cancel)
-
-        if (user != null) {
-            input.append(user.name)
-
-            save.setOnClickListener {
-                backend.updateNameOfUser(user, input.text.toString())
-                dismiss()
-            }
-
-            cancel.setOnClickListener { dismiss() }
+        v.setNameSave.setOnClickListener {
+            user.name = v.setNameInput.text.toString()
+            sendResult(0, user)
+            dismiss()
         }
+
+        v.setNameCancel.setOnClickListener { dismiss() }
 
         return showKeyboard(builder.create())
     }
@@ -47,25 +36,9 @@ class SetNameDialog : DialogFragment() {
         return dialog
     }
 
-    override fun onPause() {
-        super.onPause()
-        dismiss()
-    }
-
     companion object {
-
-        /**
-         * @param user Puede no contener todos los datos del usuario, pero necesita:
-         * [User.name]
-         */
-        fun newInstance(user: User): SetNameDialog {
-            val args = Bundle()
-
-            args.putSerializable(UserOptionsDialog.ARG_USER, user)
-
-            val fragment = SetNameDialog()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(fragment: Fragment, code: Int, user: User): SetNameDialog {
+            return BaseDialogHelper.newInstance(::SetNameDialog, fragment, code, user)
         }
     }
 }

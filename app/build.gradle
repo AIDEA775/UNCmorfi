@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
@@ -10,7 +11,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 6
-        versionName "v4.0.1 Damasco"
+        versionName "v5.0 Espagueti"
         resValue "string", "app_name", "UNCmorfi"
     }
     buildTypes {

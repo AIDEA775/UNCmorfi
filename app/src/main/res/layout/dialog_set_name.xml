@@ -18,7 +18,7 @@
         android:textSize="20sp"/>
 
     <EditText
-        android:id="@+id/set_name_input"
+        android:id="@+id/setNameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textNoSuggestions"
@@ -32,12 +32,12 @@
         android:drawableLeft="@drawable/ic_person_black" />
 
     <Button
-        android:id="@+id/set_name_cancel"
+        android:id="@+id/setNameCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/set_name_input"
-        android:layout_toLeftOf="@+id/set_name_save"
-        android:layout_toStartOf="@+id/set_name_save"
+        android:layout_below="@+id/setNameInput"
+        android:layout_toLeftOf="@+id/setNameSave"
+        android:layout_toStartOf="@+id/setNameSave"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
@@ -49,10 +49,10 @@
         style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
     <Button
-        android:id="@+id/set_name_save"
+        android:id="@+id/setNameSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/set_name_input"
+        android:layout_below="@+id/setNameInput"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="8dp"

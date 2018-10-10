@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
-import android.support.v4.view.animation.LinearOutSlowInInterpolator
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -16,18 +15,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.uncmorfi.R
 import com.uncmorfi.balance.model.User
-import com.uncmorfi.balance.model.UsersContract
 import kotlinx.android.synthetic.main.user_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
+
 
 /**
  * Llena un RecyclerView.
- * El fragmento o actividad contenedora debería implementar [OnCardClickListener].
  */
 internal class UserCursorAdapter(private val mContext: Context,
                                  private val mClickListener: (User) -> Unit,
-                                 private val mLongClickListener: (User) -> Boolean) :
+                                 private val mLongClickListener: (User) -> Unit) :
         RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder>() {
     private val mDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
     private var mCursor: Cursor? = null
@@ -38,9 +38,9 @@ internal class UserCursorAdapter(private val mContext: Context,
         fun bind(user: User) {
             setText(user)
             setImage(user)
-            setProgressBar(user.position)
+            setProgressBar(user.position!!)
             itemView.setOnClickListener { mClickListener(user) }
-            itemView.setOnLongClickListener { mLongClickListener(user) }
+            itemView.setOnLongClickListener { mLongClickListener(user); true }
         }
 
         private fun setText(user: User) {
@@ -98,33 +98,22 @@ internal class UserCursorAdapter(private val mContext: Context,
         private fun setProgressBar(position: Int) {
             if (mUpdateInProgress[position]) {
                 itemView.userBar.visibility = View.VISIBLE
-                setUserImageUpdatingMode()
+                scaleView(itemView.userImage, SCALE_USER_IMAGE_SIZE, SCALE_USER_IMAGE_SIZE)
             } else {
                 itemView.userBar.visibility = View.INVISIBLE
-                setUserImageNormalMode()
+                scaleView(itemView.userImage,1f,1f)
             }
         }
 
-        private fun setUserImageUpdatingMode() {
-            itemView.userImage.scaleX = 1f
-            itemView.userImage.scaleY = 1f
-            itemView.userImage.animate()
-                    .scaleX(SCALE_USER_IMAGE_SIZE)
-                    .scaleY(SCALE_USER_IMAGE_SIZE)
-                    .setInterpolator(LinearOutSlowInInterpolator())
-                    .setDuration(SCALE_USER_IMAGE_TIME.toLong())
-                    .start()
-        }
-
-        private fun setUserImageNormalMode() {
-            itemView.userImage.scaleX = SCALE_USER_IMAGE_SIZE
-            itemView.userImage.scaleY = SCALE_USER_IMAGE_SIZE
-            itemView.userImage.animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setInterpolator(LinearOutSlowInInterpolator())
-                    .setDuration(SCALE_USER_IMAGE_TIME.toLong())
-                    .start()
+        private fun scaleView(v: View, endX: Float, endY: Float) {
+            val anim = ScaleAnimation(
+                    v.scaleX, endX,
+                    v.scaleY, endY,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f)
+            anim.fillAfter = true
+            anim.duration = SCALE_USER_IMAGE_TIME
+            v.startAnimation(anim)
         }
 
     }
@@ -136,10 +125,9 @@ internal class UserCursorAdapter(private val mContext: Context,
     }
 
     override fun onBindViewHolder(holder: UserItemViewHolder, position: Int) {
-        val cursor = mCursor
-        cursor?.let {
-            cursor.moveToPosition(position)
-            val user = User(cursor)
+        mCursor?.let {
+            it.moveToPosition(position)
+            val user = User(it)
             user.position = position
             holder.bind(user)
         }
@@ -160,7 +148,7 @@ internal class UserCursorAdapter(private val mContext: Context,
             val diff = cursor.count - mUpdateInProgress.size
             if (diff > 0) {
                 val list = Arrays.asList<Boolean>(*arrayOfNulls(diff))
-                list.fill(java.lang.Boolean.FALSE)
+                list.fill(false)
                 mUpdateInProgress.addAll(list)
             }
         }
@@ -170,19 +158,9 @@ internal class UserCursorAdapter(private val mContext: Context,
         mUpdateInProgress[position] = show
     }
 
-    fun getItemCardFromCursor(position: Int): String? {
-        val cursor = mCursor
-        if (cursor != null) {
-            cursor.moveToPosition(position)
-            return cursor.getString(cursor.getColumnIndex(UsersContract.UserEntry.CARD))
-        }
-
-        return null
-    }
-
     companion object {
         private const val SCALE_USER_IMAGE_SIZE = 0.8f
-        private const val SCALE_USER_IMAGE_TIME = 500
+        private const val SCALE_USER_IMAGE_TIME = 500L
         private const val WARNING_USER_BALANCE = 20
         private const val WARNING_USER_EXPIRE = 1
     }

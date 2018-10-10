@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -33,6 +32,7 @@ import com.uncmorfi.helpers.SnackbarHelper.showSnack
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.user_new.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Saldo de las tarjetas.
@@ -44,8 +44,7 @@ import java.util.*
  * Se comunica con la base de datos a través de un [ContentResolver].
  * Usa a [DownloadUserAsyncTask] para descargar los datos de los usuarios.
  */
-class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
-        DownloadUserAsyncTask.DownloadUserListener {
+class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private lateinit var mRootView: View
     private lateinit var mUserCursorAdapter: UserCursorAdapter
     private val mContentResolver: ContentResolver by lazy { context!!.contentResolver }
@@ -81,10 +80,9 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         balanceList.isNestedScrollingEnabled = false
         balanceList.layoutManager = layoutManager
 
-        mUserCursorAdapter = UserCursorAdapter(requireContext(), {
-            UserOptionsDialog.newInstance(this, USER_OPTIONS_CODE, it)
-                        .show(fragmentManager, "UserOptionsDialog")},
-                { updateBalanceOfUser(it.card, intArrayOf(it.position));true })
+        mUserCursorAdapter = UserCursorAdapter(requireContext(),
+                { showUserOptionsDialog(it) },
+                { updateBalance(it) })
 
         balanceList.adapter = mUserCursorAdapter
         balanceList.addItemDecoration(
@@ -121,9 +119,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
                     }
                 }
             }
-
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
             override fun afterTextChanged(s: Editable) {}
         })
 
@@ -142,6 +138,11 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         integrator.setBeepEnabled(false)
         integrator.setBarcodeImageEnabled(true)
         integrator.initiateScan()
+    }
+
+    private fun showUserOptionsDialog(user: User) {
+        UserOptionsDialog.newInstance(this, USER_OPTIONS_CODE, user)
+                .show(fragmentManager, "UserOptionsDialog")
     }
 
     private fun callNewUser() {
@@ -172,16 +173,18 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     private fun updateAllUsers() {
-        var cards = ""
-        val positions = IntArray(mUserCursorAdapter.itemCount)
-
-        for (pos in 0 until mUserCursorAdapter.itemCount) {
-            val userCard = mUserCursorAdapter.getItemCardFromCursor(pos)
-            cards += (if (pos == 0) "" else ",") + userCard
-            positions[pos] = pos
+        val users = ArrayList<User>()
+        val cursor = allUsers
+        var pos = 0
+        while (cursor.moveToNext()) {
+            val user = User(cursor)
+            user.position = pos
+            users.add(user)
+            pos++
         }
-        if (!cards.isEmpty())
-            updateBalanceOfUser(cards, positions)
+
+        if (!users.isEmpty())
+            updateBalance(*users.toTypedArray())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -193,7 +196,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
                 USER_OPTIONS_CODE -> {
                     val user : User = getUserFromIntent(data)
                     when (resultCode) {
-                        0 -> updateBalanceOfUser(user.card, intArrayOf(user.position))
+                        0 -> updateBalance(user)
                         1 -> DeleteUserDialog.newInstance(this, DELETE_USER_CODE, user)
                                 .show(fragmentManager, "DeleteUserDialog")
                         2 -> copyCardToClipboard(user.card)
@@ -241,65 +244,15 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         newUserInput.clearFocus()
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        return CursorLoader(requireActivity().applicationContext, UserProvider.CONTENT_URI,
-                null, null, null, null)
-    }
-
-    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
-        mUserCursorAdapter.setCursor(data)
-        mUserCursorAdapter.notifyDataSetChanged()
-    }
-
-    override fun onLoaderReset(loader: Loader<Cursor>) {
-        mUserCursorAdapter.setCursor(null)
-        mUserCursorAdapter.notifyDataSetChanged()
-    }
-
-    private fun onItemAdded() {
-        newUserInput.text.clear() // se agregó la tarjeta, limpiar el EditText.
-        mUserCursorAdapter.setCursor(allUsers)
-        mUserCursorAdapter.notifyItemInserted(mUserCursorAdapter.itemCount)
-    }
-
-    private fun onItemChanged(position: Int) {
-        newUserInput.text.clear() // tambien limpiar el EditText por las dudas.
-        mUserCursorAdapter.setCursor(allUsers)
-        mUserCursorAdapter.notifyItemChanged(position)
-    }
-
-    private fun onItemDeleted(position: Int) {
-        mUserCursorAdapter.setCursor(allUsers)
-        mUserCursorAdapter.notifyItemRemoved(position)
-
-    }
-
-    private fun showSnackBarMsg(resId: Int, type: SnackType) {
-        if (activity != null && isAdded && resId != 0)
-            showSnack(requireContext(), mRootView, resId, type)
-    }
-
-    private fun showSnackBarMsg(msg: String, type: SnackType) {
-        if (activity != null && isAdded)
-            showSnack(requireContext(), mRootView, msg, type)
-    }
-
-    private fun showProgressBar(positions: IntArray, show: Boolean) {
-        for (i in positions) {
-            mUserCursorAdapter.setInProgress(i, show)
-            mUserCursorAdapter.notifyItemChanged(i)
-        }
-    }
-
     private fun newUser(card: String) {
-        Log.i("Backend", "New card: $card")
         when {
             card.length < 15 -> {
                 showSnackBarMsg(R.string.balance_new_user_dumb, SnackType.FINISH)
             }
             ConnectionHelper.isOnline(context) -> {
                 showSnackBarMsg(getNewUserMsg(card), SnackType.LOADING)
-                DownloadUserAsyncTask(this, null).execute(card)
+                DownloadUserAsyncTask {resultCode, list ->  onUsersDownloaded(resultCode, list) }
+                        .execute(User(card))
             }
             else -> {
                 showSnackBarMsg(R.string.no_connection, SnackType.ERROR)
@@ -311,32 +264,45 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         return String.format(Locale.US, getString(R.string.balance_new_user_adding), card)
     }
 
-    private fun updateBalanceOfUser(cards: String?, positions: IntArray) {
-        Log.i("Backend", "Updating cards: $cards")
+    private fun updateBalance(vararg users: User) {
         if (ConnectionHelper.isOnline(context)) {
-            showSnackBarMsg(R.string.updating, SnackType.LOADING)
-            showProgressBar(positions, true)
 
-            DownloadUserAsyncTask(this, positions).execute(cards)
+            showSnackBarMsg(R.string.updating, SnackType.LOADING)
+            showProgressBar(*users, show = true)
+
+            DownloadUserAsyncTask { resultCode, list ->  onUsersDownloaded(resultCode, list) }
+                    .execute(*users)
         } else {
             showSnackBarMsg(R.string.no_connection, SnackType.ERROR)
         }
     }
 
-    override fun onUsersDownloaded(users: List<User>) {
+    private fun onUsersDownloaded(resultCode: Int, users: List<User>) {
+        when (resultCode) {
+            ConnectionHelper.CONNECTION_ERROR -> {
+                showSnackBarMsg(R.string.connection_error, SnackType.ERROR)
+            }
+            ConnectionHelper.INTERNAL_ERROR -> {
+                showSnackBarMsg(R.string.internal_error, SnackType.ERROR)
+            }
+            else -> {
+                updateUser(users)
+                newUserInput.text.clear()
+            }
+        }
+        showProgressBar(*users.toTypedArray(), show = false)
+    }
+
+    private fun updateUser(users: List<User>) {
         var rows = -1
 
         for (u in users) {
-            rows = updateUserBalance(u)
+            rows = saveUserBalance(u)
 
             // Si una fila fue afectada, entonces se actualizó el balance del usuario
             // sinó, insertar el nuevo usuario
-            if (rows == 1) {
-                onItemChanged(u.position)
-                showProgressBar(intArrayOf(u.position), false)
-            } else if (rows == 0) {
+            if (rows == 0) {
                 insertUser(u)
-                onItemAdded()
             }
         }
 
@@ -347,22 +313,16 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         }
     }
 
-    override fun onUsersDownloadFail(errorCode: Int, positions: IntArray?) {
-        showError(errorCode)
-        if (positions != null)
-            showProgressBar(positions, false)
-    }
-
     private fun insertUser(user: User) {
         mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues(true))
     }
 
-    private fun updateUserBalance(user: User): Int {
+    private fun saveUserBalance(user: User): Int {
         return mContentResolver.update(
                 UserProvider.CONTENT_URI,
                 user.toContentValues(false),
                 UsersContract.UserEntry.CARD + "=?",
-                arrayOf(user.card ?: "")
+                arrayOf(user.card)
         )
     }
 
@@ -378,7 +338,6 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
                 ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
                 null, null)
         MemoryHelper.deleteFileInStorage(context!!, BARCODE_PATH + user.card)
-        onItemDeleted(user.position)
         showSnackBarMsg(R.string.balance_delete_user_msg, SnackType.FINISH)
     }
 
@@ -389,19 +348,40 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
                 ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
                 values, null, null
         )
-        onItemChanged(user.position)
         showSnackBarMsg(R.string.update_success, SnackType.FINISH)
     }
 
-    private fun showError(code: Int) {
-        when (code) {
-            ConnectionHelper.CONNECTION_ERROR -> {
-                showSnackBarMsg(R.string.connection_error, SnackType.ERROR)
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        return CursorLoader(requireActivity().applicationContext, UserProvider.CONTENT_URI,
+                null, null, null, null)
+    }
+
+    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
+        mUserCursorAdapter.setCursor(data)
+        mUserCursorAdapter.notifyDataSetChanged()
+    }
+
+    override fun onLoaderReset(loader: Loader<Cursor>) {
+        mUserCursorAdapter.setCursor(null)
+        mUserCursorAdapter.notifyDataSetChanged()
+    }
+
+    private fun showSnackBarMsg(resId: Int, type: SnackType) {
+        if (activity != null && isAdded && resId != 0)
+            showSnack(requireContext(), mRootView, resId, type)
+    }
+
+    private fun showSnackBarMsg(msg: String, type: SnackType) {
+        if (activity != null && isAdded)
+            showSnack(requireContext(), mRootView, msg, type)
+    }
+
+    private fun showProgressBar(vararg users: User, show: Boolean) {
+        for (u in users) {
+            u.position?.let {
+                mUserCursorAdapter.setInProgress(it, show)
+                mUserCursorAdapter.notifyItemChanged(it)
             }
-            ConnectionHelper.INTERNAL_ERROR -> {
-                showSnackBarMsg(R.string.internal_error, SnackType.ERROR)
-            }
-            else -> showSnackBarMsg(R.string.internal_error, SnackType.ERROR)
         }
     }
 

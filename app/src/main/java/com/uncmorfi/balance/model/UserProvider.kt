@@ -21,22 +21,29 @@ class UserProvider : ContentProvider() {
     override fun query(uri: Uri, projection: Array<String>?, selection: String?,
                        selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
         val db = mUsersDbHelper!!.readableDatabase
+        val cursor : Cursor
 
-        return when (mUriMatcher.match(uri)) {
-            USERS -> db.query(
-                    UserEntry.TABLE_NAME,
-                    projection,
-                    selection,
-                    selectionArgs, null, null,
-                    sortOrder)
-            USER_ID -> db.query(
-                    UserEntry.TABLE_NAME,
-                    projection,
-                    UserEntry.ID + "=" + uri.lastPathSegment,
-                    selectionArgs, null, null,
-                    sortOrder)
+        when (mUriMatcher.match(uri)) {
+            USERS -> {
+                cursor = db.query(
+                        UserEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs, null, null,
+                        sortOrder)
+            }
+            USER_ID -> {
+                cursor = db.query(
+                        UserEntry.TABLE_NAME,
+                        projection,
+                        UserEntry.ID + "=" + uri.lastPathSegment,
+                        selectionArgs, null, null,
+                        sortOrder)
+            }
             else -> throw IllegalArgumentException("URI not supported: $uri")
         }
+        cursor.setNotificationUri(context.contentResolver, uri)
+        return cursor
     }
 
     override fun getType(uri: Uri): String? {
@@ -54,6 +61,7 @@ class UserProvider : ContentProvider() {
         newUserId = db.insert(UserEntry.TABLE_NAME, null, contentValues)
 
         db.close()
+        context.contentResolver.notifyChange(uri, null)
         return ContentUris.withAppendedId(CONTENT_URI, newUserId)
     }
 
@@ -68,6 +76,7 @@ class UserProvider : ContentProvider() {
         val result = db.delete(UserEntry.TABLE_NAME, where, selectionArgs)
 
         db.close()
+        context.contentResolver.notifyChange(uri, null)
         return result
     }
 
@@ -83,6 +92,7 @@ class UserProvider : ContentProvider() {
         val result = db.update(UserEntry.TABLE_NAME, contentValues, where, selectionArgs)
 
         db.close()
+        context.contentResolver.notifyChange(uri, null)
         return result
     }
 

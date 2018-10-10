@@ -14,9 +14,13 @@ class User : Serializable {
     var balance: Int = 0
     var expiration: Long = 0
     var lastUpdate: Long = 0
-    var position: Int = 0
+    var position: Int? = null
 
     constructor()
+
+    constructor(card : String) {
+        this.card = card
+    }
 
     constructor(cursor: Cursor) {
         this.id = cursor.getInt(cursor.getColumnIndex(UsersContract.UserEntry.ID))

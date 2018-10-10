@@ -10,67 +10,53 @@ import java.io.IOException
 import java.util.*
 
 /**
- * Descarga y parsea uno o más usuarios a partir del codigo de la tarjeta.
+ * Descarga y parsea uno o más usuarios a partir del codigo de la tarjeta dentro de cada User.
  */
-internal class DownloadUserAsyncTask
-/**
- * @param position Posiciones de usuarios en el [com.uncmorfi.balance.UserCursorAdapter]
- * Necesario para actualizar la interfaz de los item de los usuarios.
- */
-(private val mListener: DownloadUserListener, private val mPosition: IntArray?) :
-        AsyncTask<String, Void, List<User>>() {
+internal class DownloadUserAsyncTask (private val mListener: (resultCode: Int, List<User>) -> Unit) :
+        AsyncTask<User, Void, List<User>>() {
     private var mErrorCode: Int = 0
 
-    internal interface DownloadUserListener {
-        fun onUsersDownloaded(users: List<User>)
-        fun onUsersDownloadFail(errorCode: Int, positions: IntArray?)
-    }
-
-    override fun doInBackground(vararg params: String): List<User>? {
+    override fun doInBackground(vararg params: User): List<User> {
+        val users = params.asList()
         try {
-            val card = params[0]
-            val result = ConnectionHelper.downloadFromUrlByGet(URL + card)
-
+            var cards = ""
+            for (pos in 0 until users.size) {
+                cards += (if (pos == 0) "" else ",") + users[pos].card
+            }
+            val result = ConnectionHelper.downloadFromUrlByGet(URL + cards)
             val array = JSONArray(result)
-            val users = ArrayList<User>()
 
             for (i in 0 until array.length()) {
                 val item = array.getJSONObject(i)
-                val user = User()
 
-                user.card = item.getString("code")
-                user.name = item.getString("name")
-                user.type = item.getString("type")
-                user.image = item.getString("imageURL")
-                user.balance = item.getInt("balance")
+                val card = item.getString("code")
+                val user = users.find { u -> u.card == card }
 
-                val expireDate = ParserHelper.stringToDate(item.getString("expirationDate"))
-                if (expireDate != null) user.expiration = expireDate.time
+                if (user != null) {
+                    user.name = item.getString("name")
+                    user.type = item.getString("type")
+                    user.image = item.getString("imageURL")
+                    user.balance = item.getInt("balance")
 
-                val currentTime = Calendar.getInstance().time
-                user.lastUpdate = currentTime.time
+                    val expireDate = ParserHelper.stringToDate(item.getString("expirationDate"))
+                    if (expireDate != null) user.expiration = expireDate.time
 
-                if (mPosition != null) user.position = mPosition[i]
-
-                users.add(user)
+                    val currentTime = Calendar.getInstance().time
+                    user.lastUpdate = currentTime.time
+                }
             }
-            return users
         } catch (e: IOException) {
             e.printStackTrace()
             mErrorCode = ConnectionHelper.CONNECTION_ERROR
-            return null
         } catch (e: JSONException) {
             mErrorCode = ConnectionHelper.INTERNAL_ERROR
             e.printStackTrace()
-            return null
         }
+        return users
     }
 
-    override fun onPostExecute(users: List<User>?) {
-        if (users == null || users.isEmpty())
-            mListener.onUsersDownloadFail(mErrorCode, mPosition)
-        else
-            mListener.onUsersDownloaded(users)
+    override fun onPostExecute(users: List<User>) {
+        mListener(mErrorCode, users)
     }
 
     companion object {

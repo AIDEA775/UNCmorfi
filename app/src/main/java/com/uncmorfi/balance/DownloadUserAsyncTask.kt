@@ -3,7 +3,7 @@ package com.uncmorfi.balance
 import android.os.AsyncTask
 import com.uncmorfi.balance.model.User
 import com.uncmorfi.helpers.ConnectionHelper
-import com.uncmorfi.helpers.ParserHelper
+import com.uncmorfi.helpers.toDate
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
@@ -12,7 +12,7 @@ import java.util.*
 /**
  * Descarga y parsea uno o más usuarios a partir del codigo de la tarjeta dentro de cada User.
  */
-internal class DownloadUserAsyncTask (private val mListener: (resultCode: Int, List<User>) -> Unit) :
+internal class DownloadUserAsyncTask (private val mListener: (code: Int, List<User>) -> Unit) :
         AsyncTask<User, Void, List<User>>() {
     private var mErrorCode: Int = 0
 
@@ -38,7 +38,7 @@ internal class DownloadUserAsyncTask (private val mListener: (resultCode: Int, L
                     user.image = item.getString("imageURL")
                     user.balance = item.getInt("balance")
 
-                    val expireDate = ParserHelper.stringToDate(item.getString("expirationDate"))
+                    val expireDate = item.getString("expirationDate").toDate()
                     if (expireDate != null) user.expiration = expireDate.time
 
                     val currentTime = Calendar.getInstance().time
@@ -55,8 +55,8 @@ internal class DownloadUserAsyncTask (private val mListener: (resultCode: Int, L
         return users
     }
 
-    override fun onPostExecute(users: List<User>) {
-        mListener(mErrorCode, users)
+    override fun onPostExecute(result: List<User>) {
+        mListener(mErrorCode, result)
     }
 
     companion object {

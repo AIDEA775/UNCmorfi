@@ -25,10 +25,8 @@ import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.balance.model.User
 import com.uncmorfi.balance.model.UserProvider
 import com.uncmorfi.balance.model.UsersContract
-import com.uncmorfi.helpers.ConnectionHelper
-import com.uncmorfi.helpers.MemoryHelper
+import com.uncmorfi.helpers.*
 import com.uncmorfi.helpers.SnackbarHelper.SnackType
-import com.uncmorfi.helpers.SnackbarHelper.showSnack
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.user_new.*
 import java.util.*
@@ -249,7 +247,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             card.length < 15 -> {
                 showSnackBarMsg(R.string.balance_new_user_dumb, SnackType.FINISH)
             }
-            ConnectionHelper.isOnline(context) -> {
+            context.isOnline() -> {
                 showSnackBarMsg(getNewUserMsg(card), SnackType.LOADING)
                 DownloadUserAsyncTask {resultCode, list ->  onUsersDownloaded(resultCode, list) }
                         .execute(User(card))
@@ -265,20 +263,20 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun updateBalance(vararg users: User) {
-        if (ConnectionHelper.isOnline(context)) {
+        if (context.isOnline()) {
 
             showSnackBarMsg(R.string.updating, SnackType.LOADING)
             showProgressBar(*users, show = true)
 
-            DownloadUserAsyncTask { resultCode, list ->  onUsersDownloaded(resultCode, list) }
+            DownloadUserAsyncTask { code, list ->  onUsersDownloaded(code, list) }
                     .execute(*users)
         } else {
             showSnackBarMsg(R.string.no_connection, SnackType.ERROR)
         }
     }
 
-    private fun onUsersDownloaded(resultCode: Int, users: List<User>) {
-        when (resultCode) {
+    private fun onUsersDownloaded(code: Int, users: List<User>) {
+        when (code) {
             ConnectionHelper.CONNECTION_ERROR -> {
                 showSnackBarMsg(R.string.connection_error, SnackType.ERROR)
             }
@@ -337,7 +335,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         mContentResolver.delete(
                 ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
                 null, null)
-        MemoryHelper.deleteFileInStorage(context!!, BARCODE_PATH + user.card)
+        context?.deleteFileInStorage(BARCODE_PATH + user.card)
         showSnackBarMsg(R.string.balance_delete_user_msg, SnackType.FINISH)
     }
 
@@ -368,12 +366,12 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private fun showSnackBarMsg(resId: Int, type: SnackType) {
         if (activity != null && isAdded && resId != 0)
-            showSnack(requireContext(), mRootView, resId, type)
+            mRootView.snack(requireContext(), resId, type)
     }
 
     private fun showSnackBarMsg(msg: String, type: SnackType) {
         if (activity != null && isAdded)
-            showSnack(requireContext(), mRootView, msg, type)
+            mRootView.snack(requireContext(), msg, type)
     }
 
     private fun showProgressBar(vararg users: User, show: Boolean) {

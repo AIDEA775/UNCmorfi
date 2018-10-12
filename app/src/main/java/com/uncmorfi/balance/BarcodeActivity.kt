@@ -13,7 +13,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.uncmorfi.R
 import com.uncmorfi.balance.BalanceFragment.Companion.BARCODE_PATH
 import com.uncmorfi.balance.model.User
-import com.uncmorfi.helpers.MemoryHelper
+import com.uncmorfi.helpers.readBitmapFromStorage
+import com.uncmorfi.helpers.saveToStorage
 import kotlinx.android.synthetic.main.activity_barcode.*
 import java.util.*
 
@@ -43,12 +44,10 @@ class BarcodeActivity : AppCompatActivity() {
     }
 
     private fun getBarcodeBitmap(card: String?): Bitmap? {
-        var b = MemoryHelper.readBitmapFromStorage(
-                applicationContext, BARCODE_PATH + card)
+        var b = applicationContext.readBitmapFromStorage(BARCODE_PATH + card)
         if (b == null) {
             b = generateBarcode(card)
-            MemoryHelper.saveBitmapToStorage(
-                    applicationContext, BARCODE_PATH + card, b)
+            applicationContext.saveToStorage(BARCODE_PATH + card, b)
         }
         return b
     }

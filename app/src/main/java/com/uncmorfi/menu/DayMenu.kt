@@ -1,50 +1,56 @@
 package com.uncmorfi.menu
 
+import android.text.TextUtils
 import com.uncmorfi.helpers.ParserHelper
-import org.json.JSONArray
+import com.uncmorfi.helpers.toArray
+import com.uncmorfi.helpers.toDate
 import org.json.JSONException
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class DayMenu internal constructor(date: String, foods: JSONArray) {
-    var date: Date? = null
-    private lateinit var mFood: MutableList<String>
+fun String?.toDayMenuList(): List<DayMenu> {
+    val menuList = ArrayList<DayMenu>()
 
-    val food: List<String>
-        get() = mFood
+    if (this == null) return menuList
 
-    init {
-        try {
-            this.date = ParserHelper.stringToDate(date)
-            mFood = ArrayList()
-            for (i in 0 until foods.length()) {
-                mFood.add(foods.getString(i))
-            }
-        } catch (e: JSONException) {
-            e.printStackTrace()
+    try {
+        val result = JSONObject(this)
+        val week = result.getJSONObject("menu")
+
+        val keys = week.keys()
+        while (keys.hasNext()) {
+            val key = keys.next() as String
+            val foods = week.getJSONArray(key)
+            menuList.add(DayMenu(key, *foods.toArray()))
         }
-
+    } catch (e: JSONException) {
+        e.printStackTrace()
     }
 
-    companion object {
-        fun fromJson(source: String): List<DayMenu> {
-            val menuList = ArrayList<DayMenu>()
+    Collections.sort(menuList, ParserHelper.MenuDayComparator())
+    return menuList
+}
 
-            try {
-                val result = JSONObject(source)
-                val week = result.getJSONObject("menu")
+class DayMenu (date: String, vararg foods: String) {
+    val date: Date? = date.toDate()
+    val food: List<String> = foods.asList()
 
-                val keys = week.keys()
-                while (keys.hasNext()) {
-                    val key = keys.next() as String
-                    menuList.add(DayMenu(key, week.getJSONArray(key)))
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
+    override fun toString() : String {
+        val name = getDateName()
+        val num = getDateNumber()
+        val menu = TextUtils.join(", ", food)
+        return "$name $num:\n$menu\n\n#UNCmorfi"
+    }
 
-            Collections.sort(menuList, ParserHelper.MenuDayComparator())
-            return menuList
-        }
+    fun getDateNumber(): String {
+        val mDateNumber = SimpleDateFormat("dd", Locale.getDefault())
+        return mDateNumber.format(date)
+    }
+
+    fun getDateName(): String {
+        val mDateName = SimpleDateFormat("EEE", Locale.getDefault())
+        return mDateName.format(date)
     }
 }

@@ -8,14 +8,14 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
+fun Context?.isOnline(): Boolean {
+    return (this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+            .activeNetworkInfo?.isConnected ?: false
+}
+
 object ConnectionHelper {
     const val INTERNAL_ERROR = -1
     const val CONNECTION_ERROR = -2
-
-    fun isOnline(context: Context?): Boolean {
-        return (context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                .activeNetworkInfo.isConnected
-    }
 
     @Throws(IOException::class)
     fun downloadFromUrlByGet(uri: String): String {

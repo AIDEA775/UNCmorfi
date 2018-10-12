@@ -1,19 +1,14 @@
 package com.uncmorfi
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.annotation.IdRes
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.view.View
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.uncmorfi.about.AboutDialog
@@ -22,16 +17,11 @@ import com.uncmorfi.counter.CounterFragment
 import com.uncmorfi.faq.FaqFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar_menu.*
 
 class MainActivity :
         AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
-
-    private val mDrawerLayout: DrawerLayout by bind(R.id.drawer_layout)
-    private val mNavigationView: NavigationView by bind(R.id.nav_view)
-
-    private fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
-        return lazy { findViewById<T>(res) }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,16 +34,15 @@ class MainActivity :
     }
 
     private fun setToolbarAndNavigation() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         val toggle = ActionBarDrawerToggle(
-                this, mDrawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close
+                this, drawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close
         )
-        mDrawerLayout.addDrawerListener(toggle)
+        drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        mNavigationView.setNavigationItemSelectedListener(this)
+        navView.setNavigationItemSelectedListener(this)
     }
 
     private fun setMainFragment() {
@@ -70,22 +59,22 @@ class MainActivity :
         if (!item.isChecked)
             changed = replaceFragment(item.itemId)
 
-        mDrawerLayout.closeDrawer(GravityCompat.START)
+        drawerLayout.closeDrawer(GravityCompat.START)
         return changed
     }
 
     override fun onBackPressed() {
         when {
-            mDrawerLayout.isDrawerOpen(GravityCompat.START) -> {
-                mDrawerLayout.closeDrawer(GravityCompat.START)
+            drawerLayout.isDrawerOpen(GravityCompat.START) -> {
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
-            mNavigationView.menu.getItem(0).isChecked -> {
+            navView.menu.getItem(0).isChecked -> {
                 super.onBackPressed()
             }
             else -> {
                 // Go to main fragment
                 replaceFragment(R.id.nav_menu)
-                mNavigationView.setCheckedItem(R.id.nav_menu)
+                navView.setCheckedItem(R.id.nav_menu)
             }
         }
     }

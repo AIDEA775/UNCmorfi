@@ -14,25 +14,28 @@
         android:id="@+id/menu_day"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/menu_day_number"
+            android:id="@+id/menuDayName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textAllCaps="true"
+            tools:text="Lun." />
+
+        <TextView
+            android:id="@+id/menuDayNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
             android:gravity="center"
             android:textSize="24sp"
             tools:text="01" />
-
-        <TextView
-            android:id="@+id/menu_day_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:textSize="16sp"
-            tools:text="Lun." />
     </LinearLayout>
 
 
@@ -48,7 +51,7 @@
         android:layout_toEndOf="@+id/menu_day">
 
         <TextView
-            android:id="@+id/menu_food1"
+            android:id="@+id/menuFood1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -56,7 +59,7 @@
             tools:text="Costeleta con salsa criolla" />
 
         <TextView
-            android:id="@+id/menu_food2"
+            android:id="@+id/menuFood2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -64,7 +67,7 @@
             tools:text="Papas a las Finas Hierbas o Ensalada de Zanahoria y choclo" />
 
         <TextView
-            android:id="@+id/menu_food3"
+            android:id="@+id/menuFood3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"

@@ -5,11 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.view.*
-import android.widget.ProgressBar
 import android.widget.SeekBar
-import android.widget.TextView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
@@ -18,10 +15,9 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.uncmorfi.R
-import com.uncmorfi.helpers.ConnectionHelper
+import com.uncmorfi.helpers.*
 import com.uncmorfi.helpers.SnackbarHelper.SnackType
-import com.uncmorfi.helpers.SnackbarHelper.showSnack
-import java.text.SimpleDateFormat
+import kotlinx.android.synthetic.main.fragment_counter.*
 import java.util.*
 
 /**
@@ -29,19 +25,9 @@ import java.util.*
  * Administra la UI con todas sus features.
  * Usa a [RefreshCounterTask] para actualizar el medidor.
  */
-class CounterFragment :
-        Fragment(), RefreshCounterTask.RefreshCounterListener, SeekBar.OnSeekBarChangeListener {
 
+class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     private lateinit var mRootView: View
-    private lateinit var mResumeView: TextView
-    private lateinit var mProgressBar: ProgressBar
-    private lateinit var mPercentView: TextView
-    private lateinit var mDistanceView: TextView
-    private lateinit var mSeekBar: SeekBar
-    private lateinit var mEstimateView: TextView
-    private lateinit var mTimeChart: LineChart
-    private lateinit var mCumulativeChart: LineChart
-    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,42 +36,34 @@ class CounterFragment :
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_counter, container, false)
+        return inflater.inflate(R.layout.fragment_counter, container, false)
+    }
 
-        setAllViews(view)
-        initSwipeRefreshLayout()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mRootView = view
 
-        setChartsOptionsBase(mTimeChart)
-        setChartsOptionsBase(mCumulativeChart)
+        counterSwipeRefresh.init { refreshCounter() }
+
+        setChartsOptionsBase(counterTimeChart)
+        setChartsOptionsBase(counterAccumulatedChart)
+
+        TODO("No se que onda esto, pero los charts tienen distino tamaño porque el acumulado" +
+                "tiene mas digitos en el lado izq, y el sync no responde bien en los bordes")
+        counterTimeChart.onChartGestureListener = SyncChartsGestureListener(
+                counterTimeChart, counterAccumulatedChart)
+
+        counterAccumulatedChart.onChartGestureListener = SyncChartsGestureListener(
+                counterAccumulatedChart, counterTimeChart)
+
         setTimeChart()
         setCumulativeChart()
 
-        mProgressBar.max = FOOD_RATIONS
-        mSeekBar.setOnSeekBarChangeListener(this)
-        mSeekBar.progress = 0
+        counterBar.max = FOOD_RATIONS
+        counterSeek.setOnSeekBarChangeListener(this)
+        counterSeek.progress = 0
 
         refreshCounter()
-        return view
-    }
-
-    private fun setAllViews(view: View) {
-        mRootView = view.findViewById(R.id.counter_coordinator)
-        mResumeView = view.findViewById(R.id.counter_resume)
-        mProgressBar = view.findViewById(R.id.counter_bar)
-        mPercentView = view.findViewById(R.id.counter_percent)
-        mDistanceView = view.findViewById(R.id.counter_distance)
-        mSeekBar = view.findViewById(R.id.counter_seek)
-        mEstimateView = view.findViewById(R.id.counter_estimate)
-        mTimeChart = view.findViewById(R.id.counter_time_chart)
-        mCumulativeChart = view.findViewById(R.id.counter_accumulated_chart)
-        mSwipeRefreshLayout = view.findViewById(R.id.counter_swipe_refresh)
-    }
-
-    private fun initSwipeRefreshLayout() {
-        mSwipeRefreshLayout.setOnRefreshListener { refreshCounter() }
-
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.accent)
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.white, R.color.primary_light)
     }
 
     private fun setChartsOptionsBase(chart: LineChart) {
@@ -120,7 +98,7 @@ class CounterFragment :
     }
 
     private fun setCumulativeChart() {
-        mCumulativeChart.xAxis.setDrawGridLines(false)
+        counterAccumulatedChart.xAxis.setDrawGridLines(false)
     }
 
     override fun onResume() {
@@ -130,7 +108,7 @@ class CounterFragment :
 
     override fun onStop() {
         super.onStop()
-        mSwipeRefreshLayout.isRefreshing = false
+        counterSwipeRefresh.isRefreshing = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -138,26 +116,28 @@ class CounterFragment :
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.counter_update) {
-            refreshCounter()
-            return true
-        } else if (item.itemId == R.id.counter_browser) {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
-            startActivity(i)
-            return true
+        return when (item.itemId) {
+            R.id.counter_update -> {
+                refreshCounter()
+                true
+            }
+            R.id.counter_browser -> {
+                val i = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
+                startActivity(i)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun refreshCounter() {
-        hideRefreshStatus()
-
-        if (ConnectionHelper.isOnline(requireContext())) {
-            showRefreshStatus()
-            RefreshCounterTask(this).execute()
+        if (requireContext().isOnline()) {
+            refreshStatus(true)
+            RefreshCounterTask { code, result -> onCounterDownloaded(code, result) }
+                    .execute()
         } else {
-            hideRefreshStatus()
-            showSnack(requireContext(), mRootView, R.string.no_connection, SnackType.ERROR)
+            refreshStatus(false)
+            mRootView.snack(requireContext(), R.string.no_connection, SnackType.ERROR)
         }
     }
 
@@ -168,10 +148,10 @@ class CounterFragment :
         val currentTime = Date().time
 
         val timeStamp = Date(currentTime + minutes * 60 * 1000)
-        val text = DATE_FMT.format(timeStamp)
+        val text = timeStamp.toString("HH:mm")
 
-        mDistanceView.text = String.format(getString(R.string.counter_distance), windows)
-        mEstimateView.text = String.format(getString(R.string.counter_estimate), minutes, text)
+        counterDistance.text = String.format(getString(R.string.counter_distance), windows)
+        counterEstimate.text = String.format(getString(R.string.counter_estimate), minutes, text)
     }
 
     /**
@@ -187,20 +167,22 @@ class CounterFragment :
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {}
 
-    override fun onRefreshCounterSuccess(result: List<Entry>) {
-        if (isAdded) {
-            hideRefreshStatus()
-            updateTextViews(result)
-            updateCharts(result)
-
-            showSnack(requireContext(), mRootView, R.string.update_success, SnackType.FINISH)
-        }
-    }
-
-    override fun onRefreshCounterFail(errorCode: Int) {
-        if (isAdded) {
-            hideRefreshStatus()
-            showError(errorCode)
+    private fun onCounterDownloaded(code: Int, result: List<Entry>) {
+        if (activity != null && isAdded) {
+            refreshStatus(false)
+            when (code) {
+                ConnectionHelper.CONNECTION_ERROR -> {
+                    mRootView.snack(requireContext(), R.string.connection_error, SnackType.ERROR)
+                }
+                ConnectionHelper.INTERNAL_ERROR -> {
+                    mRootView.snack(requireContext(), R.string.internal_error, SnackType.ERROR)
+                }
+                else -> {
+                    updateTextViews(result)
+                    updateCharts(result)
+                    mRootView.snack(requireContext(), R.string.update_success, SnackType.FINISH)
+                }
+            }
         }
     }
 
@@ -209,13 +191,13 @@ class CounterFragment :
         for (entry in result)
             total += entry.y.toInt()
 
-        mPercentView.setTextColor(ContextCompat.getColor(requireContext(),
+        counterPercent.setTextColor(ContextCompat.getColor(requireContext(),
                 if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark))
 
-        mProgressBar.progress = total
-        mResumeView.text = String.format(
+        counterBar.progress = total
+        counterResume.text = String.format(
                 getString(R.string.counter_rations_title), total, FOOD_RATIONS)
-        mPercentView.text = String.format(
+        counterPercent.text = String.format(
                 Locale.US, "%d%%", total * 100 / FOOD_RATIONS)
     }
 
@@ -223,8 +205,8 @@ class CounterFragment :
         if (data != null && !data.isEmpty()) {
             val accumulatedData = getAccumulate(data)
 
-            updateChart(mTimeChart, getTimeDataSet(data))
-            updateChart(mCumulativeChart, getAccumulatedDataSet(accumulatedData))
+            updateChart(counterTimeChart, getTimeDataSet(data))
+            updateChart(counterAccumulatedChart, getAccumulatedDataSet(accumulatedData))
         }
     }
 
@@ -268,31 +250,15 @@ class CounterFragment :
         chart.invalidate()
     }
 
-    private fun showRefreshStatus() {
-        mProgressBar.isIndeterminate = true
-        mSwipeRefreshLayout.isRefreshing = true
-    }
-
-    private fun hideRefreshStatus() {
-        mProgressBar.isIndeterminate = false
-        mSwipeRefreshLayout.isRefreshing = false
-    }
-
-    private fun showError(code: Int) {
-        when (code) {
-            ConnectionHelper.CONNECTION_ERROR -> {
-                showSnack(requireContext(), mRootView, R.string.connection_error, SnackType.ERROR)
-            }
-            ConnectionHelper.INTERNAL_ERROR -> {
-                showSnack(requireContext(), mRootView, R.string.internal_error, SnackType.ERROR)
-            }
-        }
+    private fun refreshStatus(show : Boolean) {
+        counterBar.isIndeterminate = show
+        counterSwipeRefresh.isRefreshing = show
     }
 
     private inner class HourAxisValueFormatter : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
             val valueDate = Date(value.toLong() * 1000)
-            return DATE_FMT.format(valueDate)
+            return valueDate.toString("HH:mm")
         }
     }
 
@@ -300,6 +266,5 @@ class CounterFragment :
         private const val FOOD_RATIONS = 1500
         private const val FOOD_LIMIT = 200
         private const val URL = "http://comedor.unc.edu.ar/cocina.php"
-        private val DATE_FMT = SimpleDateFormat("HH:mm", Locale.getDefault())
     }
 }

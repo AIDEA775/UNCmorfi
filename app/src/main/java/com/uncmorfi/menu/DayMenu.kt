@@ -38,19 +38,19 @@ class DayMenu (date: String, vararg foods: String) {
     val food: List<String> = foods.asList()
 
     override fun toString() : String {
-        val name = getDateName()
-        val num = getDateNumber()
+        val name = getDateName("EEEE").capitalize()
+        val num = getDateNumber("d")
         val menu = TextUtils.join(", ", food)
-        return "$name $num:\n$menu\n\n#UNCmorfi"
+        return "$name $num:\n$menu"
     }
 
-    fun getDateNumber(): String {
-        val mDateNumber = SimpleDateFormat("dd", Locale.getDefault())
+    fun getDateNumber(pattern: String = "dd"): String {
+        val mDateNumber = SimpleDateFormat(pattern, Locale.getDefault())
         return mDateNumber.format(date)
     }
 
-    fun getDateName(): String {
-        val mDateName = SimpleDateFormat("EEE", Locale.getDefault())
+    fun getDateName(pattern: String = "E"): String {
+        val mDateName = SimpleDateFormat(pattern, Locale.getDefault())
         return mDateName.format(date)
     }
 }

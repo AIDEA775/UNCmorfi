@@ -14,6 +14,8 @@
     <!-- Menu -->
     <string name="menu_action_update">Update menu</string>
     <string name="menu_copy_msg">Menu copied</string>
+    <string name="menu_share_subject">Weekly menu</string>
+    <string name="menu_share_banner">Shared from UNCmorfi</string>
 
     <!-- Balance -->
     <string name="balance_action_update">Update all cards</string>

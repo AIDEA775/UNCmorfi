@@ -59,17 +59,17 @@ fun Context.colorOf(resId: Int) : Int {
     return ContextCompat.getColor(this, resId)
 }
 
-// Devuelvo true para obviarlos en los onOptionsItemSelected() de los fragmentos
+// Devuelvo true porque lo uso en los onOptionsItemSelected() de los fragments
 fun Activity.startBrowser(uri: String) : Boolean {
     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
     return true
 }
 
-fun Activity.shareText(subject: String, text: String) : Boolean {
+fun Activity.shareText(subject: String, text: String, title: String = "UNCmorfi") : Boolean {
     val i = Intent(Intent.ACTION_SEND)
     i.type = "text/plain"
     i.putExtra(Intent.EXTRA_SUBJECT, subject)
     i.putExtra(Intent.EXTRA_TEXT, text)
-    startActivity(Intent.createChooser(i, "shareText"))
+    startActivity(Intent.createChooser(i, title))
     return true
 }

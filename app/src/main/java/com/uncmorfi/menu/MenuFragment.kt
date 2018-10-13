@@ -95,7 +95,12 @@ class MenuFragment : Fragment() {
         }
     }
 
-    private fun onClick(dayMenu: DayMenu) {}
+    private fun onClick(dayMenu: DayMenu) {
+        requireActivity().shareText(
+                getString(R.string.menu_share_subject),
+                dayMenu.toString() + "\n\n" + getString(R.string.menu_share_banner),
+                getString(R.string.menu_share_subject))
+    }
 
     private fun onLongClick(dayMenu: DayMenu) {
         val clipboard = mApplicationContext.

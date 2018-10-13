@@ -29,7 +29,7 @@ internal class MenuAdapter (private val mContext: Context,
             val colorBack: Int
             when {
                 offset < 0 -> {
-                    colorDay = mContext.colorOf(R.color.secondary_text)
+                    colorDay = mContext.colorOf(R.color.primary_dark)
                     colorFood = mContext.colorOf(R.color.secondary_text)
                     colorBack = mContext.colorOf(R.color.white)
                 }

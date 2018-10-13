@@ -19,6 +19,7 @@ import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
+import android.support.v4.widget.ViewDragHelper
 
 class MainActivity :
         AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -43,6 +44,18 @@ class MainActivity :
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
+
+        // Abrir drawerLayout desde la mitad de la pantalla
+        // https://stackoverflow.com/a/17802569
+        val mDragger = drawerLayout.javaClass.getDeclaredField("mLeftDragger")
+        mDragger.isAccessible = true
+        val draggerObj = mDragger.get(drawerLayout) as ViewDragHelper
+
+        val mEdgeSize = draggerObj.javaClass.getDeclaredField("mEdgeSize")
+        mEdgeSize.isAccessible = true
+        val edge = mEdgeSize.getInt(draggerObj)
+
+        mEdgeSize.setInt(draggerObj, edge * 3) // any constant in dp
     }
 
     private fun setMainFragment() {

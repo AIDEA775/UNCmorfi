@@ -2,7 +2,6 @@ package com.uncmorfi.balance
 
 import android.content.*
 import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
@@ -58,13 +57,17 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.fragment_balance, container, false)
+        return inflater.inflate(R.layout.fragment_balance, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         loaderManager.initLoader(0, null, this)
-        return mRootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mRootView = view
         initRecyclerAndAdapter()
         initNewUserView()
     }
@@ -155,18 +158,9 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.balance_update -> {
-                updateAllUsers()
-                true
-            }
-            R.id.balance_browser -> {
-                val i = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
-                startActivity(i)
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+            R.id.balance_update -> { updateAllUsers(); true }
+            R.id.balance_browser -> requireActivity().startBrowser(URL)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

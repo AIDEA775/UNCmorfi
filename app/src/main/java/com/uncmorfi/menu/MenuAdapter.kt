@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.uncmorfi.R
+import com.uncmorfi.helpers.colorOf
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlinx.android.synthetic.main.menu_item.view.*
@@ -28,20 +29,20 @@ internal class MenuAdapter (private val mContext: Context,
             val colorBack: Int
             when {
                 offset < 0 -> {
-                    colorDay = ContextCompat.getColor(mContext, R.color.secondary_text)
-                    colorFood = ContextCompat.getColor(mContext, R.color.secondary_text)
-                    colorBack = ContextCompat.getColor(mContext, R.color.white)
+                    colorDay = mContext.colorOf(R.color.secondary_text)
+                    colorFood = mContext.colorOf(R.color.secondary_text)
+                    colorBack = mContext.colorOf(R.color.white)
                 }
                 offset == 0 -> {
-                    colorDay = ContextCompat.getColor(mContext, R.color.white)
-                    colorFood = ContextCompat.getColor(mContext, R.color.white)
-                    colorBack = ContextCompat.getColor(mContext, R.color.accent)
+                    colorDay = mContext.colorOf(R.color.white)
+                    colorFood = mContext.colorOf(R.color.white)
+                    colorBack = mContext.colorOf(R.color.accent)
 
                 }
                 else -> {
-                    colorDay = ContextCompat.getColor(mContext, R.color.primary_text)
-                    colorFood = ContextCompat.getColor(mContext, R.color.primary_text)
-                    colorBack = ContextCompat.getColor(mContext, R.color.white)
+                    colorDay = mContext.colorOf(R.color.primary_text)
+                    colorFood = mContext.colorOf(R.color.primary_text)
+                    colorBack = mContext.colorOf(R.color.white)
                 }
             }
 

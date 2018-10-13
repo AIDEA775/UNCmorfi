@@ -1,15 +1,14 @@
 package com.uncmorfi.faq
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
-import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.uncmorfi.R
-
+import com.uncmorfi.helpers.startBrowser
+import com.uncmorfi.helpers.shareText
+import kotlinx.android.synthetic.main.fragment_faq.*
 
 /**
  * Preguntas frecuentes.
@@ -23,15 +22,17 @@ class FaqFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_faq, container, false)
-        val webView = v.findViewById<WebView>(R.id.faq_content)
-        webView.webViewClient = WebViewClient()
-        webView.settings.javaScriptEnabled = true
-        webView.loadUrl(URL)
-        return v
+        return inflater.inflate(R.layout.fragment_faq, container, false)
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        faqContent.webViewClient = WebViewClient()
+        faqContent.settings.javaScriptEnabled = true
+        faqContent.loadUrl(URL)
     }
 
     override fun onResume() {
@@ -44,19 +45,11 @@ class FaqFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.faq_share) {
-            val i = Intent(Intent.ACTION_SEND)
-            i.type = "text/plain"
-            i.putExtra(Intent.EXTRA_SUBJECT, "UNCmorfi FAQ")
-            i.putExtra(Intent.EXTRA_TEXT, URL)
-            startActivity(Intent.createChooser(i, "share"))
-            return true
-        } else if (item.itemId == R.id.faq_browser) {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
-            startActivity(i)
-            return true
+        return when (item.itemId) {
+            R.id.faq_share -> requireActivity().shareText("UNCmorfi FAQ", URL)
+            R.id.faq_browser -> requireActivity().startBrowser(URL)
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     companion object {

@@ -3,7 +3,6 @@ package com.uncmorfi.balance
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
@@ -20,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
+import com.uncmorfi.helpers.colorOf
 
 
 /**
@@ -49,14 +49,14 @@ internal class UserCursorAdapter(private val mContext: Context,
             itemView.userType.text = user.type
             itemView.userBalance.text = String.format(Locale.US, "$ %d", user.balance)
 
-            itemView.userBalance.setTextColor(ContextCompat.getColor(mContext,
+            itemView.userBalance.setTextColor(mContext.colorOf(
                     if (user.balance < WARNING_USER_BALANCE) R.color.accent else R.color.primary_dark))
 
             itemView.userExpiration.text = String.format(
                     mContext.getString(R.string.balance_expiration),
                     textExpiration(user.expiration))
 
-            itemView.userExpiration.setTextColor(ContextCompat.getColor(mContext,
+            itemView.userExpiration.setTextColor(mContext.colorOf(
                     if (warningExpiration(user.expiration)) R.color.accent else R.color.secondary_text))
 
             itemView.userLastUpdate.text = String.format(

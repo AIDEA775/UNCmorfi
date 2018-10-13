@@ -16,7 +16,7 @@ class MapFragment : SupportMapFragment() {
 
     override fun onResume() {
         super.onResume()
-        activity!!.setTitle(R.string.navigation_map)
+        requireActivity().setTitle(R.string.navigation_map)
     }
 
     fun onMapReady(googleMap: GoogleMap) {

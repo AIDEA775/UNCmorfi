@@ -1,7 +1,5 @@
 package com.uncmorfi.counter
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -48,8 +46,6 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         setChartsOptionsBase(counterTimeChart)
         setChartsOptionsBase(counterAccumulatedChart)
 
-        TODO("No se que onda esto, pero los charts tienen distino tamaño porque el acumulado" +
-                "tiene mas digitos en el lado izq, y el sync no responde bien en los bordes")
         counterTimeChart.onChartGestureListener = SyncChartsGestureListener(
                 counterTimeChart, counterAccumulatedChart)
 
@@ -85,7 +81,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         chart.xAxis.setDrawAxisLine(false)
 
         chart.legend.textSize = 14f
-        chart.legend.textColor = ContextCompat.getColor(requireContext(), R.color.primary_text)
+        chart.legend.textColor = requireContext().colorOf(R.color.primary_text)
 
         val xAxis = chart.xAxis
         xAxis.valueFormatter = HourAxisValueFormatter()
@@ -117,15 +113,8 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.counter_update -> {
-                refreshCounter()
-                true
-            }
-            R.id.counter_browser -> {
-                val i = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
-                startActivity(i)
-                true
-            }
+            R.id.counter_update -> { refreshCounter(); true }
+            R.id.counter_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -191,7 +180,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         for (entry in result)
             total += entry.y.toInt()
 
-        counterPercent.setTextColor(ContextCompat.getColor(requireContext(),
+        counterPercent.setTextColor(requireContext().colorOf(
                 if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark))
 
         counterBar.progress = total
@@ -239,7 +228,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
         dataSet.setDrawFilled(true)
         dataSet.fillAlpha = 255
-        dataSet.fillColor = ContextCompat.getColor(requireContext(), R.color.primary)
+        dataSet.fillColor = requireContext().colorOf(R.color.primary)
 
         return dataSet
     }

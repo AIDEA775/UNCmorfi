@@ -3,8 +3,6 @@ package com.uncmorfi.menu
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -81,15 +79,8 @@ class MenuFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_update -> {
-                refreshMenu()
-                true
-            }
-            R.id.menu_browser -> {
-                val i = Intent(Intent.ACTION_VIEW, Uri.parse(URL))
-                startActivity(i)
-                true
-            }
+            R.id.menu_update -> { refreshMenu(); true }
+            R.id.menu_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
     }

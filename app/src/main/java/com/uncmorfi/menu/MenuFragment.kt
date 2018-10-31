@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.SnackbarHelper.SnackType
 import kotlinx.android.synthetic.main.fragment_menu.*
 import java.util.*
 
@@ -91,7 +90,7 @@ class MenuFragment : Fragment() {
             RefreshMenuTask { onDayMenuDownloaded(it) } .execute()
         } else {
             menuSwipeRefresh.isRefreshing = false
-            mRootView.snack(requireContext(), R.string.no_connection, SnackType.ERROR)
+            mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
         }
     }
 
@@ -107,7 +106,7 @@ class MenuFragment : Fragment() {
                 getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Food", dayMenu.toString())
         clipboard.primaryClip = clip
-        mRootView.snack(requireContext(), R.string.menu_copy_msg, SnackType.FINISH)
+        mRootView.snack(context, R.string.menu_copy_msg, SnackType.FINISH)
     }
 
     private fun onDayMenuDownloaded(download: String?) {
@@ -118,13 +117,13 @@ class MenuFragment : Fragment() {
 
             if (!menu.isEmpty()) {
                 mMenuAdapter.updateMenu(menu)
-                mRootView.snack(requireContext(), R.string.update_success, SnackType.FINISH)
+                mRootView.snack(context, R.string.update_success, SnackType.FINISH)
 
                 if (needSaveMenu(menu)) {
                     mApplicationContext.saveToStorage(MENU_FILE, download)
                 }
             } else {
-                mRootView.snack(requireContext(), R.string.update_fail, SnackType.ERROR)
+                mRootView.snack(context, R.string.update_fail, SnackType.ERROR)
             }
         }
     }

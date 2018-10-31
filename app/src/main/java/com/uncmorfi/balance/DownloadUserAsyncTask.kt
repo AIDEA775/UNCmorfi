@@ -2,19 +2,21 @@ package com.uncmorfi.balance
 
 import android.os.AsyncTask
 import com.uncmorfi.balance.model.User
-import com.uncmorfi.helpers.ConnectionHelper
+import com.uncmorfi.helpers.ReturnCode
+import com.uncmorfi.helpers.downloadByGet
 import com.uncmorfi.helpers.toDate
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
+import java.net.URL
 import java.util.*
 
 /**
  * Descarga y parsea uno o más usuarios a partir del codigo de la tarjeta dentro de cada User.
  */
-internal class DownloadUserAsyncTask (private val mListener: (code: Int, List<User>) -> Unit) :
+internal class DownloadUserAsyncTask (private val mListener: (code: ReturnCode, List<User>) -> Unit) :
         AsyncTask<User, Void, List<User>>() {
-    private var mErrorCode: Int = 0
+    private var mErrorCode: ReturnCode = ReturnCode.OK
 
     override fun doInBackground(vararg params: User): List<User> {
         val users = params.asList()
@@ -23,7 +25,7 @@ internal class DownloadUserAsyncTask (private val mListener: (code: Int, List<Us
             for (pos in 0 until users.size) {
                 cards += (if (pos == 0) "" else ",") + users[pos].card
             }
-            val result = ConnectionHelper.downloadFromUrlByGet(URL + cards)
+            val result = URL(url + cards).downloadByGet()
             val array = JSONArray(result)
 
             for (i in 0 until array.length()) {
@@ -46,10 +48,10 @@ internal class DownloadUserAsyncTask (private val mListener: (code: Int, List<Us
                 }
             }
         } catch (e: IOException) {
+            mErrorCode = ReturnCode.CONNECTION_ERROR
             e.printStackTrace()
-            mErrorCode = ConnectionHelper.CONNECTION_ERROR
         } catch (e: JSONException) {
-            mErrorCode = ConnectionHelper.INTERNAL_ERROR
+            mErrorCode = ReturnCode.INTERNAL_ERROR
             e.printStackTrace()
         }
         return users
@@ -60,6 +62,6 @@ internal class DownloadUserAsyncTask (private val mListener: (code: Int, List<Us
     }
 
     companion object {
-        private const val URL = "http://uncmorfi.georgealegre.com/users?codes="
+        private const val url = "http://uncmorfi.georgealegre.com/users?codes="
     }
 }

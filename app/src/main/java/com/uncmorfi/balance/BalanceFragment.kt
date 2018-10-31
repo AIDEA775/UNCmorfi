@@ -9,9 +9,7 @@ import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Editable
 import android.text.InputFilter
-import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -25,7 +23,6 @@ import com.uncmorfi.balance.model.User
 import com.uncmorfi.balance.model.UserProvider
 import com.uncmorfi.balance.model.UsersContract
 import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.SnackbarHelper.SnackType
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.user_new.*
 import java.util.*
@@ -100,32 +97,29 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             false
         }
 
-        newUserInput.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // Cuando hay texto, cambia la función del botón por newUser.
-                if (s.isNotEmpty()) {
-                    newUserScanner.apply {
-                        setImageResource(R.drawable.ic_check)
-                        contentDescription = getString(R.string.balance_new_user_button_enter)
-                        setOnClickListener {
-                            hideKeyboard()
-                            callNewUser()
-                        }
-                    }
-                } else {
-                    newUserScanner.apply {
-                        setImageResource(R.drawable.ic_barcode)
-                        contentDescription = getString(R.string.balance_new_user_button_code)
-                        setOnClickListener { callScanner() }
-                    }
-                }
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun afterTextChanged(s: Editable) {}
-        })
+        newUserInput.onTextChanged { onNewUserTextChanged(it) }
 
         // Por defecto llama al lector
         newUserScanner.setOnClickListener { callScanner() }
+    }
+
+    private fun onNewUserTextChanged(s: CharSequence) {
+        newUserScanner.apply {
+            if (s.isNotEmpty()) {
+                // Cuando hay texto, cambia la función del botón por newUser.
+                setImageResource(R.drawable.ic_check)
+                contentDescription = getString(R.string.balance_new_user_button_enter)
+                setOnClickListener {
+                    hideKeyboard()
+                    callNewUser()
+                }
+            } else {
+                // Si es está vacio, llama al lector.
+                setImageResource(R.drawable.ic_barcode)
+                contentDescription = getString(R.string.balance_new_user_button_code)
+                setOnClickListener { callScanner() }
+            }
+        }
     }
 
     /**
@@ -239,15 +233,15 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private fun newUser(card: String) {
         when {
             card.length < 15 -> {
-                showSnackBarMsg(R.string.balance_new_user_dumb, SnackType.FINISH)
+                mRootView.snack(context, R.string.balance_new_user_dumb, SnackType.FINISH)
             }
             context.isOnline() -> {
-                showSnackBarMsg(getNewUserMsg(card), SnackType.LOADING)
+                mRootView.snack(context, getNewUserMsg(card), SnackType.LOADING)
                 DownloadUserAsyncTask {resultCode, list ->  onUsersDownloaded(resultCode, list) }
                         .execute(User(card))
             }
             else -> {
-                showSnackBarMsg(R.string.no_connection, SnackType.ERROR)
+                mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
             }
         }
     }
@@ -258,29 +252,24 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private fun updateBalance(vararg users: User) {
         if (context.isOnline()) {
+            context?.let { mRootView.snack(it, R.string.updating, SnackType.LOADING) }
 
-            showSnackBarMsg(R.string.updating, SnackType.LOADING)
             showProgressBar(*users, show = true)
 
             DownloadUserAsyncTask { code, list ->  onUsersDownloaded(code, list) }
                     .execute(*users)
         } else {
-            showSnackBarMsg(R.string.no_connection, SnackType.ERROR)
+            mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
         }
     }
 
-    private fun onUsersDownloaded(code: Int, users: List<User>) {
+    private fun onUsersDownloaded(code: ReturnCode, users: List<User>) {
         when (code) {
-            ConnectionHelper.CONNECTION_ERROR -> {
-                showSnackBarMsg(R.string.connection_error, SnackType.ERROR)
-            }
-            ConnectionHelper.INTERNAL_ERROR -> {
-                showSnackBarMsg(R.string.internal_error, SnackType.ERROR)
-            }
-            else -> {
+            ReturnCode.OK -> {
                 updateUser(users)
                 newUserInput.text.clear()
             }
+            else -> context?.let { mRootView.snack(it, code) }
         }
         showProgressBar(*users.toTypedArray(), show = false)
     }
@@ -299,9 +288,9 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         }
 
         if (rows == 1) {
-            showSnackBarMsg(R.string.update_success, SnackType.FINISH)
+            mRootView.snack(context, R.string.update_success, SnackType.FINISH)
         } else if (rows == 0) {
-            showSnackBarMsg(R.string.new_user_success, SnackType.FINISH)
+            mRootView.snack(context, R.string.new_user_success, SnackType.FINISH)
         }
     }
 
@@ -321,8 +310,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private fun copyCardToClipboard(userCard: String?) {
         val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         clipboard.primaryClip = ClipData.newPlainText("Card", userCard)
-
-        showSnackBarMsg(R.string.balance_copy_msg, SnackType.FINISH)
+        mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
     }
 
     private fun deleteUser(user: User) {
@@ -330,7 +318,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
                 null, null)
         context?.deleteFileInStorage(BARCODE_PATH + user.card)
-        showSnackBarMsg(R.string.balance_delete_user_msg, SnackType.FINISH)
+        mRootView.snack(context, R.string.balance_delete_user_msg, SnackType.FINISH)
     }
 
     private fun updateNameOfUser(user: User) {
@@ -340,7 +328,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
                 values, null, null
         )
-        showSnackBarMsg(R.string.update_success, SnackType.FINISH)
+        mRootView.snack(context, R.string.update_success, SnackType.FINISH)
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
@@ -356,16 +344,6 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onLoaderReset(loader: Loader<Cursor>) {
         mUserCursorAdapter.setCursor(null)
         mUserCursorAdapter.notifyDataSetChanged()
-    }
-
-    private fun showSnackBarMsg(resId: Int, type: SnackType) {
-        if (activity != null && isAdded && resId != 0)
-            mRootView.snack(requireContext(), resId, type)
-    }
-
-    private fun showSnackBarMsg(msg: String, type: SnackType) {
-        if (activity != null && isAdded)
-            mRootView.snack(requireContext(), msg, type)
     }
 
     private fun showProgressBar(vararg users: User, show: Boolean) {

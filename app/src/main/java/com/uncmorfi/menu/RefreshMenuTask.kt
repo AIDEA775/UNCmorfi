@@ -1,8 +1,9 @@
 package com.uncmorfi.menu
 
 import android.os.AsyncTask
-import com.uncmorfi.helpers.ConnectionHelper
+import com.uncmorfi.helpers.downloadByGet
 import java.io.IOException
+import java.net.URL
 
 /**
  * Descarga el menú de la semana.
@@ -12,7 +13,7 @@ internal class RefreshMenuTask(private val mListener: (String?) -> Unit) :
 
     override fun doInBackground(vararg params: Void): String? {
         return try {
-            ConnectionHelper.downloadFromUrlByGet(URL)
+            URL(url).downloadByGet()
         } catch (e: IOException) {
             e.printStackTrace()
             null
@@ -24,6 +25,6 @@ internal class RefreshMenuTask(private val mListener: (String?) -> Unit) :
     }
 
     companion object {
-        private const val URL = "http://uncmorfi.georgealegre.com/menu"
+        private const val url = "http://uncmorfi.georgealegre.com/menu"
     }
 }

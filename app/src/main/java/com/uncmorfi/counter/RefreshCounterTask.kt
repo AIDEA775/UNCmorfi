@@ -2,25 +2,23 @@ package com.uncmorfi.counter
 
 import android.os.AsyncTask
 import com.github.mikephil.charting.data.Entry
-import com.uncmorfi.helpers.ConnectionHelper
-import com.uncmorfi.helpers.ParserHelper
-import com.uncmorfi.helpers.clearDate
-import com.uncmorfi.helpers.toDate
+import com.uncmorfi.helpers.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.net.URL
 import java.util.*
 
 /**
  * Descarga y parsea los datos obtenidos del medidor de raciones.
  */
-internal class RefreshCounterTask(private val mListener: (resultCode: Int, List<Entry>) -> Unit) :
+internal class RefreshCounterTask(private val mListener: (code: ReturnCode, List<Entry>) -> Unit) :
         AsyncTask<Void, Void, List<Entry>>() {
-    private var mErrorCode: Int = 0
+    private var mErrorCode: ReturnCode = ReturnCode.OK
 
     override fun doInBackground(vararg params: Void): List<Entry>? {
         try {
-            val download = ConnectionHelper.downloadFromUrlByGet(URL)
+            val download = URL(url).downloadByGet()
             val result = JSONObject(download)
 
             val items = result.getJSONObject("servings")
@@ -39,14 +37,14 @@ internal class RefreshCounterTask(private val mListener: (resultCode: Int, List<
             Collections.sort(data, ParserHelper.CounterEntryComparator())
             return data
         } catch (e: IOException) {
-            mErrorCode = ConnectionHelper.CONNECTION_ERROR
+            mErrorCode = ReturnCode.CONNECTION_ERROR
             return null
         } catch (e: JSONException) {
-            mErrorCode = ConnectionHelper.INTERNAL_ERROR
+            mErrorCode = ReturnCode.INTERNAL_ERROR
             e.printStackTrace()
             return null
         } catch (e: NumberFormatException) {
-            mErrorCode = ConnectionHelper.INTERNAL_ERROR
+            mErrorCode = ReturnCode.INTERNAL_ERROR
             e.printStackTrace()
             return null
         }
@@ -57,6 +55,6 @@ internal class RefreshCounterTask(private val mListener: (resultCode: Int, List<
     }
 
     companion object {
-        private const val URL = "http://uncmorfi.georgealegre.com/servings"
+        private const val url = "http://uncmorfi.georgealegre.com/servings"
     }
 }

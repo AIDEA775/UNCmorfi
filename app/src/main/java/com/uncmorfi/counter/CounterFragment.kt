@@ -2,7 +2,6 @@ package com.uncmorfi.counter
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.*
 import android.widget.SeekBar
 import com.github.mikephil.charting.charts.LineChart
@@ -14,7 +13,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.SnackbarHelper.SnackType
 import kotlinx.android.synthetic.main.fragment_counter.*
 import java.util.*
 
@@ -126,7 +124,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
                     .execute()
         } else {
             refreshStatus(false)
-            mRootView.snack(requireContext(), R.string.no_connection, SnackType.ERROR)
+            mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
         }
     }
 
@@ -156,21 +154,16 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {}
 
-    private fun onCounterDownloaded(code: Int, result: List<Entry>) {
+    private fun onCounterDownloaded(code: ReturnCode, result: List<Entry>) {
         if (activity != null && isAdded) {
             refreshStatus(false)
             when (code) {
-                ConnectionHelper.CONNECTION_ERROR -> {
-                    mRootView.snack(requireContext(), R.string.connection_error, SnackType.ERROR)
-                }
-                ConnectionHelper.INTERNAL_ERROR -> {
-                    mRootView.snack(requireContext(), R.string.internal_error, SnackType.ERROR)
-                }
-                else -> {
+                ReturnCode.OK -> {
                     updateTextViews(result)
                     updateCharts(result)
-                    mRootView.snack(requireContext(), R.string.update_success, SnackType.FINISH)
+                    mRootView.snack(context, R.string.update_success, SnackType.FINISH)
                 }
+                else -> mRootView.snack(context, code)
             }
         }
     }

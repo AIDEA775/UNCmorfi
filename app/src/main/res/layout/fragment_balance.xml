@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
-                card_view:cardCornerRadius="1.5dp"
+                card_view:cardCornerRadius="5dp"
                 card_view:cardElevation="1.5dp"
                 card_view:cardUseCompatPadding="true" >
 

@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.uncmorfi.R
@@ -48,9 +47,6 @@ class MenuFragment : Fragment() {
 
     private fun initRecyclerAndAdapter() {
         menuRecyclerView.setHasFixedSize(true)
-        menuRecyclerView.addItemDecoration(
-                DividerItemDecoration(mApplicationContext, DividerItemDecoration.VERTICAL))
-
         val layoutManager = LinearLayoutManager(context)
         menuRecyclerView.layoutManager = layoutManager
     }

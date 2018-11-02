@@ -22,14 +22,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/counterPieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="225dp"
+                    android:background="@android:color/transparent"
+                    android:layout_margin="8dp"/>
+
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
                     android:focusable="true"
-                    card_view:cardCornerRadius="1.5dp"
+                    card_view:cardCornerRadius="5dp"
                     card_view:cardElevation="1.5dp"
                     card_view:cardUseCompatPadding="true">
 
@@ -41,88 +47,68 @@
                         android:orientation="vertical" >
 
                         <TextView
-                            android:id="@+id/counterResume"
+                            android:id="@+id/counterEstimateText"
+                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:paddingBottom="@dimen/activity_vertical_margin"
-                            android:text="@string/counter_rations"
-                            android:textSize="24sp"
-                            android:textColor="@color/primary_text"
-                            android:textStyle="bold" />
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_gravity="start"
+                            android:drawableStart="@drawable/ic_access_time"
+                            android:drawableLeft="@drawable/ic_access_time"
+                            android:drawablePadding="4dp"
+                            android:fontFamily="sans-serif-condensed"
+                            android:textSize="18sp"
+                            tools:text="25 min. aprox. (10:30)"/>
 
-                        <ProgressBar
-                            android:id="@+id/counterBar"
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/counterEstimateChart"
+                            android:visibility="gone"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:importantForAccessibility="no"
-                            style="?android:attr/progressBarStyleHorizontal"/>
-
-                        <TextView
-                            android:id="@+id/counterPercent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/counter_percent_symbol"
-                            android:textColor="@color/primary_dark"
-                            android:textSize="64sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:focusable="true"
-                    card_view:cardCornerRadius="1.5dp"
-                    card_view:cardElevation="1.5dp"
-                    card_view:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:padding="8dp"
-                        android:orientation="vertical" >
+                            android:layout_height="200dp" />
 
                         <TextView
                             android:id="@+id/counterDistance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/primary_text"
-                            android:paddingBottom="@dimen/activity_vertical_margin"
-                            tools:text="Distance" />
+                            android:layout_gravity="start"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:text="@string/counter_estimate_empty" />
 
                         <SeekBar
                             android:id="@+id/counterSeek"
                             style="@style/Widget.AppCompat.SeekBar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:max="24"
+                            android:max="25"
                             android:progress="1" />
 
-                        <TextView
-                            android:id="@+id/counterEstimate"
+                        <Button
+                            android:id="@+id/counterEstimateButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/primary_text"
-                            tools:text="Estimate"/>
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:layout_gravity="end"
+                            android:text="@string/counter_estimate_button"
+                            android:textColor="@color/accent"/>
 
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/counterChartsCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
                     android:layout_marginBottom="6dp"
-                    card_view:cardCornerRadius="1.5dp"
+                    android:visibility="gone"
+                    card_view:cardCornerRadius="5dp"
                     card_view:cardElevation="1.5dp"
                     card_view:cardUseCompatPadding="true">
 
@@ -134,13 +120,13 @@
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/counterTimeChart"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
+                            android:layout_height="225dp"
                             android:layout_margin="8dp" />
 
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/counterAccumulatedChart"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
+                            android:layout_height="225dp"
                             android:layout_margin="8dp" />
                     </LinearLayout>
 

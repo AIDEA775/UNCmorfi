@@ -1,20 +1,27 @@
 package com.uncmorfi.counter
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.view.*
 import android.widget.SeekBar
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
 import kotlinx.android.synthetic.main.fragment_counter.*
+import org.apache.commons.math3.stat.regression.SimpleRegression
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 /**
  * Medidor de raciones.
@@ -24,6 +31,9 @@ import java.util.*
 
 class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     private lateinit var mRootView: View
+    private val mEstimateList = ArrayList<Entry>()
+    private var mEstimateFirst: Double = 0.0
+    private val mSimpleRegression = SimpleRegression(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +50,10 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         mRootView = view
 
         counterSwipeRefresh.init { refreshCounter() }
-
-        setChartsOptionsBase(counterTimeChart)
-        setChartsOptionsBase(counterAccumulatedChart)
+        counterPieChart.init(requireContext())
+        counterEstimateChart.init(requireContext())
+        counterTimeChart.init(requireContext())
+        counterAccumulatedChart.init(requireContext())
 
         counterTimeChart.onChartGestureListener = SyncChartsGestureListener(
                 counterTimeChart, counterAccumulatedChart)
@@ -50,49 +61,15 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         counterAccumulatedChart.onChartGestureListener = SyncChartsGestureListener(
                 counterAccumulatedChart, counterTimeChart)
 
-        setTimeChart()
-        setCumulativeChart()
+        counterEstimateChart.legend.isEnabled = false
+        counterAccumulatedChart.xAxis.setDrawGridLines(false)
 
-        counterBar.max = FOOD_RATIONS
         counterSeek.setOnSeekBarChangeListener(this)
-        counterSeek.progress = 0
+        counterSeek.progress = 99
+
+        counterEstimateButton.setOnClickListener { updateEstimate() }
 
         refreshCounter()
-    }
-
-    private fun setChartsOptionsBase(chart: LineChart) {
-        chart.setNoDataText(getString(R.string.counter_chart_empty))
-        chart.isScaleYEnabled = false
-        chart.description = null
-
-        chart.setDrawGridBackground(false)
-        chart.setDrawBorders(false)
-
-        chart.isHighlightPerTapEnabled = false
-        chart.isHighlightPerDragEnabled = false
-
-        chart.axisLeft.axisMinimum = 0f
-        chart.axisLeft.setDrawAxisLine(false)
-        chart.axisRight.isEnabled = false
-        chart.axisRight.setDrawGridLines(false)
-
-        chart.xAxis.setDrawAxisLine(false)
-
-        chart.legend.textSize = 14f
-        chart.legend.textColor = requireContext().colorOf(R.color.primary_text)
-
-        val xAxis = chart.xAxis
-        xAxis.valueFormatter = HourAxisValueFormatter()
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-    }
-
-    private fun setTimeChart() {
-        // Por ahora nada, pero en caso de que se agreguen más graficos, dejar las opciones comunes
-        // en setChartsOptionsBase, y las específicas en estas funciones.
-    }
-
-    private fun setCumulativeChart() {
-        counterAccumulatedChart.xAxis.setDrawGridLines(false)
     }
 
     override fun onResume() {
@@ -129,16 +106,10 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-        val windows = progress + 5 // Mínimo 5 ventanas
-
-        val minutes = getEstimateFromPosition(windows)
-        val currentTime = Date().time
-
-        val timeStamp = Date(currentTime + minutes * 60 * 1000)
-        val text = timeStamp.toString("HH:mm")
-
-        counterDistance.text = String.format(getString(R.string.counter_distance), windows)
-        counterEstimate.text = String.format(getString(R.string.counter_estimate), minutes, text)
+        if (fromUser) {
+            val windows = progress + 5 // Mínimo 5 ventanas
+            counterDistance.text = String.format(getString(R.string.counter_distance), windows)
+        }
     }
 
     /**
@@ -146,8 +117,8 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
      * @param x Distancia (cantidad de ventanas)
      * @return Minutos estimados
      */
-    private fun getEstimateFromPosition(x: Int): Long {
-        return (x * (x * 0.062307 + 1.296347) - 2.190814).toLong()
+    private fun getEstimateFromPosition(x: Int): Double {
+        return (x * (x * 0.062307 + 1.296347) - 2.190814)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -159,7 +130,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
             refreshStatus(false)
             when (code) {
                 ReturnCode.OK -> {
-                    updateTextViews(result)
+                    updatePieChart(result)
                     updateCharts(result)
                     mRootView.snack(context, R.string.update_success, SnackType.FINISH)
                 }
@@ -168,80 +139,119 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         }
     }
 
-    private fun updateTextViews(result: List<Entry>) {
+    private fun updatePieChart(result: List<Entry>) {
         var total = 0
         for (entry in result)
             total += entry.y.toInt()
 
-        counterPercent.setTextColor(requireContext().colorOf(
-                if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark))
+        val percent =  (total/2000f)*100f
 
-        counterBar.progress = total
-        counterResume.text = String.format(
-                getString(R.string.counter_rations_title), total, FOOD_RATIONS)
-        counterPercent.text = String.format(
-                Locale.US, "%d%%", total * 100 / FOOD_RATIONS)
+        val entries = ArrayList<PieEntry>()
+        entries.add(PieEntry(percent, "Total"))
+        entries.add(PieEntry(100f - percent, "Empty"))
+
+        val dataSet = PieDataSet(entries, "").style(requireContext())
+
+        counterPieChart.centerText = generatePieChartText(total, percent)
+        counterPieChart.update(dataSet)
+    }
+
+    private fun generatePieChartText(total: Int, percent: Float) : SpannableString {
+        val pText = "$percent%"
+        val tText = String.format(getString(R.string.counter_rations_title), total, FOOD_RATIONS)
+        val s = SpannableString("$pText\n$tText")
+
+        s.setSpan(RelativeSizeSpan(3f), 0, pText.length, 0)
+        s.setSpan(ForegroundColorSpan(requireContext().colorOf(
+                if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark)),
+                0, pText.length, 0)
+
+        s.setSpan(StyleSpan(Typeface.NORMAL), pText.length, s.length, 0)
+        s.setSpan(ForegroundColorSpan(Color.BLACK), pText.length, s.length, 0)
+
+        return s
+    }
+
+    /*
+     * Perdón, esta función es horrible de entender. Pero funciona.
+     */
+    private fun updateEstimate() {
+        val windows = counterSeek.progress + 5 // Mínimo 5 ventanas
+        val time = Date().clearDate()
+        val dataSets = ArrayList<ILineDataSet>()
+        val minutes: Double
+
+        mEstimateList.add(Entry(time.toFloat(), windows.toFloat()))
+
+        mSimpleRegression.addData(time.toDouble(), windows.toDouble())
+        var root = (-mSimpleRegression.intercept / mSimpleRegression.slope)
+        val estimateLine = ArrayList<Entry>()
+
+        if (root.isNaN()) {
+            // Primera estimación
+            mEstimateFirst = time.toDouble()
+            root = mEstimateFirst + getEstimateFromPosition(windows) * 60
+            estimateLine.add(Entry(mEstimateFirst.toFloat(), windows.toFloat()))
+            estimateLine.add(Entry(root.toFloat(), 0f))
+            minutes = (root - time) / 60
+        } else {
+            // Estimación con 2 o más datos
+            estimateLine.add(Entry(mEstimateFirst.toFloat(),
+                    mSimpleRegression.predict(mEstimateFirst).toFloat()))
+            estimateLine.add(Entry(root.toFloat(), 0f))
+            minutes = (root - time) / 60
+        }
+
+        val lineSet = LineDataSet(estimateLine, "")
+                .style(ChartStyle.ESTIMATE, requireContext())
+        val pointSet = LineDataSet(mEstimateList, "")
+                .style(ChartStyle.POINTS, requireContext())
+
+        dataSets.add(pointSet)
+        dataSets.add(lineSet)
+
+        counterEstimateChart.visibility = View.VISIBLE
+        counterEstimateChart.update(dataSets)
+
+        counterEstimateText.visibility = View.VISIBLE
+
+        val timeStamp = Date(root.toLong() * 1000)
+        val text = timeStamp.toString("HH:mm")
+
+        counterEstimateText.text = String.format(getString(R.string.counter_estimate), minutes.roundToInt(), text)
     }
 
     private fun updateCharts(data: List<Entry>?) {
         if (data != null && !data.isEmpty()) {
-            val accumulatedData = getAccumulate(data)
+            // Algunas veces el medidor se cae, y las raciones aparecen cargadas a las 00:00hs
+            // así que al primer elemento lo ponemos 1 min antes del segundo elemento
+            // para que no haya un espacio vacío en el medio.
+            data[0].x = data[1].x - 60f
 
-            updateChart(counterTimeChart, getTimeDataSet(data))
-            updateChart(counterAccumulatedChart, getAccumulatedDataSet(accumulatedData))
+            val timeData = LineDataSet(data, getString(R.string.counter_chart_label_time))
+                    .style(ChartStyle.RATIONS, requireContext())
+
+            val cumulativeData = LineDataSet(accumulate(data), getString(R.string.counter_chart_label_accumulated))
+                    .style(ChartStyle.CUMULATIVE, requireContext())
+
+            counterChartsCard.visibility = View.VISIBLE
+            counterTimeChart.update(timeData)
+            counterAccumulatedChart.update(cumulativeData)
         }
     }
 
-    private fun getAccumulate(data: List<Entry>): List<Entry> {
-        var accumulated = 0
-        val accumulatedData = ArrayList<Entry>()
+    private fun accumulate(data: List<Entry>): List<Entry> {
+        var sum = 0
+        val accumulated = ArrayList<Entry>()
         for (entry in data) {
-            accumulated += entry.y.toInt()
-            accumulatedData.add(Entry(entry.x, accumulated.toFloat()))
+            sum += entry.y.toInt()
+            accumulated.add(Entry(entry.x, sum.toFloat()))
         }
-        return accumulatedData
-    }
-
-    private fun getTimeDataSet(data: List<Entry>): LineDataSet {
-        val dataSet = LineDataSet(data, getString(R.string.counter_chart_label_time))
-        dataSet.setColors(intArrayOf(R.color.accent), context)
-        dataSet.setCircleColors(intArrayOf(R.color.accent), context)
-        dataSet.lineWidth = 2f
-        dataSet.circleRadius = 3f
-        dataSet.setDrawValues(false)
-        return dataSet
-    }
-
-    private fun getAccumulatedDataSet(data: List<Entry>): LineDataSet {
-        val dataSet = LineDataSet(data, getString(R.string.counter_chart_label_accumulated))
-        dataSet.setColors(intArrayOf(R.color.primary_dark), context)
-        dataSet.lineWidth = 1f
-        dataSet.setDrawValues(false)
-        dataSet.setDrawCircles(false)
-
-        dataSet.setDrawFilled(true)
-        dataSet.fillAlpha = 255
-        dataSet.fillColor = requireContext().colorOf(R.color.primary)
-
-        return dataSet
-    }
-
-    private fun updateChart(chart: LineChart, dataSet: LineDataSet) {
-        chart.data = LineData(dataSet)
-        chart.setVisibleXRangeMinimum(200f)
-        chart.invalidate()
+        return accumulated
     }
 
     private fun refreshStatus(show : Boolean) {
-        counterBar.isIndeterminate = show
         counterSwipeRefresh.isRefreshing = show
-    }
-
-    private inner class HourAxisValueFormatter : IAxisValueFormatter {
-        override fun getFormattedValue(value: Float, axis: AxisBase): String {
-            val valueDate = Date(value.toLong() * 1000)
-            return valueDate.toString("HH:mm")
-        }
     }
 
     companion object {

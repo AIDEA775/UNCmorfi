@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.uncmorfi.R
 import com.uncmorfi.helpers.colorOf
+import kotlinx.android.synthetic.main.menu_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlinx.android.synthetic.main.menu_item.view.*
 
 internal class MenuAdapter (private val mContext: Context,
                             private var mMenuList: List<DayMenu>,
@@ -28,24 +28,24 @@ internal class MenuAdapter (private val mContext: Context,
             val colorBack: Int
             when {
                 offset < 0 -> {
-                    colorDay = mContext.colorOf(R.color.primary_dark)
+                    colorDay = mContext.colorOf(R.color.primary)
                     colorFood = mContext.colorOf(R.color.secondary_text)
                     colorBack = mContext.colorOf(R.color.white)
                 }
                 offset == 0 -> {
-                    colorDay = mContext.colorOf(R.color.white)
+                    colorDay = mContext.colorOf(R.color.primary_dark)
                     colorFood = mContext.colorOf(R.color.white)
                     colorBack = mContext.colorOf(R.color.accent)
 
                 }
                 else -> {
-                    colorDay = mContext.colorOf(R.color.primary_text)
+                    colorDay = mContext.colorOf(R.color.primary_dark)
                     colorFood = mContext.colorOf(R.color.primary_text)
                     colorBack = mContext.colorOf(R.color.white)
                 }
             }
 
-            itemView.setBackgroundColor(colorBack)
+            itemView.menuFood.setCardBackgroundColor(colorBack)
             itemView.menuDayNumber.setTextColor(colorDay)
             itemView.menuDayName.setTextColor(colorDay)
 
@@ -54,14 +54,14 @@ internal class MenuAdapter (private val mContext: Context,
             itemView.menuFood3.setTextColor(colorFood)
 
             itemView.menuDayNumber.text = day.getDateNumber()
-            itemView.menuDayName.text = day.getDateName()
+            itemView.menuDayName.text = day.getDateName("EEEE").capitalize()
 
-            itemView.menuFood1.text = day.food[0]
-            itemView.menuFood2.text = day.food[1]
-            itemView.menuFood3.text = day.food[2]
+            itemView.menuFood1.text = day.food.getOrNull(0)
+            itemView.menuFood2.text = day.food.getOrNull(1)
+            itemView.menuFood3.text = day.food.getOrNull(2)
 
-            itemView.setOnClickListener { mClickListener(day) }
-            itemView.setOnLongClickListener { mLongClickListener(day); true }
+            itemView.menuFood.setOnClickListener { mClickListener(day) }
+            itemView.menuFood.setOnLongClickListener { mLongClickListener(day); true }
         }
     }
 

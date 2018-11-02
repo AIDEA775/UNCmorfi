@@ -49,11 +49,11 @@
 
     <!-- Counter -->
     <string name="counter_action_update">Update counter</string>
-    <string name="counter_rations">Rations</string>
     <string name="counter_rations_title">%1$d rations of %2$d</string>
-    <string name="counter_percent_symbol">%</string>
+    <string name="counter_estimate_button">Add</string>
     <string name="counter_estimate">Approximately %1$d minutes left (%2$s)</string>
-    <string name="counter_distance">Window %1$d (Read FAQ!)</string>
+    <string name="counter_estimate_empty">Set the distance at which you are</string>
+    <string name="counter_distance">Window %1$d</string>
     <string name="counter_chart_empty">Pull down to refresh</string>
     <string name="counter_chart_label_time">Rations for time</string>
     <string name="counter_chart_label_accumulated">Accumulated rations</string>

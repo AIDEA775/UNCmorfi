@@ -6,16 +6,16 @@ resource : true
 ---
 
 ##### v4.0 Damasco
-* New icon even more cute!
-* With new banner.
+* New icon even cuter!
+* With a new banner.
 * Improvements in accessibility (screen readers).
 * New interface for the barcode.
 * New graph for the accumulated rations meter.
-* We have fanpage!
+* We have fan page!
 * Other modifications to the Meter Interface.
 * Modifications to the Balance Interface.
 * New online FAQ.
-* And many many minor fixes.
+* And many, many minor fixes.
 
 ##### v3.0 Cazuela
 * New icon!
@@ -25,7 +25,7 @@ resource : true
 * New interface in Balance.
 * Check the expiration date of your card.
 * Added the date from the last time you checked the balance.
-* Added graph ration meter.
+* Added ration meter's graph.
 * (Experimental) Waiting estimates in the line.
 * More topics in Help.
 * Added the section Renovation.

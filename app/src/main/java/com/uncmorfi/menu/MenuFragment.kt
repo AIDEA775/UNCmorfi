@@ -45,19 +45,6 @@ class MenuFragment : Fragment() {
             refreshMenu()
     }
 
-    private fun initRecyclerAndAdapter() {
-        menuRecyclerView.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(context)
-        menuRecyclerView.layoutManager = layoutManager
-    }
-
-    private fun initMenu() {
-        mMenuAdapter = MenuAdapter(mApplicationContext, getSavedMenu(),
-                { onClick(it) },
-                { onLongClick(it) })
-        menuRecyclerView.adapter = mMenuAdapter
-    }
-
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_menu)
@@ -78,6 +65,19 @@ class MenuFragment : Fragment() {
             R.id.menu_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun initRecyclerAndAdapter() {
+        menuRecyclerView.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(context)
+        menuRecyclerView.layoutManager = layoutManager
+    }
+
+    private fun initMenu() {
+        mMenuAdapter = MenuAdapter(mApplicationContext, getSavedMenu(),
+                { onClick(it) },
+                { onLongClick(it) })
+        menuRecyclerView.adapter = mMenuAdapter
     }
 
     private fun refreshMenu() {

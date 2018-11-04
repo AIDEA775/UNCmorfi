@@ -90,6 +90,17 @@ fun Activity.shareText(subject: String, text: String, title: String = "UNCmorfi"
     return true
 }
 
+fun Activity.sendEmail(to: String, subject: Int, text: Int) {
+    val i = Intent(Intent.ACTION_SENDTO)
+    i.data = Uri.parse("mailto:")
+    i.putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
+    i.putExtra(Intent.EXTRA_SUBJECT, getString(subject))
+    i.putExtra(Intent.EXTRA_TEXT, getString(text))
+
+    if (i.resolveActivity(packageManager) != null)
+        startActivity(i)
+}
+
 fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, p1: Int, p2: Int, p3: Int) {

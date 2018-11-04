@@ -1,7 +1,5 @@
 package com.uncmorfi
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -9,8 +7,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.uncmorfi.about.AboutDialog
 import com.uncmorfi.balance.BalanceFragment
 import com.uncmorfi.counter.CounterFragment
@@ -20,9 +16,11 @@ import com.uncmorfi.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
 import android.support.v4.widget.ViewDragHelper
+import com.uncmorfi.helpers.sendEmail
+import com.uncmorfi.helpers.startBrowser
 
 class MainActivity :
-        AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +43,7 @@ class MainActivity :
 
         navView.setNavigationItemSelectedListener(this)
 
-        // Abrir drawerLayout desde la mitad de la pantalla
+        // Abrir drawerLayout desde mas o menos la mitad de la pantalla
         // https://stackoverflow.com/a/17802569
         val mDragger = drawerLayout.javaClass.getDeclaredField("mLeftDragger")
         mDragger.isAccessible = true
@@ -111,33 +109,15 @@ class MainActivity :
             R.id.nav_menu -> fragment = MenuFragment()
             R.id.nav_balance -> fragment = BalanceFragment()
             R.id.nav_counter -> fragment = CounterFragment()
-            R.id.nav_renovation -> sendRenovationEmail()
-            R.id.nav_map -> {
-                val mapFragment = MapFragment()
-                fragment = mapFragment
-
-                mapFragment.getMapAsync(this)
-            }
+            R.id.nav_renovation -> sendEmail("credenciales@comedor.unc.edu.ar",
+                    R.string.renovation_email_subject,
+                    R.string.renovation_email_body)
+            R.id.nav_map -> fragment = MapFragment()
             R.id.nav_faq -> fragment = FaqFragment()
+            R.id.nav_face -> startBrowser("https://web.facebook.com/UNCmorfi/")
             R.id.nav_about -> AboutDialog().show(supportFragmentManager, "AboutDialog")
         }
         return fragment
     }
 
-    private fun sendRenovationEmail() {
-        val i = Intent(Intent.ACTION_SENDTO)
-        i.data = Uri.parse("mailto:")
-        i.putExtra(Intent.EXTRA_EMAIL, arrayOf("credenciales@comedor.unc.edu.ar"))
-        i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.renovation_email_subject))
-        i.putExtra(Intent.EXTRA_TEXT, getString(R.string.renovation_email_body))
-
-        if (i.resolveActivity(packageManager) != null)
-            startActivity(i)
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        val fragment = supportFragmentManager.findFragmentById(R.id.content_frame) as MapFragment
-
-        fragment.onMapReady(googleMap)
-    }
 }

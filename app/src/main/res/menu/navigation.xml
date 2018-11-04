@@ -31,6 +31,10 @@
             android:icon="@drawable/nav_faq_black"
             android:title="@string/navigation_faq" />
         <item
+            android:id="@+id/nav_face"
+            android:icon="@drawable/nav_face_black"
+            android:title="@string/navigation_face" />
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/nav_about_black"
             android:title="@string/navigation_about" />

@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
 import android.support.v4.widget.ViewDragHelper
 import com.uncmorfi.helpers.sendEmail
-import com.uncmorfi.helpers.startBrowser
+import com.uncmorfi.helpers.openFacebook
 
 class MainActivity :
         AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -114,7 +114,7 @@ class MainActivity :
                     R.string.renovation_email_body)
             R.id.nav_map -> fragment = MapFragment()
             R.id.nav_faq -> fragment = FaqFragment()
-            R.id.nav_face -> startBrowser("https://web.facebook.com/UNCmorfi/")
+            R.id.nav_face -> openFacebook("https://web.facebook.com/UNCmorfi/")
             R.id.nav_about -> AboutDialog().show(supportFragmentManager, "AboutDialog")
         }
         return fragment

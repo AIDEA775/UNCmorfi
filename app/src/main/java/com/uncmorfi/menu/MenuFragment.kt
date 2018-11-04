@@ -114,10 +114,7 @@ class MenuFragment : Fragment() {
             if (!menu.isEmpty()) {
                 mMenuAdapter.updateMenu(menu)
                 mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-
-                if (needSaveMenu(menu)) {
-                    mApplicationContext.saveToStorage(MENU_FILE, download)
-                }
+                mApplicationContext.saveToStorage(MENU_FILE, download)
             } else {
                 mRootView.snack(context, R.string.update_fail, SnackType.ERROR)
             }
@@ -135,17 +132,11 @@ class MenuFragment : Fragment() {
         val nowYear = now.get(Calendar.YEAR)
 
         val menu = Calendar.getInstance()
-        menu.time = getSavedMenu().firstOrNull()?.date ?: Date(0)
+        menu.time = getSavedMenu().firstOrNull()?.date ?: Date(0) // Date(0) es 1970
         val menuWeek = menu.get(Calendar.WEEK_OF_YEAR)
         val menuYear = now.get(Calendar.YEAR)
 
         return menuYear < nowYear || menuWeek < nowWeek
-    }
-
-    private fun needSaveMenu(menu: List<DayMenu>): Boolean {
-        // Comparar la primera fecha del menu guardado con la del nuevo
-        // Incluso si el menu guardado es vacio, devuelve true
-        return getSavedMenu().firstOrNull()?.date != menu.first().date
     }
 
     companion object {

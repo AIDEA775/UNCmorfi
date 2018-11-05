@@ -14,7 +14,6 @@ import com.uncmorfi.faq.FaqFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_menu.*
 import android.support.v4.widget.ViewDragHelper
 import com.uncmorfi.helpers.sendEmail
 import com.uncmorfi.helpers.openFacebook

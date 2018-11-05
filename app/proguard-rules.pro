@@ -22,3 +22,4 @@
     private <fields>;
 }
 -keep class com.uncmorfi.balance.model.UsersContract$* { *; }
+-dontwarn java.awt.**

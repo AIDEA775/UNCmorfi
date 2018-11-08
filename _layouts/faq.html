@@ -17,7 +17,7 @@
     {% assign headers = site.data.headers[page.lang] %}
     <div class="row">
       <div class="col s2 offset-s10">
-        <a href="{{ headers.lang-selector | absolute_url }}" class="btn-flat waves-effect waves-orange">{{ headers.lang-selector }}</a>
+
       </div>
     </div>
 
@@ -27,20 +27,18 @@
 
       {% assign pages=site.pages | where:"resource", true | where:"lang", page.lang %}
 
-      <div class="row">
-        <div class="col s12 m5">
-          <div class="card-panel white">
-            <div class="flow-text">
-              <h4>{{ headers.faq-indice }}</h4>
-              <ol>
-              {% for p in pages %}
-                <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
-              {% endfor %}
-              </ol>
-            </div>
-          </div>
+      <div class="card-panel white">
+        <div class="flow-text">
+          <h4>{{ headers.faq-indice }}</h4>
+          <a href="{{ headers.lang-selector | absolute_url }}" class="waves-effect waves-orange btn-flat">{{ headers.lang-selector }}</a>
+          <ol>
+          {% for p in pages %}
+            <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
+          {% endfor %}
+          </ol>
         </div>
       </div>
+
 
       {% for p in pages %}
       <h4 id="{{ p.ref }}">{{ p.title }}</h4>

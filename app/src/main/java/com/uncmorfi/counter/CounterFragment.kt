@@ -107,7 +107,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         if (fromUser) {
-            val windows = progress + 5 // Mínimo 5 ventanas
+            val windows = progress + 3 // Mínimo 3 ventanas
             counterDistance.text = String.format(getString(R.string.counter_distance), windows)
         }
     }
@@ -144,11 +144,12 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         for (entry in result)
             total += entry.y.toInt()
 
-        val percent =  (total/2000f)*100f
+        val percent = (total.toFloat()/FOOD_RATIONS)*100f
+        val percentPie = minOf(percent, 100f)
 
         val entries = ArrayList<PieEntry>()
-        entries.add(PieEntry(percent, "Total"))
-        entries.add(PieEntry(100f - percent, "Empty"))
+        entries.add(PieEntry(percentPie, "Total"))
+        entries.add(PieEntry(100f - percentPie, "Empty"))
 
         val dataSet = PieDataSet(entries, "").style(requireContext())
 
@@ -156,8 +157,11 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         counterPieChart.update(dataSet)
     }
 
+    /*
+     * Perdón, esta función es horrible. Pero funciona.
+     */
     private fun generatePieChartText(total: Int, percent: Float) : SpannableString {
-        val pText = "$percent%"
+        val pText = "%.2f%%".format(percent)
         val tText = String.format(getString(R.string.counter_rations_title), total, FOOD_RATIONS)
         val s = SpannableString("$pText\n$tText")
 
@@ -173,13 +177,12 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     /*
-     * Perdón, esta función es horrible de entender. Pero funciona.
+     * Perdón, esta función tambien horrible de entender.
      */
     private fun updateEstimate() {
-        val windows = counterSeek.progress + 5 // Mínimo 5 ventanas
+        val windows = counterSeek.progress + 3 // Mínimo 3 ventanas
         val time = Date().clearDate()
         val dataSets = ArrayList<ILineDataSet>()
-        val minutes: Double
 
         mEstimateList.add(Entry(time.toFloat(), windows.toFloat()))
 
@@ -193,13 +196,11 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
             root = mEstimateFirst + getEstimateFromPosition(windows) * 60
             estimateLine.add(Entry(mEstimateFirst.toFloat(), windows.toFloat()))
             estimateLine.add(Entry(root.toFloat(), 0f))
-            minutes = (root - time) / 60
         } else {
             // Estimación con 2 o más datos
             estimateLine.add(Entry(mEstimateFirst.toFloat(),
                     mSimpleRegression.predict(mEstimateFirst).toFloat()))
             estimateLine.add(Entry(root.toFloat(), 0f))
-            minutes = (root - time) / 60
         }
 
         val lineSet = LineDataSet(estimateLine, "")
@@ -218,7 +219,9 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         val timeStamp = Date(root.toLong() * 1000)
         val text = timeStamp.toString("HH:mm")
 
-        counterEstimateText.text = String.format(getString(R.string.counter_estimate), minutes.roundToInt(), text)
+        val minutes = (root - time) / 60
+        counterEstimateText.text = getString(R.string.counter_estimate)
+                .format(minutes.roundToInt(), text)
     }
 
     private fun updateCharts(data: List<Entry>?) {

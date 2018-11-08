@@ -30,6 +30,11 @@ open class BaseDialogHelper : AppCompatDialogFragment() {
     companion object {
         const val ARG_USER : String = "user"
 
+        /*
+         * Esta función me llevó toda una noche, y al despertar no recordé como funciona xD
+         * La intención era modularizar el código de arriba que se repetía en dos dialogos.
+         * Y la idea es devolver una instancia de la clase hija con los parametros asignados.
+         */
         fun <T> newInstance(factory: () -> T, fragment: Fragment, code: Int, user: User) : T {
             val args = Bundle()
             args.putSerializable("user", user)

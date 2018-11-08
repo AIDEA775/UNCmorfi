@@ -15,27 +15,31 @@
 
   <body>
     {% assign headers = site.data.headers[page.lang] %}
-    <nav>
-      <div class="nav-wrapper grey lighten-4">
-        <a class="brand-logo truncate grey-text text-darken-1">{{ headers.faq-title }}</a>
-        <ul id="nav-mobile" class="right">
-          <li><a href="{{ headers.lang-selector | absolute_url }}" class="btn-flat waves-effect waves-orange">{{ headers.lang-selector }}</a></li>
-        </ul>
+    <div class="row">
+      <div class="col s2 offset-s10">
+        <a href="{{ headers.lang-selector | absolute_url }}" class="btn-flat waves-effect waves-orange">{{ headers.lang-selector }}</a>
       </div>
-    </nav>
+    </div>
 
     <div class="container">
 
       {{ content }}
 
       {% assign pages=site.pages | where:"resource", true | where:"lang", page.lang %}
-      <div class="flow-text">
-        <h4>{{ headers.faq-indice }}</h4>
-        <ol>
-        {% for p in pages %}
-          <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
-        {% endfor %}
-        </ol>
+
+      <div class="row">
+        <div class="col s12 m5">
+          <div class="card-panel white">
+            <div class="flow-text">
+              <h4>{{ headers.faq-indice }}</h4>
+              <ol>
+              {% for p in pages %}
+                <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
+              {% endfor %}
+              </ol>
+            </div>
+          </div>
+        </div>
       </div>
 
       {% for p in pages %}
@@ -51,7 +55,7 @@
         </a>
       </div>
     </div>
-  
+
     <script>
     // When the user scrolls down 20px from the top of the document, show the button
     window.onscroll = function() {scrollFunction()};

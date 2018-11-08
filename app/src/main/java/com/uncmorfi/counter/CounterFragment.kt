@@ -108,7 +108,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         if (fromUser) {
             val windows = progress + 3 // Mínimo 3 ventanas
-            counterDistance.text = String.format(getString(R.string.counter_distance), windows)
+            counterDistance.text = getString(R.string.counter_distance).format(windows)
         }
     }
 
@@ -162,7 +162,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
      */
     private fun generatePieChartText(total: Int, percent: Float) : SpannableString {
         val pText = "%.2f%%".format(percent)
-        val tText = String.format(getString(R.string.counter_rations_title), total, FOOD_RATIONS)
+        val tText = getString(R.string.counter_rations_title).format(total, FOOD_RATIONS)
         val s = SpannableString("$pText\n$tText")
 
         s.setSpan(RelativeSizeSpan(3f), 0, pText.length, 0)

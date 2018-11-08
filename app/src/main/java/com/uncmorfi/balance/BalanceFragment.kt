@@ -247,7 +247,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun getNewUserMsg(card: String): String {
-        return String.format(Locale.US, getString(R.string.balance_new_user_adding), card)
+        return getString(R.string.balance_new_user_adding).format(card)
     }
 
     private fun updateBalance(vararg users: User) {

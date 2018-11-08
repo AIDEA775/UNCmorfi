@@ -52,16 +52,14 @@ internal class UserCursorAdapter(private val mContext: Context,
             itemView.userBalance.setTextColor(mContext.colorOf(
                     if (user.balance < WARNING_USER_BALANCE) R.color.accent else R.color.primary_dark))
 
-            itemView.userExpiration.text = String.format(
-                    mContext.getString(R.string.balance_expiration),
-                    textExpiration(user.expiration))
+            itemView.userExpiration.text = mContext.getString(R.string.balance_expiration)
+                            .format(textExpiration(user.expiration))
 
             itemView.userExpiration.setTextColor(mContext.colorOf(
                     if (warningExpiration(user.expiration)) R.color.accent else R.color.secondary_text))
 
-            itemView.userLastUpdate.text = String.format(
-                    mContext.getString(R.string.balance_last_update),
-                    DateUtils.getRelativeTimeSpanString(user.lastUpdate).toString().toLowerCase())
+            itemView.userLastUpdate.text = mContext.getString(R.string.balance_last_update)
+                    .format(DateUtils.getRelativeTimeSpanString(user.lastUpdate).toString().toLowerCase())
         }
 
         private fun textExpiration(expiration: Long): String {

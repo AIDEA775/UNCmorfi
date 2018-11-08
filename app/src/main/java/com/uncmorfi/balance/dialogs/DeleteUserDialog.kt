@@ -18,7 +18,7 @@ class DeleteUserDialog : BaseDialogHelper() {
         }
         val negativeListener = DialogInterface.OnClickListener { _, _ -> dismiss() }
 
-        builder.setMessage(String.format(getString(R.string.balance_delete_user_title), user.name))
+        builder.setMessage(getString(R.string.balance_delete_user_title).format(user.name))
                 .setPositiveButton(getString(R.string.balance_delete_user_positive), positiveListener)
                 .setNegativeButton(getString(android.R.string.cancel), negativeListener)
 

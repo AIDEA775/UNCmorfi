@@ -1,6 +1,6 @@
 ---
-title: ¿Cómo son las becas?
-ref: becas
+title: ¿Cómo solicito la beca del comedor?
+ref: beca
 lang: es
 resource : true
 ---

@@ -6,4 +6,4 @@ resource : true
 ---
 
 * El permiso de internet es necesario para actualizar el menú, el saldo y el medidor.
-* El permiso de cámara es para agregar la tarjeta escanendo el codigo de barras.
+* El permiso de cámara es para agregar la tarjeta escaneando el código de barras.

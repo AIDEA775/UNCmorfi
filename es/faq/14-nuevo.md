@@ -5,6 +5,16 @@ lang: es
 resource : true
 ---
 
+##### v5.0 Espagueti
+* Reescribimos toda la aplicación a Kotlin, ahora el código es muucho más lindo.
+* Tenemos nuevo backend: Ahora las versiones de Android e iOS usan el mismo servidor.
+* Menú completamente renovado.
+* ¡Compartí el menú del día!
+* Medidor de raciones también renovado.
+* ¡Nueva forma de estimar el tiempo en la fila!
+* FAQ renovado y con más preguntas.
+* Refactorizamos toodo: bocha de pequeños arreglos y mejoras.
+
 ##### v4.0 Damasco
 * ¡Nuevo icono aún más lindo!
 * Junto con el nuevo banner.
@@ -36,8 +46,8 @@ resource : true
 * Mejorada la UI del Saldo.
 * Avisos con colores.
 * Actualiza todas las tarjetas de una vez.
-* Ahora se puede instalar la aplicacion en la SD.
-* Reducido el tamaño de la aplicacion.
+* Ahora se puede instalar la aplicación en la SD.
+* Reducido el tamaño de la aplicación.
 * Otros arreglos y mejoras menores.
 
 ##### v1.1 Arroz
@@ -47,4 +57,4 @@ resource : true
 * Otros arreglos menores.
 
 ##### v1.0 Apio
-* Primera version beta.
+* Primera versión beta.

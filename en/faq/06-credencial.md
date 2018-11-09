@@ -1,6 +1,6 @@
 ---
 title: How do I apply for the credential? How can I regenerate the credential?
-ref: como_solicito
+ref: credencial
 lang: en
 resource : true
 ---

@@ -5,6 +5,16 @@ lang: en
 resource : true
 ---
 
+##### v5.0 Espagueti
+* We rewrite the whole application to Kotlin, now the code is much cuter.
+* We have a new backend: Now the Android and iOS versions use the same server.
+* Menu completely renovated.
+* Share the menu of the day!
+* Ration meter also renewed.
+* New way to estimate the time in the row!
+* FAQ renewed and with more questions.
+* We refactor everthing: many of small fixes and improvements.
+
 ##### v4.0 Damasco
 * New icon even cuter!
 * With a new banner.

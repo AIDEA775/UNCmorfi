@@ -1,5 +1,5 @@
 ---
-title: What is the ration price?
+title: What is the ration's price?
 ref: precio_racion
 lang: en
 resource : true

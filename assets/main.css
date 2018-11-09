@@ -13,3 +13,7 @@ div.flow-text > ul > li {
     margin: 8px 0px;
     padding: 0px;
 }
+div.flow-text > ol {
+    margin: 0px;
+    padding-left: 2.5rem;
+}

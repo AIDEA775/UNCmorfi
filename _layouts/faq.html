@@ -23,9 +23,9 @@
       {% assign pages=site.pages | where:"resource", true | where:"lang", page.lang %}
 
       <div class="card-panel white">
-        <div class="flow-text">
+        <div>
           <h4>{{ headers.faq-indice }}</h4>
-          <ol>
+          <ol class="flow-text">
           {% for p in pages %}
             <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
           {% endfor %}
@@ -70,7 +70,7 @@
   <footer class="page-footer orange lighten-1">
     <div class="footer-copyright orange">
       <div class="container">
-        <a href="{{ headers.lang-sel | absolute_url }}" class="white-text text-lighten-4 right">{{ headers.lang-show }}</a>
+        <a href="{{ headers.lang-sel | absolute_url }}" class="white-text text-lighten-4">{{ headers.lang-show }}</a>
       </div>
     </div>
   </footer>

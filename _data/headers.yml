@@ -1,9 +1,9 @@
 es:
-  faq-title: Gracias por pasarte.
   faq-indice: Índice
-  lang-selector: en
+  lang-sel: en
+  lang-show: EN Version
 
 en:
-  faq-title: Thanks for reading!
   faq-indice: Index
-  lang-selector: es
+  lang-sel: es
+  lang-show: ES Versión

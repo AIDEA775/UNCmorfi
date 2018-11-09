@@ -15,11 +15,6 @@
 
   <body>
     {% assign headers = site.data.headers[page.lang] %}
-    <div class="row">
-      <div class="col s2 offset-s10">
-
-      </div>
-    </div>
 
     <div class="container">
 
@@ -72,10 +67,10 @@
     </script>
   </body>
 
-  <footer class="page-footer">
-    <div class="footer-copyright">
+  <footer class="page-footer orange lighten-1">
+    <div class="footer-copyright orange">
       <div class="container">
-        <a href="{{ headers.lang-selector | absolute_url }}" class="white-text text-lighten-4 right">{{ headers.lang-selector }}</a>
+        <a href="{{ headers.lang-sel | absolute_url }}" class="white-text text-lighten-4 right">{{ headers.lang-show }}</a>
       </div>
     </div>
   </footer>

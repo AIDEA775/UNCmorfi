@@ -60,11 +60,11 @@ class MapFragment : Fragment() {
 
         mMap.addMarker(MarkerOptions()
                 .position(CENTRAL)
-                .title("Sucursal Central"))
+                .title(getString(R.string.map_central)))
 
         mMap.addMarker(MarkerOptions()
                 .position(BELGRANO)
-                .title("Sucursal Belgrano"))
+                .title(getString(R.string.map_belgrano)))
 
         val cameraPosition = CameraPosition.builder()
                 .target(CENTER)

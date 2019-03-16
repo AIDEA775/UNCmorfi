@@ -69,6 +69,10 @@
         \tO carné de Daspu, recibo de sueldo o certificado que acredite
         relación con la UNC si eres Docente o No Docente.</string>
 
+    <!-- Map -->
+    <string name="map_central">Sede principal</string>
+    <string name="map_belgrano">Sede Belgrano</string>
+
     <!-- FAQ -->
     <string name="faq_action_share">Compartir</string>
 

@@ -108,7 +108,7 @@ class MainActivity :
             R.id.nav_menu -> fragment = MenuFragment()
             R.id.nav_balance -> fragment = BalanceFragment()
             R.id.nav_counter -> fragment = CounterFragment()
-            R.id.nav_renovation -> sendEmail("credenciales@comedor.unc.edu.ar",
+            R.id.nav_renovation -> sendEmail("credenciales@estudiantiles.unc.edu.ar",
                     R.string.renovation_email_subject,
                     R.string.renovation_email_body)
             R.id.nav_map -> fragment = MapFragment()

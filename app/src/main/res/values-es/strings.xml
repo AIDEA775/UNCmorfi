@@ -10,6 +10,7 @@
     <string name="navigation_map">Mapa</string>
     <string name="navigation_faq">FAQ</string>
     <string name="navigation_face">Fanpage</string>
+    <string name="navigation_github">Github</string>
     <string name="navigation_about">Acerca de</string>
 
     <!-- Menu -->

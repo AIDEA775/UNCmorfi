@@ -9,7 +9,8 @@
     <string name="navigation_renovation">Renovation</string>
     <string name="navigation_map">Map</string>
     <string name="navigation_faq">FAQ</string>
-    <string name="navigation_face">Fanpage</string>
+    <string name="navigation_face">Fan page</string>
+    <string name="navigation_github">Github</string>
     <string name="navigation_about">About</string>
 
     <!-- Menu -->

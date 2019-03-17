@@ -42,7 +42,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private lateinit var mRootView: View
     private lateinit var mUserCursorAdapter: UserCursorAdapter
     private val mContentResolver: ContentResolver by lazy { context!!.contentResolver }
-    private val allUsers: Cursor
+    private val allUsers: Cursor?
         get() = mContentResolver.query(
                 UserProvider.CONTENT_URI,
                 null, null, null, null, null)
@@ -83,8 +83,6 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 { updateBalance(it) })
 
         balanceList.adapter = mUserCursorAdapter
-        balanceList.addItemDecoration(
-                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
     }
 
     private fun initNewUserView() {
@@ -141,7 +139,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun callNewUser() {
-        val input = newUserInput.text.toString().replace(" ", ",")
+        val input = newUserInput.text.toString()
         if (input.isNotEmpty())
             newUser(input)
     }
@@ -162,11 +160,14 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         val users = ArrayList<User>()
         val cursor = allUsers
         var pos = 0
-        while (cursor.moveToNext()) {
-            val user = User(cursor)
-            user.position = pos
-            users.add(user)
-            pos++
+
+        cursor?.let {
+            while (cursor.moveToNext()) {
+                val user = User(cursor)
+                user.position = pos
+                users.add(user)
+                pos++
+            }
         }
 
         if (!users.isEmpty())
@@ -230,15 +231,19 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         newUserInput.clearFocus()
     }
 
-    private fun newUser(card: String) {
+    private fun newUser(cards: String) {
         when {
-            card.length < 15 -> {
+            cards.length < 15 -> {
                 mRootView.snack(context, R.string.balance_new_user_dumb, SnackType.FINISH)
             }
             context.isOnline() -> {
-                mRootView.snack(context, getNewUserMsg(card), SnackType.LOADING)
+                mRootView.snack(context, getNewUserMsg(cards), SnackType.LOADING)
+                val users = mutableListOf<User>()
+                for (c in cards.split(" ")) {
+                    users.add(User(c))
+                }
                 DownloadUserAsyncTask {resultCode, list ->  onUsersDownloaded(resultCode, list) }
-                        .execute(User(card))
+                        .execute(*users.toTypedArray())
             }
             else -> {
                 mRootView.snack(context, R.string.no_connection, SnackType.ERROR)

@@ -24,7 +24,20 @@ Gris 2 | secondary_text | ![#757575](https://placehold.it/15/757575/000000?text=
 Blanco | white | ![#FFFFFF](https://placehold.it/15/FFFFFF/000000?text=+) | #FFFFFF
 
 ## FAQ
-Está alojado en la rama `gh-pages`, [podés leerlo acá](https://aidea775.github.io/UNCmorfi/).
+Está alojado en la rama `gh-pages`:
+
+[https://aidea775.github.io/UNCmorfi/](https://aidea775.github.io/UNCmorfi/)
+
+## Backend
+Usamos otro servidor que hace el trabajo sucio de parsear los datos de la web del comedor y entregar un lindo JSON.
+Si tenes dudas, también podes consultar su codigo fuente:
+
+[https://github.com/georgealegre/UNCmorfiServer](https://github.com/georgealegre/UNCmorfiServer)
+
+## Version de iOS
+Facu Alegre se re copó e hizo una version para iOS:
+
+[https://github.com/georgealegre/UNCmorfi](https://github.com/georgealegre/UNCmorfi)
 
 ## Librerias
 * Google: [v4 support](https://developer.android.com/topic/libraries/support-library/features.html#v4)

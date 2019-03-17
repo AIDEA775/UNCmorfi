@@ -15,8 +15,8 @@ import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.widget.ViewDragHelper
-import com.uncmorfi.helpers.sendEmail
 import com.uncmorfi.helpers.openFacebook
+import com.uncmorfi.helpers.sendEmail
 import com.uncmorfi.helpers.startBrowser
 
 class MainActivity :
@@ -114,7 +114,7 @@ class MainActivity :
                     R.string.renovation_email_body)
             R.id.nav_map -> fragment = MapFragment()
             R.id.nav_faq -> fragment = FaqFragment()
-            R.id.nav_face -> openFacebook("https://web.facebook.com/UNCmorfi/")
+            R.id.nav_face -> openFacebook()
             R.id.nav_github -> startBrowser("https://github.com/AIDEA775/UNCmorfi")
             R.id.nav_about -> AboutDialog().show(supportFragmentManager, "AboutDialog")
         }

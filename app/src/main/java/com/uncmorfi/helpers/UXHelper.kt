@@ -12,8 +12,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import com.uncmorfi.R
-import android.content.pm.PackageManager
-
 
 enum class SnackType {
     ERROR,
@@ -83,16 +81,13 @@ fun Activity.startBrowser(uri: String) : Boolean {
     return true
 }
 
-// http://stackoverflow.com/a/24547437/1048340
-fun Activity.openFacebook(url: String) {
-    var uri = Uri.parse(url)
+// https://stackoverflow.com/a/17286547
+fun Activity.openFacebook() {
     try {
-        val appInfo = packageManager.getApplicationInfo("com.facebook.katana", 0)
-        if (appInfo.enabled) {
-            uri = Uri.parse("fb://facewebmodal/f?href=$url")
-        }
-    } catch (ignored: PackageManager.NameNotFoundException) { }
-    startActivity(Intent(Intent.ACTION_VIEW, uri))
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/1978631742388364")))
+    } catch (e: Exception) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/UNCmorfi")))
+    }
 }
 
 fun Activity.shareText(subject: String, text: String, title: String = "UNCmorfi") : Boolean {

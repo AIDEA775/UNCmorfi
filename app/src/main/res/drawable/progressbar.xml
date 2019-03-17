@@ -9,14 +9,13 @@
     <shape
         android:innerRadius="25dp"
         android:shape="ring"
-        android:thickness="2dp"
+        android:thickness="1dp"
         android:useLevel="false" >
 
         <gradient
-            android:centerY="0.5"
-            android:endColor="#FFFF5252"
+            android:endColor="#FF5252"
             android:startColor="#FFFFFF"
-            android:type="sweep"
+            android:type="linear"
             android:useLevel="false" />
     </shape>
 

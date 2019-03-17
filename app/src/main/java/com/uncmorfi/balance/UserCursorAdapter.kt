@@ -3,6 +3,7 @@ package com.uncmorfi.balance
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
@@ -38,6 +39,7 @@ internal class UserCursorAdapter(private val mContext: Context,
         fun bind(user: User) {
             setText(user)
             setImage(user)
+            setColors(user)
             setProgressBar(user.position!!)
             itemView.setOnClickListener { mClickListener(user) }
             itemView.setOnLongClickListener { mLongClickListener(user); true }
@@ -47,19 +49,12 @@ internal class UserCursorAdapter(private val mContext: Context,
             itemView.userName.text = user.name
             itemView.userCard.text = user.card
             itemView.userType.text = user.type
+
             itemView.userBalance.text = String.format(Locale.US, "$ %d", user.balance)
-
-            itemView.userBalance.setTextColor(mContext.colorOf(
-                    if (user.balance < WARNING_USER_BALANCE) R.color.accent else R.color.primary_dark))
-
             itemView.userExpiration.text = mContext.getString(R.string.balance_expiration)
-                            .format(textExpiration(user.expiration))
-
-            itemView.userExpiration.setTextColor(mContext.colorOf(
-                    if (warningExpiration(user.expiration)) R.color.accent else R.color.secondary_text))
-
+                    .format(textExpiration(user.expiration))
             itemView.userLastUpdate.text = mContext.getString(R.string.balance_last_update)
-                    .format(DateUtils.getRelativeTimeSpanString(user.lastUpdate).toString().toLowerCase())
+                    .format(relativeLastUpdate(user.lastUpdate))
         }
 
         private fun textExpiration(expiration: Long): String {
@@ -69,11 +64,8 @@ internal class UserCursorAdapter(private val mContext: Context,
                 mDateFormat.format(Date(expiration))
         }
 
-        private fun warningExpiration(expiration: Long): Boolean {
-            val cal = Calendar.getInstance()
-            cal.time = Date()
-            cal.add(Calendar.MONTH, WARNING_USER_EXPIRE)
-            return Date(expiration).before(cal.time)
+        private fun relativeLastUpdate(lastUpdate: Long): String {
+            return DateUtils.getRelativeTimeSpanString(lastUpdate).toString().toLowerCase()
         }
 
         private fun setImage(user: User) {
@@ -91,6 +83,56 @@ internal class UserCursorAdapter(private val mContext: Context,
                             itemView.userImage.setImageDrawable(circularBitmapDrawable)
                         }
                     })
+        }
+
+        private fun setColors(user: User) {
+            // Alerta si le queda poco saldo
+            if (user.balance < WARNING_USER_BALANCE)
+                itemView.userBalance.setTextColor(mContext.colorOf(R.color.accent))
+            else
+                itemView.userBalance.setTextColor(mContext.colorOf(R.color.primary_dark))
+
+            // Alerta si la tarjeta está vencida o está por vencerse
+            when {
+                expired(user.expiration) -> {
+                    itemView.setBackgroundColor(mContext.colorOf(R.color.accent))
+                    itemView.userBalance.setTextColor(mContext.colorOf(R.color.white))
+                    itemView.userExpiration.setTypeface(null, Typeface.BOLD)
+                    itemView.userExpiration.setTextColor(mContext.colorOf(R.color.white))
+                    setTextColor(R.color.white, R.color.white)
+                }
+                warningExpiration(user.expiration) -> {
+                    itemView.setBackgroundColor(mContext.colorOf(R.color.white))
+                    itemView.userExpiration.setTypeface(null, Typeface.NORMAL)
+                    itemView.userExpiration.setTextColor(mContext.colorOf(R.color.accent))
+                    setTextColor(R.color.primary_text, R.color.secondary_text)
+                }
+                else -> {
+                    itemView.setBackgroundColor(mContext.colorOf(R.color.white))
+                    itemView.userExpiration.setTypeface(null, Typeface.NORMAL)
+                    itemView.userExpiration.setTextColor(mContext.colorOf(R.color.secondary_text))
+                    setTextColor(R.color.primary_text, R.color.secondary_text)
+                }
+            }
+        }
+
+        private fun setTextColor(primary: Int, extra: Int) {
+            itemView.userName.setTextColor(mContext.colorOf(primary))
+            itemView.userCard.setTextColor(mContext.colorOf(primary))
+
+            itemView.userType.setTextColor(mContext.colorOf(extra))
+            itemView.userLastUpdate.setTextColor(mContext.colorOf(extra))
+        }
+
+        private fun warningExpiration(expiration: Long): Boolean {
+            val cal = Calendar.getInstance()
+            cal.time = Date()
+            cal.add(Calendar.MONTH, WARNING_USER_EXPIRE)
+            return Date(expiration).before(cal.time)
+        }
+
+        private fun expired(expiration: Long): Boolean {
+            return Date(expiration).before(Date())
         }
 
         private fun setProgressBar(position: Int) {

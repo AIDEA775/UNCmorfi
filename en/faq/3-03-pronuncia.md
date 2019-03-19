@@ -1,8 +1,8 @@
 ---
-title: ¿Cómo se pronuncia UNCmorfi?
+title: How to pronounce UNCmorfi?
 ref: pronuncia
 lang: en
-resource : true
+resource: Us
 ---
 
 "u-ene-ce-morfi"

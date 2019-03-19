@@ -19,28 +19,21 @@
     <div class="container">
 
       {{ content }}
+      {% for sec in headers.sections %}
+        {% assign pages=site.pages | where:"resource", sec | where:"lang", page.lang %}
 
-      {% assign pages=site.pages | where:"resource", true | where:"lang", page.lang %}
-
-      <div class="card-panel white">
         <div>
-          <h4>{{ headers.faq-indice }}</h4>
+          <h4>{{ sec }}</h4>
           <ul class="mdc-list">
           {% for p in pages %}
             <li class="mdc-list-item">
               <a class="mdc-list-item__text" href="#{{ p.ref }}">{{ p.title }}</a>
               <span class="mdc-list-item__meta material-icons" aria-hidden="true">expand_more</span>
-              </li>
+            </li>
+            <h4 id="{{ p.ref }}">{{ p.content }}</h4>
           {% endfor %}
           </ul>
         </div>
-      </div>
-
-      {% for p in pages %}
-      <h4 id="{{ p.ref }}">{{ p.title }}</h4>
-      <div class="flow-text">
-        {{ p.content }}
-      </div>
       {% endfor %}
 
       <div onclick="topFunction()" id="FAB" class="fixed-action-btn scale-transition scale-out">
@@ -50,6 +43,14 @@
       </div>
     </div>
 
+  <footer class="page-footer orange lighten-1">
+    <div class="footer-copyright orange">
+      <div class="container">
+        <a href="{{ headers.lang-sel | absolute_url }}" class="white-text text-lighten-4">{{ headers.lang-show }}</a>
+      </div>
+    </div>
+  </footer>
+  
     <script>
     // When the user scrolls down 20px from the top of the document, show the button
     window.onscroll = function() {scrollFunction()};
@@ -69,13 +70,4 @@
     }
     </script>
   </body>
-
-  <footer class="page-footer orange lighten-1">
-    <div class="footer-copyright orange">
-      <div class="container">
-        <a href="{{ headers.lang-sel | absolute_url }}" class="white-text text-lighten-4">{{ headers.lang-show }}</a>
-      </div>
-    </div>
-  </footer>
-
 </html>

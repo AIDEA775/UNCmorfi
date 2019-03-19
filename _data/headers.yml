@@ -2,8 +2,11 @@ es:
   faq-indice: Índice
   lang-sel: en
   lang-show: English version
+  sections: ["Nosotros", "Comedor", "Aplicación"]
 
 en:
   faq-indice: Index
   lang-sel: es
   lang-show: Versión en Español
+  sections: ["Us", "Dinner", "App"]
+

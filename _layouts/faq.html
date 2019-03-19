@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <title>UNCmorfi</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
     <link rel="stylesheet" href=" {{ '/assets/main.css' | absolute_url }}">
 
     <!--Let browser know website is optimized for mobile-->
@@ -25,11 +25,14 @@
       <div class="card-panel white">
         <div>
           <h4>{{ headers.faq-indice }}</h4>
-          <ol class="flow-text">
+          <ul class="mdc-list">
           {% for p in pages %}
-            <li><a href="#{{ p.ref }}">{{ p.title }}</a></li>
+            <li class="mdc-list-item">
+              <a class="mdc-list-item__text" href="#{{ p.ref }}">{{ p.title }}</a>
+              <span class="mdc-list-item__meta material-icons" aria-hidden="true">expand_more</span>
+              </li>
           {% endfor %}
-          </ol>
+          </ul>
         </div>
       </div>
 

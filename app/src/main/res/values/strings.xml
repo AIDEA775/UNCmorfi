@@ -21,6 +21,7 @@
 
     <!-- Balance -->
     <string name="balance_action_update">Update all cards</string>
+    <string name="balance_action_copy">Copy cards</string>
 
     <string name="balance_expiration">Expiration date: %1$s</string>
     <string name="balance_last_update">Last update %1$s</string>
@@ -42,7 +43,8 @@
     <string name="balance_delete_user_positive">Delete</string>
     <string name="balance_delete_user_msg">Card deleted</string>
 
-    <string name="balance_copy_msg">Number card copied</string>
+    <string name="balance_copy_msg">Copied</string>
+    <string name="balance_no_cards">No cards</string>
 
     <string name="balance_set_name_title">New name</string>
     <string name="balance_set_name_save">Save</string>

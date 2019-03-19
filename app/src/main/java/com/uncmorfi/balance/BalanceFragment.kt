@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputFilter
 import android.view.*
@@ -25,7 +24,6 @@ import com.uncmorfi.balance.model.UsersContract
 import com.uncmorfi.helpers.*
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.user_new.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -151,12 +149,31 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.balance_update -> { updateAllUsers(); true }
+            R.id.balance_copy -> { copyAllUsers(); true}
             R.id.balance_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun updateAllUsers() {
+        val users = allUsersToList()
+
+        if (!users.isEmpty())
+            updateBalance(*users.toTypedArray())
+        else
+            mRootView.snack(context, R.string.balance_no_cards, SnackType.ERROR)
+    }
+
+    private fun copyAllUsers() {
+        val users = allUsersToList()
+
+        if (!users.isEmpty())
+            copyToClipboard(users.joinToString(separator = " ") { it.card.toString() })
+        else
+            mRootView.snack(context, R.string.balance_no_cards, SnackType.ERROR)
+    }
+
+    private fun allUsersToList(): List<User> {
         val users = ArrayList<User>()
         val cursor = allUsers
         var pos = 0
@@ -169,9 +186,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 pos++
             }
         }
-
-        if (!users.isEmpty())
-            updateBalance(*users.toTypedArray())
+        return users
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -186,7 +201,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                         0 -> updateBalance(user)
                         1 -> DeleteUserDialog.newInstance(this, DELETE_USER_CODE, user)
                                 .show(fragmentManager, "DeleteUserDialog")
-                        2 -> copyCardToClipboard(user.card)
+                        2 -> copyToClipboard(user.card)
                         3 -> startActivity(BarcodeActivity.intent(context!!, user))
                         4 -> SetNameDialog.newInstance(this, SET_NAME_CODE, user)
                                 .show(fragmentManager, "SetNameDialog")
@@ -312,9 +327,9 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         )
     }
 
-    private fun copyCardToClipboard(userCard: String?) {
+    private fun copyToClipboard(string: String?) {
         val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.primaryClip = ClipData.newPlainText("Card", userCard)
+        clipboard.primaryClip = ClipData.newPlainText("Card", string)
         mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
     }
 

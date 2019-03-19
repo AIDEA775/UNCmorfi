@@ -7,6 +7,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/balance_copy"
+        android:title="@string/balance_action_copy"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/balance_browser"
         android:title="@string/action_browser"
         app:showAsAction="never" />

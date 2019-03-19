@@ -21,6 +21,7 @@
 
     <!-- Balance -->
     <string name="balance_action_update">Actualizar tarjetas</string>
+    <string name="balance_action_copy">Copiar tarjetas</string>
 
     <string name="balance_expiration">Fecha de vencimiento: %1$s</string>
     <string name="balance_last_update">Última actualización %1$s</string>
@@ -42,7 +43,8 @@
     <string name="balance_delete_user_positive">Eliminar</string>
     <string name="balance_delete_user_msg">Tarjeta eliminada</string>
 
-    <string name="balance_copy_msg">Número de tarjeta copiado</string>
+    <string name="balance_copy_msg">Copiado</string>
+    <string name="balance_no_cards">No hay tarjetas</string>
 
     <string name="balance_set_name_title">Nuevo nombre</string>
     <string name="balance_set_name_save">Guardar</string>

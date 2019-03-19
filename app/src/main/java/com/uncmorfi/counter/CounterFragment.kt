@@ -226,10 +226,12 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     private fun updateCharts(data: List<Entry>?) {
         if (data != null && !data.isEmpty()) {
-            // Algunas veces el medidor se cae, y las raciones aparecen cargadas a las 00:00hs
-            // así que al primer elemento lo ponemos 1 min antes del segundo elemento
-            // para que no haya un espacio vacío en el medio.
-            data[0].x = data[1].x - 60f
+            if (data.size > 1) {
+                // Algunas veces el medidor se cae, y las raciones aparecen cargadas a las 00:00hs
+                // así que al primer elemento lo ponemos 1 min antes del segundo elemento
+                // para que no haya un espacio vacío en el medio.
+                data[0].x = data[1].x - 60f
+            }
 
             val timeData = LineDataSet(data, getString(R.string.counter_chart_label_time))
                     .style(ChartStyle.RATIONS, requireContext())

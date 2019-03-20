@@ -2,5 +2,6 @@
 .idea
 app
 build
+_site
 local.properties
 UNCmorfi.iml

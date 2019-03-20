@@ -2,7 +2,7 @@
 title: ¿Cómo solicito la credencial? ¿Cómo puedo regenerar mi credencial?
 ref: credencial
 lang: es
-resource : true
+resource: Comedor
 ---
 
 Leé la web del comedor:

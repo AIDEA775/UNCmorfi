@@ -2,7 +2,7 @@
 title: ¿Por qué el menú no se actualiza?
 ref: menu_no_actualiza
 lang: es
-resource : true
+resource: Aplicación
 ---
 
 Al menú lo obtenemos desde la web de la universidad:

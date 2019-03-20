@@ -2,7 +2,7 @@
 title: ¿Puedo colaborar?
 ref: puedo_colaborar
 lang: es
-resource : true
+resource: Nosotros
 ---
 
 * [Podés enviar tu sugerencia sobre la app por correo electrónico](mailto:alex.sai95@gmail.com?cc=julieta.raw@gmail.com&subject=%5BUNCmorfi%5D).

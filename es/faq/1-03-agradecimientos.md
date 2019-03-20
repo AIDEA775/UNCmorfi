@@ -2,7 +2,7 @@
 title: Agradecimientos
 ref: agradecimientos
 lang: es
-resource : true
+resource: Nosotros
 ---
 
 A los colaboradores en el desarrollo.

@@ -2,7 +2,7 @@
 title: Which is the schedule?
 ref: horario
 lang: en
-resource : true
+resource: Dinner Room
 ---
 
 

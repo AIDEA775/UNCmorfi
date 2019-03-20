@@ -2,7 +2,7 @@
 title: ¿Cómo solicito la beca del comedor?
 ref: beca
 lang: es
-resource : true
+resource: Comedor
 ---
 
 Podés encontrar toda la info acá:

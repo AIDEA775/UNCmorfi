@@ -2,7 +2,7 @@
 title: ¿Cuál es el precio de la ración?
 ref: precio_racion
 lang: es
-resource : true
+resource: Comedor
 ---
 
 * 4 pesos para estudiantes.

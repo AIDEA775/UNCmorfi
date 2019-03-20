@@ -2,7 +2,7 @@
 title: How to apply for the dining room scholarship?
 ref: beca
 lang: en
-resource : true
+resource: Dinner Room
 ---
 
 You can find all the info here:

@@ -2,7 +2,7 @@
 title: Thanks to
 ref: agradecimientos
 lang: en
-resource : true
+resource: Us
 ---
 
 To contributors on the development.

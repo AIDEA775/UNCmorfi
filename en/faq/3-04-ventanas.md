@@ -2,7 +2,7 @@
 title: Windows? How do estimates work?
 ref: ventanas
 lang: en
-resource : true
+resource: App
 ---
 
 Estimates are a foolish and innocent approximation of what you might expect in the dining room line. It' s not very accurate, we know it.

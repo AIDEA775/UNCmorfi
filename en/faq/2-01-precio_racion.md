@@ -2,7 +2,7 @@
 title: What is the ration's price?
 ref: precio_racion
 lang: en
-resource : true
+resource: Dinner Room
 ---
 
 * 4 ARS for students.

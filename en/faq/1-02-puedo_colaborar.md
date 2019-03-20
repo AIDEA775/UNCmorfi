@@ -2,7 +2,7 @@
 title: How can I collaborate?
 ref: puedo_colaborar
 lang: en
-resource : true
+resource: Us
 ---
 
 * [You can send your suggestion by e-mail](mailto:alex.sai95@gmail.com?cc=julieta.raw@gmail.com&subject=%5BUNCmorfi%5D).

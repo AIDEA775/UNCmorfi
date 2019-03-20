@@ -2,7 +2,7 @@
 title: I didn't understand how the windows are counted
 ref: no_entendi
 lang: en
-resource : true
+resource: App
 ---
 
 Surely you'll understand if we explain it mathematically:

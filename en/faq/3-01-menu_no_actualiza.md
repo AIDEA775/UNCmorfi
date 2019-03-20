@@ -2,7 +2,7 @@
 title: Why is the menu not updated?
 ref: menu_no_actualiza
 lang: en
-resource : true
+resource: App
 ---
 
 We get the menu from the university's website:

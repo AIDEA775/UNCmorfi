@@ -2,7 +2,7 @@
 title: Who we are?
 ref: quienes_somos
 lang: en
-resource : true
+resource: Us
 ---
 
 We're two very hungry FaMAF students.

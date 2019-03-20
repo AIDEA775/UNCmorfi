@@ -2,7 +2,7 @@
 title: How do I apply for the credential? How can I regenerate the credential?
 ref: credencial
 lang: en
-resource : true
+resource: Dinner Room
 ---
 
 Read the website of the dining room:

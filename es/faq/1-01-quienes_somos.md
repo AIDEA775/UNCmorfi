@@ -2,7 +2,7 @@
 title: ¿Quiénes somos?
 ref: quienes_somos
 lang: es
-resource : true
+resource: Nosotros
 ---
 
 Somos dos estudiantes de FaMAF con mucha hambre.

@@ -2,7 +2,7 @@
 title: What's new in this version?
 ref: nuevo
 lang: en
-resource : true
+resource: App
 ---
 
 ##### v5.0 Espagueti

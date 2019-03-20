@@ -2,7 +2,7 @@
 title: ¿Ventanas? ¿Qué son las estimaciones?
 ref: ventanas
 lang: es
-resource : true
+resource: Aplicación
 ---
 
 Las estimaciones son una aproximación tonta e inocente de lo que quizá esperes en la fila del comedor. No es precisa, lo sabemos.

@@ -2,7 +2,7 @@
 title: ¿De dónde obtienen la información del Saldo y el Medidor?
 ref: obtienen_infomacion
 lang: es
-resource : true
+resource: Aplicación
 ---
 
 De las webs del comedor:

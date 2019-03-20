@@ -2,7 +2,7 @@
 title: ¿Cuál es el horario?
 ref: precio_racion
 lang: es
-resource : true
+resource: Comedor
 ---
 
 Los horarios aplican a las sedes Centro y Ciudad Universitaria

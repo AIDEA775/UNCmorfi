@@ -2,7 +2,7 @@
 title: How to pronounce UNCmorfi?
 ref: pronuncia
 lang: en
-resource: Us
+resource: App
 ---
 
 "u-ene-ce-morfi"

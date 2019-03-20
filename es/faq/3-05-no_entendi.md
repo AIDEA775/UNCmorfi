@@ -2,7 +2,7 @@
 title: No entendí como se cuentan las ventanas
 ref: no_entendi
 lang: es
-resource : true
+resource: Aplicación
 ---
 
 Seguro que lo entendés si te lo explicamos matemáticamente:

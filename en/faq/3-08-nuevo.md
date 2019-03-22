@@ -5,7 +5,7 @@ lang: en
 resource: App
 ---
 
-##### v5.0 Espagueti
+#### **v5.0 Espagueti**
 * We rewrite the whole application to Kotlin, now the code is much cuter.
 * We have a new backend: Now the Android and iOS versions use the same server.
 * Menu completely renovated.
@@ -15,7 +15,7 @@ resource: App
 * FAQ renewed and with more questions.
 * We refactor everthing: many of small fixes and improvements.
 
-##### v4.0 Damasco
+#### **v4.0 Damasco**
 * New icon even cuter!
 * With a new banner.
 * Improvements in accessibility (screen readers).
@@ -27,7 +27,7 @@ resource: App
 * New online FAQ.
 * And many, many minor fixes.
 
-##### v3.0 Cazuela
+#### **v3.0 Cazuela**
 * New icon!
 * New lateral menu.
 * Now the menu is automatically updated every week.
@@ -41,7 +41,7 @@ resource: App
 * Added the section Renovation.
 * And many other minor changes.
 
-##### v2.0 Bolognesa
+#### **v2.0 Bolognesa**
 * Added the sections Help and Contact.
 * Improved the Balance UI.
 * Colored notifications.
@@ -50,11 +50,11 @@ resource: App
 * Reduced application size.
 * Other minor fixes and improvements.
 
-##### v1.1 Arroz
+#### **v1.1 Arroz**
 * Fixed the first start of the camera on android 6.0 or higher.
 * Removed the "Press back again to exit".
 * Fixed balance update.
 * Other small fixes.
 
-##### v1.0 Apio
+#### **v1.0 Apio**
 * First beta version.

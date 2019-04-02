@@ -22,25 +22,26 @@
       {{ content }}
       {% for sec in headers.sections %}
         {% assign pages=site.pages | where:"resource", sec | where:"lang", page.lang %}
-
         <div>
           <h2><strong>{{ sec }}</strong></h2>
           <ul class="mdc-list">
             {% for p in pages %}
-              <li class="mdc-list-item">
-                <!--<a class="mdc-list-item__text" href="#{{ p.ref }}"><h3>{{ p.title }}</h3></a>-->
-                <a class="mdc-list-item__text collapse"><h3>{{ p.title }}</h3></a>
-                <!--<span class="mdc-list-item__meta material-icons" aria-hidden="true" style="color:white">expand_more</span>-->
+            <div class="collapse close">
+              <li class="mdc-list-item collapseTitle">
+                <a class="mdc-list-item__text"><h3>{{ p.title }}</h3></a>
               </li>
-              <!--<h4 id="{{ p.ref }}">{{ p.content }}</h4>-->
-              <h4>{{ p.content }}</h4>
+              <div class="collapseContent">
+                <h4>{{ p.content }}</h4>
+                <div class="mdc-list-divider" role="separator"></div>
+              </div>
+            </div>
             {% endfor %}
             <div class="mdc-list-divider" role="separator"></div>
           </ul>
         </div>
       {% endfor %}
     </div>
-
+    
     <footer>
       <button class="mdc-button">
         <a href="{{ headers.lang-sel | absolute_url }}" class="mdc-button__label">{{ headers.lang-show }}</a>
@@ -48,6 +49,20 @@
     </footer>
   
   <script>
+    var coll = document.getElementsByClassName('collapse');
+    var collTitle = document.getElementsByClassName('collapseTitle');
+    for (i = 0; i < collTitle.length; i++) {
+      collTitle[i].addEventListener('click', toggleItem, false);
+    }
+    function toggleItem() {
+      var itemClass = this.parentNode.className;
+      for (i = 0; i < coll.length; i++) {
+          coll[i].className = 'collapse close';
+      }
+      if (itemClass == 'collapse close') {
+          this.parentNode.className = 'collapse open';
+      }
+    }
   </script>
 
   </body>

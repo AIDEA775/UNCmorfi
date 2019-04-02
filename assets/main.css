@@ -46,14 +46,11 @@ li:before {
 
 body {
   background-color: #FFB74D;
-  background-attachment: fixed;
-  background-size: cover;
-  color: white;
 }
 
 .collapse:before{
   content: "\e5cc";
-  font-family: Material Icons;
+  font-family: Material Icons; /* Material Icons Unicode */
   color: #FF5252;
   font-weight: bold;
   float: right;

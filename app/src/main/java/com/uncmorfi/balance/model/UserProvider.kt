@@ -14,7 +14,7 @@ class UserProvider : ContentProvider() {
     private var mUsersDbHelper: UsersDbHelper? = null
 
     override fun onCreate(): Boolean {
-        mUsersDbHelper = UsersDbHelper(context)
+        mUsersDbHelper = UsersDbHelper(context!!)
         return true
     }
 
@@ -42,7 +42,7 @@ class UserProvider : ContentProvider() {
             }
             else -> throw IllegalArgumentException("URI not supported: $uri")
         }
-        cursor.setNotificationUri(context.contentResolver, uri)
+        cursor.setNotificationUri(context?.contentResolver, uri)
         return cursor
     }
 
@@ -61,7 +61,7 @@ class UserProvider : ContentProvider() {
         newUserId = db.insert(UserEntry.TABLE_NAME, null, contentValues)
 
         db.close()
-        context.contentResolver.notifyChange(uri, null)
+        context?.contentResolver?.notifyChange(uri, null)
         return ContentUris.withAppendedId(CONTENT_URI, newUserId)
     }
 
@@ -76,7 +76,7 @@ class UserProvider : ContentProvider() {
         val result = db.delete(UserEntry.TABLE_NAME, where, selectionArgs)
 
         db.close()
-        context.contentResolver.notifyChange(uri, null)
+        context?.contentResolver?.notifyChange(uri, null)
         return result
     }
 
@@ -92,7 +92,7 @@ class UserProvider : ContentProvider() {
         val result = db.update(UserEntry.TABLE_NAME, contentValues, where, selectionArgs)
 
         db.close()
-        context.contentResolver.notifyChange(uri, null)
+        context?.contentResolver?.notifyChange(uri, null)
         return result
     }
 

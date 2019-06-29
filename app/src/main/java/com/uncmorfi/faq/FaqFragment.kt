@@ -2,7 +2,7 @@ package com.uncmorfi.faq
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.*
 import android.webkit.WebViewClient
 import com.uncmorfi.R

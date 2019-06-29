@@ -3,7 +3,7 @@ package com.uncmorfi.counter
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan

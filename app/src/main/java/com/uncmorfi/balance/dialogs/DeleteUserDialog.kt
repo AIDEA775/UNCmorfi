@@ -3,7 +3,7 @@ package com.uncmorfi.balance.dialogs
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.uncmorfi.R
 import com.uncmorfi.balance.model.User
 
@@ -27,7 +27,7 @@ class DeleteUserDialog : BaseDialogHelper() {
 
     companion object {
         fun newInstance(fragment: Fragment, code: Int, user: User): DeleteUserDialog {
-            return BaseDialogHelper.newInstance(::DeleteUserDialog, fragment, code, user)
+            return newInstance(::DeleteUserDialog, fragment, code, user)
         }
     }
 }

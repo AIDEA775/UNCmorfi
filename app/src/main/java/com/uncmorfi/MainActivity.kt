@@ -1,11 +1,11 @@
 package com.uncmorfi
 
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
+import androidx.fragment.app.Fragment
+import androidx.core.view.GravityCompat
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import com.uncmorfi.about.AboutDialog
 import com.uncmorfi.balance.BalanceFragment
@@ -14,7 +14,7 @@ import com.uncmorfi.faq.FaqFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import android.support.v4.widget.ViewDragHelper
+import androidx.customview.widget.ViewDragHelper
 import com.uncmorfi.helpers.openFacebook
 import com.uncmorfi.helpers.sendEmail
 import com.uncmorfi.helpers.startBrowser

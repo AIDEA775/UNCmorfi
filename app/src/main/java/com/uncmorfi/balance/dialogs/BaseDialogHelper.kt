@@ -2,9 +2,9 @@ package com.uncmorfi.balance.dialogs
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatDialogFragment
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialogFragment
 import com.uncmorfi.balance.model.User
 
 open class BaseDialogHelper : AppCompatDialogFragment() {

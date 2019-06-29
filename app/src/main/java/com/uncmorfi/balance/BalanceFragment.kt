@@ -3,11 +3,11 @@ package com.uncmorfi.balance
 import android.content.*
 import android.database.Cursor
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.CursorLoader
-import android.support.v4.content.Loader
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.InputFilter
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -68,7 +68,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun initRecyclerAndAdapter() {
-        val layoutManager = object : LinearLayoutManager(context) {
+        val layoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(context) {
             override fun isAutoMeasureEnabled(): Boolean {
                 return true
             }
@@ -133,7 +133,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private fun showUserOptionsDialog(user: User) {
         UserOptionsDialog.newInstance(this, USER_OPTIONS_CODE, user)
-                .show(fragmentManager, "UserOptionsDialog")
+                .show(fragmentManager!!, "UserOptionsDialog")
     }
 
     private fun callNewUser() {
@@ -200,11 +200,11 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                     when (resultCode) {
                         0 -> updateBalance(user)
                         1 -> DeleteUserDialog.newInstance(this, DELETE_USER_CODE, user)
-                                .show(fragmentManager, "DeleteUserDialog")
+                                .show(fragmentManager!!, "DeleteUserDialog")
                         2 -> copyToClipboard(user.card)
                         3 -> startActivity(BarcodeActivity.intent(context!!, user))
                         4 -> SetNameDialog.newInstance(this, SET_NAME_CODE, user)
-                                .show(fragmentManager, "SetNameDialog")
+                                .show(fragmentManager!!, "SetNameDialog")
                         else -> {
                         }
                     }

@@ -2,7 +2,7 @@ package com.uncmorfi.balance.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.uncmorfi.R
 import com.uncmorfi.balance.model.User
 
@@ -27,7 +27,7 @@ class UserOptionsDialog : BaseDialogHelper() {
 
     companion object {
         fun newInstance(fragment: Fragment, code: Int, user: User): UserOptionsDialog {
-            return BaseDialogHelper.newInstance(::UserOptionsDialog, fragment, code, user)
+            return newInstance(::UserOptionsDialog, fragment, code, user)
         }
     }
 

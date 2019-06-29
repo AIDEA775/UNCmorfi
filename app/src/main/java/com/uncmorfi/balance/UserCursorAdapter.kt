@@ -2,17 +2,13 @@ package com.uncmorfi.balance
 
 import android.content.Context
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.graphics.Typeface
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
-import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.uncmorfi.R
 import com.uncmorfi.balance.model.User
 import kotlinx.android.synthetic.main.user_item.view.*
@@ -20,8 +16,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.helpers.colorOf
-
 
 /**
  * Llena un RecyclerView.
@@ -29,7 +26,7 @@ import com.uncmorfi.helpers.colorOf
 internal class UserCursorAdapter(private val mContext: Context,
                                  private val mClickListener: (User) -> Unit,
                                  private val mLongClickListener: (User) -> Unit) :
-        RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder>() {
+                                 RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder>() {
     private val mDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
     private var mCursor: Cursor? = null
     private val mUpdateInProgress = ArrayList<Boolean>()
@@ -71,18 +68,10 @@ internal class UserCursorAdapter(private val mContext: Context,
         private fun setImage(user: User) {
             Glide.with(mContext)
                     .load(user.image)
-                    .asBitmap()
                     .placeholder(R.drawable.person_placeholder)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
-                    .into<BitmapImageViewTarget>(object : BitmapImageViewTarget(itemView.userImage) {
-                        override fun setResource(resource: Bitmap) {
-                            val circularBitmapDrawable = RoundedBitmapDrawableFactory.create(
-                                    mContext.resources, resource)
-                            circularBitmapDrawable.isCircular = true
-                            itemView.userImage.setImageDrawable(circularBitmapDrawable)
-                        }
-                    })
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(itemView.userImage)
         }
 
         private fun setColors(user: User) {

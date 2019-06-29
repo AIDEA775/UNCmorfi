@@ -2,8 +2,8 @@ package com.uncmorfi.balance.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.view.WindowManager
 import com.uncmorfi.R
@@ -38,7 +38,7 @@ class SetNameDialog : BaseDialogHelper() {
 
     companion object {
         fun newInstance(fragment: Fragment, code: Int, user: User): SetNameDialog {
-            return BaseDialogHelper.newInstance(::SetNameDialog, fragment, code, user)
+            return newInstance(::SetNameDialog, fragment, code, user)
         }
     }
 }

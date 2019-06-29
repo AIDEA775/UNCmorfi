@@ -1,7 +1,7 @@
 package com.uncmorfi.menu
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,7 @@ internal class MenuAdapter (private val mContext: Context,
                             private var mMenuList: List<DayMenu>,
                             private val mClickListener: (DayMenu) -> Unit,
                             private val mLongClickListener: (DayMenu) -> Unit) :
-        RecyclerView.Adapter<MenuAdapter.MenuItemViewHolder>() {
+                            RecyclerView.Adapter<MenuAdapter.MenuItemViewHolder>() {
 
     internal inner class MenuItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -45,7 +45,7 @@ internal class MenuAdapter (private val mContext: Context,
                 }
             }
 
-            itemView.menuFood.setCardBackgroundColor(colorBack)
+            itemView.menuCard.setCardBackgroundColor(colorBack)
             itemView.menuDayNumber.setTextColor(colorDay)
             itemView.menuDayName.setTextColor(colorDay)
 
@@ -60,8 +60,8 @@ internal class MenuAdapter (private val mContext: Context,
             itemView.menuFood2.text = day.food.getOrNull(1)
             itemView.menuFood3.text = day.food.getOrNull(2)
 
-            itemView.menuFood.setOnClickListener { mClickListener(day) }
-            itemView.menuFood.setOnLongClickListener { mLongClickListener(day); true }
+            itemView.menuCard.setOnClickListener { mClickListener(day) }
+            itemView.menuCard.setOnLongClickListener { mLongClickListener(day); true }
         }
     }
 

@@ -4,9 +4,9 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.*
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
 import kotlinx.android.synthetic.main.fragment_menu.*
@@ -111,7 +111,7 @@ class MenuFragment : Fragment() {
         if (activity != null && isAdded) {
             menuSwipeRefresh.isRefreshing = false
 
-            if (!menu.isEmpty()) {
+            if (menu.isNotEmpty()) {
                 mMenuAdapter.updateMenu(menu)
                 mRootView.snack(context, R.string.update_success, SnackType.FINISH)
                 mApplicationContext.saveToStorage(MENU_FILE, download)

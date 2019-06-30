@@ -2,32 +2,30 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/set_name_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="16dp"
         android:text="@string/balance_set_name_title"
-        android:textColor="@color/primary_text"
-        android:fontFamily="sans-serif-medium"
-        android:textSize="20sp"/>
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"/>
 
     <EditText
         android:id="@+id/setNameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions"
-        android:layout_below="@+id/set_name_title"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:fontFamily="sans-serif-light"
-        android:textSize="18sp"
+        android:inputType="textNoSuggestions"
+        android:layout_below="@+id/set_name_title"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="28dp"
+        android:hint="@string/balance_set_name_hint"
+        android:importantForAutofill="no"
         android:drawableStart="@drawable/ic_person_black"
         android:drawableLeft="@drawable/ic_person_black" />
 
@@ -39,14 +37,9 @@
         android:layout_toLeftOf="@+id/setNameSave"
         android:layout_toStartOf="@+id/setNameSave"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="8dp"
         android:text="@android:string/cancel"
         android:layout_gravity="end"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
     <Button
         android:id="@+id/setNameSave"
@@ -56,12 +49,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
         android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:text="@string/balance_set_name_save"
         android:layout_gravity="end"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
 </RelativeLayout>

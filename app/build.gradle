@@ -10,8 +10,8 @@ android {
         applicationId "com.uncmorfi"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 10
-        versionName "v5.1 Espagueti"
+        versionCode 11
+        versionName "v5.2 Espagueti"
         resValue "string", "app_name", "UNCmorfi"
     }
     buildTypes {

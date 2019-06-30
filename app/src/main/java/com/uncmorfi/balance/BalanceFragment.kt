@@ -3,15 +3,14 @@ package com.uncmorfi.balance
 import android.content.*
 import android.database.Cursor
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.CursorLoader
-import androidx.loader.content.Loader
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.InputFilter
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
 import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.BaseDialogHelper
@@ -24,7 +23,6 @@ import com.uncmorfi.balance.model.UsersContract
 import com.uncmorfi.helpers.*
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.user_new.*
-import kotlin.collections.ArrayList
 
 /**
  * Saldo de las tarjetas.

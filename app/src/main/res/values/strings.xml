@@ -48,6 +48,7 @@
 
     <string name="balance_set_name_title">New name</string>
     <string name="balance_set_name_save">Save</string>
+    <string name="balance_set_name_hint">Your name</string>
 
     <string name="balance_align_barcode">Align barcode</string>
 

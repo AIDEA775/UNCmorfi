@@ -23,6 +23,7 @@
     <style name="MaterialCard" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">6dp</item>
         <item name="rippleColor">@color/accent</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

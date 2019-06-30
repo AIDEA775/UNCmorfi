@@ -1,10 +1,10 @@
 package com.uncmorfi.menu
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.uncmorfi.R
 import com.uncmorfi.helpers.colorOf
 import kotlinx.android.synthetic.main.menu_item.view.*
@@ -33,7 +33,7 @@ internal class MenuAdapter (private val mContext: Context,
                     colorBack = mContext.colorOf(R.color.white)
                 }
                 offset == 0 -> {
-                    colorDay = mContext.colorOf(R.color.primary_dark)
+                    colorDay = mContext.colorOf(R.color.white)
                     colorFood = mContext.colorOf(R.color.white)
                     colorBack = mContext.colorOf(R.color.accent)
 

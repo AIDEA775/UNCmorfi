@@ -2,18 +2,18 @@ package com.uncmorfi.balance.dialogs
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.uncmorfi.balance.model.User
 
 open class BaseDialogHelper : AppCompatDialogFragment() {
-    lateinit var builder: AlertDialog.Builder
+    lateinit var builder: MaterialAlertDialogBuilder
     lateinit var user : User
 
     fun init() {
         user = arguments?.getSerializable(ARG_USER) as User
-        builder = AlertDialog.Builder(requireContext())
+        builder = MaterialAlertDialogBuilder(context)
     }
 
     fun sendResult(code: Int, user: User) {

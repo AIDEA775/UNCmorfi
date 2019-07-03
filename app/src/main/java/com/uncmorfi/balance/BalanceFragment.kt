@@ -166,7 +166,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         val users = allUsersToList()
 
         if (!users.isEmpty())
-            copyToClipboard(users.joinToString(separator = " ") { it.card.toString() })
+            copyToClipboard(users.joinToString(separator = "\n") { it.card!! })
         else
             mRootView.snack(context, R.string.balance_no_cards, SnackType.ERROR)
     }
@@ -252,7 +252,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             context.isOnline() -> {
                 mRootView.snack(context, getNewUserMsg(cards), SnackType.LOADING)
                 val users = mutableListOf<User>()
-                for (c in cards.split(" ")) {
+                for (c in cards.split("\\s+".toRegex())) {
                     users.add(User(c))
                 }
                 DownloadUserAsyncTask {resultCode, list ->  onUsersDownloaded(resultCode, list) }

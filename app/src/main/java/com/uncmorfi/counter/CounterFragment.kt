@@ -3,13 +3,13 @@ package com.uncmorfi.counter
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.view.*
 import android.widget.SeekBar
+import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieDataSet
@@ -125,11 +125,11 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {}
 
-    private fun onCounterDownloaded(code: ReturnCode, result: List<Entry>) {
+    private fun onCounterDownloaded(code: StatusCode, result: List<Entry>) {
         if (activity != null && isAdded) {
             refreshStatus(false)
             when (code) {
-                ReturnCode.OK -> {
+                StatusCode.OK -> {
                     updatePieChart(result)
                     updateCharts(result)
                     mRootView.snack(context, R.string.update_success, SnackType.FINISH)

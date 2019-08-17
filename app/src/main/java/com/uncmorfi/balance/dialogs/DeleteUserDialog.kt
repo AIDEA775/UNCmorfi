@@ -5,7 +5,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.uncmorfi.R
-import com.uncmorfi.balance.model.User
+import com.uncmorfi.models.User
 
 class DeleteUserDialog : BaseDialogHelper() {
 

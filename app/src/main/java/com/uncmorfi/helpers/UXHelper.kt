@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.content.ContextCompat
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
+import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.uncmorfi.R
 
 enum class SnackType {
@@ -33,18 +33,20 @@ fun View.snack(context: Context?, msg: String, type: SnackType): Snackbar {
     return bar
 }
 
-fun View.snack(context: Context?, code: ReturnCode): Snackbar {
+fun View.snack(context: Context?, code: StatusCode): Snackbar {
     val bar = Snackbar.make(this, getMsg(code), getLength(SnackType.ERROR))
     context?.let { setColored(it, bar, SnackType.ERROR) }
     bar.show()
     return bar
 }
 
-private fun getMsg(code: ReturnCode): Int {
+private fun getMsg(code: StatusCode): Int {
     return when (code) {
-        ReturnCode.INTERNAL_ERROR -> R.string.internal_error
-        ReturnCode.CONNECTION_ERROR -> R.string.connection_error
-        ReturnCode.OK -> R.string.update_success
+        StatusCode.INTERNAL_ERROR -> R.string.internal_error
+        StatusCode.CONNECTION_ERROR -> R.string.connection_error
+        StatusCode.EMPTY_ERROR -> R.string.balance_new_user_not_found
+        StatusCode.OK -> R.string.update_success
+        else -> R.string.error
     }
 }
 

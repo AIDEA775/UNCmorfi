@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.uncmorfi.balance.model.User
+import com.uncmorfi.models.User
 
 open class BaseDialogHelper : AppCompatDialogFragment() {
     lateinit var builder: MaterialAlertDialogBuilder

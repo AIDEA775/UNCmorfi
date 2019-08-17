@@ -31,6 +31,8 @@
     <string name="balance_new_user_button_code">Abrir lector de barras</string>
     <string name="balance_new_user_dumb">Fijate lo que pusiste</string>
     <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
+    <string name="balance_new_user_several_adds">Agregando tarjetas&#8230;</string>
+    <string name="balance_new_user_not_found">Tarjeta no encontrada</string>
 
     <string name="balance_user_options_title">Tarjeta</string>
     <string name="balance_user_options_update">Actualizar</string>
@@ -88,6 +90,7 @@
     <string name="no_connection">No hay conexión</string>
     <string name="connection_error">Error de conexión</string>
     <string name="internal_error">Ocurrió un error</string>
+    <string name="error">ERROR ERROR ERROR Reportá esto!</string>
     <string name="updating">Actualizando&#8230;</string>
     <string name="update_success">Actualizado</string>
     <string name="update_fail">No se pudo actualizar</string>

@@ -35,7 +35,7 @@
             android:value="AIzaSyCSp9NAfXyfp4RTPawVvfYcS_tZaWoXA_g" />
 
         <provider
-            android:name=".balance.model.UserProvider"
+            android:name="com.uncmorfi.models.UserProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false" />
 

@@ -1,10 +1,10 @@
 package com.uncmorfi.balance
 
 import android.os.AsyncTask
-import com.uncmorfi.balance.model.User
-import com.uncmorfi.helpers.ReturnCode
+import com.uncmorfi.helpers.StatusCode
 import com.uncmorfi.helpers.downloadByGet
 import com.uncmorfi.helpers.toDate
+import com.uncmorfi.models.User
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
@@ -14,9 +14,9 @@ import java.util.*
 /**
  * Descarga y parsea uno o más usuarios a partir del codigo de la tarjeta dentro de cada User.
  */
-internal class DownloadUserAsyncTask (private val mListener: (code: ReturnCode, List<User>) -> Unit) :
+internal class DownloadUserAsyncTask (private val mListener: (code: StatusCode, List<User>) -> Unit) :
         AsyncTask<User, Void, List<User>>() {
-    private var mErrorCode: ReturnCode = ReturnCode.OK
+    private var mErrorCode: StatusCode = StatusCode.OK
 
     override fun doInBackground(vararg params: User): List<User> {
         val users = params.asList()
@@ -48,10 +48,10 @@ internal class DownloadUserAsyncTask (private val mListener: (code: ReturnCode, 
                 }
             }
         } catch (e: IOException) {
-            mErrorCode = ReturnCode.CONNECTION_ERROR
+            mErrorCode = StatusCode.CONNECTION_ERROR
             e.printStackTrace()
         } catch (e: JSONException) {
-            mErrorCode = ReturnCode.INTERNAL_ERROR
+            mErrorCode = StatusCode.INTERNAL_ERROR
             e.printStackTrace()
         }
         return users

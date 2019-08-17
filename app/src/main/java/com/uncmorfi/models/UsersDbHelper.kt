@@ -1,10 +1,10 @@
-package com.uncmorfi.balance.model
+package com.uncmorfi.models
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-import com.uncmorfi.balance.model.UsersContract.UserEntry
+import com.uncmorfi.models.UsersContract.UserEntry
 
 internal class UsersDbHelper(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {

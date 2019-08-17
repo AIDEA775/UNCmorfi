@@ -1,47 +1,45 @@
 package com.uncmorfi.balance
 
 import android.content.*
-import android.database.Cursor
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.CursorLoader
-import androidx.loader.content.Loader
+import androidx.lifecycle.Observer
 import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.BaseDialogHelper
 import com.uncmorfi.balance.dialogs.DeleteUserDialog
 import com.uncmorfi.balance.dialogs.SetNameDialog
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.balance.model.User
-import com.uncmorfi.balance.model.UserProvider
-import com.uncmorfi.balance.model.UsersContract
-import com.uncmorfi.helpers.*
+import com.uncmorfi.helpers.SnackType.*
+import com.uncmorfi.helpers.StatusCode.*
+import com.uncmorfi.helpers.isOnline
+import com.uncmorfi.helpers.onTextChanged
+import com.uncmorfi.helpers.snack
+import com.uncmorfi.helpers.startBrowser
+import com.uncmorfi.models.MainViewModel
+import com.uncmorfi.models.User
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.user_new.*
 
 /**
  * Saldo de las tarjetas.
  * Administra toda la UI.
- * Usa a [UserCursorAdapter] para llenar el RecyclerView.
+ * Usa a [UserAdapter] para llenar el RecyclerView.
  * Usa a [UserOptionsDialog] para que el usuario pueda modificar alguna tarjeta.
  *
  * Se encarga del manejo de datos de los usuarios/tarjetas.
  * Se comunica con la base de datos a través de un [ContentResolver].
- * Usa a [DownloadUserAsyncTask] para descargar los datos de los usuarios.
  */
-class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
+class BalanceFragment : Fragment() {
     private lateinit var mRootView: View
-    private lateinit var mUserCursorAdapter: UserCursorAdapter
-    private val mContentResolver: ContentResolver by lazy { context!!.contentResolver }
-    private val allUsers: Cursor?
-        get() = mContentResolver.query(
-                UserProvider.CONTENT_URI,
-                null, null, null, null, null)
+    private lateinit var mUserAdapter: UserAdapter
+    private lateinit var mViewModel: MainViewModel
+
+    private var userList: List<User> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,16 +51,35 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        loaderManager.initLoader(0, null, this)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
+        mViewModel = MainViewModel(requireContext())
+
         initRecyclerAndAdapter()
         initNewUserView()
+
+        mViewModel.userStatus.observe(this, Observer {
+            when (it) {
+                BUSY -> {}
+//                UPDATING -> mRootView.snack(context, R.string.updating, LOADING)
+                UPDATED -> {
+                    mRootView.snack(context, R.string.update_success, FINISH)
+                    newUserInput.text.clear()
+                }
+                INSERTED -> {
+                    mRootView.snack(context, R.string.new_user_success, FINISH)
+                    newUserInput.text.clear()
+                }
+                DELETED -> mRootView.snack(context, R.string.balance_delete_user_msg, FINISH)
+                else -> mRootView.snack(context, it)
+            }
+        })
+
+        mViewModel.allUsers().observe(this, Observer {
+            mUserAdapter.setUsers(it)
+            userList = it
+        })
     }
 
     private fun initRecyclerAndAdapter() {
@@ -74,11 +91,11 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         balanceList.isNestedScrollingEnabled = false
         balanceList.layoutManager = layoutManager
 
-        mUserCursorAdapter = UserCursorAdapter(requireContext(),
+        mUserAdapter = UserAdapter(requireContext(),
                 { showUserOptionsDialog(it) },
-                { updateBalance(it) })
+                { updateUser(it) })
 
-        balanceList.adapter = mUserCursorAdapter
+        balanceList.adapter = mUserAdapter
     }
 
     private fun initNewUserView() {
@@ -86,7 +103,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         newUserInput.setOnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_DONE) {
                 hideKeyboard()
-                callNewUser()
+                onNewUserClicked()
             }
             false
         }
@@ -105,7 +122,7 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 contentDescription = getString(R.string.balance_new_user_button_enter)
                 setOnClickListener {
                     hideKeyboard()
-                    callNewUser()
+                    onNewUserClicked()
                 }
             } else {
                 // Si es está vacio, llama al lector.
@@ -134,10 +151,10 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 .show(fragmentManager!!, "UserOptionsDialog")
     }
 
-    private fun callNewUser() {
+    private fun onNewUserClicked() {
         val input = newUserInput.text.toString()
         if (input.isNotEmpty())
-            newUser(input)
+            updateUser(*parseUsers(input))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -154,49 +171,31 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun updateAllUsers() {
-        val users = allUsersToList()
-
-        if (!users.isEmpty())
-            updateBalance(*users.toTypedArray())
-        else
-            mRootView.snack(context, R.string.balance_no_cards, SnackType.ERROR)
+        if (userList.isEmpty()) {
+            mRootView.snack(context, R.string.balance_no_cards, ERROR)
+        } else {
+            updateUser(*userList.toTypedArray())
+        }
     }
 
     private fun copyAllUsers() {
-        val users = allUsersToList()
-
-        if (!users.isEmpty())
-            copyToClipboard(users.joinToString(separator = "\n") { it.card!! })
+        if (userList.isNotEmpty())
+            copyToClipboard(userList.joinToString(separator = "\n") { it.card })
         else
-            mRootView.snack(context, R.string.balance_no_cards, SnackType.ERROR)
+            mRootView.snack(context, R.string.balance_no_cards, ERROR)
     }
 
-    private fun allUsersToList(): List<User> {
-        val users = ArrayList<User>()
-        val cursor = allUsers
-        var pos = 0
-
-        cursor?.let {
-            while (cursor.moveToNext()) {
-                val user = User(cursor)
-                user.position = pos
-                users.add(user)
-                pos++
-            }
-        }
-        return users
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
-            newUser(result.contents)
+            updateUser(*parseUsers(result.contents))
         } else {
             when (requestCode) {
                 USER_OPTIONS_CODE -> {
                     val user : User = getUserFromIntent(data)
                     when (resultCode) {
-                        0 -> updateBalance(user)
+                        0 -> updateUser(user)
                         1 -> DeleteUserDialog.newInstance(this, DELETE_USER_CODE, user)
                                 .show(fragmentManager!!, "DeleteUserDialog")
                         2 -> copyToClipboard(user.card)
@@ -208,10 +207,10 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                     }
                 }
                 DELETE_USER_CODE -> {
-                    deleteUser(getUserFromIntent(data))
+                    mViewModel.deleteUser(getUserFromIntent(data))
                 }
                 SET_NAME_CODE -> {
-                    updateNameOfUser(getUserFromIntent(data))
+                    mViewModel.updateUserName(getUserFromIntent(data))
                 }
                 else -> {
                     super.onActivityResult(requestCode, resultCode, data)
@@ -223,6 +222,120 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private fun getUserFromIntent(data: Intent?) : User {
         return data?.getSerializableExtra(BaseDialogHelper.ARG_USER) as User
     }
+
+    private fun parseUsers(cards: String): Array<User> {
+        val users = mutableListOf<User>()
+        for (c in cards.split("\\s+".toRegex())) {
+            users.add(User(c))
+        }
+        return users.toTypedArray()
+    }
+
+    private fun updateUser(vararg users: User) {
+        when {
+            users.any { it.card.length < 15 } -> {
+                mRootView.snack(context, R.string.balance_new_user_dumb, FINISH)
+            }
+            context.isOnline() -> {
+
+                userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
+                mUserAdapter.setUsers(userList)
+
+                when {
+                    userList.any { it.isLoading } ->
+                        mRootView.snack(context, R.string.updating, LOADING)
+                    users.size == 1 ->
+                        mRootView.snack(context, getNewUserMsg(users.first().card), LOADING)
+                    else ->
+                        mRootView.snack(context, R.string.balance_new_user_several_adds, LOADING)
+                }
+
+                mViewModel.downloadUsers(*users)
+            }
+            else -> {
+                mRootView.snack(context, R.string.no_connection, ERROR)
+            }
+        }
+    }
+
+    private fun getNewUserMsg(card: String): String {
+        return getString(R.string.balance_new_user_adding).format(card)
+    }
+
+//    private fun onUsersDownloaded(code: StatusCode, users: List<User>) {
+//        when (code) {
+//            OK -> {
+//                updateUser(users)
+//                newUserInput.text.clear()
+//            }
+//            else -> context?.let { mRootView.snack(it, code) }
+//        }
+//    }
+//
+//    private fun updateUser(users: List<User>) {
+//        var rows = -1
+//
+//        for (u in users) {
+//            rows = saveUserBalance(u)
+//
+//            // Si una fila fue afectada, entonces se actualizó el balance del usuario
+//            // sinó, insertar el nuevo usuario
+//            if (rows == 0) {
+//                insertUser(u)
+//            }
+//        }
+//
+//        if (rows == 1) {
+//            mRootView.snack(context, R.string.update_success, FINISH)
+//        } else if (rows == 0) {
+//            mRootView.snack(context, R.string.new_user_success, FINISH)
+//        }
+//    }
+
+//    private fun insertUser(user: User) {
+//        mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues(true))
+//    }
+//
+//    private fun saveUserBalance(user: User): Int {
+//        return mContentResolver.update(
+//                UserProvider.CONTENT_URI,
+//                user.toContentValues(false),
+//                UsersContract.UserEntry.CARD + "=?",
+//                arrayOf(user.card)
+//        )
+//    }
+
+    private fun copyToClipboard(string: String?) {
+        val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.primaryClip = ClipData.newPlainText("Card", string)
+        mRootView.snack(context, R.string.balance_copy_msg, FINISH)
+    }
+
+//    private fun deleteUser(user: User) {
+//        mContentResolver.delete(
+//                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
+//                null, null)
+//        context?.deleteFileInStorage(BARCODE_PATH + user.card)
+//    }
+//
+//    private fun updateNameOfUser(user: User) {
+//        val values = ContentValues()
+//        values.put(UsersContract.UserEntry.NAME, user.name)
+//        mContentResolver.update(
+//                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
+//                values, null, null
+//        )
+//        mRootView.snack(context, R.string.update_success, FINISH)
+//    }
+//
+//    private fun showProgressBar(vararg users: User, show: Boolean) {
+//        for (u in users) {
+//            u.position?.let {
+//                mUserAdapter.setInProgress(it, show)
+//                mUserAdapter.notifyItemChanged(it)
+//            }
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -242,135 +355,6 @@ class BalanceFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
         newUserInput.clearFocus()
-    }
-
-    private fun newUser(cards: String) {
-        when {
-            cards.length < 15 -> {
-                mRootView.snack(context, R.string.balance_new_user_dumb, SnackType.FINISH)
-            }
-            context.isOnline() -> {
-                mRootView.snack(context, getNewUserMsg(cards), SnackType.LOADING)
-                val users = mutableListOf<User>()
-                for (c in cards.split("\\s+".toRegex())) {
-                    users.add(User(c))
-                }
-                DownloadUserAsyncTask {resultCode, list ->  onUsersDownloaded(resultCode, list) }
-                        .execute(*users.toTypedArray())
-            }
-            else -> {
-                mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
-            }
-        }
-    }
-
-    private fun getNewUserMsg(card: String): String {
-        return getString(R.string.balance_new_user_adding).format(card)
-    }
-
-    private fun updateBalance(vararg users: User) {
-        if (context.isOnline()) {
-            context?.let { mRootView.snack(it, R.string.updating, SnackType.LOADING) }
-
-            showProgressBar(*users, show = true)
-
-            DownloadUserAsyncTask { code, list ->  onUsersDownloaded(code, list) }
-                    .execute(*users)
-        } else {
-            mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
-        }
-    }
-
-    private fun onUsersDownloaded(code: ReturnCode, users: List<User>) {
-        when (code) {
-            ReturnCode.OK -> {
-                updateUser(users)
-                newUserInput.text.clear()
-            }
-            else -> context?.let { mRootView.snack(it, code) }
-        }
-        showProgressBar(*users.toTypedArray(), show = false)
-    }
-
-    private fun updateUser(users: List<User>) {
-        var rows = -1
-
-        for (u in users) {
-            rows = saveUserBalance(u)
-
-            // Si una fila fue afectada, entonces se actualizó el balance del usuario
-            // sinó, insertar el nuevo usuario
-            if (rows == 0) {
-                insertUser(u)
-            }
-        }
-
-        if (rows == 1) {
-            mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-        } else if (rows == 0) {
-            mRootView.snack(context, R.string.new_user_success, SnackType.FINISH)
-        }
-    }
-
-    private fun insertUser(user: User) {
-        mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues(true))
-    }
-
-    private fun saveUserBalance(user: User): Int {
-        return mContentResolver.update(
-                UserProvider.CONTENT_URI,
-                user.toContentValues(false),
-                UsersContract.UserEntry.CARD + "=?",
-                arrayOf(user.card)
-        )
-    }
-
-    private fun copyToClipboard(string: String?) {
-        val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.primaryClip = ClipData.newPlainText("Card", string)
-        mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
-    }
-
-    private fun deleteUser(user: User) {
-        mContentResolver.delete(
-                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
-                null, null)
-        context?.deleteFileInStorage(BARCODE_PATH + user.card)
-        mRootView.snack(context, R.string.balance_delete_user_msg, SnackType.FINISH)
-    }
-
-    private fun updateNameOfUser(user: User) {
-        val values = ContentValues()
-        values.put(UsersContract.UserEntry.NAME, user.name)
-        mContentResolver.update(
-                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
-                values, null, null
-        )
-        mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        return CursorLoader(requireActivity().applicationContext, UserProvider.CONTENT_URI,
-                null, null, null, null)
-    }
-
-    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
-        mUserCursorAdapter.setCursor(data)
-        mUserCursorAdapter.notifyDataSetChanged()
-    }
-
-    override fun onLoaderReset(loader: Loader<Cursor>) {
-        mUserCursorAdapter.setCursor(null)
-        mUserCursorAdapter.notifyDataSetChanged()
-    }
-
-    private fun showProgressBar(vararg users: User, show: Boolean) {
-        for (u in users) {
-            u.position?.let {
-                mUserCursorAdapter.setInProgress(it, show)
-                mUserCursorAdapter.notifyItemChanged(it)
-            }
-        }
     }
 
     companion object {

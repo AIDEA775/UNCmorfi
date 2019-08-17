@@ -12,9 +12,9 @@ import java.util.*
 /**
  * Descarga y parsea los datos obtenidos del medidor de raciones.
  */
-internal class RefreshCounterTask(private val mListener: (code: ReturnCode, List<Entry>) -> Unit) :
+internal class RefreshCounterTask(private val mListener: (code: StatusCode, List<Entry>) -> Unit) :
         AsyncTask<Void, Void, List<Entry>>() {
-    private var mErrorCode: ReturnCode = ReturnCode.OK
+    private var mErrorCode: StatusCode = StatusCode.OK
 
     override fun doInBackground(vararg params: Void): List<Entry>? {
         try {
@@ -37,14 +37,14 @@ internal class RefreshCounterTask(private val mListener: (code: ReturnCode, List
             Collections.sort(data, ParserHelper.CounterEntryComparator())
             return data
         } catch (e: IOException) {
-            mErrorCode = ReturnCode.CONNECTION_ERROR
+            mErrorCode = StatusCode.CONNECTION_ERROR
             return null
         } catch (e: JSONException) {
-            mErrorCode = ReturnCode.INTERNAL_ERROR
+            mErrorCode = StatusCode.INTERNAL_ERROR
             e.printStackTrace()
             return null
         } catch (e: NumberFormatException) {
-            mErrorCode = ReturnCode.INTERNAL_ERROR
+            mErrorCode = StatusCode.INTERNAL_ERROR
             e.printStackTrace()
             return null
         }

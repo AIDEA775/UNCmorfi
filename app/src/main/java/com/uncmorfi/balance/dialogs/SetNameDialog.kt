@@ -2,12 +2,12 @@ package com.uncmorfi.balance.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.uncmorfi.R
-import com.uncmorfi.balance.model.User
+import com.uncmorfi.models.User
 import kotlinx.android.synthetic.main.dialog_set_name.view.*
 
 class SetNameDialog : BaseDialogHelper() {

@@ -31,6 +31,8 @@
     <string name="balance_new_user_button_code">Open barcode scanner</string>
     <string name="balance_new_user_dumb">Check the input</string>
     <string name="balance_new_user_adding">Adding card %1$s&#8230;</string>
+    <string name="balance_new_user_several_adds">Adding cards&#8230;</string>
+    <string name="balance_new_user_not_found">Card not found</string>
 
     <string name="balance_user_options_title">Card</string>
     <string name="balance_user_options_update">Update</string>
@@ -87,6 +89,7 @@
     <string name="no_connection">No connection</string>
     <string name="connection_error">Connection error</string>
     <string name="internal_error">An error occurred</string>
+    <string name="error">ERROR ERROR ERROR Report this!</string>
     <string name="updating">Updating&#8230;</string>
     <string name="update_success">Updated</string>
     <string name="update_fail">Update failed</string>

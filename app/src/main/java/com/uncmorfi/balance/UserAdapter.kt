@@ -1,35 +1,31 @@
 package com.uncmorfi.balance
 
 import android.content.Context
-import android.database.Cursor
 import android.graphics.Typeface
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.uncmorfi.R
-import com.uncmorfi.balance.model.User
-import kotlinx.android.synthetic.main.user_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.uncmorfi.R
 import com.uncmorfi.helpers.colorOf
+import com.uncmorfi.models.User
+import kotlinx.android.synthetic.main.user_item.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-/**
- * Llena un RecyclerView.
- */
-internal class UserCursorAdapter(private val mContext: Context,
-                                 private val mClickListener: (User) -> Unit,
-                                 private val mLongClickListener: (User) -> Unit) :
-                                 RecyclerView.Adapter<UserCursorAdapter.UserItemViewHolder>() {
+
+internal class UserAdapter(private val mContext: Context,
+                           private val mClickListener: (User) -> Unit,
+                           private val mLongClickListener: (User) -> Unit) :
+                                 RecyclerView.Adapter<UserAdapter.UserItemViewHolder>() {
     private val mDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
-    private var mCursor: Cursor? = null
-    private val mUpdateInProgress = ArrayList<Boolean>()
+    private var mUsersList = emptyList<User>()
 
     internal inner class UserItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -37,7 +33,7 @@ internal class UserCursorAdapter(private val mContext: Context,
             setText(user)
             setImage(user)
             setColors(user)
-            setProgressBar(user.position!!)
+            setProgressBar(user.isLoading)
             itemView.setOnClickListener { mClickListener(user) }
             itemView.setOnLongClickListener { mLongClickListener(user); true }
         }
@@ -124,8 +120,8 @@ internal class UserCursorAdapter(private val mContext: Context,
             return Date(expiration).before(Date())
         }
 
-        private fun setProgressBar(position: Int) {
-            if (mUpdateInProgress[position]) {
+        private fun setProgressBar(isLoading: Boolean) {
+            if (isLoading) {
                 itemView.userBar.visibility = View.VISIBLE
                 scaleView(itemView.userImage, SCALE_USER_IMAGE_SIZE, SCALE_USER_IMAGE_SIZE)
             } else {
@@ -154,37 +150,19 @@ internal class UserCursorAdapter(private val mContext: Context,
     }
 
     override fun onBindViewHolder(holder: UserItemViewHolder, position: Int) {
-        mCursor?.let {
-            it.moveToPosition(position)
-            val user = User(it)
-            user.position = position
+        val user = mUsersList.getOrNull(position)
+        user?.let {
             holder.bind(user)
         }
     }
 
     override fun getItemCount(): Int {
-        return mCursor?.count ?: 0
+        return mUsersList.count()
     }
 
-    fun setCursor(newCursor: Cursor?) {
-        mCursor = newCursor
-        resizeUpdateInProgress()
-    }
-
-    private fun resizeUpdateInProgress() {
-        val cursor = mCursor
-        if (cursor != null) {
-            val diff = cursor.count - mUpdateInProgress.size
-            if (diff > 0) {
-                val list = Arrays.asList<Boolean>(*arrayOfNulls(diff))
-                list.fill(false)
-                mUpdateInProgress.addAll(list)
-            }
-        }
-    }
-
-    fun setInProgress(position: Int, show: Boolean) {
-        mUpdateInProgress[position] = show
+    fun setUsers(users: List<User>) {
+        mUsersList = users
+        notifyDataSetChanged()
     }
 
     companion object {

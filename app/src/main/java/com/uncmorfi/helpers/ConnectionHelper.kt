@@ -7,7 +7,13 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-enum class ReturnCode {
+enum class StatusCode {
+    BUSY,
+    UPDATING,
+    UPDATED,
+    INSERTED,
+    DELETED,
+    EMPTY_ERROR,
     INTERNAL_ERROR,
     CONNECTION_ERROR,
     OK

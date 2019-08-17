@@ -12,9 +12,9 @@ import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.uncmorfi.R
 import com.uncmorfi.balance.BalanceFragment.Companion.BARCODE_PATH
-import com.uncmorfi.balance.model.User
 import com.uncmorfi.helpers.readBitmapFromStorage
 import com.uncmorfi.helpers.saveToStorage
+import com.uncmorfi.models.User
 import kotlinx.android.synthetic.main.activity_barcode.*
 import java.util.*
 

@@ -1,4 +1,4 @@
-package com.uncmorfi.balance.model
+package com.uncmorfi.models
 
 import android.content.ContentProvider
 import android.content.ContentUris
@@ -7,7 +7,7 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import com.uncmorfi.BuildConfig
-import com.uncmorfi.balance.model.UsersContract.UserEntry
+import com.uncmorfi.models.UsersContract.UserEntry
 
 class UserProvider : ContentProvider() {
 

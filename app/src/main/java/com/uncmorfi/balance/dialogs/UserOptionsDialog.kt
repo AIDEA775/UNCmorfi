@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.uncmorfi.R
-import com.uncmorfi.balance.model.User
+import com.uncmorfi.models.User
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.

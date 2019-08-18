@@ -93,6 +93,7 @@
     <string name="error">ERROR ERROR ERROR Reportá esto!</string>
     <string name="updating">Actualizando&#8230;</string>
     <string name="update_success">Actualizado</string>
+    <string name="update_nothing">Ya estaba actualizado</string>
     <string name="update_fail">No se pudo actualizar</string>
     <string name="new_user_success">Agregado</string>
     <string name="action_browser">Abrir en&#8230;</string>

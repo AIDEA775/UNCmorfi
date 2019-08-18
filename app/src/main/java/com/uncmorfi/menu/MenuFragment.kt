@@ -6,21 +6,24 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
+import com.uncmorfi.helpers.StatusCode.*
+import com.uncmorfi.models.DayMenu
+import com.uncmorfi.models.MainViewModel
 import kotlinx.android.synthetic.main.fragment_menu.*
-import java.util.*
 
 /**
  * Menú de la semana.
- * Administra la UI y el guardado persistente del menú.
- * Usa a [RefreshMenuTask] para actualizar el menú.
+ * Administra la UI.
  */
 class MenuFragment : Fragment() {
     private lateinit var mRootView: View
     private lateinit var mMenuAdapter: MenuAdapter
-    private lateinit var mApplicationContext: Context
+    private lateinit var mViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,30 +32,33 @@ class MenuFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        mRootView = inflater.inflate(R.layout.fragment_menu, container, false)
-        mApplicationContext = requireActivity().applicationContext
-        return mRootView
+        return inflater.inflate(R.layout.fragment_menu, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mRootView = view
 
         menuSwipeRefresh.init { refreshMenu() }
         initRecyclerAndAdapter()
         initMenu()
 
-        if (needAutoRefreshMenu())
-            refreshMenu()
-    }
+        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-    override fun onResume() {
-        super.onResume()
-        requireActivity().setTitle(R.string.navigation_menu)
-    }
+        mViewModel.getMenu().observe(this, Observer {
+            mMenuAdapter.updateMenu(it)
+        })
 
-    override fun onStop() {
-        super.onStop()
-        menuSwipeRefresh.isRefreshing = false
+        mViewModel.menuStatus.observe(this, Observer {
+            menuSwipeRefresh.isRefreshing = false
+            when (it) {
+                BUSY -> {}
+                UPDATED -> mRootView.snack(context, R.string.update_success, SnackType.FINISH)
+                EMPTY_ERROR -> mRootView.snack(context, R.string.update_fail, SnackType.ERROR)
+                OK -> mRootView.snack(context, R.string.update_nothing, SnackType.FINISH)
+                else -> mRootView.snack(context, it)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -74,21 +80,33 @@ class MenuFragment : Fragment() {
     }
 
     private fun initMenu() {
-        mMenuAdapter = MenuAdapter(mApplicationContext, getSavedMenu(),
+        mMenuAdapter = MenuAdapter(requireContext(),
                 { onClick(it) },
                 { onLongClick(it) })
         menuRecyclerView.adapter = mMenuAdapter
     }
 
     private fun refreshMenu() {
-        if (mApplicationContext.isOnline()) {
+        if (context.isOnline()) {
             menuSwipeRefresh.isRefreshing = true
-            RefreshMenuTask { onDayMenuDownloaded(it) } .execute()
+            mViewModel.updateMenu()
         } else {
             menuSwipeRefresh.isRefreshing = false
             mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().setTitle(R.string.navigation_menu)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        menuSwipeRefresh.isRefreshing = false
+        mViewModel.menuStatus.value = BUSY
+    }
+
 
     private fun onClick(dayMenu: DayMenu) {
         requireActivity().shareText(
@@ -98,50 +116,15 @@ class MenuFragment : Fragment() {
     }
 
     private fun onLongClick(dayMenu: DayMenu) {
-        val clipboard = mApplicationContext.
+        val clipboard = requireContext().
                 getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Food", dayMenu.toString())
         clipboard.primaryClip = clip
         mRootView.snack(context, R.string.menu_copy_msg, SnackType.FINISH)
     }
 
-    private fun onDayMenuDownloaded(download: String?) {
-        val menu = download.toDayMenuList()
-
-        if (activity != null && isAdded) {
-            menuSwipeRefresh.isRefreshing = false
-
-            if (menu.isNotEmpty()) {
-                mMenuAdapter.updateMenu(menu)
-                mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-                mApplicationContext.saveToStorage(MENU_FILE, download)
-            } else {
-                mRootView.snack(context, R.string.update_fail, SnackType.ERROR)
-            }
-        }
-    }
-
-    private fun getSavedMenu() : List<DayMenu> {
-        return mApplicationContext.readStringFromStorage(MENU_FILE).toDayMenuList()
-    }
-
-    private fun needAutoRefreshMenu(): Boolean {
-        val now = Calendar.getInstance()
-        now.time = Date()
-        val nowWeek = now.get(Calendar.WEEK_OF_YEAR)
-        val nowYear = now.get(Calendar.YEAR)
-
-        val menu = Calendar.getInstance()
-        menu.time = getSavedMenu().firstOrNull()?.date ?: Date(0) // Date(0) es 1970
-        val menuWeek = menu.get(Calendar.WEEK_OF_YEAR)
-        val menuYear = now.get(Calendar.YEAR)
-
-        return menuYear < nowYear || menuWeek < nowWeek
-    }
-
     companion object {
         private const val URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana"
-        const val MENU_FILE = "menu.json"
     }
 
 }

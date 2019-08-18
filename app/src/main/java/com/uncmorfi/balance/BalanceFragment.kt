@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.BaseDialogHelper
@@ -54,7 +55,8 @@ class BalanceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
-        mViewModel = MainViewModel(requireContext())
+
+        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         initRecyclerAndAdapter()
         initNewUserView()
@@ -62,7 +64,6 @@ class BalanceFragment : Fragment() {
         mViewModel.userStatus.observe(this, Observer {
             when (it) {
                 BUSY -> {}
-//                UPDATING -> mRootView.snack(context, R.string.updating, LOADING)
                 UPDATED -> {
                     mRootView.snack(context, R.string.update_success, FINISH)
                     newUserInput.text.clear()
@@ -345,6 +346,7 @@ class BalanceFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         hideKeyboard()
+        mViewModel.userStatus.value = BUSY
     }
 
     private fun hideKeyboard() {

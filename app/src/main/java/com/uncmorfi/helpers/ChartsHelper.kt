@@ -132,6 +132,6 @@ fun PieDataSet.style(context: Context): PieDataSet {
 private class HourAxisValueFormatter : IAxisValueFormatter {
     override fun getFormattedValue(value: Float, axis: AxisBase): String {
         val valueDate = Date(value.toLong() * 1000)
-        return valueDate.toString("HH:mm")
+        return valueDate.toFormat("HH:mm")
     }
 }

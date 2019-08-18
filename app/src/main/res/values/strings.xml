@@ -92,6 +92,7 @@
     <string name="error">ERROR ERROR ERROR Report this!</string>
     <string name="updating">Updating&#8230;</string>
     <string name="update_success">Updated</string>
+    <string name="update_nothing">Already updated</string>
     <string name="update_fail">Update failed</string>
     <string name="new_user_success">Added</string>
     <string name="action_browser">Open with&#8230;</string>

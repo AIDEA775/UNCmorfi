@@ -7,15 +7,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.uncmorfi.R
 import com.uncmorfi.helpers.colorOf
+import com.uncmorfi.helpers.toFormat
+import com.uncmorfi.models.DayMenu
 import kotlinx.android.synthetic.main.menu_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 internal class MenuAdapter (private val mContext: Context,
-                            private var mMenuList: List<DayMenu>,
                             private val mClickListener: (DayMenu) -> Unit,
                             private val mLongClickListener: (DayMenu) -> Unit) :
                             RecyclerView.Adapter<MenuAdapter.MenuItemViewHolder>() {
+    private var mMenuList: List<DayMenu> = emptyList()
 
     internal inner class MenuItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -53,8 +55,8 @@ internal class MenuAdapter (private val mContext: Context,
             itemView.menuFood2.setTextColor(colorFood)
             itemView.menuFood3.setTextColor(colorFood)
 
-            itemView.menuDayNumber.text = day.getDateNumber()
-            itemView.menuDayName.text = day.getDateName("EEEE").capitalize()
+            itemView.menuDayNumber.text = day.date.toFormat("dd")
+            itemView.menuDayName.text = day.date.toFormat("EEEE").capitalize()
 
             itemView.menuFood1.text = day.food.getOrNull(0)
             itemView.menuFood2.text = day.food.getOrNull(1)

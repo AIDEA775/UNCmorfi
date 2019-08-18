@@ -1,7 +1,7 @@
 package com.uncmorfi.helpers
 
 import com.github.mikephil.charting.data.Entry
-import com.uncmorfi.menu.DayMenu
+import com.uncmorfi.models.DayMenu
 import org.json.JSONArray
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -38,7 +38,7 @@ fun Date.clearDate(): Long {
     return cal.timeInMillis / 1000
 }
 
-fun Date.toString(format: String) : String {
+fun Date.toFormat(format: String) : String {
     val fmt = SimpleDateFormat(format, Locale.getDefault())
     return fmt.format(this)
 }
@@ -46,7 +46,7 @@ fun Date.toString(format: String) : String {
 object ParserHelper {
     class MenuDayComparator : Comparator<DayMenu> {
         override fun compare(left: DayMenu, right: DayMenu): Int {
-            return left.date?.compareTo(right.date) ?: -1
+            return left.date.compareTo(right.date)
         }
     }
 

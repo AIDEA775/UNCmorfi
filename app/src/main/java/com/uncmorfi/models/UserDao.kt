@@ -2,7 +2,6 @@ package com.uncmorfi.models
 
 import androidx.room.*
 
-
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")

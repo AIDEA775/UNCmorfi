@@ -217,7 +217,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         counterEstimateText.visibility = View.VISIBLE
 
         val timeStamp = Date(root.toLong() * 1000)
-        val text = timeStamp.toString("HH:mm")
+        val text = timeStamp.toFormat("HH:mm")
 
         val minutes = (root - time) / 60
         counterEstimateText.text = getString(R.string.counter_estimate)

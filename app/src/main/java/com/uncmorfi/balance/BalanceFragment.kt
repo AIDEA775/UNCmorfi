@@ -119,7 +119,7 @@ class BalanceFragment : Fragment() {
         newUserScanner.apply {
             if (s.isNotEmpty()) {
                 // Cuando hay texto, cambia la función del botón por newUser.
-                setImageResource(R.drawable.ic_check)
+                setImageResource(R.drawable.ic_done)
                 contentDescription = getString(R.string.balance_new_user_button_enter)
                 setOnClickListener {
                     hideKeyboard()

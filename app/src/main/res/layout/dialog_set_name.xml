@@ -26,8 +26,9 @@
         android:layout_marginBottom="28dp"
         android:hint="@string/balance_set_name_hint"
         android:importantForAutofill="no"
-        android:drawableStart="@drawable/ic_person_black"
-        android:drawableLeft="@drawable/ic_person_black" />
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/ic_face"
+        android:drawableLeft="@drawable/ic_face" />
 
     <Button
         android:id="@+id/setNameCancel"

@@ -3,6 +3,7 @@
     <!-- Navigation -->
     <string name="navigation_open">Abrir menú deslizable</string>
     <string name="navigation_close">Cerrar menú deslizable</string>
+    <string name="navigation_home">Inicio</string>
     <string name="navigation_menu">Menú</string>
     <string name="navigation_balance">Saldo</string>
     <string name="navigation_counter">Medidor</string>

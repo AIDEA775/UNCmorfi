@@ -14,6 +14,7 @@ import com.uncmorfi.faq.FaqFragment
 import com.uncmorfi.helpers.openFacebook
 import com.uncmorfi.helpers.sendEmail
 import com.uncmorfi.helpers.startBrowser
+import com.uncmorfi.home.HomeFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
 import com.uncmorfi.servings.ServingsFragment
@@ -57,7 +58,7 @@ class MainActivity :
     }
 
     private fun setMainFragment() {
-        val firstFragment = MenuFragment()
+        val firstFragment = HomeFragment()
         supportFragmentManager
                 .beginTransaction()
                 .add(R.id.content_frame, firstFragment)
@@ -84,8 +85,8 @@ class MainActivity :
             }
             else -> {
                 // Go to main fragment
-                replaceFragment(R.id.nav_menu)
-                navView.setCheckedItem(R.id.nav_menu)
+                replaceFragment(R.id.nav_home)
+                navView.setCheckedItem(R.id.nav_home)
             }
         }
     }
@@ -106,6 +107,7 @@ class MainActivity :
         var fragment: Fragment? = null
 
         when (id) {
+            R.id.nav_home -> fragment = HomeFragment()
             R.id.nav_menu -> fragment = MenuFragment()
             R.id.nav_balance -> fragment = BalanceFragment()
             R.id.nav_counter -> fragment = ServingsFragment()

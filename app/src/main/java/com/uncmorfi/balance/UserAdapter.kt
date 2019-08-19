@@ -64,7 +64,7 @@ internal class UserAdapter(private val mContext: Context,
         private fun setImage(user: User) {
             Glide.with(mContext)
                     .load(user.image)
-                    .placeholder(R.drawable.person_placeholder)
+                    .placeholder(R.drawable.ic_account)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .apply(RequestOptions.circleCropTransform())
                     .into(itemView.userImage)

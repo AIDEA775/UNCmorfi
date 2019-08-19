@@ -1,12 +1,11 @@
-package com.uncmorfi.counter
+package com.uncmorfi.servings
 
 import android.graphics.Matrix
 import android.view.MotionEvent
-
+import android.view.View
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
-import android.view.View
 
 class SyncChartsGestureListener(private val source: LineChart,
                                 private vararg val dest: LineChart) : OnChartGestureListener {

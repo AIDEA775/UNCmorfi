@@ -13,7 +13,7 @@ import com.uncmorfi.R
 import com.uncmorfi.helpers.*
 import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.models.DayMenu
-import com.uncmorfi.models.MainViewModel
+import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_menu.*
 
 /**
@@ -103,7 +103,6 @@ class MenuFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        menuSwipeRefresh.isRefreshing = false
         mViewModel.menuStatus.value = BUSY
     }
 

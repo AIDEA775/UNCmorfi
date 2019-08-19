@@ -21,8 +21,8 @@ import com.uncmorfi.helpers.isOnline
 import com.uncmorfi.helpers.onTextChanged
 import com.uncmorfi.helpers.snack
 import com.uncmorfi.helpers.startBrowser
-import com.uncmorfi.models.MainViewModel
 import com.uncmorfi.models.User
+import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.user_new.*
 

@@ -1,23 +1,23 @@
 package com.uncmorfi
 
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.fragment.app.Fragment
-import androidx.core.view.GravityCompat
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import android.view.MenuItem
+import androidx.core.view.GravityCompat
+import androidx.customview.widget.ViewDragHelper
+import androidx.fragment.app.Fragment
+import com.google.android.material.navigation.NavigationView
 import com.uncmorfi.about.AboutDialog
 import com.uncmorfi.balance.BalanceFragment
-import com.uncmorfi.counter.CounterFragment
 import com.uncmorfi.faq.FaqFragment
-import com.uncmorfi.map.MapFragment
-import com.uncmorfi.menu.MenuFragment
-import kotlinx.android.synthetic.main.activity_main.*
-import androidx.customview.widget.ViewDragHelper
 import com.uncmorfi.helpers.openFacebook
 import com.uncmorfi.helpers.sendEmail
 import com.uncmorfi.helpers.startBrowser
+import com.uncmorfi.map.MapFragment
+import com.uncmorfi.menu.MenuFragment
+import com.uncmorfi.servings.ServingsFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity :
         AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -108,7 +108,7 @@ class MainActivity :
         when (id) {
             R.id.nav_menu -> fragment = MenuFragment()
             R.id.nav_balance -> fragment = BalanceFragment()
-            R.id.nav_counter -> fragment = CounterFragment()
+            R.id.nav_counter -> fragment = ServingsFragment()
             R.id.nav_renovation -> sendEmail("credenciales@estudiantiles.unc.edu.ar",
                     R.string.renovation_email_subject,
                     R.string.renovation_email_body)

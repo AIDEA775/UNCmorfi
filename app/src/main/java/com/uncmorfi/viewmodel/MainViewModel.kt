@@ -1,4 +1,4 @@
-package com.uncmorfi.models
+package com.uncmorfi.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,6 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.uncmorfi.helpers.*
 import com.uncmorfi.helpers.StatusCode.*
+import com.uncmorfi.models.AppDatabase
+import com.uncmorfi.models.DayMenu
+import com.uncmorfi.models.Serving
+import com.uncmorfi.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,10 +29,14 @@ class MainViewModel(context: Application): AndroidViewModel(context) {
     private val menuLive: MutableLiveData<List<DayMenu>> = MutableLiveData()
     val menuStatus: MutableLiveData<StatusCode> = MutableLiveData()
 
+    private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
+    val servingStatus: MutableLiveData<StatusCode> = MutableLiveData()
+
     init {
         userStatus.value = BUSY
+        menuStatus.value = BUSY
+        servingStatus.value = BUSY
     }
-
 
     /*
      * Balance stuff
@@ -115,8 +123,6 @@ class MainViewModel(context: Application): AndroidViewModel(context) {
         }
     }
 
-
-
     /*
      * Menu stuff
      */
@@ -194,9 +200,69 @@ class MainViewModel(context: Application): AndroidViewModel(context) {
         return if (inserts.all { it == -1L }) OK else UPDATED
     }
 
+    /*
+     * Serving stuff
+     */
+
+    fun getServings(): LiveData<List<Serving>> {
+        if (servingLive.value == null) {
+            viewModelScope.launch(Dispatchers.Main) {
+                servingLive.value = db.servingDao().getAll()
+            }
+        }
+        return servingLive
+    }
+
+    fun updateServings() {
+        viewModelScope.launch(Dispatchers.Main) {
+            val status = withContext(coroutineContext + Dispatchers.IO) {
+                downloadServingsTask()
+            }
+            servingLive.value = db.servingDao().getAll()
+            servingStatus.value = status
+        }
+    }
+
+    private suspend fun downloadServingsTask(): StatusCode {
+        try {
+            val result = URL(COUNTER_URL).downloadByGet()
+            val items = JSONObject(result).getJSONObject("servings")
+
+            val data = mutableListOf<Serving>()
+
+            val keys = items.keys()
+            while (keys.hasNext()) {
+                val key = keys.next() as String
+
+                val date = key.toDate("UTC")
+                val ration = items.getInt(key)
+
+                date?.let {
+                    data.add(Serving(date, ration))
+                }
+            }
+            Collections.sort(data, ParserHelper.ServingsComparator())
+
+            if (data.isEmpty()) {
+                return EMPTY_ERROR
+            }
+
+            db.servingDao().insert(*data.toTypedArray())
+            return UPDATED
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return CONNECTION_ERROR
+        } catch (e: JSONException) {
+            return INTERNAL_ERROR
+        } catch (e: NumberFormatException) {
+            return INTERNAL_ERROR
+        }
+    }
+
     companion object {
         private const val USER_URL = "http://uncmorfi.georgealegre.com/users?codes="
         private const val MENU_URL = "http://uncmorfi.georgealegre.com/menu"
+        private const val COUNTER_URL = "http://uncmorfi.georgealegre.com/servings"
     }
 
 }

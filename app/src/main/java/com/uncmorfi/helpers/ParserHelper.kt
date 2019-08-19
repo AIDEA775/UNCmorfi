@@ -1,7 +1,7 @@
 package com.uncmorfi.helpers
 
-import com.github.mikephil.charting.data.Entry
 import com.uncmorfi.models.DayMenu
+import com.uncmorfi.models.Serving
 import org.json.JSONArray
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -50,9 +50,9 @@ object ParserHelper {
         }
     }
 
-    class CounterEntryComparator : Comparator<Entry> {
-        override fun compare(left: Entry, right: Entry): Int {
-            return Date(left.x.toLong()).compareTo(Date(right.x.toLong()))
+    class ServingsComparator : Comparator<Serving> {
+        override fun compare(left: Serving, right: Serving): Int {
+            return left.date.compareTo(right.date)
         }
     }
 }

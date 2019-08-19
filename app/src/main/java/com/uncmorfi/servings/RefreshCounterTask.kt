@@ -1,8 +1,11 @@
-package com.uncmorfi.counter
+package com.uncmorfi.servings
 
 import android.os.AsyncTask
 import com.github.mikephil.charting.data.Entry
-import com.uncmorfi.helpers.*
+import com.uncmorfi.helpers.StatusCode
+import com.uncmorfi.helpers.clearDate
+import com.uncmorfi.helpers.downloadByGet
+import com.uncmorfi.helpers.toDate
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -34,7 +37,7 @@ internal class RefreshCounterTask(private val mListener: (code: StatusCode, List
                 if (date != null)
                     data.add(Entry(date.clearDate().toFloat(), ration.toFloat()))
             }
-            Collections.sort(data, ParserHelper.CounterEntryComparator())
+//            Collections.sort(data, ParserHelper.ServingsComparator())
             return data
         } catch (e: IOException) {
             mErrorCode = StatusCode.CONNECTION_ERROR

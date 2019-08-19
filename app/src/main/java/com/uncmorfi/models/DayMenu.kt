@@ -5,10 +5,6 @@ import androidx.room.PrimaryKey
 import com.uncmorfi.helpers.toFormat
 import java.util.*
 
-//fun String?.toDayMenuList(): List<DayMenu> {
-//
-//}
-
 @Entity(tableName = "menu")
 data class DayMenu (
         @PrimaryKey() var date: Date = Date(),

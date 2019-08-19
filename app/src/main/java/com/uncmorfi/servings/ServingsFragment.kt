@@ -1,4 +1,4 @@
-package com.uncmorfi.counter
+package com.uncmorfi.servings
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -10,6 +10,8 @@ import android.text.style.StyleSpan
 import android.view.*
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieDataSet
@@ -17,6 +19,9 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
+import com.uncmorfi.helpers.StatusCode.*
+import com.uncmorfi.models.Serving
+import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_counter.*
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import java.util.*
@@ -26,11 +31,11 @@ import kotlin.math.roundToInt
 /**
  * Medidor de raciones.
  * Administra la UI con todas sus features.
- * Usa a [RefreshCounterTask] para actualizar el medidor.
  */
 
-class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
+class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     private lateinit var mRootView: View
+    private lateinit var mViewModel: MainViewModel
     private val mEstimateList = ArrayList<Entry>()
     private var mEstimateFirst: Double = 0.0
     private val mSimpleRegression = SimpleRegression(true)
@@ -48,6 +53,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
+        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         counterSwipeRefresh.init { refreshCounter() }
         counterPieChart.init(requireContext())
@@ -69,6 +75,23 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
         counterEstimateButton.setOnClickListener { updateEstimate() }
 
+        mViewModel.getServings().observe(this, Observer {
+            updatePieChart(it)
+            updateCharts(it)
+        })
+
+        mViewModel.servingStatus.observe(this, Observer {
+            if (it == BUSY) return@Observer
+            counterSwipeRefresh.isRefreshing = false
+            when (it) {
+                UPDATED -> mRootView.snack(context, R.string.update_success, SnackType.FINISH)
+                UPDATING -> mRootView.snack(context, R.string.updating, SnackType.FINISH)
+                DELETED -> TODO()
+                EMPTY_ERROR -> mRootView.snack(context, R.string.update_success, SnackType.FINISH)
+                else -> mRootView.snack(context, it)
+            }
+        })
+
         refreshCounter()
     }
 
@@ -79,7 +102,7 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onStop() {
         super.onStop()
-        counterSwipeRefresh.isRefreshing = false
+        mViewModel.servingStatus.value = BUSY
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -96,11 +119,10 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     private fun refreshCounter() {
         if (requireContext().isOnline()) {
-            refreshStatus(true)
-            RefreshCounterTask { code, result -> onCounterDownloaded(code, result) }
-                    .execute()
+            counterSwipeRefresh.isRefreshing = true
+            mViewModel.updateServings()
         } else {
-            refreshStatus(false)
+            counterSwipeRefresh.isRefreshing = false
             mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
         }
     }
@@ -125,24 +147,8 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {}
 
-    private fun onCounterDownloaded(code: StatusCode, result: List<Entry>) {
-        if (activity != null && isAdded) {
-            refreshStatus(false)
-            when (code) {
-                StatusCode.OK -> {
-                    updatePieChart(result)
-                    updateCharts(result)
-                    mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-                }
-                else -> mRootView.snack(context, code)
-            }
-        }
-    }
-
-    private fun updatePieChart(result: List<Entry>) {
-        var total = 0
-        for (entry in result)
-            total += entry.y.toInt()
+    private fun updatePieChart(result: List<Serving>) {
+        val total = result.fold(0) { subtotal, item -> subtotal + item.serving }
 
         val percent = (total.toFloat()/FOOD_RATIONS)*100f
         val percentPie = minOf(percent, 100f)
@@ -224,8 +230,9 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
                 .format(minutes.roundToInt(), text)
     }
 
-    private fun updateCharts(data: List<Entry>?) {
-        if (data != null && !data.isEmpty()) {
+    private fun updateCharts(items: List<Serving>) {
+        if (items.isNotEmpty()) {
+            val data = items.map { s -> Entry(s.date.clearDate().toFloat(), s.serving.toFloat()) }
             if (data.size > 1) {
                 // Algunas veces el medidor se cae, y las raciones aparecen cargadas a las 00:00hs
                 // así que al primer elemento lo ponemos 1 min antes del segundo elemento
@@ -246,17 +253,13 @@ class CounterFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     private fun accumulate(data: List<Entry>): List<Entry> {
-        var sum = 0
+        var sum = 0f
         val accumulated = ArrayList<Entry>()
         for (entry in data) {
-            sum += entry.y.toInt()
-            accumulated.add(Entry(entry.x, sum.toFloat()))
+            sum += entry.y
+            accumulated.add(Entry(entry.x, sum))
         }
         return accumulated
-    }
-
-    private fun refreshStatus(show : Boolean) {
-        counterSwipeRefresh.isRefreshing = show
     }
 
     companion object {

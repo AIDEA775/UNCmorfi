@@ -4,47 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-
-fun Context.saveToStorage(file: String, content: String?) {
-    if (content != null) {
-        try {
-            val out = OutputStreamWriter(
-                    this.openFileOutput(file, Context.MODE_PRIVATE))
-
-            out.write(content)
-            out.close()
-            Log.i("MemoryHelper", "Written $file success")
-        } catch (ex: IOException) {
-            Log.e("MemoryHelper", "Error writing in internal memory")
-        }
-
-    }
-}
-
-fun Context.readStringFromStorage(file: String): String? {
-    try {
-        val rd = BufferedReader(
-                InputStreamReader(this.openFileInput(file)))
-        var line: String
-        val read = StringBuilder()
-
-        while (true) {
-            line = rd.readLine() ?: break
-            read.append(line)
-        }
-
-        rd.close()
-        return read.toString()
-    } catch (ex: Exception) {
-        Log.e("MemoryHelper", "Error reading in internal memory")
-        return null
-    }
-
-}
 
 fun Context.saveToStorage(file: String, bitmap: Bitmap?) {
     if (bitmap != null) {

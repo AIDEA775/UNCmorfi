@@ -1,8 +1,5 @@
 package com.uncmorfi.menu
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -115,10 +112,7 @@ class MenuFragment : Fragment() {
     }
 
     private fun onLongClick(dayMenu: DayMenu) {
-        val clipboard = requireContext().
-                getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Food", dayMenu.toString())
-        clipboard.primaryClip = clip
+        context?.copyToClipboard("food", dayMenu.toString())
         mRootView.snack(context, R.string.menu_copy_msg, SnackType.FINISH)
     }
 

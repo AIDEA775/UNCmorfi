@@ -19,6 +19,8 @@ internal class UserAdapter(private val mContext: Context,
 
         fun bind(user: User) {
             user.showOn(itemView)
+            itemView.setOnClickListener { mClickListener(user) }
+            itemView.setOnLongClickListener { mLongClickListener(user); true }
         }
     }
 

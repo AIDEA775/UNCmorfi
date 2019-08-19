@@ -48,6 +48,7 @@
             style="@style/MaterialCard">
 
             <include
+                android:id="@+id/homeCard"
                 layout="@layout/user_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

@@ -1,11 +1,10 @@
 package com.uncmorfi.balance
 
-import android.content.*
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.*
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,12 +14,9 @@ import com.uncmorfi.balance.dialogs.BaseDialogHelper
 import com.uncmorfi.balance.dialogs.DeleteUserDialog
 import com.uncmorfi.balance.dialogs.SetNameDialog
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
+import com.uncmorfi.helpers.*
 import com.uncmorfi.helpers.SnackType.*
 import com.uncmorfi.helpers.StatusCode.*
-import com.uncmorfi.helpers.isOnline
-import com.uncmorfi.helpers.onTextChanged
-import com.uncmorfi.helpers.snack
-import com.uncmorfi.helpers.startBrowser
 import com.uncmorfi.models.User
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_balance.*
@@ -31,9 +27,6 @@ import kotlinx.android.synthetic.main.user_new.*
  * Administra toda la UI.
  * Usa a [UserAdapter] para llenar el RecyclerView.
  * Usa a [UserOptionsDialog] para que el usuario pueda modificar alguna tarjeta.
- *
- * Se encarga del manejo de datos de los usuarios/tarjetas.
- * Se comunica con la base de datos a través de un [ContentResolver].
  */
 class BalanceFragment : Fragment() {
     private lateinit var mRootView: View
@@ -103,7 +96,7 @@ class BalanceFragment : Fragment() {
         newUserInput.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
         newUserInput.setOnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboard()
+                activity?.hideKeyboard()
                 onNewUserClicked()
             }
             false
@@ -122,7 +115,7 @@ class BalanceFragment : Fragment() {
                 setImageResource(R.drawable.ic_done)
                 contentDescription = getString(R.string.balance_new_user_button_enter)
                 setOnClickListener {
-                    hideKeyboard()
+                    activity?.hideKeyboard()
                     onNewUserClicked()
                 }
             } else {
@@ -180,10 +173,13 @@ class BalanceFragment : Fragment() {
     }
 
     private fun copyAllUsers() {
-        if (userList.isNotEmpty())
-            copyToClipboard(userList.joinToString(separator = "\n") { it.card })
-        else
+        if (userList.isNotEmpty()) {
+            context?.copyToClipboard("cards", userList.joinToString(separator = "\n") { it.card })
+            mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
+        }
+        else {
             mRootView.snack(context, R.string.balance_no_cards, ERROR)
+        }
     }
 
 
@@ -199,7 +195,10 @@ class BalanceFragment : Fragment() {
                         0 -> updateUser(user)
                         1 -> DeleteUserDialog.newInstance(this, DELETE_USER_CODE, user)
                                 .show(fragmentManager!!, "DeleteUserDialog")
-                        2 -> copyToClipboard(user.card)
+                        2 -> {
+                            context?.copyToClipboard("card", user.card)
+                            mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
+                        }
                         3 -> startActivity(BarcodeActivity.intent(context!!, user))
                         4 -> SetNameDialog.newInstance(this, SET_NAME_CODE, user)
                                 .show(fragmentManager!!, "SetNameDialog")
@@ -263,81 +262,6 @@ class BalanceFragment : Fragment() {
         return getString(R.string.balance_new_user_adding).format(card)
     }
 
-//    private fun onUsersDownloaded(code: StatusCode, users: List<User>) {
-//        when (code) {
-//            OK -> {
-//                updateUser(users)
-//                newUserInput.text.clear()
-//            }
-//            else -> context?.let { mRootView.snack(it, code) }
-//        }
-//    }
-//
-//    private fun updateUser(users: List<User>) {
-//        var rows = -1
-//
-//        for (u in users) {
-//            rows = saveUserBalance(u)
-//
-//            // Si una fila fue afectada, entonces se actualizó el balance del usuario
-//            // sinó, insertar el nuevo usuario
-//            if (rows == 0) {
-//                insertUser(u)
-//            }
-//        }
-//
-//        if (rows == 1) {
-//            mRootView.snack(context, R.string.update_success, FINISH)
-//        } else if (rows == 0) {
-//            mRootView.snack(context, R.string.new_user_success, FINISH)
-//        }
-//    }
-
-//    private fun insertUser(user: User) {
-//        mContentResolver.insert(UserProvider.CONTENT_URI, user.toContentValues(true))
-//    }
-//
-//    private fun saveUserBalance(user: User): Int {
-//        return mContentResolver.update(
-//                UserProvider.CONTENT_URI,
-//                user.toContentValues(false),
-//                UsersContract.UserEntry.CARD + "=?",
-//                arrayOf(user.card)
-//        )
-//    }
-
-    private fun copyToClipboard(string: String?) {
-        val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.primaryClip = ClipData.newPlainText("Card", string)
-        mRootView.snack(context, R.string.balance_copy_msg, FINISH)
-    }
-
-//    private fun deleteUser(user: User) {
-//        mContentResolver.delete(
-//                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
-//                null, null)
-//        context?.deleteFileInStorage(BARCODE_PATH + user.card)
-//    }
-//
-//    private fun updateNameOfUser(user: User) {
-//        val values = ContentValues()
-//        values.put(UsersContract.UserEntry.NAME, user.name)
-//        mContentResolver.update(
-//                ContentUris.withAppendedId(UserProvider.CONTENT_URI, user.id.toLong()),
-//                values, null, null
-//        )
-//        mRootView.snack(context, R.string.update_success, FINISH)
-//    }
-//
-//    private fun showProgressBar(vararg users: User, show: Boolean) {
-//        for (u in users) {
-//            u.position?.let {
-//                mUserAdapter.setInProgress(it, show)
-//                mUserAdapter.notifyItemChanged(it)
-//            }
-//        }
-//    }
-
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_balance)
@@ -345,18 +269,9 @@ class BalanceFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        hideKeyboard()
-        mViewModel.userStatus.value = BUSY
-    }
-
-    private fun hideKeyboard() {
-        val view = requireActivity().currentFocus
-        if (view != null) {
-            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE)
-                    as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+        activity?.hideKeyboard()
         newUserInput.clearFocus()
+        mViewModel.userStatus.value = BUSY
     }
 
     companion object {

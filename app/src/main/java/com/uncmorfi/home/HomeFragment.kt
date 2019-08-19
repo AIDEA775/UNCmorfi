@@ -9,9 +9,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.balance.showOn
+import com.uncmorfi.helpers.StatusCode
 import com.uncmorfi.helpers.colorOf
 import com.uncmorfi.helpers.compareToToday
 import com.uncmorfi.helpers.toFormat
+import com.uncmorfi.models.User
 import com.uncmorfi.servings.init
 import com.uncmorfi.servings.update
 import com.uncmorfi.viewmodel.MainViewModel
@@ -20,6 +22,7 @@ import kotlinx.android.synthetic.main.menu_item.*
 
 class HomeFragment : Fragment() {
     private lateinit var mViewModel: MainViewModel
+    private lateinit var mUser: User
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -50,9 +53,11 @@ class HomeFragment : Fragment() {
             }
         })
 
+        homeCard.setOnClickListener { mViewModel.downloadUsers(mUser) }
+
         mViewModel.allUsers().observe(this, Observer {
-            val user = it[0]
-            user.showOn(view)
+            mUser = it[0]
+            mUser.showOn(view)
         })
 
         counterPieChart.init(requireContext())
@@ -70,6 +75,7 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        mViewModel.servingStatus.value = StatusCode.BUSY
     }
 
 }

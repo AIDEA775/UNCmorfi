@@ -75,6 +75,7 @@ class MainViewModel(context: Application): AndroidViewModel(context) {
     fun deleteUser(user: User) {
         viewModelScope.launch(Dispatchers.Main) {
             db.userDao().delete(user)
+            // fixme eliminar tambien la caché del codigo de barras de la tarjeta
             usersNotify(DELETED)
         }
     }

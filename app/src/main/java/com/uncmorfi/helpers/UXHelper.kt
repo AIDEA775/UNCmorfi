@@ -1,12 +1,15 @@
 package com.uncmorfi.helpers
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -110,6 +113,20 @@ fun Activity.sendEmail(to: String, subject: Int, text: Int) {
 
     if (i.resolveActivity(packageManager) != null)
         startActivity(i)
+}
+
+fun Activity.hideKeyboard() {
+    val view = this.currentFocus
+    if (view != null) {
+        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE)
+                as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+}
+
+fun Context.copyToClipboard(label: String, data: String) {
+    val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    clipboard.primaryClip = ClipData.newPlainText(label, data)
 }
 
 fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {

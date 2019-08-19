@@ -1,19 +1,24 @@
-package com.uncmorfi.helpers
+package com.uncmorfi.servings
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
+import com.uncmorfi.helpers.colorOf
+import com.uncmorfi.helpers.toFormat
+import com.uncmorfi.models.Serving
 import java.util.*
 
 enum class ChartStyle {
@@ -76,13 +81,48 @@ fun LineChart.update(dataSet: ArrayList<ILineDataSet>) {
     this.invalidate()
 }
 
-fun PieChart.update(dataSet: PieDataSet) {
+fun PieChart.update(context: Context, result: List<Serving>) {
+    val total = result.fold(0) { subtotal, item -> subtotal + item.serving }
+
+    val percent = (total.toFloat()/ FOOD_RATIONS)*100f
+    val percentPie = minOf(percent, 100f)
+
+    val entries = ArrayList<PieEntry>()
+    entries.add(PieEntry(percentPie, "Total"))
+    entries.add(PieEntry(100f - percentPie, "Empty"))
+
+    val dataSet = PieDataSet(entries, "").style(context)
+
+    this.centerText = generatePieChartText(context, total, percent)
+    this.update(dataSet)
+}
+
+/*
+ * Perdón, esta función es horrible. Pero funciona.
+ */
+private fun generatePieChartText(context: Context, total: Int, percent: Float) : SpannableString {
+    val pText = "%.2f%%".format(percent)
+    val tText = context.getString(R.string.counter_rations_title).format(total, FOOD_RATIONS)
+    val s = SpannableString("$pText\n$tText")
+
+    s.setSpan(RelativeSizeSpan(3f), 0, pText.length, 0)
+    s.setSpan(ForegroundColorSpan(context.colorOf(
+            if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark)),
+            0, pText.length, 0)
+
+    s.setSpan(StyleSpan(Typeface.NORMAL), pText.length, s.length, 0)
+    s.setSpan(ForegroundColorSpan(Color.BLACK), pText.length, s.length, 0)
+
+    return s
+}
+
+private fun PieChart.update(dataSet: PieDataSet) {
     this.animateY(800, Easing.EasingOption.EaseInOutCubic)
     this.data = PieData(dataSet)
     this.invalidate()
 }
 
-fun LineDataSet.style(style: ChartStyle, context: Context): LineDataSet {
+fun LineDataSet.style(context: Context, style: ChartStyle): LineDataSet {
     when (style) {
         ChartStyle.POINTS -> {
             this.setDrawValues(false)
@@ -135,3 +175,6 @@ private class HourAxisValueFormatter : IAxisValueFormatter {
         return valueDate.toFormat("HH:mm")
     }
 }
+
+private const val FOOD_RATIONS = 1500
+private const val FOOD_LIMIT = 200

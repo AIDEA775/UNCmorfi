@@ -51,6 +51,11 @@ class MainViewModel(context: Application): AndroidViewModel(context) {
         return userLive
     }
 
+    // todo get and add fav cards
+//    fun getFavUser(): LiveData<User> {
+//
+//    }
+
     fun downloadUsers(vararg users: User) {
         viewModelScope.launch(Dispatchers.Main) {
             val status = withContext(coroutineContext + Dispatchers.IO) {

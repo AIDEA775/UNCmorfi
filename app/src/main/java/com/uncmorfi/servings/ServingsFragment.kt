@@ -1,12 +1,6 @@
 package com.uncmorfi.servings
 
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
 import android.view.*
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
@@ -14,8 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
@@ -67,6 +59,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         counterAccumulatedChart.onChartGestureListener = SyncChartsGestureListener(
                 counterAccumulatedChart, counterTimeChart)
 
+        // Parametros especiales de ambos LineChart
         counterEstimateChart.legend.isEnabled = false
         counterAccumulatedChart.xAxis.setDrawGridLines(false)
 
@@ -76,7 +69,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         counterEstimateButton.setOnClickListener { updateEstimate() }
 
         mViewModel.getServings().observe(this, Observer {
-            updatePieChart(it)
+            counterPieChart.update(requireContext(), it)
             updateCharts(it)
         })
 
@@ -147,41 +140,6 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {}
 
-    private fun updatePieChart(result: List<Serving>) {
-        val total = result.fold(0) { subtotal, item -> subtotal + item.serving }
-
-        val percent = (total.toFloat()/FOOD_RATIONS)*100f
-        val percentPie = minOf(percent, 100f)
-
-        val entries = ArrayList<PieEntry>()
-        entries.add(PieEntry(percentPie, "Total"))
-        entries.add(PieEntry(100f - percentPie, "Empty"))
-
-        val dataSet = PieDataSet(entries, "").style(requireContext())
-
-        counterPieChart.centerText = generatePieChartText(total, percent)
-        counterPieChart.update(dataSet)
-    }
-
-    /*
-     * Perdón, esta función es horrible. Pero funciona.
-     */
-    private fun generatePieChartText(total: Int, percent: Float) : SpannableString {
-        val pText = "%.2f%%".format(percent)
-        val tText = getString(R.string.counter_rations_title).format(total, FOOD_RATIONS)
-        val s = SpannableString("$pText\n$tText")
-
-        s.setSpan(RelativeSizeSpan(3f), 0, pText.length, 0)
-        s.setSpan(ForegroundColorSpan(requireContext().colorOf(
-                if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark)),
-                0, pText.length, 0)
-
-        s.setSpan(StyleSpan(Typeface.NORMAL), pText.length, s.length, 0)
-        s.setSpan(ForegroundColorSpan(Color.BLACK), pText.length, s.length, 0)
-
-        return s
-    }
-
     /*
      * Perdón, esta función tambien horrible de entender.
      */
@@ -210,9 +168,9 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         }
 
         val lineSet = LineDataSet(estimateLine, "")
-                .style(ChartStyle.ESTIMATE, requireContext())
+                .style(requireContext(), ChartStyle.ESTIMATE)
         val pointSet = LineDataSet(mEstimateList, "")
-                .style(ChartStyle.POINTS, requireContext())
+                .style(requireContext(), ChartStyle.POINTS)
 
         dataSets.add(pointSet)
         dataSets.add(lineSet)
@@ -241,10 +199,10 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
             }
 
             val timeData = LineDataSet(data, getString(R.string.counter_chart_label_time))
-                    .style(ChartStyle.RATIONS, requireContext())
+                    .style(requireContext(), ChartStyle.RATIONS)
 
             val cumulativeData = LineDataSet(accumulate(data), getString(R.string.counter_chart_label_accumulated))
-                    .style(ChartStyle.CUMULATIVE, requireContext())
+                    .style(requireContext(), ChartStyle.CUMULATIVE)
 
             counterChartsCard.visibility = View.VISIBLE
             counterTimeChart.update(timeData)

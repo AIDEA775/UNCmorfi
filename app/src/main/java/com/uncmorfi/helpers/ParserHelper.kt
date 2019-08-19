@@ -43,6 +43,11 @@ fun Date.toFormat(format: String) : String {
     return fmt.format(this)
 }
 
+fun Date.compareToToday(): Int {
+    val fmt = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+    return fmt.format(this).compareTo(fmt.format(Date()))
+}
+
 object ParserHelper {
     class MenuDayComparator : Comparator<DayMenu> {
         override fun compare(left: DayMenu, right: DayMenu): Int {

@@ -14,6 +14,11 @@
     <string name="navigation_github">Github</string>
     <string name="navigation_about">About</string>
 
+    <!-- Home -->
+    <string name="home_menu">Today\'s menu</string>
+    <string name="home_cards">Your card</string>
+    <string name="home_servings">Current servings</string>
+
     <!-- Menu -->
     <string name="menu_action_update">Update menu</string>
     <string name="menu_copy_msg">Menu copied</string>

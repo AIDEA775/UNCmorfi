@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.uncmorfi.R
+import com.uncmorfi.balance.BarcodeActivity
 import com.uncmorfi.models.User
 
 /**
@@ -21,7 +22,16 @@ class UserOptionsDialog : BaseDialogHelper() {
         items[4] = getString(R.string.balance_user_options_set_name)
 
         builder.setTitle(getString(R.string.balance_user_options_title))
-                .setItems(items) { _, which -> sendResult(which, user) }
+                .setItems(items) { _, which ->
+                    when (which) {
+                        1 -> DeleteUserDialog.newInstance(this, 0, user)
+                                .show(fragmentManager!!, "DeleteUserDialog")
+                        3 -> startActivity(BarcodeActivity.intent(context!!, user))
+                        4 -> SetNameDialog.newInstance(this, 0, user)
+                                .show(fragmentManager!!, "SetNameDialog")
+                        else -> sendResult(which, user)
+                    }
+                }
         return builder.create()
     }
 

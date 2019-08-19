@@ -6,14 +6,18 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.models.User
+import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.dialog_set_name.view.*
 
 class SetNameDialog : BaseDialogHelper() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.init()
+        val viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
         val v = View.inflate(context, R.layout.dialog_set_name, null)
         builder.setView(v)
 
@@ -21,7 +25,7 @@ class SetNameDialog : BaseDialogHelper() {
 
         v.setNameSave.setOnClickListener {
             user.name = v.setNameInput.text.toString()
-            sendResult(0, user)
+            viewModel.updateUserName(user)
             dismiss()
         }
 

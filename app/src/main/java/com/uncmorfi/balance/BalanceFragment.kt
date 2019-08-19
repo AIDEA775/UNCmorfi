@@ -279,6 +279,5 @@ class BalanceFragment : Fragment() {
         private const val USER_OPTIONS_CODE = 1
         private const val SET_NAME_CODE = 2
         private const val DELETE_USER_CODE = 3
-        const val BARCODE_PATH = "barcode-land-"
     }
 }

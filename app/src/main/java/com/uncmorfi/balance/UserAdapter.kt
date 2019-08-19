@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.uncmorfi.R
 import com.uncmorfi.models.User
-
+import kotlinx.android.synthetic.main.item_user.view.*
 
 internal class UserAdapter(private val mContext: Context,
                            private val mClickListener: (User) -> Unit,
@@ -18,15 +18,15 @@ internal class UserAdapter(private val mContext: Context,
     internal inner class UserItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         fun bind(user: User) {
-            user.showOn(itemView)
-            itemView.setOnClickListener { mClickListener(user) }
-            itemView.setOnLongClickListener { mLongClickListener(user); true }
+            itemView.userCardView.setUser(user)
+            itemView.userCardView.setOnClickListener { mClickListener(user) }
+            itemView.userCardView.setOnLongClickListener { mLongClickListener(user); true }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserItemViewHolder {
         val v = LayoutInflater.from(parent.context)
-                .inflate(R.layout.user_item, parent, false)
+                .inflate(R.layout.item_user, parent, false)
         return UserItemViewHolder(v)
     }
 

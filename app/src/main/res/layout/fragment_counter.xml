@@ -21,8 +21,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/counterPieChart"
+                <com.uncmorfi.core.TotalPieChartView
+                    android:id="@+id/servingsPieChart"
                     android:layout_width="match_parent"
                     android:layout_height="225dp"
                     android:background="@android:color/transparent"

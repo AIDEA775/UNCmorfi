@@ -21,14 +21,22 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
             android:text="@string/home_menu"/>
 
-        <include
-            layout="@layout/menu_item"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            style="@style/MaterialCard">
+
+            <com.uncmorfi.core.DayMenuView
+                android:id="@+id/homeMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="match_parent"
@@ -47,11 +55,13 @@
             android:layout_marginBottom="16dp"
             style="@style/MaterialCard">
 
-            <include
+            <com.uncmorfi.core.UserCardView
                 android:id="@+id/homeCard"
-                layout="@layout/user_item"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -72,13 +82,12 @@
             android:layout_marginBottom="16dp"
             style="@style/MaterialCard">
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/counterPieChart"
+            <com.uncmorfi.core.TotalPieChartView
+                android:id="@+id/servingsPieChart"
                 android:layout_width="match_parent"
                 android:layout_height="225dp"
-                android:focusable="true"
                 android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"/>
+                android:focusable="true"/>
 
         </com.google.android.material.card.MaterialCardView>
 

@@ -11,7 +11,6 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.uncmorfi.R
-import com.uncmorfi.balance.BalanceFragment.Companion.BARCODE_PATH
 import com.uncmorfi.helpers.readBitmapFromStorage
 import com.uncmorfi.helpers.saveToStorage
 import com.uncmorfi.models.User
@@ -84,6 +83,7 @@ class BarcodeActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val BARCODE_PATH = "barcode-land-"
         const val USER_ARG = "user"
 
         fun intent(context: Context, user: User): Intent {

@@ -8,17 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
-import com.uncmorfi.balance.showOn
-import com.uncmorfi.helpers.StatusCode
-import com.uncmorfi.helpers.colorOf
+import com.uncmorfi.helpers.SnackType
+import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.helpers.compareToToday
-import com.uncmorfi.helpers.toFormat
+import com.uncmorfi.helpers.snack
 import com.uncmorfi.models.User
-import com.uncmorfi.servings.init
-import com.uncmorfi.servings.update
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.menu_item.*
 
 class HomeFragment : Fragment() {
     private lateinit var mViewModel: MainViewModel
@@ -33,39 +29,51 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
+        /*
+         * Menú
+         */
         mViewModel.getMenu().observe(this, Observer { menuList ->
             val today = menuList.firstOrNull { it.date.compareToToday() == 0 }
             today?.let {
-                val colorDay = requireContext().colorOf(R.color.white)
-                val colorFood = requireContext().colorOf(R.color.white)
-                val colorBack = requireContext().colorOf(R.color.accent)
-                menuCard.setCardBackgroundColor(colorBack)
-                menuDayNumber.setTextColor(colorDay)
-                menuDayName.setTextColor(colorDay)
-                menuFood1.setTextColor(colorFood)
-                menuFood2.setTextColor(colorFood)
-                menuFood3.setTextColor(colorFood)
-                menuDayNumber.text = it.date.toFormat("dd")
-                menuDayName.text = it.date.toFormat("EEEE").capitalize()
-                menuFood1.text = it.food.getOrNull(0)
-                menuFood2.text = it.food.getOrNull(1)
-                menuFood3.text = it.food.getOrNull(2)
+                homeMenu.setDayMenu(it)
             }
         })
 
-        homeCard.setOnClickListener { mViewModel.downloadUsers(mUser) }
-
+        /*
+         * Tarjetas
+         */
         mViewModel.allUsers().observe(this, Observer {
             mUser = it[0]
-            mUser.showOn(view)
+            homeCard.setUser(mUser)
+        })
+        homeCard.setOnLongClickListener {
+            mUser.isLoading = true
+            homeCard.setUser(mUser)
+            mViewModel.downloadUsers(mUser)
+            true
+        }
+        mViewModel.userStatus.observe(this, Observer {
+            when (it) {
+                BUSY -> {}
+                UPDATED -> {
+                    view.snack(context, R.string.update_success, SnackType.FINISH)
+                }
+                INSERTED -> {
+                    view.snack(context, R.string.new_user_success, SnackType.FINISH)
+                }
+                DELETED -> view.snack(context, R.string.balance_delete_user_msg, SnackType.FINISH)
+                else -> view.snack(context, it)
+            }
         })
 
-        counterPieChart.init(requireContext())
-        mViewModel.updateServings()
+        /*
+         * Medidor
+         */
         mViewModel.getServings().observe(this, Observer {
-            counterPieChart.update(requireContext(), it)
+            servingsPieChart.set(it)
         })
-
+        servingsPieChart.setTouchEnabled(true)
+        servingsPieChart.setTouchListener { mViewModel.updateServings() }
     }
 
     override fun onResume() {
@@ -75,7 +83,9 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        mViewModel.servingStatus.value = StatusCode.BUSY
+        mViewModel.menuStatus.value = BUSY
+        mViewModel.userStatus.value = BUSY
+        mViewModel.servingStatus.value = BUSY
     }
 
 }

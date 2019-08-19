@@ -7,12 +7,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
 import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.models.Serving
+import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.*
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_counter.*
 import org.apache.commons.math3.stat.regression.SimpleRegression
@@ -48,7 +48,6 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         counterSwipeRefresh.init { refreshCounter() }
-        counterPieChart.init(requireContext())
         counterEstimateChart.init(requireContext())
         counterTimeChart.init(requireContext())
         counterAccumulatedChart.init(requireContext())
@@ -69,7 +68,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         counterEstimateButton.setOnClickListener { updateEstimate() }
 
         mViewModel.getServings().observe(this, Observer {
-            counterPieChart.update(requireContext(), it)
+            servingsPieChart.set(it)
             updateCharts(it)
         })
 
@@ -167,10 +166,8 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
             estimateLine.add(Entry(root.toFloat(), 0f))
         }
 
-        val lineSet = LineDataSet(estimateLine, "")
-                .style(requireContext(), ChartStyle.ESTIMATE)
-        val pointSet = LineDataSet(mEstimateList, "")
-                .style(requireContext(), ChartStyle.POINTS)
+        val lineSet = StyledLineDataSet(requireContext(), estimateLine, "", ESTIMATE)
+        val pointSet = StyledLineDataSet(requireContext(), mEstimateList, "", POINTS)
 
         dataSets.add(pointSet)
         dataSets.add(lineSet)
@@ -198,11 +195,8 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
                 data[0].x = data[1].x - 60f
             }
 
-            val timeData = LineDataSet(data, getString(R.string.counter_chart_label_time))
-                    .style(requireContext(), ChartStyle.RATIONS)
-
-            val cumulativeData = LineDataSet(accumulate(data), getString(R.string.counter_chart_label_accumulated))
-                    .style(requireContext(), ChartStyle.CUMULATIVE)
+            val timeData = StyledLineDataSet(requireContext(), data, getString(R.string.counter_chart_label_time), RATIONS)
+            val cumulativeData = StyledLineDataSet(requireContext(), accumulate(data), getString(R.string.counter_chart_label_accumulated), CUMULATIVE)
 
             counterChartsCard.visibility = View.VISIBLE
             counterTimeChart.update(timeData)

@@ -73,6 +73,7 @@ class MenuFragment : Fragment() {
     private fun initRecyclerAndAdapter() {
         menuRecyclerView.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
+        layoutManager.stackFromEnd = true
         menuRecyclerView.layoutManager = layoutManager
     }
 

@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.uncmorfi.models.User
+import com.uncmorfi.viewmodel.MainViewModel
 
 open class BaseDialogHelper : AppCompatDialogFragment() {
     lateinit var builder: MaterialAlertDialogBuilder
+    lateinit var viewModel: MainViewModel
     lateinit var user : User
 
     fun init() {
         user = arguments?.getSerializable(ARG_USER) as User
         builder = MaterialAlertDialogBuilder(context)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
     fun sendResult(code: Int, user: User) {

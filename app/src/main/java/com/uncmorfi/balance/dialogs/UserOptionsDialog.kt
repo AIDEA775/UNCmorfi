@@ -5,12 +5,14 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.uncmorfi.R
 import com.uncmorfi.balance.BarcodeActivity
+import com.uncmorfi.helpers.StatusCode
+import com.uncmorfi.helpers.copyToClipboard
 import com.uncmorfi.models.User
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.
  */
-class UserOptionsDialog : BaseDialogHelper() {
+class UserOptionsDialog: BaseDialogHelper() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.init()
@@ -24,12 +26,16 @@ class UserOptionsDialog : BaseDialogHelper() {
         builder.setTitle(getString(R.string.balance_user_options_title))
                 .setItems(items) { _, which ->
                     when (which) {
+                        0 -> sendResult(which, user)
                         1 -> DeleteUserDialog.newInstance(this, 0, user)
                                 .show(fragmentManager!!, "DeleteUserDialog")
+                        2 -> {
+                            context?.copyToClipboard("card", user.card)
+                            viewModel.userStatus.value = StatusCode.COPIED
+                        }
                         3 -> startActivity(BarcodeActivity.intent(context!!, user))
                         4 -> SetNameDialog.newInstance(this, 0, user)
                                 .show(fragmentManager!!, "SetNameDialog")
-                        else -> sendResult(which, user)
                     }
                 }
         return builder.create()

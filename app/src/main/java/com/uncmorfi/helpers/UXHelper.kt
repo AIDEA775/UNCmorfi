@@ -9,12 +9,17 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.uncmorfi.R
+import com.uncmorfi.balance.dialogs.BaseDialogHelper
+import com.uncmorfi.models.User
 
 enum class SnackType {
     ERROR,
@@ -48,6 +53,7 @@ private fun getMsg(code: StatusCode): Int {
         StatusCode.INTERNAL_ERROR -> R.string.internal_error
         StatusCode.CONNECTION_ERROR -> R.string.connection_error
         StatusCode.EMPTY_ERROR -> R.string.balance_new_user_not_found
+        StatusCode.NO_CONNECTION -> R.string.no_connection
         StatusCode.OK -> R.string.update_success
         else -> R.string.error
     }
@@ -141,4 +147,12 @@ fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {
         override fun afterTextChanged(editable: Editable?) {
         }
     })
+}
+
+fun Intent?.getUser() : User {
+    return this?.getSerializableExtra(BaseDialogHelper.ARG_USER) as User
+}
+
+fun TextView.updateVisibility() {
+    this.visibility = if (this.text.isNullOrEmpty()) GONE else VISIBLE
 }

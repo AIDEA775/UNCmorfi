@@ -13,9 +13,11 @@ enum class StatusCode {
     UPDATED,
     INSERTED,
     DELETED,
+    COPIED,
     EMPTY_ERROR,
     INTERNAL_ERROR,
     CONNECTION_ERROR,
+    NO_CONNECTION,
     OK
 }
 

@@ -21,7 +21,7 @@ import java.io.IOException
 import java.net.URL
 import java.util.*
 
-class MainViewModel(context: Application): AndroidViewModel(context) {
+class MainViewModel(val context: Application): AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
     private val userLive: MutableLiveData<List<User>> = MutableLiveData()
     val userStatus: MutableLiveData<StatusCode> = MutableLiveData()
@@ -51,17 +51,16 @@ class MainViewModel(context: Application): AndroidViewModel(context) {
         return userLive
     }
 
-    // todo get and add fav cards
-//    fun getFavUser(): LiveData<User> {
-//
-//    }
-
     fun downloadUsers(vararg users: User) {
         viewModelScope.launch(Dispatchers.Main) {
-            val status = withContext(coroutineContext + Dispatchers.IO) {
-                downloadUsersTask(*users)
+            if (context.isOnline()) {
+                val status = withContext(coroutineContext + Dispatchers.IO) {
+                    downloadUsersTask(*users)
+                }
+                usersNotify(status)
+            } else {
+                usersNotify(NO_CONNECTION)
             }
-            usersNotify(status)
         }
     }
 

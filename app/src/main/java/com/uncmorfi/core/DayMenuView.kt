@@ -8,6 +8,7 @@ import com.uncmorfi.R
 import com.uncmorfi.helpers.colorOf
 import com.uncmorfi.helpers.compareToToday
 import com.uncmorfi.helpers.toFormat
+import com.uncmorfi.helpers.updateVisibility
 import com.uncmorfi.models.DayMenu
 import kotlinx.android.synthetic.main.view_day_menu.view.*
 
@@ -60,7 +61,10 @@ class DayMenuView : ConstraintLayout {
         menuDayName.text = menu.date.toFormat("EEEE").capitalize()
 
         menuFood1.text = menu.food.getOrNull(0)
+        menuFood1.updateVisibility()
         menuFood2.text = menu.food.getOrNull(1)
+        menuFood2.updateVisibility()
         menuFood3.text = menu.food.getOrNull(2)
+        menuFood3.updateVisibility()
     }
 }

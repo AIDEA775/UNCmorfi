@@ -4,16 +4,13 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.models.User
-import com.uncmorfi.viewmodel.MainViewModel
 
 class DeleteUserDialog : BaseDialogHelper() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.init()
-        val viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         val positiveListener = DialogInterface.OnClickListener { _, _ ->
             viewModel.deleteUser(user)

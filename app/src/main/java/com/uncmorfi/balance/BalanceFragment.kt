@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
-import com.uncmorfi.balance.dialogs.BaseDialogHelper
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.helpers.*
 import com.uncmorfi.helpers.SnackType.*
@@ -70,6 +69,7 @@ class BalanceFragment : Fragment() {
         mViewModel.userStatus.observe(this, Observer {
             when (it) {
                 BUSY -> {}
+                UPDATING -> mRootView.snack(context, R.string.updating, LOADING)
                 UPDATED -> {
                     mRootView.snack(context, R.string.update_success, FINISH)
                     newUserInput.text.clear()
@@ -79,6 +79,7 @@ class BalanceFragment : Fragment() {
                     newUserInput.text.clear()
                 }
                 DELETED -> mRootView.snack(context, R.string.balance_delete_user_msg, FINISH)
+                COPIED -> mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
                 else -> mRootView.snack(context, it)
             }
         })
@@ -149,25 +150,14 @@ class BalanceFragment : Fragment() {
         } else {
             when (requestCode) {
                 USER_OPTIONS_CODE -> {
-                    val user : User = getUserFromIntent(data)
-                    when (resultCode) {
-                        0 -> updateUser(user)
-                        2 -> {
-                            context?.copyToClipboard("card", user.card)
-                            mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
-                        }
-                        else -> {}
-                    }
+                    val user = data.getUser()
+                    updateUser(user)
                 }
                 else -> {
                     super.onActivityResult(requestCode, resultCode, data)
                 }
             }
         }
-    }
-
-    private fun getUserFromIntent(data: Intent?) : User {
-        return data?.getSerializableExtra(BaseDialogHelper.ARG_USER) as User
     }
 
     private fun parseUsers(cards: String): Array<User> {
@@ -183,8 +173,7 @@ class BalanceFragment : Fragment() {
             users.any { it.card.length < 15 } -> {
                 mRootView.snack(context, R.string.balance_new_user_dumb, FINISH)
             }
-            context.isOnline() -> {
-
+            else -> {
                 userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
                 mUserAdapter.setUsers(userList)
 
@@ -198,9 +187,6 @@ class BalanceFragment : Fragment() {
                 }
 
                 mViewModel.downloadUsers(*users)
-            }
-            else -> {
-                mRootView.snack(context, R.string.no_connection, ERROR)
             }
         }
     }

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -48,8 +50,15 @@ class HomeFragment : Fragment() {
          * Tarjetas
          */
         mViewModel.allUsers().observe(this, Observer {
-            mUser = it[0]
-            homeCard.setUser(mUser)
+            if (it.isNotEmpty()) {
+                mUser = it[0]
+                homeCard.setUser(mUser)
+                homeCardContainer.visibility = VISIBLE
+                homeCardTitle.visibility = VISIBLE
+            } else {
+                homeCardContainer.visibility = GONE
+                homeCardTitle.visibility = GONE
+            }
         })
         homeCard.setOnClickListener {
             showUserOptionsDialog(mUser)

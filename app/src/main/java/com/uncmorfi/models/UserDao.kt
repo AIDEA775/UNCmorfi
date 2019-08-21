@@ -22,7 +22,7 @@ interface UserDao {
         image = :image,
         balance= :balance,
         expiration= :expiration,
-        lastUpdate= :lastUpdate
+        last_update= :lastUpdate
         WHERE card = :card
         """)
     suspend fun updatePartialUser(card: String,

@@ -40,7 +40,10 @@
                 android:id="@+id/homeMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -70,10 +73,7 @@
             <com.uncmorfi.balance.UserCardView
                 android:id="@+id/homeCard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground" />
+                android:layout_height="wrap_content"/>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -84,9 +84,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:text="@string/home_servings"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            android:text="@string/home_servings"/>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/homeServingsContainer"
@@ -96,16 +94,12 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="16dp"
-            android:visibility="gone"
-            tools:visibility="visible"
             style="@style/MaterialCard">
 
             <com.uncmorfi.servings.TotalPieChartView
                 android:id="@+id/servingsPieChart"
                 android:layout_width="match_parent"
-                android:layout_height="225dp"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:layout_height="225dp"/>
 
         </com.google.android.material.card.MaterialCardView>
 

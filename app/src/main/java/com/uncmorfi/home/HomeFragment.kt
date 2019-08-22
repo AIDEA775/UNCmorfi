@@ -67,10 +67,10 @@ class HomeFragment : Fragment() {
                 homeCardContainer.visibility = GONE
             }
         })
-        homeCard.setOnClickListener {
+        homeCardContainer.setOnClickListener {
             showUserOptionsDialog(mUser)
         }
-        homeCard.setOnLongClickListener {
+        homeCardContainer.setOnLongClickListener {
             mUser.isLoading = true
             homeCard.setUser(mUser)
             mViewModel.downloadUsers(mUser)
@@ -91,15 +91,10 @@ class HomeFragment : Fragment() {
         mViewModel.getServings().observe(this, Observer {
             if (it.isNotEmpty()) {
                 servingsPieChart.set(it)
-                homeServingsTitle.visibility = VISIBLE
-                homeServingsContainer.visibility = VISIBLE
-            } else {
-                homeServingsTitle.visibility = GONE
-                homeServingsContainer.visibility = GONE
             }
         })
-        servingsPieChart.setTouchEnabled(true)
-        servingsPieChart.setTouchListener {
+        servingsPieChart.setTouchEnabled(false)
+        homeServingsContainer.setOnClickListener {
             mRootView.snack(context, R.string.snack_updating, LOADING)
             mViewModel.updateServings()
         }

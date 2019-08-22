@@ -1,6 +1,7 @@
 package com.uncmorfi.models
 
 import androidx.room.*
+import java.util.*
 
 @Dao
 interface UserDao {
@@ -22,15 +23,15 @@ interface UserDao {
         image = :image,
         balance= :balance,
         expiration= :expiration,
-        last_update= :lastUpdate
+        lastUpdate= :lastUpdate
         WHERE card = :card
         """)
     suspend fun updatePartialUser(card: String,
                                   type: String?,
                                   image: String?,
                                   balance: Int,
-                                  expiration: Long,
-                                  lastUpdate: Long)
+                                  expiration: Calendar,
+                                  lastUpdate: Calendar)
 
     @Delete
     suspend fun delete(user: User)

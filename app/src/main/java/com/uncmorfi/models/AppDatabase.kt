@@ -5,10 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [User::class, DayMenu::class, Serving::class], version = 3)
+@Database(entities = [User::class, DayMenu::class, Serving::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
@@ -29,25 +27,10 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         "database.db")
-                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                         .build()
                 INSTANCE = instance
                 return instance
             }
         }
-
-        private val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE user ADD COLUMN expiration INTEGER")
-                database.execSQL("ALTER TABLE user ADD COLUMN last_update INTEGER")
-            }
-        }
-
-        private val MIGRATION_2_3 = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE user RENAME TO users")
-            }
-        }
-
     }
 }

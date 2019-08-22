@@ -1,17 +1,19 @@
 package com.uncmorfi.models
 
 import androidx.room.TypeConverter
+import com.uncmorfi.helpers.toCalendar
+import com.uncmorfi.helpers.toISOString
 import java.util.*
 
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun fromTimestamp(value: String?): Calendar? {
+        return value?.toCalendar()
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
+    fun dateToTimestamp(cal: Calendar?): String? {
+        return cal?.toISOString()
     }
 
     @TypeConverter

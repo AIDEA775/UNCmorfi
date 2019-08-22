@@ -34,11 +34,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCSp9NAfXyfp4RTPawVvfYcS_tZaWoXA_g" />
 
-        <provider
-            android:name="com.uncmorfi.models.UserProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false" />
-
         <activity
             android:name=".balance.BarcodeActivity"
             android:screenOrientation="landscape"

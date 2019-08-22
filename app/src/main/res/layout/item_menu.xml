@@ -10,7 +10,7 @@
     android:layout_marginTop="6dp"
     android:layout_marginBottom="6dp">
 
-    <com.uncmorfi.core.DayMenuView
+    <com.uncmorfi.menu.DayMenuView
         android:id="@+id/menuView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

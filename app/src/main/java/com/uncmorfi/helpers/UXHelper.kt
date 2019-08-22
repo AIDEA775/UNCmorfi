@@ -27,6 +27,24 @@ enum class SnackType {
     FINISH
 }
 
+enum class StatusCode {
+    NO_ONLINE,
+    CONNECT_ERROR,
+    INTERNAL_ERROR,
+    UPDATE_ERROR,
+
+    UPDATING,
+    UPDATE_SUCCESS,
+    EMPTY_UPDATE,
+    ALREADY_UPDATED,
+
+    COPIED,
+    INSERTED,
+    DELETED,
+
+    BUSY
+}
+
 fun View.snack(context: Context?, resId: Int, type: SnackType): Snackbar {
     val bar = Snackbar.make(this, resId, getLength(type))
     context?.let { setColored(it, bar, type) }
@@ -42,20 +60,45 @@ fun View.snack(context: Context?, msg: String, type: SnackType): Snackbar {
 }
 
 fun View.snack(context: Context?, code: StatusCode): Snackbar {
-    val bar = Snackbar.make(this, getMsg(code), getLength(SnackType.ERROR))
-    context?.let { setColored(it, bar, SnackType.ERROR) }
+    val bar = Snackbar.make(this, getMsg(code), getLength(getType(code)))
+    context?.let { setColored(it, bar, getType(code)) }
     bar.show()
     return bar
 }
 
 private fun getMsg(code: StatusCode): Int {
     return when (code) {
-        StatusCode.INTERNAL_ERROR -> R.string.internal_error
-        StatusCode.CONNECTION_ERROR -> R.string.connection_error
-        StatusCode.EMPTY_ERROR -> R.string.balance_new_user_not_found
-        StatusCode.NO_CONNECTION -> R.string.no_connection
-        StatusCode.OK -> R.string.update_success
-        else -> R.string.error
+        StatusCode.NO_ONLINE -> R.string.snack_no_online
+        StatusCode.CONNECT_ERROR -> R.string.snack_connect_error
+        StatusCode.INTERNAL_ERROR -> R.string.snack_internal_error
+        StatusCode.UPDATE_ERROR -> R.string.snack_update_error
+
+        StatusCode.UPDATING -> R.string.snack_updating
+        StatusCode.UPDATE_SUCCESS -> R.string.snack_update_success
+        StatusCode.EMPTY_UPDATE -> R.string.snack_empty_update
+        StatusCode.ALREADY_UPDATED -> R.string.snack_already_updated
+
+        StatusCode.COPIED -> R.string.snack_copied
+
+        else -> R.string.snack_error
+    }
+}
+
+private fun getType(code: StatusCode): SnackType {
+    return when (code) {
+        StatusCode.NO_ONLINE,
+        StatusCode.CONNECT_ERROR,
+        StatusCode.INTERNAL_ERROR,
+        StatusCode.UPDATE_ERROR -> SnackType.ERROR
+
+        StatusCode.UPDATING -> SnackType.LOADING
+
+        StatusCode.UPDATE_SUCCESS,
+        StatusCode.EMPTY_UPDATE,
+        StatusCode.ALREADY_UPDATED,
+        StatusCode.COPIED -> SnackType.FINISH
+
+        else -> SnackType.ERROR
     }
 }
 

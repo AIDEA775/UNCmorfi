@@ -1,16 +1,18 @@
 package com.uncmorfi.models
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface ServingDao {
-    // Fixme mas de un dia guardado
-    @Query("SELECT * FROM servings")
-    suspend fun getAll(): List<Serving>
+    @Query("SELECT * FROM servings WHERE datetime(date) >= date('now', 'start of day')")
+    suspend fun getToday(): List<Serving>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg menus: Serving): List<Long>
 
-    @Delete
-    suspend fun delete(menu: Serving)
+    @Query("DELETE FROM servings WHERE datetime(date) <= date('now','-2 day')")
+    suspend fun clear()
 }

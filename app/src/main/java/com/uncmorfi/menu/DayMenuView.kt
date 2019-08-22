@@ -1,4 +1,4 @@
-package com.uncmorfi.core
+package com.uncmorfi.menu
 
 import android.content.Context
 import android.util.AttributeSet

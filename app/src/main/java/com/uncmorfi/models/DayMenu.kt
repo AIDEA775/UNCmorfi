@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity(tableName = "menu")
 data class DayMenu (
-        @PrimaryKey() var date: Date = Date(),
+        @PrimaryKey() var date: Calendar = Calendar.getInstance(),
         val food: List<String> = listOf("", "", "")
 ) {
     override fun toString() : String {

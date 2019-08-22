@@ -21,7 +21,7 @@
         <item
             android:id="@+id/nav_counter"
             android:icon="@drawable/nav_usage"
-            android:title="@string/navigation_counter" />
+            android:title="@string/navigation_servings" />
         <item
             android:id="@+id/nav_renovation"
             android:icon="@drawable/nav_renovation"

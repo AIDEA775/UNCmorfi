@@ -16,7 +16,6 @@ import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.models.User
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_balance.*
-import kotlinx.android.synthetic.main.view_user_new.*
 
 /**
  * Saldo de las tarjetas.
@@ -69,18 +68,14 @@ class BalanceFragment : Fragment() {
         mViewModel.userStatus.observe(this, Observer {
             when (it) {
                 BUSY -> {}
-                UPDATING -> mRootView.snack(context, R.string.updating, LOADING)
-                UPDATED -> {
-                    mRootView.snack(context, R.string.update_success, FINISH)
-                    newUserInput.text.clear()
-                }
-                INSERTED -> {
-                    mRootView.snack(context, R.string.new_user_success, FINISH)
-                    newUserInput.text.clear()
-                }
-                DELETED -> mRootView.snack(context, R.string.balance_delete_user_msg, FINISH)
-                COPIED -> mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
+                UPDATE_ERROR -> mRootView.snack(context, R.string.snack_new_user_not_found, FINISH)
+                INSERTED -> mRootView.snack(context, R.string.snack_new_user_success, FINISH)
+                DELETED -> mRootView.snack(context, R.string.snack_delete_user_done, FINISH)
                 else -> mRootView.snack(context, it)
+            }
+
+            if (it == UPDATE_SUCCESS || it == INSERTED) {
+                newUser.clearText()
             }
         })
 
@@ -126,7 +121,7 @@ class BalanceFragment : Fragment() {
 
     private fun updateAllUsers() {
         if (userList.isEmpty()) {
-            mRootView.snack(context, R.string.balance_no_cards, ERROR)
+            mRootView.snack(context, R.string.snack_empty_update, ERROR)
         } else {
             updateUser(*userList.toTypedArray())
         }
@@ -134,11 +129,11 @@ class BalanceFragment : Fragment() {
 
     private fun copyAllUsers() {
         if (userList.isNotEmpty()) {
-            context?.copyToClipboard("cards", userList.joinToString(separator = "\n") { it.card })
-            mRootView.snack(context, R.string.balance_copy_msg, SnackType.FINISH)
+            context?.copyToClipboard("cards",userList.joinToString("\n") { it.card })
+            mRootView.snack(context, R.string.snack_copied, FINISH)
         }
         else {
-            mRootView.snack(context, R.string.balance_no_cards, ERROR)
+            mRootView.snack(context, R.string.snack_empty_copy, ERROR)
         }
     }
 
@@ -169,30 +164,27 @@ class BalanceFragment : Fragment() {
     }
 
     private fun updateUser(vararg users: User) {
-        when {
-            users.any { it.card.length < 15 } -> {
-                mRootView.snack(context, R.string.balance_new_user_dumb, FINISH)
-            }
-            else -> {
-                userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
-                mUserAdapter.setUsers(userList)
+        if(users.any { it.card.length < 15 }) {
+            mRootView.snack(context, R.string.snack_new_user_dumb, FINISH)
+        } else {
+            userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
+            mUserAdapter.setUsers(userList)
 
-                when {
-                    userList.any { it.isLoading } ->
-                        mRootView.snack(context, R.string.updating, LOADING)
-                    users.size == 1 ->
-                        mRootView.snack(context, getNewUserMsg(users.first().card), LOADING)
-                    else ->
-                        mRootView.snack(context, R.string.balance_new_user_several_adds, LOADING)
-                }
-
-                mViewModel.downloadUsers(*users)
+            when {
+                userList.any { it.isLoading } ->
+                    mRootView.snack(context, R.string.snack_updating, LOADING)
+                users.size == 1 ->
+                    mRootView.snack(context, getNewUserMsg(users.first()), LOADING)
+                else ->
+                    mRootView.snack(context, R.string.snack_new_user_several_adds, LOADING)
             }
+
+            mViewModel.downloadUsers(*users)
         }
     }
 
-    private fun getNewUserMsg(card: String): String {
-        return getString(R.string.balance_new_user_adding).format(card)
+    private fun getNewUserMsg(user: User): String {
+        return getString(R.string.snack_new_user_adding).format(user.card)
     }
 
     override fun onResume() {
@@ -203,7 +195,7 @@ class BalanceFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         activity?.hideKeyboard()
-        newUserInput.clearFocus()
+        newUser.clearFocus()
         mViewModel.userStatus.value = BUSY
     }
 

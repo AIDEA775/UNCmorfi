@@ -15,37 +15,42 @@ fun JSONArray.toArray() : Array<String> {
     return result.toTypedArray()
 }
 
-fun String.toDate(timeZone: String? = null): Date? {
+fun String.toCalendar(timeZone: String? = null): Calendar? {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-    timeZone?.let { dateFormat.timeZone = TimeZone.getTimeZone(it) }
+    val calendar = Calendar.getInstance()
     val date: Date
-    try {
+    timeZone?.let { dateFormat.timeZone = TimeZone.getTimeZone(it) }
+
+    return try {
         date = dateFormat.parse(this)
+        calendar.time = date
+        calendar
     } catch (e: ParseException) {
         e.printStackTrace()
-        return null
+        null
     }
-
-    return date
 }
 
-fun Date.clearDate(): Long {
-    val cal = Calendar.getInstance()
-    cal.time = this
-    cal.set(Calendar.YEAR, 1970)
-    cal.set(Calendar.MONTH, 0)
-    cal.set(Calendar.DAY_OF_MONTH, 1)
-    return cal.timeInMillis / 1000
+fun Calendar.toISOString(): String {
+    val fmt = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+    return fmt.format(this.time)
 }
 
-fun Date.toFormat(format: String) : String {
+fun Calendar.clearDate(): Long {
+    this.set(Calendar.YEAR, 1970)
+    this.set(Calendar.MONTH, 0)
+    this.set(Calendar.DAY_OF_MONTH, 1)
+    return this.timeInMillis / 1000
+}
+
+fun Calendar.toFormat(format: String) : String {
     val fmt = SimpleDateFormat(format, Locale.getDefault())
-    return fmt.format(this)
+    return fmt.format(this.time)
 }
 
-fun Date.compareToToday(): Int {
+fun Calendar.compareToToday(): Int {
     val fmt = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-    return fmt.format(this).compareTo(fmt.format(Date()))
+    return fmt.format(this.time).compareTo(fmt.format(Date()))
 }
 
 object ParserHelper {

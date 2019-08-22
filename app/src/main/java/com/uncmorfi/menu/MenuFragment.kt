@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.StatusCode.*
+import com.uncmorfi.helpers.StatusCode.BUSY
 import com.uncmorfi.models.DayMenu
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_menu.*
@@ -50,9 +50,6 @@ class MenuFragment : Fragment() {
             menuSwipeRefresh.isRefreshing = false
             when (it) {
                 BUSY -> {}
-                UPDATED -> mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-                EMPTY_ERROR -> mRootView.snack(context, R.string.update_fail, SnackType.ERROR)
-                OK -> mRootView.snack(context, R.string.update_nothing, SnackType.FINISH)
                 else -> mRootView.snack(context, it)
             }
         })
@@ -85,13 +82,8 @@ class MenuFragment : Fragment() {
     }
 
     private fun refreshMenu() {
-        if (context.isOnline()) {
-            menuSwipeRefresh.isRefreshing = true
-            mViewModel.updateMenu()
-        } else {
-            menuSwipeRefresh.isRefreshing = false
-            mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
-        }
+        menuSwipeRefresh.isRefreshing = true
+        mViewModel.updateMenu()
     }
 
     override fun onResume() {
@@ -114,7 +106,7 @@ class MenuFragment : Fragment() {
 
     private fun onLongClick(dayMenu: DayMenu) {
         context?.copyToClipboard("food", dayMenu.toString())
-        mRootView.snack(context, R.string.menu_copy_msg, SnackType.FINISH)
+        mRootView.snack(context, R.string.snack_copied, SnackType.FINISH)
     }
 
     companion object {

@@ -11,6 +11,7 @@ import com.uncmorfi.models.AppDatabase
 import com.uncmorfi.models.DayMenu
 import com.uncmorfi.models.Serving
 import com.uncmorfi.models.User
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,6 +21,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.net.URL
 import java.util.*
+import kotlin.coroutines.coroutineContext
 
 class MainViewModel(val context: Application): AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
@@ -44,7 +46,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     fun allUsers(): LiveData<List<User>> {
         if (userLive.value == null) {
-            viewModelScope.launch(Dispatchers.Main) {
+            mainDispatch {
                 userLive.value = db.userDao().getAll()
             }
         }
@@ -52,27 +54,25 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     }
 
     fun downloadUsers(vararg users: User) {
-        viewModelScope.launch(Dispatchers.Main) {
+        mainDispatch {
             if (context.isOnline()) {
-                val status = withContext(coroutineContext + Dispatchers.IO) {
-                    downloadUsersTask(*users)
-                }
+                val status = ioDispatch { downloadUsersTask(*users) }
                 usersNotify(status)
             } else {
-                usersNotify(NO_CONNECTION)
+                usersNotify(NO_ONLINE)
             }
         }
     }
 
     fun updateUserName(user: User) {
-        viewModelScope.launch(Dispatchers.Main) {
+        mainDispatch {
             db.userDao().updateFullUser(user)
-            usersNotify(UPDATED)
+            usersNotify(UPDATE_SUCCESS)
         }
     }
 
     fun deleteUser(user: User) {
-        viewModelScope.launch(Dispatchers.Main) {
+        mainDispatch {
             db.userDao().delete(user)
             // fixme eliminar tambien la caché del codigo de barras de la tarjeta
             usersNotify(DELETED)
@@ -84,8 +84,6 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         userStatus.value = status
     }
 
-
-
     private suspend fun downloadUsersTask(vararg users: User): StatusCode {
         try {
             val cards = users.joinToString(separator = ",") { it.card }
@@ -93,7 +91,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             val array = JSONArray(result)
 
             if (array.length() == 0) {
-                return EMPTY_ERROR
+                return UPDATE_ERROR
             }
 
             val userUpdated = mutableListOf<User>()
@@ -109,19 +107,18 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                     user.image = item.getString("imageURL")
                     user.balance = item.getInt("balance")
 
-                    val expireDate = item.getString("expirationDate").toDate()
-                    if (expireDate != null) user.expiration = expireDate.time
+                    val expireDate = item.getString("expirationDate").toCalendar()
+                    if (expireDate != null) user.expiration = expireDate
 
-                    val currentTime = Calendar.getInstance().time
-                    user.lastUpdate = currentTime.time
+                    user.lastUpdate = Calendar.getInstance()
                     userUpdated.add(user)
                 }
             }
             val rows = db.userDao().upsertUser(*userUpdated.toTypedArray())
-            return if (rows > 0) UPDATED else INSERTED
+            return if (rows > 0) UPDATE_SUCCESS else INSERTED
         } catch (e: IOException) {
             e.printStackTrace()
-            return CONNECTION_ERROR
+            return CONNECT_ERROR
         } catch (e: JSONException) {
             e.printStackTrace()
             return INTERNAL_ERROR
@@ -134,7 +131,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     fun getMenu(): LiveData<List<DayMenu>> {
         if (menuLive.value == null) {
-            viewModelScope.launch(Dispatchers.Main) {
+            mainDispatch {
                 menuLive.value = db.menuDao().getAll()
                 menuStatus.value = BUSY
                 if (needAutoUpdateMenu()) {
@@ -146,12 +143,21 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     }
 
     fun updateMenu() {
-        viewModelScope.launch(Dispatchers.Main) {
-            val status = withContext(coroutineContext + Dispatchers.IO) {
-                downloadMenuTask()
+        mainDispatch {
+            if (context.isOnline()) {
+                menuStatus.value = ioDispatch { downloadMenuTask() }
+                menuLive.value = db.menuDao().getAll()
+            } else {
+                menuStatus.value = NO_ONLINE
             }
-            menuLive.value = db.menuDao().getAll()
-            menuStatus.value = status
+
+        }
+    }
+
+    fun clear() {
+        mainDispatch {
+            db.menuDao().clearAll()
+            updateMenu()
         }
     }
 
@@ -161,8 +167,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         val nowWeek = now.get(Calendar.WEEK_OF_YEAR)
         val nowYear = now.get(Calendar.YEAR)
 
-        val menu = Calendar.getInstance()
-        menu.time = db.menuDao().getAll().firstOrNull()?.date ?: Date(0) // Date(0) es 1970
+        val menu = db.menuDao().getAll().firstOrNull()?.date ?: return true
         val menuWeek = menu.get(Calendar.WEEK_OF_YEAR)
         val menuYear = now.get(Calendar.YEAR)
 
@@ -180,14 +185,14 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             while (keys.hasNext()) {
                 val key = keys.next() as String
                 val foods = week.getJSONArray(key)
-                val day = key.toDate()
+                val day = key.toCalendar()
                 day?.let {
                     menuList.add(DayMenu(day, foods.toArray().toList()))
                 }
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            return CONNECTION_ERROR
+            return CONNECT_ERROR
         } catch (e: JSONException) {
             e.printStackTrace()
             return INTERNAL_ERROR
@@ -196,13 +201,14 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         }
 
         if (menuList.isEmpty()) {
-            return EMPTY_ERROR
+            return UPDATE_ERROR
         }
 
         Collections.sort(menuList, ParserHelper.MenuDayComparator())
+        db.menuDao().clear()
         val inserts = db.menuDao().insert(*menuList.toTypedArray())
 
-        return if (inserts.all { it == -1L }) OK else UPDATED
+        return if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
     }
 
     /*
@@ -211,20 +217,22 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     fun getServings(): LiveData<List<Serving>> {
         if (servingLive.value == null) {
-            viewModelScope.launch(Dispatchers.Main) {
-                servingLive.value = db.servingDao().getAll()
+            mainDispatch {
+                servingLive.value = db.servingDao().getToday()
+                servingStatus.value = BUSY
             }
         }
         return servingLive
     }
 
     fun updateServings() {
-        viewModelScope.launch(Dispatchers.Main) {
-            val status = withContext(coroutineContext + Dispatchers.IO) {
-                downloadServingsTask()
+        mainDispatch {
+            if (context.isOnline()) {
+                servingStatus.value = ioDispatch { downloadServingsTask() }
+                servingLive.value = db.servingDao().getToday()
+            } else {
+                servingStatus.value = NO_ONLINE
             }
-            servingLive.value = db.servingDao().getAll()
-            servingStatus.value = status
         }
     }
 
@@ -239,7 +247,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             while (keys.hasNext()) {
                 val key = keys.next() as String
 
-                val date = key.toDate("UTC")
+                val date = key.toCalendar("UTC")
                 val ration = items.getInt(key)
 
                 date?.let {
@@ -249,19 +257,28 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             Collections.sort(data, ParserHelper.ServingsComparator())
 
             if (data.isEmpty()) {
-                return EMPTY_ERROR
+                return UPDATE_SUCCESS
             }
 
+            db.servingDao().clear()
             db.servingDao().insert(*data.toTypedArray())
-            return UPDATED
+            return UPDATE_SUCCESS
         } catch (e: IOException) {
             e.printStackTrace()
-            return CONNECTION_ERROR
+            return CONNECT_ERROR
         } catch (e: JSONException) {
             return INTERNAL_ERROR
         } catch (e: NumberFormatException) {
             return INTERNAL_ERROR
         }
+    }
+
+    private fun mainDispatch(f: suspend (CoroutineScope) -> Unit) {
+        viewModelScope.launch(Dispatchers.Main, block = f)
+    }
+
+    private suspend fun <T>ioDispatch(f: suspend (CoroutineScope) -> T): T {
+        return withContext(coroutineContext + Dispatchers.IO, block = f)
     }
 
     companion object {

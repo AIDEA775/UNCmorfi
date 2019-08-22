@@ -1,4 +1,4 @@
-package com.uncmorfi.core
+package com.uncmorfi.servings
 
 import android.content.Context
 import android.graphics.Color
@@ -28,7 +28,7 @@ class TotalPieChartView: PieChart {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
-        setNoDataText(context.getString(R.string.counter_chart_empty))
+        setNoDataText(context.getString(R.string.servings_chart_empty))
         description.isEnabled = false
         legend.isEnabled = false
 
@@ -78,7 +78,7 @@ class TotalPieChartView: PieChart {
      */
     private fun generatePieChartText(context: Context, total: Int, percent: Float) : SpannableString {
         val pText = "%.2f%%".format(percent)
-        val tText = context.getString(R.string.counter_rations_title).format(total, FOOD_RATIONS)
+        val tText = context.getString(R.string.servings_rations_title).format(total, FOOD_RATIONS)
         val s = SpannableString("$pText\n$tText")
 
         s.setSpan(RelativeSizeSpan(3f), 0, pText.length, 0)

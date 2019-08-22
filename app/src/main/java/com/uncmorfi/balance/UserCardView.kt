@@ -1,4 +1,4 @@
-package com.uncmorfi.core
+package com.uncmorfi.balance
 
 import android.content.Context
 import android.graphics.Typeface
@@ -14,9 +14,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
 import com.uncmorfi.helpers.colorOf
+import com.uncmorfi.helpers.toFormat
 import com.uncmorfi.models.User
 import kotlinx.android.synthetic.main.view_user_card.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class UserCardView : RelativeLayout {
@@ -50,13 +50,13 @@ class UserCardView : RelativeLayout {
                 .format(relativeLastUpdate(user.lastUpdate))
     }
 
-    private fun textExpiration(expiration: Long): String {
-        return if (expiration == 0L) "?"
-        else SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(Date(expiration))
+    private fun textExpiration(expiration: Calendar?): String {
+        return if (expiration == null) "?"
+        else expiration.toFormat("yyyy-MM-dd")
     }
 
-    private fun relativeLastUpdate(lastUpdate: Long): String {
-        return DateUtils.getRelativeTimeSpanString(lastUpdate).toString().toLowerCase()
+    private fun relativeLastUpdate(lastUpdate: Calendar): String {
+        return DateUtils.getRelativeTimeSpanString(lastUpdate.timeInMillis).toString().toLowerCase()
     }
 
     private fun setImage(user: User) {
@@ -107,15 +107,15 @@ class UserCardView : RelativeLayout {
         userLastUpdate.setTextColor(context.colorOf(extra))
     }
 
-    private fun warningExpiration(expiration: Long): Boolean {
+    private fun warningExpiration(expiration: Calendar): Boolean {
         val cal = Calendar.getInstance()
         cal.time = Date()
         cal.add(Calendar.MONTH, WARNING_USER_EXPIRE)
-        return Date(expiration).before(cal.time)
+        return expiration.before(cal)
     }
 
-    private fun expired(expiration: Long): Boolean {
-        return Date(expiration).before(Date())
+    private fun expired(expiration: Calendar): Boolean {
+        return expiration.before(Date())
     }
 
     private fun setProgressBar(isLoading: Boolean) {

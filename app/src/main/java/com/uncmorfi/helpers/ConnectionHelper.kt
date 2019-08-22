@@ -7,20 +7,6 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-enum class StatusCode {
-    BUSY,
-    UPDATING,
-    UPDATED,
-    INSERTED,
-    DELETED,
-    COPIED,
-    EMPTY_ERROR,
-    INTERNAL_ERROR,
-    CONNECTION_ERROR,
-    NO_CONNECTION,
-    OK
-}
-
 fun Context?.isOnline(): Boolean {
     return (this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
             .activeNetworkInfo?.isConnected ?: false

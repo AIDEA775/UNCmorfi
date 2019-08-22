@@ -10,11 +10,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
 import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.StatusCode.*
+import com.uncmorfi.helpers.StatusCode.BUSY
 import com.uncmorfi.models.Serving
 import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.*
 import com.uncmorfi.viewmodel.MainViewModel
-import kotlinx.android.synthetic.main.fragment_counter.*
+import kotlinx.android.synthetic.main.fragment_servings.*
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,7 +39,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_counter, container, false)
+        return inflater.inflate(R.layout.fragment_servings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,13 +73,10 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         })
 
         mViewModel.servingStatus.observe(this, Observer {
-            if (it == BUSY) return@Observer
+//            if (it == BUSY) return@Observer
             counterSwipeRefresh.isRefreshing = false
             when (it) {
-                UPDATED -> mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-                UPDATING -> mRootView.snack(context, R.string.updating, SnackType.FINISH)
-                DELETED -> TODO()
-                EMPTY_ERROR -> mRootView.snack(context, R.string.update_success, SnackType.FINISH)
+                BUSY -> {}
                 else -> mRootView.snack(context, it)
             }
         })
@@ -89,7 +86,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().setTitle(R.string.navigation_counter)
+        requireActivity().setTitle(R.string.navigation_servings)
     }
 
     override fun onStop() {
@@ -110,19 +107,14 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     private fun refreshCounter() {
-        if (requireContext().isOnline()) {
-            counterSwipeRefresh.isRefreshing = true
-            mViewModel.updateServings()
-        } else {
-            counterSwipeRefresh.isRefreshing = false
-            mRootView.snack(context, R.string.no_connection, SnackType.ERROR)
-        }
+        counterSwipeRefresh.isRefreshing = true
+        mViewModel.updateServings()
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         if (fromUser) {
             val windows = progress + 3 // Mínimo 3 ventanas
-            counterDistance.text = getString(R.string.counter_distance).format(windows)
+            counterDistance.text = getString(R.string.servings_distance).format(windows)
         }
     }
 
@@ -144,7 +136,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
      */
     private fun updateEstimate() {
         val windows = counterSeek.progress + 3 // Mínimo 3 ventanas
-        val time = Date().clearDate()
+        val time = Calendar.getInstance().clearDate()
         val dataSets = ArrayList<ILineDataSet>()
 
         mEstimateList.add(Entry(time.toFloat(), windows.toFloat()))
@@ -177,11 +169,12 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
         counterEstimateText.visibility = View.VISIBLE
 
-        val timeStamp = Date(root.toLong() * 1000)
+        val timeStamp = Calendar.getInstance()
+        timeStamp.timeInMillis = root.toLong() * 1000
         val text = timeStamp.toFormat("HH:mm")
 
         val minutes = (root - time) / 60
-        counterEstimateText.text = getString(R.string.counter_estimate)
+        counterEstimateText.text = getString(R.string.servings_estimate)
                 .format(minutes.roundToInt(), text)
     }
 
@@ -195,8 +188,8 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
                 data[0].x = data[1].x - 60f
             }
 
-            val timeData = StyledLineDataSet(requireContext(), data, getString(R.string.counter_chart_label_time), RATIONS)
-            val cumulativeData = StyledLineDataSet(requireContext(), accumulate(data), getString(R.string.counter_chart_label_accumulated), CUMULATIVE)
+            val timeData = StyledLineDataSet(requireContext(), data, getString(R.string.servings_chart_label_time), RATIONS)
+            val cumulativeData = StyledLineDataSet(requireContext(), accumulate(data), getString(R.string.servings_chart_label_accumulated), CUMULATIVE)
 
             counterChartsCard.visibility = View.VISIBLE
             counterTimeChart.update(timeData)
@@ -215,8 +208,6 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     companion object {
-        private const val FOOD_RATIONS = 1500
-        private const val FOOD_LIMIT = 200
         private const val URL = "http://comedor.unc.edu.ar/cocina.php"
     }
 }

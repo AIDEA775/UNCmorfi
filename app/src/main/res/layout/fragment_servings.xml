@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <com.uncmorfi.core.TotalPieChartView
+                <com.uncmorfi.servings.TotalPieChartView
                     android:id="@+id/servingsPieChart"
                     android:layout_width="match_parent"
                     android:layout_height="225dp"
@@ -78,7 +78,7 @@
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginBottom="8dp"
-                            android:text="@string/counter_estimate_empty" />
+                            android:text="@string/servings_estimate_empty" />
 
                         <SeekBar
                             android:id="@+id/counterSeek"
@@ -99,7 +99,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginRight="8dp"
                             android:layout_marginLeft="8dp"
-                            android:text="@string/counter_estimate_button" />
+                            android:text="@string/servings_estimate_button" />
 
                     </LinearLayout>
 

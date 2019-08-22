@@ -12,7 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.helpers.SnackType
+import com.uncmorfi.helpers.SnackType.FINISH
+import com.uncmorfi.helpers.SnackType.LOADING
 import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.helpers.compareToToday
 import com.uncmorfi.helpers.getUser
@@ -41,8 +42,14 @@ class HomeFragment : Fragment() {
          */
         mViewModel.getMenu().observe(this, Observer { menuList ->
             val today = menuList.firstOrNull { it.date.compareToToday() == 0 }
-            today?.let {
-                homeMenu.setDayMenu(it)
+
+            if (today != null) {
+                homeMenu.setDayMenu(today)
+                homeMenuTitle.visibility = VISIBLE
+                homeMenuContainer.visibility = VISIBLE
+            } else {
+                homeMenuTitle.visibility = GONE
+                homeMenuContainer.visibility = GONE
             }
         })
 
@@ -51,13 +58,13 @@ class HomeFragment : Fragment() {
          */
         mViewModel.allUsers().observe(this, Observer {
             if (it.isNotEmpty()) {
-                mUser = it[0]
+                mUser = it.first()
                 homeCard.setUser(mUser)
-                homeCardContainer.visibility = VISIBLE
                 homeCardTitle.visibility = VISIBLE
+                homeCardContainer.visibility = VISIBLE
             } else {
-                homeCardContainer.visibility = GONE
                 homeCardTitle.visibility = GONE
+                homeCardContainer.visibility = GONE
             }
         })
         homeCard.setOnClickListener {
@@ -72,13 +79,8 @@ class HomeFragment : Fragment() {
         mViewModel.userStatus.observe(this, Observer {
             when (it) {
                 BUSY -> {}
-                UPDATED -> {
-                    mRootView.snack(context, R.string.update_success, SnackType.FINISH)
-                }
-                INSERTED -> {
-                    mRootView.snack(context, R.string.new_user_success, SnackType.FINISH)
-                }
-                DELETED -> mRootView.snack(context, R.string.balance_delete_user_msg, SnackType.FINISH)
+                UPDATE_ERROR -> mRootView.snack(context, R.string.snack_new_user_not_found, FINISH)
+                DELETED -> mRootView.snack(context, R.string.snack_delete_user_done, FINISH)
                 else -> mRootView.snack(context, it)
             }
         })
@@ -87,10 +89,26 @@ class HomeFragment : Fragment() {
          * Medidor
          */
         mViewModel.getServings().observe(this, Observer {
-            servingsPieChart.set(it)
+            if (it.isNotEmpty()) {
+                servingsPieChart.set(it)
+                homeServingsTitle.visibility = VISIBLE
+                homeServingsContainer.visibility = VISIBLE
+            } else {
+                homeServingsTitle.visibility = GONE
+                homeServingsContainer.visibility = GONE
+            }
         })
         servingsPieChart.setTouchEnabled(true)
-        servingsPieChart.setTouchListener { mViewModel.updateServings() }
+        servingsPieChart.setTouchListener {
+            mRootView.snack(context, R.string.snack_updating, LOADING)
+            mViewModel.updateServings()
+        }
+        mViewModel.servingStatus.observe(this, Observer {
+            when (it) {
+                BUSY -> {}
+                else -> mRootView.snack(context, it)
+            }
+        })
     }
 
     private fun showUserOptionsDialog(user: User) {

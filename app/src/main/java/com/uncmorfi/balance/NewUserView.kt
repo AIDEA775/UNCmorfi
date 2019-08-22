@@ -1,4 +1,4 @@
-package com.uncmorfi.core
+package com.uncmorfi.balance
 
 import android.content.Context
 import android.text.InputFilter
@@ -64,6 +64,10 @@ class NewUserView: LinearLayout {
 
     fun scanner(l: () -> Unit) {
         scannerListener = l
+    }
+
+    fun clearText() {
+        newUserInput.text.clear()
     }
 
 }

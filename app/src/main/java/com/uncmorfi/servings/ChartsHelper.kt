@@ -53,7 +53,8 @@ fun LineChart.update(dataSet: ArrayList<ILineDataSet>) {
 
 private class HourAxisValueFormatter : IAxisValueFormatter {
     override fun getFormattedValue(value: Float, axis: AxisBase): String {
-        val valueDate = Date(value.toLong() * 1000)
+        val valueDate = Calendar.getInstance()
+        valueDate.timeInMillis = value.toLong() * 1000
         return valueDate.toFormat("HH:mm")
     }
 }

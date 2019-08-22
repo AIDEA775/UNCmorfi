@@ -6,7 +6,7 @@
     <string name="navigation_home">Inicio</string>
     <string name="navigation_menu">Menú</string>
     <string name="navigation_balance">Saldo</string>
-    <string name="navigation_counter">Medidor</string>
+    <string name="navigation_servings">Medidor</string>
     <string name="navigation_renovation">Renovación</string>
     <string name="navigation_map">Mapa</string>
     <string name="navigation_faq">FAQ</string>
@@ -21,7 +21,6 @@
 
     <!-- Menu -->
     <string name="menu_action_update">Actualizar menú</string>
-    <string name="menu_copy_msg">Menú copiado</string>
     <string name="menu_share_subject">Menú de la semana</string>
     <string name="menu_share_banner">Compartido desde UNCmorfi</string>
 
@@ -35,10 +34,13 @@
     <string name="balance_new_user_hint">Escribe el número de la tarjeta</string>
     <string name="balance_new_user_button_enter">Agregar la tarjeta</string>
     <string name="balance_new_user_button_code">Abrir lector de barras</string>
-    <string name="balance_new_user_dumb">Fijate lo que pusiste</string>
-    <string name="balance_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
-    <string name="balance_new_user_several_adds">Agregando tarjetas&#8230;</string>
-    <string name="balance_new_user_not_found">Tarjeta no encontrada</string>
+
+    <string name="snack_new_user_dumb">Fijate lo que pusiste</string>
+    <string name="snack_new_user_adding">Agregando tarjeta %1$s&#8230;</string>
+    <string name="snack_new_user_several_adds">Agregando tarjetas&#8230;</string>
+    <string name="snack_new_user_not_found">Tarjeta no encontrada</string>
+    <string name="snack_new_user_success">Agregado</string>
+    <string name="snack_delete_user_done">Tarjeta eliminada</string>
 
     <string name="balance_user_options_title">Tarjeta</string>
     <string name="balance_user_options_update">Actualizar</string>
@@ -49,10 +51,6 @@
 
     <string name="balance_delete_user_title">Eliminar tarjeta de %1$s?</string>
     <string name="balance_delete_user_positive">Eliminar</string>
-    <string name="balance_delete_user_msg">Tarjeta eliminada</string>
-
-    <string name="balance_copy_msg">Copiado</string>
-    <string name="balance_no_cards">No hay tarjetas</string>
 
     <string name="balance_set_name_title">Nuevo nombre</string>
     <string name="balance_set_name_save">Guardar</string>
@@ -60,16 +58,16 @@
 
     <string name="balance_align_barcode">Alineá el código de barras</string>
 
-    <!-- Counter -->
-    <string name="counter_action_update">Actualizar medidor</string>
-    <string name="counter_rations_title">%1$d raciones de %2$d</string>
-    <string name="counter_estimate_button">Agregar</string>
-    <string name="counter_estimate">%1$d min aprox. (%2$s)</string>
-    <string name="counter_estimate_empty">Poné a que distancia estas</string>
-    <string name="counter_distance">Ventana %1$d</string>
-    <string name="counter_chart_empty">Refrescá</string>
-    <string name="counter_chart_label_time">Raciones por tiempo</string>
-    <string name="counter_chart_label_accumulated">Raciones acumuladas</string>
+    <!-- Servings -->
+    <string name="servings_action_update">Actualizar medidor</string>
+    <string name="servings_rations_title">%1$d raciones de %2$d</string>
+    <string name="servings_estimate_button">Agregar</string>
+    <string name="servings_estimate">%1$d min aprox. (%2$s)</string>
+    <string name="servings_estimate_empty">Poné a que distancia estas</string>
+    <string name="servings_distance">Ventana %1$d</string>
+    <string name="servings_chart_empty">Refrescá</string>
+    <string name="servings_chart_label_time">Raciones por tiempo</string>
+    <string name="servings_chart_label_accumulated">Raciones acumuladas</string>
 
     <!-- Renovation -->
     <string name="renovation_email_subject">RENOVAR</string>
@@ -92,16 +90,23 @@
     <string name="about_source_code">Código fuente:</string>
     <string name="about_fanpage">Fanpage:</string>
 
+    <!-- Snacks -->
+    <string name="snack_no_online">No hay conexión</string>
+    <string name="snack_connect_error">Error de conexión</string>
+    <string name="snack_internal_error">Ocurrió un error</string>
+    <string name="snack_update_error">No se pudo actualizar</string>
+
+    <string name="snack_updating">Actualizando&#8230;</string>
+    <string name="snack_update_success">Actualizado</string>
+    <string name="snack_empty_update">Nada para actualizar</string>
+    <string name="snack_already_updated">Ya estaba actualizado</string>
+
+    <string name="snack_copied">Copiado al portapapeles</string>
+    <string name="snack_empty_copy">Nada para copiar</string>
+
+    <string name="snack_error">ERROR ERROR ERROR Reportá esto!</string>
+
     <!-- Cualquiera -->
-    <string name="no_connection">No hay conexión</string>
-    <string name="connection_error">Error de conexión</string>
-    <string name="internal_error">Ocurrió un error</string>
-    <string name="error">ERROR ERROR ERROR Reportá esto!</string>
-    <string name="updating">Actualizando&#8230;</string>
-    <string name="update_success">Actualizado</string>
-    <string name="update_nothing">Ya estaba actualizado</string>
-    <string name="update_fail">No se pudo actualizar</string>
-    <string name="new_user_success">Agregado</string>
     <string name="action_browser">Abrir en&#8230;</string>
 
 </resources>

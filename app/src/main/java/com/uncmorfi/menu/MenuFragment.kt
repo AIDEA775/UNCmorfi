@@ -62,6 +62,10 @@ class MenuFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_update -> { refreshMenu(); true }
+            R.id.menu_clear -> {
+                mViewModel.clearMenu()
+                menuSwipeRefresh.isRefreshing = true
+                true }
             R.id.menu_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }

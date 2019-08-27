@@ -154,9 +154,10 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         }
     }
 
-    fun clear() {
+    fun clearMenu() {
         mainDispatch {
             db.menuDao().clearAll()
+            menuLive.value = db.menuDao().getAll()
             updateMenu()
         }
     }

@@ -22,6 +22,7 @@
 
     <!-- Menu -->
     <string name="menu_action_update">Actualizar menú</string>
+    <string name="menu_action_clear">Limpiar menú</string>
     <string name="menu_share_subject">Menú de la semana</string>
     <string name="menu_share_banner">Compartido desde UNCmorfi</string>
 

@@ -22,6 +22,7 @@
 
     <!-- Menu -->
     <string name="menu_action_update">Update menu</string>
+    <string name="menu_action_clear">Clear menu</string>
     <string name="menu_share_subject">Weekly menu</string>
     <string name="menu_share_banner">Shared from UNCmorfi</string>
 

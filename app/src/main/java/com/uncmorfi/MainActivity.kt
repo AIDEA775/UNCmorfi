@@ -17,6 +17,7 @@ import com.uncmorfi.helpers.startBrowser
 import com.uncmorfi.home.HomeFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
+import com.uncmorfi.reservations.ReservationFragment
 import com.uncmorfi.servings.ServingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -111,6 +112,7 @@ class MainActivity :
             R.id.nav_menu -> fragment = MenuFragment()
             R.id.nav_balance -> fragment = BalanceFragment()
             R.id.nav_counter -> fragment = ServingsFragment()
+            R.id.nav_reservation -> fragment = ReservationFragment()
             R.id.nav_renovation -> sendEmail("credenciales@estudiantiles.unc.edu.ar",
                     R.string.renovation_email_subject,
                     R.string.renovation_email_body)

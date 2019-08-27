@@ -7,6 +7,7 @@
     <string name="navigation_menu">Menú</string>
     <string name="navigation_balance">Saldo</string>
     <string name="navigation_servings">Medidor</string>
+    <string name="navigation_reservation">Reservas</string>
     <string name="navigation_renovation">Renovación</string>
     <string name="navigation_map">Mapa</string>
     <string name="navigation_faq">FAQ</string>
@@ -53,7 +54,6 @@
     <string name="balance_delete_user_positive">Eliminar</string>
 
     <string name="balance_set_name_title">Nuevo nombre</string>
-    <string name="balance_set_name_save">Guardar</string>
     <string name="balance_set_name_hint">Tu nombre</string>
 
     <string name="balance_align_barcode">Alineá el código de barras</string>
@@ -68,6 +68,15 @@
     <string name="servings_chart_empty">Refrescá</string>
     <string name="servings_chart_label_time">Raciones por tiempo</string>
     <string name="servings_chart_label_accumulated">Raciones acumuladas</string>
+
+    <!-- Reservations -->
+    <string name="reservations_title">Reservá</string>
+    <string name="reservations_content">Reserva tu porción en el comedor</string>
+
+    <string name="reservations_chip_head">Notificame sobre las reservas los días:</string>
+
+    <string name="reservations_channel_name">Reservaciones</string>
+    <string name="reservations_channel_description">Notifica cuando las reservaciones están abiertas</string>
 
     <!-- Renovation -->
     <string name="renovation_email_subject">RENOVAR</string>
@@ -108,5 +117,7 @@
 
     <!-- Cualquiera -->
     <string name="action_browser">Abrir en&#8230;</string>
+    <string name="save">Guardar</string>
+    <string name="saved">Guardado</string>
 
 </resources>

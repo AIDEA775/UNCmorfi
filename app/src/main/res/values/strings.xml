@@ -7,6 +7,7 @@
     <string name="navigation_menu">Menu</string>
     <string name="navigation_balance">Balance</string>
     <string name="navigation_servings">Servings</string>
+    <string name="navigation_reservation">Reservations</string>
     <string name="navigation_renovation">Renovation</string>
     <string name="navigation_map">Map</string>
     <string name="navigation_faq">FAQ</string>
@@ -53,7 +54,6 @@
     <string name="balance_delete_user_positive">Delete</string>
 
     <string name="balance_set_name_title">New name</string>
-    <string name="balance_set_name_save">Save</string>
     <string name="balance_set_name_hint">Your name</string>
 
     <string name="balance_align_barcode">Align barcode</string>
@@ -68,6 +68,15 @@
     <string name="servings_chart_empty">Pull down to refresh</string>
     <string name="servings_chart_label_time">Rations for time</string>
     <string name="servings_chart_label_accumulated">Accumulated rations</string>
+
+    <!-- Reservations -->
+    <string name="reservations_title">Reservation</string>
+    <string name="reservations_content">Reserve your serving in the dinning room!</string>
+
+    <string name="reservations_chip_head">Notify me these days:</string>
+
+    <string name="reservations_channel_name">Reservations</string>
+    <string name="reservations_channel_description">Notifications when reservations is open</string>
 
     <!-- Renovation -->
     <string name="renovation_email_subject">RENOVAR</string>
@@ -107,5 +116,7 @@
 
     <!-- Any -->
     <string name="action_browser">Open with&#8230;</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
 
 </resources>

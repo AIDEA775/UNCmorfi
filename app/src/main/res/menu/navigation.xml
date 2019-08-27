@@ -23,6 +23,10 @@
             android:icon="@drawable/nav_usage"
             android:title="@string/navigation_servings" />
         <item
+            android:id="@+id/nav_reservation"
+            android:icon="@drawable/nav_ticket"
+            android:title="@string/navigation_reservation" />
+        <item
             android:id="@+id/nav_renovation"
             android:icon="@drawable/nav_renovation"
             android:title="@string/navigation_renovation" />

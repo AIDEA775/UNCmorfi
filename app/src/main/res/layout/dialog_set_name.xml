@@ -52,7 +52,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
-        android:text="@string/balance_set_name_save"
+        android:text="@string/save"
         android:layout_gravity="end"
         style="@style/Widget.MaterialComponents.Button.TextButton"/>
 

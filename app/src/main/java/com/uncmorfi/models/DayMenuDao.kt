@@ -7,7 +7,6 @@ import androidx.room.Query
 
 @Dao
 interface DayMenuDao {
-    // Fixme mas de una semana guardada
     @Query("SELECT * FROM menu")
     suspend fun getAll(): List<DayMenu>
 

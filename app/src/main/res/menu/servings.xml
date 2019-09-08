@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/counter_update"
+        android:id="@+id/serving_update"
         android:title="@string/servings_action_update"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/counter_browser"
+        android:id="@+id/serving_browser"
         android:title="@string/action_browser"
         app:showAsAction="never" />
 </menu>

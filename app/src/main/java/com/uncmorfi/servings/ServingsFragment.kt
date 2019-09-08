@@ -47,25 +47,25 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         mRootView = view
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        counterSwipeRefresh.init { refreshCounter() }
-        counterEstimateChart.init(requireContext())
-        counterTimeChart.init(requireContext())
-        counterAccumulatedChart.init(requireContext())
+        servingSwipeRefresh.init { refreshServings() }
+        servingEstimateChart.init(requireContext())
+        servingTimeChart.init(requireContext())
+        servingAccumulatedChart.init(requireContext())
 
-        counterTimeChart.onChartGestureListener = SyncChartsGestureListener(
-                counterTimeChart, counterAccumulatedChart)
+        servingTimeChart.onChartGestureListener = SyncChartsGestureListener(
+                servingTimeChart, servingAccumulatedChart)
 
-        counterAccumulatedChart.onChartGestureListener = SyncChartsGestureListener(
-                counterAccumulatedChart, counterTimeChart)
+        servingAccumulatedChart.onChartGestureListener = SyncChartsGestureListener(
+                servingAccumulatedChart, servingTimeChart)
 
         // Parametros especiales de ambos LineChart
-        counterEstimateChart.legend.isEnabled = false
-        counterAccumulatedChart.xAxis.setDrawGridLines(false)
+        servingEstimateChart.legend.isEnabled = false
+        servingAccumulatedChart.xAxis.setDrawGridLines(false)
 
-        counterSeek.setOnSeekBarChangeListener(this)
-        counterSeek.progress = 99
+        servingSeek.setOnSeekBarChangeListener(this)
+        servingSeek.progress = 99
 
-        counterEstimateButton.setOnClickListener { updateEstimate() }
+        servingEstimateButton.setOnClickListener { updateEstimate() }
 
         mViewModel.getServings().observe(this, Observer {
             servingsPieChart.set(it)
@@ -73,15 +73,16 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         })
 
         mViewModel.servingStatus.observe(this, Observer {
-//            if (it == BUSY) return@Observer
-            counterSwipeRefresh.isRefreshing = false
             when (it) {
                 BUSY -> {}
-                else -> mRootView.snack(context, it)
+                else -> {
+                    servingSwipeRefresh.isRefreshing = false
+                    mRootView.snack(context, it)
+                }
             }
         })
 
-        refreshCounter()
+        refreshServings()
     }
 
     override fun onResume() {
@@ -95,26 +96,26 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.counter, menu)
+        inflater.inflate(R.menu.servings, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.counter_update -> { refreshCounter(); true }
-            R.id.counter_browser -> requireActivity().startBrowser(URL)
+            R.id.serving_update -> { refreshServings(); true }
+            R.id.serving_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun refreshCounter() {
-        counterSwipeRefresh.isRefreshing = true
+    private fun refreshServings() {
+        servingSwipeRefresh.isRefreshing = true
         mViewModel.updateServings()
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         if (fromUser) {
             val windows = progress + 3 // Mínimo 3 ventanas
-            counterDistance.text = getString(R.string.servings_distance).format(windows)
+            servingDistance.text = getString(R.string.servings_distance).format(windows)
         }
     }
 
@@ -135,7 +136,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
      * Perdón, esta función tambien horrible de entender.
      */
     private fun updateEstimate() {
-        val windows = counterSeek.progress + 3 // Mínimo 3 ventanas
+        val windows = servingSeek.progress + 3 // Mínimo 3 ventanas
         val time = Calendar.getInstance().clearDate()
         val dataSets = ArrayList<ILineDataSet>()
 
@@ -164,17 +165,17 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         dataSets.add(pointSet)
         dataSets.add(lineSet)
 
-        counterEstimateChart.visibility = View.VISIBLE
-        counterEstimateChart.update(dataSets)
+        servingEstimateChart.visibility = View.VISIBLE
+        servingEstimateChart.update(dataSets)
 
-        counterEstimateText.visibility = View.VISIBLE
+        servingEstimateText.visibility = View.VISIBLE
 
         val timeStamp = Calendar.getInstance()
         timeStamp.timeInMillis = root.toLong() * 1000
         val text = timeStamp.toFormat("HH:mm")
 
         val minutes = (root - time) / 60
-        counterEstimateText.text = getString(R.string.servings_estimate)
+        servingEstimateText.text = getString(R.string.servings_estimate)
                 .format(minutes.roundToInt(), text)
     }
 
@@ -191,9 +192,9 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
             val timeData = StyledLineDataSet(requireContext(), data, getString(R.string.servings_chart_label_time), RATIONS)
             val cumulativeData = StyledLineDataSet(requireContext(), accumulate(data), getString(R.string.servings_chart_label_accumulated), CUMULATIVE)
 
-            counterChartsCard.visibility = View.VISIBLE
-            counterTimeChart.update(timeData)
-            counterAccumulatedChart.update(cumulativeData)
+            servingChartsCard.visibility = View.VISIBLE
+            servingTimeChart.update(timeData)
+            servingAccumulatedChart.update(cumulativeData)
         }
     }
 

@@ -111,7 +111,7 @@ class MainActivity :
             R.id.nav_home -> fragment = HomeFragment()
             R.id.nav_menu -> fragment = MenuFragment()
             R.id.nav_balance -> fragment = BalanceFragment()
-            R.id.nav_counter -> fragment = ServingsFragment()
+            R.id.nav_servings -> fragment = ServingsFragment()
             R.id.nav_reservation -> fragment = ReservationFragment()
             R.id.nav_renovation -> sendEmail("credenciales@estudiantiles.unc.edu.ar",
                     R.string.renovation_email_subject,

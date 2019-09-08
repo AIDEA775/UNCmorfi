@@ -239,7 +239,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     private suspend fun downloadServingsTask(): StatusCode {
         try {
-            val result = URL(COUNTER_URL).downloadByGet()
+            val result = URL(SERVINGS_URL).downloadByGet()
             val items = JSONObject(result).getJSONObject("servings")
 
             val data = mutableListOf<Serving>()
@@ -285,7 +285,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     companion object {
         private const val USER_URL = "http://uncmorfi.georgealegre.com/users?codes="
         private const val MENU_URL = "http://uncmorfi.georgealegre.com/menu"
-        private const val COUNTER_URL = "http://uncmorfi.georgealegre.com/servings"
+        private const val SERVINGS_URL = "http://uncmorfi.georgealegre.com/servings"
     }
 
 }

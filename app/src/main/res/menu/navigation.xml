@@ -19,7 +19,7 @@
             android:icon="@drawable/nav_card"
             android:title="@string/navigation_balance" />
         <item
-            android:id="@+id/nav_counter"
+            android:id="@+id/nav_servings"
             android:icon="@drawable/nav_usage"
             android:title="@string/navigation_servings" />
         <item

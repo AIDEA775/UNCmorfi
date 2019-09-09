@@ -53,6 +53,10 @@ fun Calendar.compareToToday(): Int {
     return fmt.format(this.time).compareTo(fmt.format(Date()))
 }
 
+fun Calendar.compareToTodayInMillis(): Int {
+    return this.compareTo(Calendar.getInstance())
+}
+
 object ParserHelper {
     class MenuDayComparator : Comparator<DayMenu> {
         override fun compare(left: DayMenu, right: DayMenu): Int {

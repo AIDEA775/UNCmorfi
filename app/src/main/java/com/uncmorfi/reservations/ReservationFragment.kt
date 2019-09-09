@@ -5,16 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.chip.Chip
 import com.uncmorfi.R
 import com.uncmorfi.helpers.SnackType
 import com.uncmorfi.helpers.snack
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_reservation.*
-import java.text.DateFormatSymbols
 import java.util.*
 
 class ReservationFragment : Fragment() {
@@ -28,38 +25,58 @@ class ReservationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
+        reservation_1.initDays()
+        reservation_1.setHeader(R.string.reservations_head1)
+        reservation_2.initDays()
+        reservation_2.setHeader(R.string.reservations_head2)
+
         val sharedPref = requireActivity().getSharedPreferences("prefs" ,Context.MODE_PRIVATE)
-
-        val days = DateFormatSymbols.getInstance().shortWeekdays
-
-        // Fixme debe haber una mejor forma de hacer esto
-        // MONDAY=2, por eso el [i-2], así indexamos desde 0
         for (i in Calendar.MONDAY..Calendar.FRIDAY) {
-            val chip = chipGroup[i-2] as Chip
-            chip.text = days[i].capitalize()
-            val scheduled = sharedPref.getBoolean(i.toString(), false)
-            chip.isChecked = scheduled
+            val value = sharedPref.getInt(i.toString(), -1)
+
+            if (value == 1 || value == 3) {
+                reservation_1.setChecked(i, true)
+            }
+            if (value == 2 || value == 3) {
+                reservation_2.setChecked(i, true)
+            }
         }
 
-        button.setOnClickListener {
+        reservationSave.setOnClickListener {
             AlarmHelper.enableBootReceiver(requireContext())
             AlarmHelper.createNotificationChannel(requireContext())
 
             with (sharedPref.edit()) {
                 for (day in Calendar.MONDAY..Calendar.FRIDAY) {
-                    val chip = chipGroup[day - 2] as Chip
-                    val schedule = chip.isChecked
-                    AlarmHelper.scheduleAlarm(requireContext(), day, schedule)
-                    putBoolean(day.toString(), schedule)
+                    var value = if (reservation_1.getChecked(day)) 1 else 0
+                    value += if (reservation_2.getChecked(day)) 2 else 0
+                    if (value > 0) {
+                        putInt(day.toString(), value)
+                    }
                 }
                 apply()
+            }
+            val calendar = AlarmHelper.getNextAlarm(requireContext())
+            calendar?.let {
+                AlarmHelper.scheduleAlarm(requireContext(), calendar)
             }
             view.snack(context, R.string.saved, SnackType.FINISH)
         }
 
-        button2.setOnClickListener {
-            AlarmHelper.makeNotification(context!!)
+        reservationClear.setOnClickListener {
+            with (sharedPref.edit()) {
+                for (day in Calendar.MONDAY..Calendar.FRIDAY) {
+                    remove(day.toString())
+                    reservation_1.setChecked(day, false)
+                    reservation_2.setChecked(day, false)
+                }
+                apply()
+            }
+            AlarmHelper.cancelAlarm(requireContext())
+            view.snack(context, R.string.cleared, SnackType.FINISH)
         }
     }
+
 
 }

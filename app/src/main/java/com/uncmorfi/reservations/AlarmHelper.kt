@@ -15,7 +15,9 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat.getSystemService
 import com.uncmorfi.MainActivity
 import com.uncmorfi.R
+import com.uncmorfi.helpers.compareToTodayInMillis
 import java.util.*
+import java.util.Calendar.*
 
 class AlarmHelper {
     companion object {
@@ -41,45 +43,82 @@ class AlarmHelper {
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP
             )
-
         }
 
-        private fun getIntent(context: Context, dayOfWeek: Int): PendingIntent {
+        private fun getIntent(context: Context): PendingIntent {
             return Intent(context, AlarmReceiver::class.java).let { intent ->
                 PendingIntent.getBroadcast(
                         context,
-                        dayOfWeek,
+                        0,
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT)
             }
         }
 
-        fun scheduleAlarm(context: Context, dayOfWeek: Int, schedule: Boolean) {
-            val intent = getIntent(context, dayOfWeek)
+        fun getNextAlarm(context: Context): Calendar? {
+            val sharedPref = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+
+            val today = Calendar.getInstance().get(DAY_OF_WEEK)
+            val calendar = Calendar.getInstance().apply {
+                set(MINUTE, 0)
+                set(SECOND, 0)
+            }
+
+            for (i in today..today+7) {
+                val day = i%7
+                val value = sharedPref.getInt(day.toString(), -1)
+
+                if (setNextAlarmHour(calendar, value)) {
+                    return calendar
+                }
+                calendar.add(DAY_OF_YEAR, 1)
+            }
+            return null
+        }
+
+        /* -1 si no está seteado
+         * 1 si es a las 7AM
+         * 2 si es a las 10AM
+         * 3 si es a las 7AM o las 10AM
+        */
+        private fun setNextAlarmHour(calendar: Calendar, value: Int): Boolean {
+            if (value == 1 || value == 3) {
+                calendar.set(HOUR_OF_DAY, 7)
+                if (calendar.compareToTodayInMillis() > 0) {
+                    return true
+                }
+            }
+
+            if (value == 2 || value == 3) {
+                calendar.set(HOUR_OF_DAY, 10)
+                if (calendar.compareToTodayInMillis() > 0) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        fun scheduleAlarm(context: Context, calendar: Calendar) {
+            val intent = getIntent(context)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-            if (!schedule) {
-                alarmManager.cancel(intent)
-                return
+            if (Build.VERSION.SDK_INT >= 19) {
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        intent)
+            } else {
+                alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        intent)
             }
+        }
 
-            val calendar = Calendar.getInstance().apply {
-                set(Calendar.DAY_OF_WEEK, dayOfWeek)
-                set(Calendar.HOUR_OF_DAY, 8)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-            }
-
-            // Si ya pasó ese día, va para la otra semana
-            if (calendar.timeInMillis < System.currentTimeMillis()) {
-                calendar.add(Calendar.DAY_OF_YEAR, 7)
-            }
-
-            alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY * 7,
-                    intent)
+        fun cancelAlarm(context: Context) {
+            val intent = getIntent(context)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(intent)
         }
 
         fun makeNotification(context: Context) {
@@ -94,12 +133,12 @@ class AlarmHelper {
                     .setSmallIcon(R.drawable.nav_ticket)
                     .setContentTitle(context.getString(R.string.reservations_title))
                     .setContentText(context.getString(R.string.reservations_content))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setAutoCancel(true)
 
             with(NotificationManagerCompat.from(context)) {
                 // notificationId es un int único para cada notificación
-                val notificationId = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                val notificationId = Calendar.getInstance().get(DAY_OF_YEAR)
                 notify(notificationId, builder.build())
             }
         }

@@ -8,6 +8,11 @@ class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
             AlarmHelper.makeNotification(context)
+
+            val calendar = AlarmHelper.getNextAlarm(context)
+            calendar?.let {
+                AlarmHelper.scheduleAlarm(context, calendar)
+            }
         }
     }
 }

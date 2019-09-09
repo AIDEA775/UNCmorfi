@@ -75,6 +75,8 @@
     <string name="reservations_content">Reserva tu porción en el comedor</string>
 
     <string name="reservations_chip_head">Notificame sobre las reservas los días:</string>
+    <string name="reservations_head1">A las 7AM:</string>
+    <string name="reservations_head2">A las 10AM:</string>
 
     <string name="reservations_channel_name">Reservaciones</string>
     <string name="reservations_channel_description">Notifica cuando las reservaciones están abiertas</string>
@@ -120,5 +122,6 @@
     <string name="action_browser">Abrir en&#8230;</string>
     <string name="save">Guardar</string>
     <string name="saved">Guardado</string>
-
+    <string name="clear">Limpiar</string>
+    <string name="cleared">Limpiado</string>
 </resources>

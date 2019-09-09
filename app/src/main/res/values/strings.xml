@@ -75,6 +75,8 @@
     <string name="reservations_content">Reserve your serving in the dinning room!</string>
 
     <string name="reservations_chip_head">Notify me these days:</string>
+    <string name="reservations_head1">At 7AM:</string>
+    <string name="reservations_head2">At 10AM:</string>
 
     <string name="reservations_channel_name">Reservations</string>
     <string name="reservations_channel_description">Notifications when reservations is open</string>
@@ -119,5 +121,7 @@
     <string name="action_browser">Open with&#8230;</string>
     <string name="save">Save</string>
     <string name="saved">Saved</string>
+    <string name="clear">Clear</string>
+    <string name="cleared">Cleared</string>
 
 </resources>

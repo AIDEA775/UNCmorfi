@@ -1,6 +1,7 @@
 package com.uncmorfi.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -272,6 +273,40 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         } catch (e: NumberFormatException) {
             return INTERNAL_ERROR
         }
+    }
+
+
+    /*
+     * Reservation stuff
+     */
+    fun reserve(user: User, token: String) {
+        Log.e("arst", token)
+        // TODO
+        //  GET /reservation/login (traer datos)
+        //  POST /reservation/reserve (mandar datos y el token del captcha)
+        //  Guardar el TOBA_SESSID
+        //  y notificar a travez de un Status Code
+    }
+
+    fun reserve(sessionId: String) {
+        // TODO
+        //  POST /reservation/reserve solo con la TOBA_SESSID
+        //  y devolver el resultado con un Status Code?
+    }
+
+    fun reserveStatus(sessionId: String) {
+        // TODO POST /reservation/status solo con la TOBA_SESSID
+        //  y devolver el resultado con un Status Code?
+    }
+
+    fun reserveLoop(sessionId: String) {
+        // TODO workmanager
+        //  POST /reservation/reserve solo con la TOBA_SESSID una y otra vez
+        //  hasta que se reserve, o el usuario cancele...
+    }
+
+    fun reserveStop(sessionId: String) {
+        // TODO detener el workmanager de arriba
     }
 
     private fun mainDispatch(f: suspend (CoroutineScope) -> Unit) {

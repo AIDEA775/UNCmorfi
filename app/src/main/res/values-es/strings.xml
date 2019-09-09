@@ -122,6 +122,6 @@
     <string name="action_browser">Abrir en&#8230;</string>
     <string name="save">Guardar</string>
     <string name="saved">Guardado</string>
-    <string name="clear">Limpiar</string>
-    <string name="cleared">Limpiado</string>
+    <string name="clean">Limpiar</string>
+    <string name="cleaned">Limpiado</string>
 </resources>

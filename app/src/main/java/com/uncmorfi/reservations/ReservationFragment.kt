@@ -74,7 +74,7 @@ class ReservationFragment : Fragment() {
                 apply()
             }
             AlarmHelper.cancelAlarm(requireContext())
-            view.snack(context, R.string.cleared, SnackType.FINISH)
+            view.snack(context, R.string.cleaned, SnackType.FINISH)
         }
     }
 

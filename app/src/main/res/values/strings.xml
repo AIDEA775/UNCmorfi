@@ -121,7 +121,7 @@
     <string name="action_browser">Open with&#8230;</string>
     <string name="save">Save</string>
     <string name="saved">Saved</string>
-    <string name="clear">Clear</string>
-    <string name="cleared">Cleared</string>
+    <string name="clean">Clean</string>
+    <string name="cleaned">Cleaned</string>
 
 </resources>

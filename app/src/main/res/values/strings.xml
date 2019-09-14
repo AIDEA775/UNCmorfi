@@ -81,6 +81,13 @@
     <string name="reservations_channel_name">Reservations</string>
     <string name="reservations_channel_description">Notifications when reservations is open</string>
 
+    <string name="reservations_reserve">Reserve</string>
+    <string name="reservations_consult">Reserve</string>
+    <string name="reservations_loop">Reserve</string>
+    <string name="reservations_stop">Stop</string>
+    <string name="reservations_cancel">Reserve</string>
+    <string name="reservations_loguot">Reserve</string>
+
     <!-- Renovation -->
     <string name="renovation_email_subject">RENOVAR</string>
     <string name="renovation_email_body">

@@ -12,8 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.helpers.SnackType.FINISH
-import com.uncmorfi.helpers.SnackType.LOADING
+import com.uncmorfi.helpers.ReserveStatus
+import com.uncmorfi.helpers.SnackType.*
 import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.helpers.compareToToday
 import com.uncmorfi.helpers.getUser
@@ -103,6 +103,25 @@ class HomeFragment : Fragment() {
                 BUSY -> {}
                 else -> mRootView.snack(context, it)
             }
+        })
+
+        /*
+         * Reservas
+         */
+        mViewModel.reserveStatus.observe(this, Observer {
+            when (it) {
+                ReserveStatus.RESERVING -> mRootView.snack(context, "reservando", LOADING)
+                ReserveStatus.RESERVED -> mRootView.snack(context, "reservado", FINISH)
+                ReserveStatus.UNAVAILABLE -> mRootView.snack(context, "no disponible", ERROR)
+                ReserveStatus.SOLDOUT -> mRootView.snack(context, "se terminó", ERROR)
+                ReserveStatus.INVALID -> mRootView.snack(context, "invalido", ERROR)
+                ReserveStatus.REDOLOGIN -> mRootView.snack(context, "re login", ERROR)
+                else -> {}
+            }
+        })
+
+        mViewModel.reserveTry.observe(this, Observer {
+            mRootView.snack(context, "reservando, intento $it", LOADING)
         })
     }
 

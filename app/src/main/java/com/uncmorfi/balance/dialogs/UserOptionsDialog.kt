@@ -9,6 +9,7 @@ import com.uncmorfi.helpers.StatusCode
 import com.uncmorfi.helpers.copyToClipboard
 import com.uncmorfi.models.User
 import com.uncmorfi.reservations.CaptchaDialog
+import com.uncmorfi.reservations.ReserveOptionsDialog
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.
@@ -19,7 +20,7 @@ class UserOptionsDialog: BaseDialogHelper() {
         super.init()
         val items = arrayOf(
                 getString(R.string.balance_user_options_update),
-                "Reservar",
+                getString(R.string.reservations_reserve),
                 getString(R.string.balance_user_options_delete),
                 getString(R.string.balance_user_options_copy),
                 getString(R.string.balance_user_options_barcode),
@@ -30,8 +31,13 @@ class UserOptionsDialog: BaseDialogHelper() {
                 .setItems(items) { _, which ->
                     when (which) {
                         0 -> sendResult(which, user)
-                        1 -> CaptchaDialog.newInstance(this, 0, user)
-                                .show(fragmentManager!!, "CaptchaDialog")
+                        1 -> if (viewModel.reservationIsCached(user)) {
+                                ReserveOptionsDialog.newInstance(this, 0, user)
+                                        .show(fragmentManager!!, "ReserveOptionsDialog")
+                            } else {
+                                CaptchaDialog.newInstance(this, 0, user)
+                                        .show(fragmentManager!!, "CaptchaDialog")
+                            }
                         2 -> DeleteUserDialog.newInstance(this, 0, user)
                                 .show(fragmentManager!!, "DeleteUserDialog")
                         3 -> {

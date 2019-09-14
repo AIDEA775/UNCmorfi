@@ -27,6 +27,15 @@ enum class SnackType {
     FINISH
 }
 
+enum class ReserveStatus {
+    RESERVING,
+    RESERVED,
+    UNAVAILABLE,
+    SOLDOUT,
+    INVALID,
+    REDOLOGIN,
+}
+
 enum class StatusCode {
     NO_ONLINE,
     CONNECT_ERROR,

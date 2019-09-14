@@ -7,18 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.uncmorfi.helpers.*
+import com.uncmorfi.helpers.ReserveStatus.*
 import com.uncmorfi.helpers.StatusCode.*
-import com.uncmorfi.models.AppDatabase
-import com.uncmorfi.models.DayMenu
-import com.uncmorfi.models.Serving
-import com.uncmorfi.models.User
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.uncmorfi.models.*
+import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.net.URL
 import java.util.*
@@ -34,6 +31,18 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
     val servingStatus: MutableLiveData<StatusCode> = MutableLiveData()
+
+    val reserveStatus: MutableLiveData<ReserveStatus> = MutableLiveData()
+    val reserveTry: MutableLiveData<Int> = MutableLiveData()
+    var reservation: Reservation? = null
+    var reserveJob: Job? = null
+
+    private val client by lazy {
+        Retrofit.Builder()
+                .baseUrl("https://frozen-sierra-45328.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(Webservice::class.java)
+    }
 
     init {
         userStatus.value = BUSY
@@ -279,38 +288,89 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     /*
      * Reservation stuff
      */
-    fun reserve(user: User, token: String) {
-        Log.e("arst", token)
-        // TODO
-        //  GET /reservation/login (traer datos)
-        //  POST /reservation/reserve (mandar datos y el token del captcha)
-        //  Guardar el TOBA_SESSID
-        //  y notificar a travez de un Status Code
+    fun reserve(user: User, captcha: String) {
+        reserveStatus.value = RESERVING
+        mainDispatch {
+            val reserve = client.login(user.card)
+            reservation = reserve
+
+            reserve.captchaText = captcha
+            val result = client.reserve(reserve)
+
+            notifyReservation(result)
+            saveSession(reservation!!)
+        }
     }
 
-    fun reserve(sessionId: String) {
-        // TODO
-        //  POST /reservation/reserve solo con la TOBA_SESSID
-        //  y devolver el resultado con un Status Code?
+    fun reserve() {
+        val reserve = reservation
+        if (reserve != null) {
+            reserveStatus.value = RESERVING
+            mainDispatch{
+                val result = client.reserve(reserve)
+                notifyReservation(result)
+                saveSession(reservation!!)
+            }
+        } else {
+            reserveStatus.value = REDOLOGIN
+        }
     }
 
-    fun reserveStatus(sessionId: String) {
-        // TODO POST /reservation/status solo con la TOBA_SESSID
-        //  y devolver el resultado con un Status Code?
+    fun reserveLoop() {
+        val reserve = reservation
+        if (reserve == null) {
+            reserveStatus.value = REDOLOGIN
+            return
+        }
+        reserveJob = mainDispatch{
+            var intent = 0
+            do {
+                intent += 1
+                reserveTry.value = intent
+                val result = ioDispatch {
+                    client.reserve(reserve)
+                }
+                val status = notifyReservation(result)
+                Log.e("arst", reservation?.path)
+                delay(1500)
+            } while (status != RESERVED && status != REDOLOGIN)
+        }
     }
 
-    fun reserveLoop(sessionId: String) {
-        // TODO workmanager
-        //  POST /reservation/reserve solo con la TOBA_SESSID una y otra vez
-        //  hasta que se reserve, o el usuario cancele...
+    fun reserveStop() {
+        reserveJob?.cancel()
+
+        // Guardar sesion
+        val reserve = reservation
+        reserve?.let {
+            mainDispatch{
+                saveSession(reservation!!)
+            }
+        }
     }
 
-    fun reserveStop(sessionId: String) {
-        // TODO detener el workmanager de arriba
+    fun reservationIsCached(user: User): Boolean {
+        return reservation?.code == user.card
     }
 
-    private fun mainDispatch(f: suspend (CoroutineScope) -> Unit) {
-        viewModelScope.launch(Dispatchers.Main, block = f)
+    private suspend fun notifyReservation(result: ReservationResponse): ReserveStatus {
+        result.path?.let { reservation?.path = it }
+        result.token?.let { reservation?.token = it }
+
+        val status = ReserveStatus.valueOf(result.reservationResult.toUpperCase())
+        reserveStatus.value = status
+        if (status == REDOLOGIN) {
+            reservation = null
+        }
+        return status
+    }
+
+    private suspend fun saveSession(reserve: Reservation) {
+        db.reserveDao().insert(reserve)
+    }
+
+    private fun mainDispatch(f: suspend (CoroutineScope) -> Unit): Job {
+        return viewModelScope.launch(Dispatchers.Main, block = f)
     }
 
     private suspend fun <T>ioDispatch(f: suspend (CoroutineScope) -> T): T {

@@ -6,12 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [User::class, DayMenu::class, Serving::class], version = 1)
+@Database(entities = [User::class,
+                      DayMenu::class,
+                      Serving::class,
+                      Reservation::class,
+                      Cookie::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun menuDao(): DayMenuDao
     abstract fun servingDao(): ServingDao
+    abstract fun reserveDao(): ReservationDao
 
     companion object {
         @Volatile

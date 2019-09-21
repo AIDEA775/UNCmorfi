@@ -3,8 +3,10 @@ package com.uncmorfi.balance.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.uncmorfi.R
 import com.uncmorfi.balance.BarcodeActivity
+import com.uncmorfi.helpers.ReserveStatus
 import com.uncmorfi.helpers.StatusCode
 import com.uncmorfi.helpers.copyToClipboard
 import com.uncmorfi.models.User
@@ -15,9 +17,11 @@ import com.uncmorfi.reservations.ReserveOptionsDialog
  * Muestra las opciones disponibles para efectuar sobre un usuario.
  */
 class UserOptionsDialog: BaseDialogHelper() {
+    private var reserveCached = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.init()
+        reservationInit()
         val items = arrayOf(
                 getString(R.string.balance_user_options_update),
                 getString(R.string.reservations_reserve),
@@ -31,25 +35,40 @@ class UserOptionsDialog: BaseDialogHelper() {
                 .setItems(items) { _, which ->
                     when (which) {
                         0 -> sendResult(which, user)
-                        1 -> if (viewModel.reservationIsCached(user)) {
-                                ReserveOptionsDialog.newInstance(this, 0, user)
-                                        .show(fragmentManager!!, "ReserveOptionsDialog")
-                            } else {
-                                CaptchaDialog.newInstance(this, 0, user)
-                                        .show(fragmentManager!!, "CaptchaDialog")
-                            }
-                        2 -> DeleteUserDialog.newInstance(this, 0, user)
+                        1 -> reservation()
+                        2 -> DeleteUserDialog
+                                .newInstance(this, 0, user)
                                 .show(fragmentManager!!, "DeleteUserDialog")
                         3 -> {
                             context?.copyToClipboard("card", user.card)
                             viewModel.userStatus.value = StatusCode.COPIED
                         }
                         4 -> startActivity(BarcodeActivity.intent(context!!, user))
-                        5 -> SetNameDialog.newInstance(this, 0, user)
+                        5 -> SetNameDialog
+                                .newInstance(this, 0, user)
                                 .show(fragmentManager!!, "SetNameDialog")
                     }
                 }
         return builder.create()
+    }
+
+    private fun reservationInit() {
+        viewModel.reserveStatus.observe(this, Observer {
+            reserveCached = reserveCached || (it == ReserveStatus.CACHED)
+        })
+        viewModel.reserveIsCached(user)
+    }
+
+    private fun reservation() {
+        if (reserveCached) {
+            ReserveOptionsDialog
+                    .newInstance(this, 0, user)
+                    .show(fragmentManager!!, "ReserveOptionsDialog")
+        } else {
+            CaptchaDialog
+                    .newInstance(this, 0, user)
+                    .show(fragmentManager!!, "CaptchaDialog")
+        }
     }
 
     companion object {

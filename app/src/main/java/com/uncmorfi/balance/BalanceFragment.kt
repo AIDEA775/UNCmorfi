@@ -68,10 +68,10 @@ class BalanceFragment : Fragment() {
         mViewModel.userStatus.observe(this, Observer {
             when (it) {
                 BUSY -> {}
-                UPDATE_ERROR -> mRootView.snack(context, R.string.snack_new_user_not_found, FINISH)
-                INSERTED -> mRootView.snack(context, R.string.snack_new_user_success, FINISH)
-                DELETED -> mRootView.snack(context, R.string.snack_delete_user_done, FINISH)
-                else -> mRootView.snack(context, it)
+                UPDATE_ERROR -> mRootView.snack(R.string.snack_new_user_not_found, FINISH)
+                INSERTED -> mRootView.snack(R.string.snack_new_user_success, FINISH)
+                DELETED -> mRootView.snack(R.string.snack_delete_user_done, FINISH)
+                else -> mRootView.snack(it)
             }
 
             if (it == UPDATE_SUCCESS || it == INSERTED) {
@@ -82,6 +82,14 @@ class BalanceFragment : Fragment() {
         mViewModel.allUsers().observe(this, Observer {
             mUserAdapter.setUsers(it)
             userList = it
+        })
+
+        mViewModel.reserveStatus.observe(this, Observer {
+            mRootView.snack(it)
+        })
+
+        mViewModel.reserveTry.observe(this, Observer {
+            mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
         })
     }
 
@@ -121,7 +129,7 @@ class BalanceFragment : Fragment() {
 
     private fun updateAllUsers() {
         if (userList.isEmpty()) {
-            mRootView.snack(context, R.string.snack_empty_update, ERROR)
+            mRootView.snack(R.string.snack_empty_update, ERROR)
         } else {
             updateUser(*userList.toTypedArray())
         }
@@ -130,10 +138,10 @@ class BalanceFragment : Fragment() {
     private fun copyAllUsers() {
         if (userList.isNotEmpty()) {
             context?.copyToClipboard("cards",userList.joinToString("\n") { it.card })
-            mRootView.snack(context, R.string.snack_copied, FINISH)
+            mRootView.snack(R.string.snack_copied, FINISH)
         }
         else {
-            mRootView.snack(context, R.string.snack_empty_copy, ERROR)
+            mRootView.snack(R.string.snack_empty_copy, ERROR)
         }
     }
 
@@ -165,18 +173,18 @@ class BalanceFragment : Fragment() {
 
     private fun updateUser(vararg users: User) {
         if(users.any { it.card.length < 15 }) {
-            mRootView.snack(context, R.string.snack_new_user_dumb, FINISH)
+            mRootView.snack(R.string.snack_new_user_dumb, FINISH)
         } else {
             userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
             mUserAdapter.setUsers(userList)
 
             when {
                 userList.any { it.isLoading } ->
-                    mRootView.snack(context, R.string.snack_updating, LOADING)
+                    mRootView.snack(R.string.snack_updating, LOADING)
                 users.size == 1 ->
-                    mRootView.snack(context, getNewUserMsg(users.first()), LOADING)
+                    mRootView.snack(getNewUserMsg(users.first()), LOADING)
                 else ->
-                    mRootView.snack(context, R.string.snack_new_user_several_adds, LOADING)
+                    mRootView.snack(R.string.snack_new_user_several_adds, LOADING)
             }
 
             mViewModel.downloadUsers(*users)

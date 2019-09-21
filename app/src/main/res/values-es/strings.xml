@@ -86,7 +86,15 @@
     <string name="reservations_loop">Reservar hasta morir</string>
     <string name="reservations_stop">Parar de reservar</string>
     <string name="reservations_cancel">Cancelar reserva</string>
-    <string name="reservations_loguot">Cerrar sesion</string>
+    <string name="reservations_logout">Cerrar sesion</string>
+
+    <string name="snack_reserving">Reservando&#8230;</string>
+    <string name="snack_reserved">Reservado!</string>
+    <string name="snack_unavailable">Reservas no disponible</string>
+    <string name="snack_soldout">Ya no hay mas reservas</string>
+    <string name="snack_invalid">Invalido</string>
+    <string name="snack_redologin">Volvé a loguearte</string>
+    <string name="snack_loop">Reservando, intento %1$d&#8230;</string>
 
     <!-- Renovation -->
     <string name="renovation_email_subject">RENOVAR</string>
@@ -122,8 +130,6 @@
 
     <string name="snack_copied">Copiado al portapapeles</string>
     <string name="snack_empty_copy">Nada para copiar</string>
-
-    <string name="snack_error">ERROR ERROR ERROR Reportá esto!</string>
 
     <!-- Cualquiera -->
     <string name="action_browser">Abrir en&#8230;</string>

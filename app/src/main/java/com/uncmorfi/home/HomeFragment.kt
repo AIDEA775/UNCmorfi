@@ -12,8 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.helpers.ReserveStatus
-import com.uncmorfi.helpers.SnackType.*
+import com.uncmorfi.helpers.SnackType.FINISH
+import com.uncmorfi.helpers.SnackType.LOADING
 import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.helpers.compareToToday
 import com.uncmorfi.helpers.getUser
@@ -68,7 +68,9 @@ class HomeFragment : Fragment() {
             }
         })
         homeCardContainer.setOnClickListener {
-            showUserOptionsDialog(mUser)
+            UserOptionsDialog
+                    .newInstance(this, USER_OPTIONS_CODE, mUser)
+                    .show(fragmentManager!!, "UserOptionsDialog")
         }
         homeCardContainer.setOnLongClickListener {
             mUser.isLoading = true
@@ -79,9 +81,9 @@ class HomeFragment : Fragment() {
         mViewModel.userStatus.observe(this, Observer {
             when (it) {
                 BUSY -> {}
-                UPDATE_ERROR -> mRootView.snack(context, R.string.snack_new_user_not_found, FINISH)
-                DELETED -> mRootView.snack(context, R.string.snack_delete_user_done, FINISH)
-                else -> mRootView.snack(context, it)
+                UPDATE_ERROR -> mRootView.snack(R.string.snack_new_user_not_found, FINISH)
+                DELETED -> mRootView.snack(R.string.snack_delete_user_done, FINISH)
+                else -> mRootView.snack(it)
             }
         })
 
@@ -95,13 +97,13 @@ class HomeFragment : Fragment() {
         })
         servingsPieChart.setTouchEnabled(false)
         homeServingsContainer.setOnClickListener {
-            mRootView.snack(context, R.string.snack_updating, LOADING)
+            mRootView.snack(R.string.snack_updating, LOADING)
             mViewModel.updateServings()
         }
         mViewModel.servingStatus.observe(this, Observer {
             when (it) {
                 BUSY -> {}
-                else -> mRootView.snack(context, it)
+                else -> mRootView.snack(it)
             }
         })
 
@@ -109,25 +111,12 @@ class HomeFragment : Fragment() {
          * Reservas
          */
         mViewModel.reserveStatus.observe(this, Observer {
-            when (it) {
-                ReserveStatus.RESERVING -> mRootView.snack(context, "reservando", LOADING)
-                ReserveStatus.RESERVED -> mRootView.snack(context, "reservado", FINISH)
-                ReserveStatus.UNAVAILABLE -> mRootView.snack(context, "no disponible", ERROR)
-                ReserveStatus.SOLDOUT -> mRootView.snack(context, "se terminó", ERROR)
-                ReserveStatus.INVALID -> mRootView.snack(context, "invalido", ERROR)
-                ReserveStatus.REDOLOGIN -> mRootView.snack(context, "re login", ERROR)
-                else -> {}
-            }
+            mRootView.snack(it)
         })
 
         mViewModel.reserveTry.observe(this, Observer {
-            mRootView.snack(context, "reservando, intento $it", LOADING)
+            mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
         })
-    }
-
-    private fun showUserOptionsDialog(user: User) {
-        UserOptionsDialog.newInstance(this, USER_OPTIONS_CODE, user)
-                .show(fragmentManager!!, "UserOptionsDialog")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

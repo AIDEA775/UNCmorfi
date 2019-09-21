@@ -50,7 +50,7 @@ class MenuFragment : Fragment() {
             menuSwipeRefresh.isRefreshing = false
             when (it) {
                 BUSY -> {}
-                else -> mRootView.snack(context, it)
+                else -> mRootView.snack(it)
             }
         })
     }
@@ -110,7 +110,7 @@ class MenuFragment : Fragment() {
 
     private fun onLongClick(dayMenu: DayMenu) {
         context?.copyToClipboard("food", dayMenu.toString())
-        mRootView.snack(context, R.string.snack_copied, SnackType.FINISH)
+        mRootView.snack(R.string.snack_copied, SnackType.FINISH)
     }
 
     companion object {

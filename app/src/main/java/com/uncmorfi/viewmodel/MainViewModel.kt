@@ -34,7 +34,6 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     val reserveStatus: MutableLiveData<ReserveStatus> = MutableLiveData()
     val reserveTry: MutableLiveData<Int> = MutableLiveData()
-    var reservation: Reservation? = null
     var reserveJob: Job? = null
 
     private val client by lazy {
@@ -288,85 +287,96 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     /*
      * Reservation stuff
      */
-    fun reserve(user: User, captcha: String) {
-        reserveStatus.value = RESERVING
+    fun reserveIsCached(user: User) {
         mainDispatch {
-            val reserve = client.login(user.card)
-            reservation = reserve
+            val reserve = getReserve(user.card)
+            if (reserve != null) {
+                reserveStatus.value = CACHED
+            } else {
+                reserveStatus.value = NOCACHED
+            }
+        }
+    }
+
+    fun reserve(user: User, captcha: String) {
+        mainDispatch {
+            reserveStatus.value = RESERVING
+            val reserve: Reservation = client.login(user.card)
 
             reserve.captchaText = captcha
             val result = client.reserve(reserve)
 
-            notifyReservation(result)
-            saveSession(reservation!!)
+            updateReservation(reserve, result)
         }
     }
 
-    fun reserve() {
-        val reserve = reservation
-        if (reserve != null) {
-            reserveStatus.value = RESERVING
-            mainDispatch{
-                val result = client.reserve(reserve)
-                notifyReservation(result)
-                saveSession(reservation!!)
+    fun reserve(user: User) {
+        mainDispatch {
+            val reserve = getReserve(user.card)
+            if (reserve != null) {
+                reserveStatus.value = RESERVING
+                val result = ioDispatch { client.reserve(reserve) }
+                updateReservation(reserve, result)
+            } else {
+                reserveStatus.value = REDOLOGIN
             }
-        } else {
-            reserveStatus.value = REDOLOGIN
         }
     }
 
-    fun reserveLoop() {
-        val reserve = reservation
-        if (reserve == null) {
-            reserveStatus.value = REDOLOGIN
-            return
-        }
-        reserveJob = mainDispatch{
-            var intent = 0
-            do {
-                intent += 1
-                reserveTry.value = intent
-                val result = ioDispatch {
-                    client.reserve(reserve)
-                }
-                val status = notifyReservation(result)
-                Log.e("arst", reservation?.path)
-                delay(1500)
-            } while (status != RESERVED && status != REDOLOGIN)
+    fun reserveLoop(user: User) {
+        mainDispatch {
+            val reserve = getReserve(user.card)
+            if (reserve == null) {
+                reserveStatus.value = REDOLOGIN
+                return@mainDispatch
+            }
+            reserveJob?.cancel()
+            reserveJob = mainDispatch{
+                var intent = 0
+                do {
+                    intent += 1
+                    reserveTry.value = intent
+                    val result = ioDispatch { client.reserve(reserve) }
+                    val status = updateReservation(reserve, result)
+                    Log.e("reserveLoop", reserve.path)
+                    delay(1500)
+                } while (status != RESERVED && status != REDOLOGIN)
+            }
         }
     }
 
     fun reserveStop() {
         reserveJob?.cancel()
+    }
 
-        // Guardar sesion
-        val reserve = reservation
-        reserve?.let {
-            mainDispatch{
-                saveSession(reservation!!)
-            }
+    fun reserveLogout(user: User) {
+        mainDispatch {
+            db.reserveDao().delete(user.card)
+            reserveStatus.value = NOCACHED
         }
     }
 
-    fun reservationIsCached(user: User): Boolean {
-        return reservation?.code == user.card
-    }
-
-    private suspend fun notifyReservation(result: ReservationResponse): ReserveStatus {
-        result.path?.let { reservation?.path = it }
-        result.token?.let { reservation?.token = it }
+    private suspend fun updateReservation(reserve: Reservation, result: ReservationResponse): ReserveStatus {
+        result.path?.let { reserve.path = it }
+        result.token?.let { reserve.token = it }
 
         val status = ReserveStatus.valueOf(result.reservationResult.toUpperCase())
         reserveStatus.value = status
+
         if (status == REDOLOGIN) {
-            reservation = null
+            db.reserveDao().delete(reserve.code)
+        } else {
+            // Guardar cookie con el codigo de la tarjeta a la que pertenece
+            reserve.cookies?.map { c -> c.code = reserve.code }
+            db.reserveDao().insert(reserve)
         }
         return status
     }
 
-    private suspend fun saveSession(reserve: Reservation) {
-        db.reserveDao().insert(reserve)
+    private suspend fun getReserve(code: String): Reservation? {
+        val reserve = db.reserveDao().getReservation(code)
+        reserve?.cookies = db.reserveDao().getCookies(code)
+        return reserve
     }
 
     private fun mainDispatch(f: suspend (CoroutineScope) -> Unit): Job {

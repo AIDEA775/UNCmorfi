@@ -77,7 +77,7 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
                 BUSY -> {}
                 else -> {
                     servingSwipeRefresh.isRefreshing = false
-                    mRootView.snack(context, it)
+                    mRootView.snack(it)
                 }
             }
         })

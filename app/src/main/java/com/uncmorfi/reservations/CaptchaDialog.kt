@@ -40,7 +40,7 @@ class CaptchaDialog: BaseDialogHelper() {
                 """.trimIndent(),
                 "text/html",
                 "UTF-8",
-                "http://comedor.unc.edu.ar")
+                "https://comedor.unc.edu.ar")
         return builder.create()
     }
 

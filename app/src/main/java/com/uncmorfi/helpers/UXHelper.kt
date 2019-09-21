@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
@@ -34,6 +35,8 @@ enum class ReserveStatus {
     SOLDOUT,
     INVALID,
     REDOLOGIN,
+    CACHED,
+    NOCACHED,
 }
 
 enum class StatusCode {
@@ -54,60 +57,47 @@ enum class StatusCode {
     BUSY
 }
 
-fun View.snack(context: Context?, resId: Int, type: SnackType): Snackbar {
+fun View.snack(resId: Int, type: SnackType): Snackbar {
     val bar = Snackbar.make(this, resId, getLength(type))
-    context?.let { setColored(it, bar, type) }
+    setColored(this.context, bar, type)
     bar.show()
     return bar
 }
 
-fun View.snack(context: Context?, msg: String, type: SnackType): Snackbar {
+fun View.snack(msg: String, type: SnackType): Snackbar {
     val bar = Snackbar.make(this, msg, getLength(type))
-    context?.let { setColored(it, bar, type) }
+    setColored(this.context, bar, type)
     bar.show()
     return bar
 }
 
-fun View.snack(context: Context?, code: StatusCode): Snackbar {
-    val bar = Snackbar.make(this, getMsg(code), getLength(getType(code)))
-    context?.let { setColored(it, bar, getType(code)) }
-    bar.show()
-    return bar
-}
-
-private fun getMsg(code: StatusCode): Int {
+fun View.snack(code: StatusCode): Snackbar? {
     return when (code) {
-        StatusCode.NO_ONLINE -> R.string.snack_no_online
-        StatusCode.CONNECT_ERROR -> R.string.snack_connect_error
-        StatusCode.INTERNAL_ERROR -> R.string.snack_internal_error
-        StatusCode.UPDATE_ERROR -> R.string.snack_update_error
+        StatusCode.NO_ONLINE -> this.snack(R.string.snack_no_online, SnackType.ERROR)
+        StatusCode.CONNECT_ERROR -> this.snack(R.string.snack_connect_error, SnackType.ERROR)
+        StatusCode.INTERNAL_ERROR -> this.snack(R.string.snack_internal_error, SnackType.ERROR)
+        StatusCode.UPDATE_ERROR -> this.snack(R.string.snack_update_error, SnackType.ERROR)
 
-        StatusCode.UPDATING -> R.string.snack_updating
-        StatusCode.UPDATE_SUCCESS -> R.string.snack_update_success
-        StatusCode.EMPTY_UPDATE -> R.string.snack_empty_update
-        StatusCode.ALREADY_UPDATED -> R.string.snack_already_updated
+        StatusCode.UPDATING -> this.snack(R.string.snack_updating, SnackType.LOADING)
 
-        StatusCode.COPIED -> R.string.snack_copied
+        StatusCode.UPDATE_SUCCESS -> this.snack(R.string.snack_update_success, SnackType.FINISH)
+        StatusCode.EMPTY_UPDATE -> this.snack(R.string.snack_empty_update, SnackType.FINISH)
+        StatusCode.ALREADY_UPDATED -> this.snack(R.string.snack_already_updated, SnackType.FINISH)
 
-        else -> R.string.snack_error
+        StatusCode.COPIED -> this.snack(R.string.snack_copied, SnackType.FINISH)
+        else -> null
     }
 }
 
-private fun getType(code: StatusCode): SnackType {
+fun View.snack(code: ReserveStatus): Snackbar? {
     return when (code) {
-        StatusCode.NO_ONLINE,
-        StatusCode.CONNECT_ERROR,
-        StatusCode.INTERNAL_ERROR,
-        StatusCode.UPDATE_ERROR -> SnackType.ERROR
-
-        StatusCode.UPDATING -> SnackType.LOADING
-
-        StatusCode.UPDATE_SUCCESS,
-        StatusCode.EMPTY_UPDATE,
-        StatusCode.ALREADY_UPDATED,
-        StatusCode.COPIED -> SnackType.FINISH
-
-        else -> SnackType.ERROR
+        ReserveStatus.RESERVING -> this.snack(R.string.snack_reserving, SnackType.LOADING)
+        ReserveStatus.RESERVED -> this.snack(R.string.snack_reserved, SnackType.FINISH)
+        ReserveStatus.UNAVAILABLE -> this.snack(R.string.snack_unavailable, SnackType.ERROR)
+        ReserveStatus.SOLDOUT -> this.snack(R.string.snack_soldout, SnackType.ERROR)
+        ReserveStatus.INVALID -> this.snack(R.string.snack_invalid, SnackType.ERROR)
+        ReserveStatus.REDOLOGIN -> this.snack(R.string.snack_redologin, SnackType.ERROR)
+        else -> null
     }
 }
 
@@ -125,7 +115,9 @@ private fun setColored(context: Context, snackBar: Snackbar, type: SnackType) {
         SnackType.LOADING -> context.colorOf(R.color.primary_text)
         SnackType.FINISH -> context.colorOf(R.color.primary_dark)
     }
-    snackBar.view.setBackgroundColor(color)
+    snackBar.view.setBackgroundResource(R.drawable.rounded_corners)
+    val drawable = snackBar.view.background as GradientDrawable
+    drawable.setColor(color)
 }
 
 fun SwipeRefreshLayout.init(f: () -> Unit) {

@@ -61,7 +61,7 @@ class ReservationFragment : Fragment() {
             calendar?.let {
                 AlarmHelper.scheduleAlarm(requireContext(), calendar)
             }
-            view.snack(context, R.string.saved, SnackType.FINISH)
+            view.snack(R.string.saved, SnackType.FINISH)
         }
 
         reservationClear.setOnClickListener {
@@ -74,7 +74,7 @@ class ReservationFragment : Fragment() {
                 apply()
             }
             AlarmHelper.cancelAlarm(requireContext())
-            view.snack(context, R.string.cleaned, SnackType.FINISH)
+            view.snack(R.string.cleaned, SnackType.FINISH)
         }
     }
 

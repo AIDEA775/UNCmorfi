@@ -82,11 +82,19 @@
     <string name="reservations_channel_description">Notifications when reservations is open</string>
 
     <string name="reservations_reserve">Reserve</string>
-    <string name="reservations_consult">Reserve</string>
-    <string name="reservations_loop">Reserve</string>
-    <string name="reservations_stop">Stop</string>
-    <string name="reservations_cancel">Reserve</string>
-    <string name="reservations_loguot">Reserve</string>
+    <string name="reservations_consult">Consult</string>
+    <string name="reservations_loop">Reserve for ever</string>
+    <string name="reservations_stop">Stop loop</string>
+    <string name="reservations_cancel">Cancel reserve</string>
+    <string name="reservations_logout">Logout</string>
+
+    <string name="snack_reserving">Reserving&#8230;</string>
+    <string name="snack_reserved">Reserved!</string>
+    <string name="snack_unavailable">Unavailable</string>
+    <string name="snack_soldout">Sold out</string>
+    <string name="snack_invalid">Invalid</string>
+    <string name="snack_redologin">Redo login</string>
+    <string name="snack_loop">Reserving, try %1$d&#8230;</string>
 
     <!-- Renovation -->
     <string name="renovation_email_subject">RENOVAR</string>
@@ -116,13 +124,11 @@
 
     <string name="snack_updating">Updating&#8230;</string>
     <string name="snack_update_success">Updated</string>
-    <string name="snack_empty_update">Nada para actualizar</string>
+    <string name="snack_empty_update">Nothing to update</string>
     <string name="snack_already_updated">Already updated</string>
 
     <string name="snack_copied">Copied</string>
     <string name="snack_empty_copy">No cards</string>
-
-    <string name="snack_error">ERROR ERROR ERROR Report this!</string>
 
     <!-- Any -->
     <string name="action_browser">Open with&#8230;</string>

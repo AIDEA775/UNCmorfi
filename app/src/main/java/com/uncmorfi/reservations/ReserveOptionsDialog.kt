@@ -12,14 +12,12 @@ class ReserveOptionsDialog: BaseDialogHelper() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.init()
 
-        isCached()
-
         val items = mutableListOf(
                 getString(R.string.reservations_consult),
                 getString(R.string.reservations_reserve),
                 getString(R.string.reservations_loop),
                 getString(R.string.reservations_cancel),
-                getString(R.string.reservations_loguot)
+                getString(R.string.reservations_logout)
         )
 
         if (viewModel.reserveJob != null) {
@@ -29,25 +27,15 @@ class ReserveOptionsDialog: BaseDialogHelper() {
         builder.setTitle(user.card)
                 .setItems(items.toTypedArray()) { _, which ->
                     when (which) {
-                        0 -> if (isCached()) viewModel.reserve()
-                        1 -> if (isCached()) viewModel.reserve()
-                        2 -> if (isCached()) viewModel.reserveLoop()
+                        0 -> viewModel.reserve(user)
+                        1 -> viewModel.reserve(user)
+                        2 -> viewModel.reserveLoop(user)
                         3 -> {} // cancelar
-                        4 -> {} // cerrar sesion
+                        4 -> viewModel.reserveLogout(user)
                         5 -> viewModel.reserveStop()
                     }
                 }
         return builder.create()
-    }
-
-    private fun isCached(): Boolean {
-        if (!viewModel.reservationIsCached(user)) {
-            CaptchaDialog
-                    .newInstance(this, 0, user)
-                    .show(fragmentManager!!, "CaptchaDialog")
-            return false
-        }
-        return true
     }
 
     companion object {

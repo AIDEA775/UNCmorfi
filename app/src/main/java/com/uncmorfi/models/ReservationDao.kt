@@ -7,7 +7,7 @@ import androidx.room.*
 interface ReservationDao {
 
     @Query("SELECT * FROM reservations WHERE code LIKE :code")
-    suspend fun getReservation(code: String): Reservation
+    suspend fun getReservation(code: String): Reservation?
 
     @Query("SELECT * FROM cookies WHERE code_id LIKE :code")
     suspend fun getCookies(code: String): List<Cookie>
@@ -25,8 +25,8 @@ interface ReservationDao {
         insertCookies(*reserve.cookies!!.toTypedArray())
     }
 
-    @Delete
-    suspend fun delete(reserve: Reservation)
+    @Query("DELETE FROM reservations WHERE code LIKE :code")
+    suspend fun delete(code: String)
 
     @Query("DELETE FROM cookies WHERE code_id LIKE :code")
     suspend fun deleteCookies(code: String)

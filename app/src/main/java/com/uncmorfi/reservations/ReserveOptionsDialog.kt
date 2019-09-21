@@ -4,8 +4,8 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.uncmorfi.R
-import com.uncmorfi.balance.dialogs.BaseDialogHelper
 import com.uncmorfi.models.User
+import com.uncmorfi.shared.BaseDialogHelper
 
 class ReserveOptionsDialog: BaseDialogHelper() {
 

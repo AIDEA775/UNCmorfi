@@ -1,4 +1,4 @@
-package com.uncmorfi.balance.dialogs
+package com.uncmorfi.shared
 
 import android.content.Intent
 import android.os.Bundle

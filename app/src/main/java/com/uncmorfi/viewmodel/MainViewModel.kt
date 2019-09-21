@@ -6,10 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.ReserveStatus.*
-import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.models.*
+import com.uncmorfi.shared.*
+import com.uncmorfi.shared.ReserveStatus.*
+import com.uncmorfi.shared.StatusCode.*
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONException
@@ -47,6 +47,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         userStatus.value = BUSY
         menuStatus.value = BUSY
         servingStatus.value = BUSY
+        reserveStatus.value = NOCACHED
     }
 
     /*

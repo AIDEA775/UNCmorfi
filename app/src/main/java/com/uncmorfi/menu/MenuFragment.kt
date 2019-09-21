@@ -7,9 +7,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.R
-import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.StatusCode.BUSY
 import com.uncmorfi.models.DayMenu
+import com.uncmorfi.shared.*
+import com.uncmorfi.shared.StatusCode.BUSY
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_menu.*
 

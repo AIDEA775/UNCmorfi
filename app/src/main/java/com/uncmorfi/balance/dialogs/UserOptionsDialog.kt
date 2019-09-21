@@ -6,12 +6,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.uncmorfi.R
 import com.uncmorfi.balance.BarcodeActivity
-import com.uncmorfi.helpers.ReserveStatus
-import com.uncmorfi.helpers.StatusCode
-import com.uncmorfi.helpers.copyToClipboard
 import com.uncmorfi.models.User
 import com.uncmorfi.reservations.CaptchaDialog
 import com.uncmorfi.reservations.ReserveOptionsDialog
+import com.uncmorfi.shared.BaseDialogHelper
+import com.uncmorfi.shared.ReserveStatus
+import com.uncmorfi.shared.StatusCode
+import com.uncmorfi.shared.copyToClipboard
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.

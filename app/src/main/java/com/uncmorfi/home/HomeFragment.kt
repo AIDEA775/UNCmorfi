@@ -12,13 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.helpers.SnackType.FINISH
-import com.uncmorfi.helpers.SnackType.LOADING
-import com.uncmorfi.helpers.StatusCode.*
-import com.uncmorfi.helpers.compareToToday
-import com.uncmorfi.helpers.getUser
-import com.uncmorfi.helpers.snack
 import com.uncmorfi.models.User
+import com.uncmorfi.shared.ReserveStatus.NOCACHED
+import com.uncmorfi.shared.SnackType.FINISH
+import com.uncmorfi.shared.SnackType.LOADING
+import com.uncmorfi.shared.StatusCode.*
+import com.uncmorfi.shared.compareToToday
+import com.uncmorfi.shared.getUser
+import com.uncmorfi.shared.snack
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -143,6 +144,7 @@ class HomeFragment : Fragment() {
         mViewModel.menuStatus.value = BUSY
         mViewModel.userStatus.value = BUSY
         mViewModel.servingStatus.value = BUSY
+        mViewModel.reserveStatus.value = NOCACHED
     }
     companion object {
         private const val USER_OPTIONS_CODE = 1

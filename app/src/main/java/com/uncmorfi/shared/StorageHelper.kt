@@ -1,4 +1,4 @@
-package com.uncmorfi.helpers
+package com.uncmorfi.shared
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -1,4 +1,4 @@
-package com.uncmorfi.helpers
+package com.uncmorfi.shared
 
 import android.app.Activity
 import android.content.ClipData
@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,8 +20,11 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.uncmorfi.R
-import com.uncmorfi.balance.dialogs.BaseDialogHelper
 import com.uncmorfi.models.User
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 enum class SnackType {
     ERROR,
@@ -197,6 +201,32 @@ fun Intent?.getUser() : User {
     return this?.getSerializableExtra(BaseDialogHelper.ARG_USER) as User
 }
 
+fun Context?.isOnline(): Boolean {
+    return (this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+            .activeNetworkInfo?.isConnected ?: false
+}
+
 fun TextView.updateVisibility() {
     this.visibility = if (this.text.isNullOrEmpty()) GONE else VISIBLE
+}
+
+fun URL.downloadByGet(): String {
+    val conn = this.openConnection() as HttpURLConnection
+    conn.readTimeout = 10000
+    conn.connectTimeout = 15000
+    conn.requestMethod = "GET"
+    conn.doInput = true
+    conn.connect()
+    val inputStream = conn.inputStream
+
+    val rd = BufferedReader(InputStreamReader(inputStream))
+    var line: String
+    val response = StringBuilder()
+    while (true) {
+        line = rd.readLine() ?: break
+        response.append(line)
+    }
+    rd.close()
+
+    return response.toString()
 }

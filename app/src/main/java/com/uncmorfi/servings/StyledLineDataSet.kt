@@ -5,7 +5,7 @@ import android.graphics.Color
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.uncmorfi.R
-import com.uncmorfi.helpers.colorOf
+import com.uncmorfi.shared.colorOf
 
 class StyledLineDataSet(context: Context, yVals: List<Entry>, label: String, style: ChartStyle):
         LineDataSet(yVals, label) {

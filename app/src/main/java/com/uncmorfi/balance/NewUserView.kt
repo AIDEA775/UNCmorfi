@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import com.uncmorfi.R
-import com.uncmorfi.helpers.onTextChanged
+import com.uncmorfi.shared.onTextChanged
 import kotlinx.android.synthetic.main.view_user_new.view.*
 
 class NewUserView: LinearLayout {

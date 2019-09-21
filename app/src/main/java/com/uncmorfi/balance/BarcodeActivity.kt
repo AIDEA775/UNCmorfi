@@ -11,9 +11,9 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.uncmorfi.R
-import com.uncmorfi.helpers.readBitmapFromStorage
-import com.uncmorfi.helpers.saveToStorage
 import com.uncmorfi.models.User
+import com.uncmorfi.shared.readBitmapFromStorage
+import com.uncmorfi.shared.saveToStorage
 import kotlinx.android.synthetic.main.activity_barcode.*
 import java.util.*
 

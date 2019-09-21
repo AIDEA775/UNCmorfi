@@ -1,4 +1,4 @@
-package com.uncmorfi.helpers
+package com.uncmorfi.shared
 
 import com.uncmorfi.models.DayMenu
 import com.uncmorfi.models.Serving

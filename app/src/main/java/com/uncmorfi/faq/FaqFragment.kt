@@ -2,12 +2,12 @@ package com.uncmorfi.faq
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.*
 import android.webkit.WebViewClient
+import androidx.fragment.app.Fragment
 import com.uncmorfi.R
-import com.uncmorfi.helpers.startBrowser
-import com.uncmorfi.helpers.shareText
+import com.uncmorfi.shared.shareText
+import com.uncmorfi.shared.startBrowser
 import kotlinx.android.synthetic.main.fragment_faq.*
 
 /**

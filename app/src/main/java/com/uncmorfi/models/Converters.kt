@@ -1,8 +1,8 @@
 package com.uncmorfi.models
 
 import androidx.room.TypeConverter
-import com.uncmorfi.helpers.toCalendar
-import com.uncmorfi.helpers.toISOString
+import com.uncmorfi.shared.toCalendar
+import com.uncmorfi.shared.toISOString
 import java.util.*
 
 class Converters {

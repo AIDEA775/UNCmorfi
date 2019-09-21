@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
-import com.uncmorfi.helpers.colorOf
-import com.uncmorfi.helpers.toFormat
 import com.uncmorfi.models.User
+import com.uncmorfi.shared.colorOf
+import com.uncmorfi.shared.toFormat
 import kotlinx.android.synthetic.main.view_user_card.view.*
 import java.util.*
 

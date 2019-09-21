@@ -7,8 +7,8 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
-import com.uncmorfi.balance.dialogs.BaseDialogHelper
 import com.uncmorfi.models.User
+import com.uncmorfi.shared.BaseDialogHelper
 
 class CaptchaDialog: BaseDialogHelper() {
 

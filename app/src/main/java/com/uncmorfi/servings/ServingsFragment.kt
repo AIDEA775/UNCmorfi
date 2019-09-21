@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
-import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.StatusCode.BUSY
 import com.uncmorfi.models.Serving
 import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.*
+import com.uncmorfi.shared.*
+import com.uncmorfi.shared.StatusCode.BUSY
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_servings.*
 import org.apache.commons.math3.stat.regression.SimpleRegression

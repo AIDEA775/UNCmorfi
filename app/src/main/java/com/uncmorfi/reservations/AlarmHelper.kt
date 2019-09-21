@@ -15,7 +15,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat.getSystemService
 import com.uncmorfi.MainActivity
 import com.uncmorfi.R
-import com.uncmorfi.helpers.compareToTodayInMillis
+import com.uncmorfi.shared.compareToTodayInMillis
 import java.util.*
 import java.util.Calendar.*
 

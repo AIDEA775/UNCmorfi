@@ -2,7 +2,7 @@ package com.uncmorfi.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.uncmorfi.helpers.toFormat
+import com.uncmorfi.shared.toFormat
 import java.util.*
 
 @Entity(tableName = "menu")

@@ -5,11 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.uncmorfi.R
-import com.uncmorfi.helpers.colorOf
-import com.uncmorfi.helpers.compareToToday
-import com.uncmorfi.helpers.toFormat
-import com.uncmorfi.helpers.updateVisibility
 import com.uncmorfi.models.DayMenu
+import com.uncmorfi.shared.colorOf
+import com.uncmorfi.shared.compareToToday
+import com.uncmorfi.shared.toFormat
+import com.uncmorfi.shared.updateVisibility
 import kotlinx.android.synthetic.main.view_day_menu.view.*
 
 class DayMenuView : ConstraintLayout {

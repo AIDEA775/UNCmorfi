@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.uncmorfi.R
 import com.uncmorfi.models.User
+import com.uncmorfi.shared.BaseDialogHelper
 import kotlinx.android.synthetic.main.dialog_set_name.view.*
 
 class SetNameDialog : BaseDialogHelper() {

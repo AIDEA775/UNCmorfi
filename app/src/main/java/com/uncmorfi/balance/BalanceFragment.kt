@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.helpers.*
-import com.uncmorfi.helpers.SnackType.*
-import com.uncmorfi.helpers.StatusCode.*
 import com.uncmorfi.models.User
+import com.uncmorfi.shared.*
+import com.uncmorfi.shared.ReserveStatus.NOCACHED
+import com.uncmorfi.shared.SnackType.*
+import com.uncmorfi.shared.StatusCode.*
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_balance.*
 
@@ -205,6 +206,7 @@ class BalanceFragment : Fragment() {
         activity?.hideKeyboard()
         newUser.clearFocus()
         mViewModel.userStatus.value = BUSY
+        mViewModel.reserveStatus.value = NOCACHED
     }
 
     companion object {

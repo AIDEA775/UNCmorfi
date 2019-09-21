@@ -11,14 +11,14 @@ import com.google.android.material.navigation.NavigationView
 import com.uncmorfi.about.AboutDialog
 import com.uncmorfi.balance.BalanceFragment
 import com.uncmorfi.faq.FaqFragment
-import com.uncmorfi.helpers.openFacebook
-import com.uncmorfi.helpers.sendEmail
-import com.uncmorfi.helpers.startBrowser
 import com.uncmorfi.home.HomeFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
 import com.uncmorfi.reservations.ReservationFragment
 import com.uncmorfi.servings.ServingsFragment
+import com.uncmorfi.shared.openFacebook
+import com.uncmorfi.shared.sendEmail
+import com.uncmorfi.shared.startBrowser
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity :

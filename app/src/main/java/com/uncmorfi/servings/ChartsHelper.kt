@@ -9,8 +9,8 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
-import com.uncmorfi.helpers.colorOf
-import com.uncmorfi.helpers.toFormat
+import com.uncmorfi.shared.colorOf
+import com.uncmorfi.shared.toFormat
 import java.util.*
 
 fun LineChart.init(context: Context) {

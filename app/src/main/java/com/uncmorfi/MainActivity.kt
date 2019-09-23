@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.customview.widget.ViewDragHelper
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import com.uncmorfi.about.AboutDialog
 import com.uncmorfi.balance.BalanceFragment
@@ -18,7 +20,9 @@ import com.uncmorfi.reservations.ReservationFragment
 import com.uncmorfi.servings.ServingsFragment
 import com.uncmorfi.shared.openFacebook
 import com.uncmorfi.shared.sendEmail
+import com.uncmorfi.shared.snack
 import com.uncmorfi.shared.startBrowser
+import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity :
@@ -32,6 +36,12 @@ class MainActivity :
         if (savedInstanceState == null) {
             setMainFragment()
         }
+
+        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.status.observe(this, Observer {
+            content_layout.snack(it)
+        })
+
     }
 
     private fun setToolbarAndNavigation() {

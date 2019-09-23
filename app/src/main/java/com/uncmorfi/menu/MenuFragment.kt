@@ -46,11 +46,9 @@ class MenuFragment : Fragment() {
             mMenuAdapter.updateMenu(it)
         })
 
-        mViewModel.menuStatus.observe(this, Observer {
-            menuSwipeRefresh.isRefreshing = false
-            when (it) {
-                BUSY -> {}
-                else -> mRootView.snack(it)
+        mViewModel.status.observe(this, Observer {
+            if (it != BUSY) {
+                menuSwipeRefresh.isRefreshing = false
             }
         })
     }
@@ -94,12 +92,6 @@ class MenuFragment : Fragment() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_menu)
     }
-
-    override fun onStop() {
-        super.onStop()
-        mViewModel.menuStatus.value = BUSY
-    }
-
 
     private fun onClick(dayMenu: DayMenu) {
         requireActivity().shareText(

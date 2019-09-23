@@ -14,7 +14,8 @@ import com.uncmorfi.models.User
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.SnackType.*
-import com.uncmorfi.shared.StatusCode.*
+import com.uncmorfi.shared.StatusCode.UPDATE_SUCCESS
+import com.uncmorfi.shared.StatusCode.USER_INSERTED
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_balance.*
 
@@ -66,16 +67,8 @@ class BalanceFragment : Fragment() {
         }
 
 
-        mViewModel.userStatus.observe(this, Observer {
-            when (it) {
-                BUSY -> {}
-                UPDATE_ERROR -> mRootView.snack(R.string.snack_new_user_not_found, FINISH)
-                INSERTED -> mRootView.snack(R.string.snack_new_user_success, FINISH)
-                DELETED -> mRootView.snack(R.string.snack_delete_user_done, FINISH)
-                else -> mRootView.snack(it)
-            }
-
-            if (it == UPDATE_SUCCESS || it == INSERTED) {
+        mViewModel.status.observe(this, Observer {
+            if (it == UPDATE_SUCCESS || it == USER_INSERTED) {
                 newUser.clearText()
             }
         })
@@ -90,7 +83,7 @@ class BalanceFragment : Fragment() {
         })
 
         mViewModel.reserveTry.observe(this, Observer {
-            mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
+            if (it > 0) mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
         })
     }
 
@@ -205,7 +198,6 @@ class BalanceFragment : Fragment() {
         super.onStop()
         activity?.hideKeyboard()
         newUser.clearFocus()
-        mViewModel.userStatus.value = BUSY
         mViewModel.reserveStatus.value = NOCACHED
     }
 

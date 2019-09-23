@@ -10,7 +10,10 @@ interface DayMenuDao {
     @Query("SELECT * FROM menu")
     suspend fun getAll(): List<DayMenu>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Query("SELECT * FROM menu ORDER BY datetime(date) DESC LIMIT 1")
+    suspend fun getLast(): DayMenu?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg menus: DayMenu): List<Long>
 
     @Query("DELETE FROM menu WHERE datetime(date) <= date('now','-15 day')")

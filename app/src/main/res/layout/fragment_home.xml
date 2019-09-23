@@ -1,107 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.uncmorfi.home.HomeFragment"
+    android:id="@+id/homeSwipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.uncmorfi.home.HomeFragment">
+    android:scrollbarStyle="outsideOverlay">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
 
-        <TextView
-            android:id="@+id/homeMenuTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-            android:text="@string/home_menu"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/homeMenuContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            style="@style/MaterialCard">
-
-            <com.uncmorfi.menu.DayMenuView
-                android:id="@+id/homeMenu"
+            <TextView
+                android:id="@+id/homeMenuTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:focusable="true"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground" />
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:text="@string/home_menu"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/homeCardTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:text="@string/home_cards"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/homeCardContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            style="@style/MaterialCard">
-
-            <com.uncmorfi.balance.UserCardView
-                android:id="@+id/homeCard"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/homeMenuContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                style="@style/MaterialCard">
 
-        </com.google.android.material.card.MaterialCardView>
+                <com.uncmorfi.menu.DayMenuView
+                    android:id="@+id/homeMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground" />
 
-        <TextView
-            android:id="@+id/homeServingsTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:text="@string/home_servings"/>
+            </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/homeServingsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="16dp"
-            style="@style/MaterialCard">
-
-            <com.uncmorfi.servings.TotalPieChartView
-                android:id="@+id/servingsPieChart"
+            <TextView
+                android:id="@+id/homeCardTitle"
                 android:layout_width="match_parent"
-                android:layout_height="225dp"/>
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:text="@string/home_cards"/>
 
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/homeCardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                style="@style/MaterialCard">
 
-    </LinearLayout>
-</ScrollView>
+                <com.uncmorfi.balance.UserCardView
+                    android:id="@+id/homeCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/homeServingsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:text="@string/home_servings"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/homeServingsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"
+                style="@style/MaterialCard">
+
+                <com.uncmorfi.servings.TotalPieChartView
+                    android:id="@+id/servingsPieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="225dp"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

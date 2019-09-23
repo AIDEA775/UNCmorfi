@@ -11,8 +11,11 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.uncmorfi.R
 import com.uncmorfi.models.Serving
 import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.*
-import com.uncmorfi.shared.*
 import com.uncmorfi.shared.StatusCode.BUSY
+import com.uncmorfi.shared.clearDate
+import com.uncmorfi.shared.init
+import com.uncmorfi.shared.startBrowser
+import com.uncmorfi.shared.toFormat
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_servings.*
 import org.apache.commons.math3.stat.regression.SimpleRegression
@@ -72,13 +75,9 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
             updateCharts(it)
         })
 
-        mViewModel.servingStatus.observe(this, Observer {
-            when (it) {
-                BUSY -> {}
-                else -> {
-                    servingSwipeRefresh.isRefreshing = false
-                    mRootView.snack(it)
-                }
+        mViewModel.status.observe(this, Observer {
+            if (it != BUSY) {
+                servingSwipeRefresh.isRefreshing = false
             }
         })
 
@@ -88,11 +87,6 @@ class ServingsFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_servings)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mViewModel.servingStatus.value = BUSY
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

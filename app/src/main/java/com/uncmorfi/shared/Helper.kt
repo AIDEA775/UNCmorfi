@@ -55,8 +55,10 @@ enum class StatusCode {
     ALREADY_UPDATED,
 
     COPIED,
-    INSERTED,
-    DELETED,
+
+    USER_INSERTED,
+    USER_DELETED,
+    USER_NOT_FOUND,
 
     BUSY
 }
@@ -89,6 +91,11 @@ fun View.snack(code: StatusCode): Snackbar? {
         StatusCode.ALREADY_UPDATED -> this.snack(R.string.snack_already_updated, SnackType.FINISH)
 
         StatusCode.COPIED -> this.snack(R.string.snack_copied, SnackType.FINISH)
+
+        StatusCode.USER_INSERTED -> this.snack(R.string.snack_new_user_success, SnackType.FINISH)
+        StatusCode.USER_DELETED -> this.snack(R.string.snack_delete_user_done, SnackType.FINISH)
+        StatusCode.USER_NOT_FOUND -> this.snack(R.string.snack_new_user_not_found, SnackType.FINISH)
+
         else -> null
     }
 }

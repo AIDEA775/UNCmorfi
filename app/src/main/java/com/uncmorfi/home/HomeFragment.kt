@@ -12,13 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
+import com.uncmorfi.models.DayMenu
 import com.uncmorfi.models.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
-import com.uncmorfi.shared.SnackType.FINISH
 import com.uncmorfi.shared.SnackType.LOADING
-import com.uncmorfi.shared.StatusCode.*
+import com.uncmorfi.shared.StatusCode.BUSY
 import com.uncmorfi.shared.compareToToday
 import com.uncmorfi.shared.getUser
+import com.uncmorfi.shared.init
 import com.uncmorfi.shared.snack
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -26,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment() {
     private lateinit var mViewModel: MainViewModel
     private lateinit var mUser: User
+    private var mDayMenu: DayMenu? = null
     private lateinit var mRootView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -38,11 +40,29 @@ class HomeFragment : Fragment() {
         mRootView = view
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
+        homeSwipeRefresh.init {
+            homeSwipeRefresh.isRefreshing = true
+            if (mDayMenu == null) {
+                mViewModel.updateMenu()
+            }
+            mViewModel.updateServings()
+            mUser.isLoading = true
+            homeCard.setUser(mUser)
+            mViewModel.downloadUsers(mUser)
+        }
+
+        mViewModel.status.observe(this, Observer {
+            if (it != BUSY) {
+                homeSwipeRefresh.isRefreshing = false
+            }
+        })
+
         /*
          * Menú
          */
         mViewModel.getMenu().observe(this, Observer { menuList ->
             val today = menuList.firstOrNull { it.date.compareToToday() == 0 }
+            mDayMenu = today
 
             if (today != null) {
                 homeMenu.setDayMenu(today)
@@ -79,14 +99,6 @@ class HomeFragment : Fragment() {
             mViewModel.downloadUsers(mUser)
             true
         }
-        mViewModel.userStatus.observe(this, Observer {
-            when (it) {
-                BUSY -> {}
-                UPDATE_ERROR -> mRootView.snack(R.string.snack_new_user_not_found, FINISH)
-                DELETED -> mRootView.snack(R.string.snack_delete_user_done, FINISH)
-                else -> mRootView.snack(it)
-            }
-        })
 
         /*
          * Medidor
@@ -101,12 +113,6 @@ class HomeFragment : Fragment() {
             mRootView.snack(R.string.snack_updating, LOADING)
             mViewModel.updateServings()
         }
-        mViewModel.servingStatus.observe(this, Observer {
-            when (it) {
-                BUSY -> {}
-                else -> mRootView.snack(it)
-            }
-        })
 
         /*
          * Reservas
@@ -116,7 +122,7 @@ class HomeFragment : Fragment() {
         })
 
         mViewModel.reserveTry.observe(this, Observer {
-            mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
+            if (it > 0) mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
         })
     }
 
@@ -141,9 +147,6 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        mViewModel.menuStatus.value = BUSY
-        mViewModel.userStatus.value = BUSY
-        mViewModel.servingStatus.value = BUSY
         mViewModel.reserveStatus.value = NOCACHED
     }
     companion object {

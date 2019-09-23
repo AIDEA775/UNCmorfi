@@ -1,7 +1,6 @@
 package com.uncmorfi.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +13,7 @@ import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -24,14 +24,10 @@ import kotlin.coroutines.coroutineContext
 class MainViewModel(val context: Application): AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
     private val userLive: MutableLiveData<List<User>> = MutableLiveData()
-    val userStatus: MutableLiveData<StatusCode> = MutableLiveData()
-
     private val menuLive: MutableLiveData<List<DayMenu>> = MutableLiveData()
-    val menuStatus: MutableLiveData<StatusCode> = MutableLiveData()
-
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
-    val servingStatus: MutableLiveData<StatusCode> = MutableLiveData()
 
+    val status: MutableLiveData<StatusCode> = MutableLiveData()
     val reserveStatus: MutableLiveData<ReserveStatus> = MutableLiveData()
     val reserveTry: MutableLiveData<Int> = MutableLiveData()
     var reserveJob: Job? = null
@@ -44,9 +40,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     }
 
     init {
-        userStatus.value = BUSY
-        menuStatus.value = BUSY
-        servingStatus.value = BUSY
+        this.status.value = BUSY
         reserveStatus.value = NOCACHED
     }
 
@@ -67,7 +61,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         mainDispatch {
             if (context.isOnline()) {
                 val status = ioDispatch { downloadUsersTask(*users) }
-                usersNotify(status)
+                usersNotify(status!!)
             } else {
                 usersNotify(NO_ONLINE)
             }
@@ -85,13 +79,13 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         mainDispatch {
             db.userDao().delete(user)
             // fixme eliminar tambien la caché del codigo de barras de la tarjeta
-            usersNotify(DELETED)
+            usersNotify(USER_DELETED)
         }
     }
 
     private suspend fun usersNotify(status: StatusCode) {
         userLive.value = db.userDao().getAll()
-        userStatus.value = status
+        this.status.value = status
     }
 
     private suspend fun downloadUsersTask(vararg users: User): StatusCode {
@@ -101,7 +95,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             val array = JSONArray(result)
 
             if (array.length() == 0) {
-                return UPDATE_ERROR
+                return USER_NOT_FOUND
             }
 
             val userUpdated = mutableListOf<User>()
@@ -125,7 +119,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                 }
             }
             val rows = db.userDao().upsertUser(*userUpdated.toTypedArray())
-            return if (rows > 0) UPDATE_SUCCESS else INSERTED
+            return if (rows > 0) UPDATE_SUCCESS else USER_INSERTED
         } catch (e: IOException) {
             e.printStackTrace()
             return CONNECT_ERROR
@@ -143,7 +137,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         if (menuLive.value == null) {
             mainDispatch {
                 menuLive.value = db.menuDao().getAll()
-                menuStatus.value = BUSY
+                this.status.value = BUSY
                 if (needAutoUpdateMenu()) {
                     updateMenu()
                 }
@@ -155,12 +149,11 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun updateMenu() {
         mainDispatch {
             if (context.isOnline()) {
-                menuStatus.value = ioDispatch { downloadMenuTask() }
+                this.status.value = ioDispatch { downloadMenuTask() }
                 menuLive.value = db.menuDao().getAll()
             } else {
-                menuStatus.value = NO_ONLINE
+                this.status.value = NO_ONLINE
             }
-
         }
     }
 
@@ -178,7 +171,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         val nowWeek = now.get(Calendar.WEEK_OF_YEAR)
         val nowYear = now.get(Calendar.YEAR)
 
-        val menu = db.menuDao().getAll().firstOrNull()?.date ?: return true
+        val menu = db.menuDao().getLast()?.date ?: return true
         val menuWeek = menu.get(Calendar.WEEK_OF_YEAR)
         val menuYear = now.get(Calendar.YEAR)
 
@@ -230,7 +223,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         if (servingLive.value == null) {
             mainDispatch {
                 servingLive.value = db.servingDao().getToday()
-                servingStatus.value = BUSY
+                this.status.value = BUSY
             }
         }
         return servingLive
@@ -239,10 +232,10 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun updateServings() {
         mainDispatch {
             if (context.isOnline()) {
-                servingStatus.value = ioDispatch { downloadServingsTask() }
+                this.status.value = ioDispatch { downloadServingsTask() }
                 servingLive.value = db.servingDao().getToday()
             } else {
-                servingStatus.value = NO_ONLINE
+                this.status.value = NO_ONLINE
             }
         }
     }
@@ -305,9 +298,8 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             val reserve: Reservation = client.login(user.card)
 
             reserve.captchaText = captcha
-            val result = client.reserve(reserve)
-
-            updateReservation(reserve, result)
+            val result = ioDispatch { client.reserve(reserve) }
+            result?.updateReservation(reserve)
         }
     }
 
@@ -315,9 +307,13 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         mainDispatch {
             val reserve = getReserve(user.card)
             if (reserve != null) {
-                reserveStatus.value = RESERVING
-                val result = ioDispatch { client.reserve(reserve) }
-                updateReservation(reserve, result)
+                if (context.isOnline()) {
+                    reserveStatus.value = RESERVING
+                    val result = ioDispatch { client.reserve(reserve) }
+                    result?.updateReservation(reserve)
+                } else {
+                    this.status.value = NO_ONLINE
+                }
             } else {
                 reserveStatus.value = REDOLOGIN
             }
@@ -338,8 +334,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                     intent += 1
                     reserveTry.value = intent
                     val result = ioDispatch { client.reserve(reserve) }
-                    val status = updateReservation(reserve, result)
-                    Log.e("reserveLoop", reserve.path)
+                    val status = result?.updateReservation(reserve)
                     delay(1500)
                 } while (status != RESERVED && status != REDOLOGIN)
             }
@@ -348,6 +343,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     fun reserveStop() {
         reserveJob?.cancel()
+        reserveTry.value = 0
     }
 
     fun reserveLogout(user: User) {
@@ -357,11 +353,11 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         }
     }
 
-    private suspend fun updateReservation(reserve: Reservation, result: ReservationResponse): ReserveStatus {
-        result.path?.let { reserve.path = it }
-        result.token?.let { reserve.token = it }
+    private suspend fun ReservationResponse.updateReservation(reserve: Reservation): ReserveStatus {
+        this.path?.let { reserve.path = it }
+        this.token?.let { reserve.token = it }
 
-        val status = ReserveStatus.valueOf(result.reservationResult.toUpperCase())
+        val status = ReserveStatus.valueOf(this.reservationResult.toUpperCase())
         reserveStatus.value = status
 
         if (status == REDOLOGIN) {
@@ -384,8 +380,23 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         return viewModelScope.launch(Dispatchers.Main, block = f)
     }
 
-    private suspend fun <T>ioDispatch(f: suspend (CoroutineScope) -> T): T {
-        return withContext(coroutineContext + Dispatchers.IO, block = f)
+    private suspend fun <T>ioDispatch(f: suspend (CoroutineScope) -> T): T? {
+        try {
+            return withContext(coroutineContext + Dispatchers.IO, block = f)
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            this.status.value = CONNECT_ERROR
+        } catch (e: IOException) {
+            e.printStackTrace()
+            this.status.value = CONNECT_ERROR
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            this.status.value =  INTERNAL_ERROR
+        } catch (e: NumberFormatException) {
+            e.printStackTrace()
+            this.status.value =  INTERNAL_ERROR
+        }
+        return null
     }
 
     companion object {

@@ -42,7 +42,7 @@ class UserOptionsDialog: BaseDialogHelper() {
                                 .show(fragmentManager!!, "DeleteUserDialog")
                         3 -> {
                             context?.copyToClipboard("card", user.card)
-                            viewModel.userStatus.value = StatusCode.COPIED
+                            viewModel.status.value = StatusCode.COPIED
                         }
                         4 -> startActivity(BarcodeActivity.intent(context!!, user))
                         5 -> SetNameDialog

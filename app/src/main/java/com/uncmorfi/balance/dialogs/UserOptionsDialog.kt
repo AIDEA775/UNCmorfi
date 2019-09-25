@@ -25,7 +25,7 @@ class UserOptionsDialog: BaseDialogHelper() {
         reservationInit()
         val items = arrayOf(
                 getString(R.string.balance_user_options_update),
-                getString(R.string.reservations_reserve),
+                getString(R.string.balance_user_options_reserve),
                 getString(R.string.balance_user_options_delete),
                 getString(R.string.balance_user_options_copy),
                 getString(R.string.balance_user_options_barcode),

@@ -46,6 +46,7 @@
 
     <string name="balance_user_options_title">Tarjeta</string>
     <string name="balance_user_options_update">Actualizar</string>
+    <string name="balance_user_options_reserve">Reservar (BETA)</string>
     <string name="balance_user_options_delete">Eliminar</string>
     <string name="balance_user_options_copy">Copiar</string>
     <string name="balance_user_options_barcode">Código de barras</string>
@@ -85,15 +86,15 @@
     <string name="reservations_consult">Consultar</string>
     <string name="reservations_loop">Reservar hasta morir</string>
     <string name="reservations_stop">Parar de reservar</string>
-    <string name="reservations_cancel">Cancelar reserva</string>
     <string name="reservations_logout">Cerrar sesion</string>
 
     <string name="snack_reserving">Reservando&#8230;</string>
+    <string name="snack_consulting">Consultando&#8230;</string>
     <string name="snack_reserved">Reservado!</string>
     <string name="snack_unavailable">Reservas no disponible</string>
     <string name="snack_soldout">Ya no hay mas reservas</string>
     <string name="snack_invalid">Invalido</string>
-    <string name="snack_redologin">Volvé a loguearte</string>
+    <string name="snack_redologin">Volvé a iniciar sesión</string>
     <string name="snack_loop">Reservando, intento %1$d&#8230;</string>
 
     <!-- Renovation -->

@@ -34,6 +34,7 @@ enum class SnackType {
 
 enum class ReserveStatus {
     RESERVING,
+    CONSULTING,
     RESERVED,
     UNAVAILABLE,
     SOLDOUT,
@@ -103,6 +104,7 @@ fun View.snack(code: StatusCode): Snackbar? {
 fun View.snack(code: ReserveStatus): Snackbar? {
     return when (code) {
         ReserveStatus.RESERVING -> this.snack(R.string.snack_reserving, SnackType.LOADING)
+        ReserveStatus.CONSULTING -> this.snack(R.string.snack_consulting, SnackType.LOADING)
         ReserveStatus.RESERVED -> this.snack(R.string.snack_reserved, SnackType.FINISH)
         ReserveStatus.UNAVAILABLE -> this.snack(R.string.snack_unavailable, SnackType.ERROR)
         ReserveStatus.SOLDOUT -> this.snack(R.string.snack_soldout, SnackType.ERROR)

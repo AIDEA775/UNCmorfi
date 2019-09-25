@@ -292,14 +292,33 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         }
     }
 
-    fun reserve(user: User, captcha: String) {
+    fun reserveLogin(user: User, captcha: String) {
         mainDispatch {
-            reserveStatus.value = RESERVING
-            val reserve: Reservation = client.login(user.card)
-
+            val reserve = client.getLogin(user.card)
             reserve.captchaText = captcha
-            val result = ioDispatch { client.reserve(reserve) }
-            result?.updateReservation(reserve)
+
+            val result = ioDispatch { client.doLogin(reserve) }
+            result?.let {
+                insertReservation(result)
+                reserveStatus.value = CACHED
+            }
+        }
+    }
+
+    fun reserveConsult(user: User) {
+        mainDispatch {
+            val reserve = getReserve(user.card)
+            if (reserve != null) {
+                if (context.isOnline()) {
+                    reserveStatus.value = CONSULTING
+                    val result = ioDispatch { client.status(reserve) }
+                    result?.updateReservation(reserve)
+                } else {
+                    this.status.value = NO_ONLINE
+                }
+            } else {
+                reserveStatus.value = REDOLOGIN
+            }
         }
     }
 
@@ -366,11 +385,15 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         if (status == REDOLOGIN) {
             db.reserveDao().delete(reserve.code)
         } else {
-            // Guardar cookie con el codigo de la tarjeta a la que pertenece
-            reserve.cookies?.map { c -> c.code = reserve.code }
-            db.reserveDao().insert(reserve)
+            insertReservation(reserve)
         }
         return status
+    }
+
+    private suspend fun insertReservation(reserve: Reservation) {
+        // Guardar cookie con el codigo de la tarjeta a la que pertenece
+        reserve.cookies?.map { c -> c.code = reserve.code }
+        db.reserveDao().insert(reserve)
     }
 
     private suspend fun getReserve(code: String): Reservation? {

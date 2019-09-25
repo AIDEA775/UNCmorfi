@@ -7,8 +7,10 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.uncmorfi.models.User
 import com.uncmorfi.shared.BaseDialogHelper
+import com.uncmorfi.shared.ReserveStatus
 
 class CaptchaDialog: BaseDialogHelper() {
 
@@ -41,14 +43,23 @@ class CaptchaDialog: BaseDialogHelper() {
                 "text/html",
                 "UTF-8",
                 "https://comedor.unc.edu.ar")
+
+        viewModel.reserveStatus.observe(this, Observer {
+            if (it == ReserveStatus.CACHED) {
+                ReserveOptionsDialog
+                        .newInstance(this, 0, user)
+                        .show(fragmentManager!!, "ReserveOptionsDialog")
+                dismiss()
+            }
+        })
+
         return builder.create()
     }
 
     internal inner class JsObject {
         @JavascriptInterface
         fun callback(g_response: String) {
-            viewModel.reserve(user, g_response)
-            dismiss()
+            viewModel.reserveLogin(user, g_response)
         }
     }
 

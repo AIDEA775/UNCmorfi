@@ -46,6 +46,7 @@
 
     <string name="balance_user_options_title">Card</string>
     <string name="balance_user_options_update">Update</string>
+    <string name="balance_user_options_reserve">Reserve (BETA)</string>
     <string name="balance_user_options_delete">Delete</string>
     <string name="balance_user_options_copy">Copy</string>
     <string name="balance_user_options_barcode">Barcode</string>
@@ -85,10 +86,10 @@
     <string name="reservations_consult">Consult</string>
     <string name="reservations_loop">Reserve for ever</string>
     <string name="reservations_stop">Stop loop</string>
-    <string name="reservations_cancel">Cancel reserve</string>
     <string name="reservations_logout">Logout</string>
 
     <string name="snack_reserving">Reserving&#8230;</string>
+    <string name="snack_consulting">Consulting&#8230;</string>
     <string name="snack_reserved">Reserved!</string>
     <string name="snack_unavailable">Unavailable</string>
     <string name="snack_soldout">Sold out</string>

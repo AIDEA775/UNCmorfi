@@ -16,7 +16,6 @@ class ReserveOptionsDialog: BaseDialogHelper() {
                 getString(R.string.reservations_consult),
                 getString(R.string.reservations_reserve),
                 getString(R.string.reservations_loop),
-                getString(R.string.reservations_cancel),
                 getString(R.string.reservations_logout)
         )
 
@@ -27,12 +26,11 @@ class ReserveOptionsDialog: BaseDialogHelper() {
         builder.setTitle(user.card)
                 .setItems(items.toTypedArray()) { _, which ->
                     when (which) {
-                        0 -> viewModel.reserve(user)
+                        0 -> viewModel.reserveConsult(user)
                         1 -> viewModel.reserve(user)
                         2 -> viewModel.reserveLoop(user)
-                        3 -> {} // cancelar
-                        4 -> viewModel.reserveLogout(user)
-                        5 -> viewModel.reserveStop()
+                        3 -> viewModel.reserveLogout(user)
+                        4 -> viewModel.reserveStop()
                     }
                 }
         return builder.create()

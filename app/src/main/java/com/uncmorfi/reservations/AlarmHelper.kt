@@ -62,13 +62,14 @@ class AlarmHelper {
             val calendar = Calendar.getInstance().apply {
                 set(MINUTE, 0)
                 set(SECOND, 0)
+                set(MILLISECOND, 0)
             }
 
             for (i in today..today+7) {
                 val day = i%7
                 val value = sharedPref.getInt(day.toString(), -1)
 
-                if (setNextAlarmHour(calendar, value)) {
+                if (setAsNextAlarm(calendar, value)) {
                     return calendar
                 }
                 calendar.add(DAY_OF_YEAR, 1)
@@ -81,16 +82,18 @@ class AlarmHelper {
          * 2 si es a las 10AM
          * 3 si es a las 7AM o las 10AM
         */
-        private fun setNextAlarmHour(calendar: Calendar, value: Int): Boolean {
+        private fun setAsNextAlarm(calendar: Calendar, value: Int): Boolean {
             if (value == 1 || value == 3) {
-                calendar.set(HOUR_OF_DAY, 7)
+                calendar.set(HOUR_OF_DAY, 6)
+                calendar.set(MINUTE, 55)
                 if (calendar.compareToTodayInMillis() > 0) {
                     return true
                 }
             }
 
             if (value == 2 || value == 3) {
-                calendar.set(HOUR_OF_DAY, 10)
+                calendar.set(HOUR_OF_DAY, 9)
+                calendar.set(MINUTE, 55)
                 if (calendar.compareToTodayInMillis() > 0) {
                     return true
                 }

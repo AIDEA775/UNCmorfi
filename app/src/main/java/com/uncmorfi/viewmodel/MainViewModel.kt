@@ -330,6 +330,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             reserveJob?.cancel()
             reserveJob = mainDispatch{
                 var intent = 0
+
                 do {
                     intent += 1
                     reserveTry.value = intent
@@ -337,6 +338,8 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                     val status = result?.updateReservation(reserve)
                     delay(1500)
                 } while (status != RESERVED && status != REDOLOGIN)
+
+                reserveTry.value = 0
             }
         }
     }

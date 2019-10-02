@@ -25,7 +25,7 @@ data class Reservation(
                 childColumns = arrayOf("code_id"))])
 data class Cookie(
         @PrimaryKey(autoGenerate = true) var cookieId: Int = 0,
-        @ColumnInfo(name = "code_id") var code: String,
+        @ColumnInfo(name = "code_id", index = true) var code: String,
 
         var domain: String = "",
         var value: String = "",

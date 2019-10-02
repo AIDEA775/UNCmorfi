@@ -132,7 +132,6 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     /*
      * Menu stuff
      */
-
     fun getMenu(): LiveData<List<DayMenu>> {
         if (menuLive.value == null) {
             mainDispatch {

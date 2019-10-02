@@ -9,7 +9,6 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.util.AttributeSet
 import android.view.MotionEvent
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -67,8 +66,7 @@ class TotalPieChartView: PieChart {
         return this
     }
 
-    private fun PieChart.update(dataSet: PieDataSet) {
-        animateY(800, Easing.EasingOption.EaseInOutCubic)
+    private fun update(dataSet: PieDataSet) {
         data = PieData(dataSet)
         invalidate()
     }
@@ -108,7 +106,7 @@ class TotalPieChartView: PieChart {
     }
 
     companion object {
-        private const val FOOD_RATIONS = 1500
+        private const val FOOD_RATIONS = 1700
         private const val FOOD_LIMIT = 200
     }
 }

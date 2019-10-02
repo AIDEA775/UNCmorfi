@@ -2,18 +2,16 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MaterialCard"
-    android:id="@+id/menuCard"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="6dp"
-    android:layout_marginBottom="6dp">
+    android:layout_height="wrap_content">
 
     <com.uncmorfi.menu.DayMenuView
         android:id="@+id/menuView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:padding="12dp"/>
 
 </com.google.android.material.card.MaterialCardView>

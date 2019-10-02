@@ -19,6 +19,7 @@
     <string name="home_menu">Comida de hoy</string>
     <string name="home_cards">Tu tarjeta</string>
     <string name="home_servings">Porciones dadas</string>
+    <string name="home_more">Ver más</string>
 
     <!-- Menu -->
     <string name="menu_action_update">Actualizar menú</string>

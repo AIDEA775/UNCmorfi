@@ -39,7 +39,7 @@ class UserOptionsDialog: BaseDialogHelper() {
                         1 -> reservation()
                         2 -> DeleteUserDialog
                                 .newInstance(this, 0, user)
-                                .show(fragmentManager!!, "DeleteUserDialog")
+                                .show(parentFragmentManager, "DeleteUserDialog")
                         3 -> {
                             context?.copyToClipboard("card", user.card)
                             viewModel.status.value = StatusCode.COPIED
@@ -47,7 +47,7 @@ class UserOptionsDialog: BaseDialogHelper() {
                         4 -> startActivity(BarcodeActivity.intent(context!!, user))
                         5 -> SetNameDialog
                                 .newInstance(this, 0, user)
-                                .show(fragmentManager!!, "SetNameDialog")
+                                .show(parentFragmentManager, "SetNameDialog")
                     }
                 }
         return builder.create()
@@ -64,11 +64,11 @@ class UserOptionsDialog: BaseDialogHelper() {
         if (reserveCached) {
             ReserveOptionsDialog
                     .newInstance(this, 0, user)
-                    .show(fragmentManager!!, "ReserveOptionsDialog")
+                    .show(parentFragmentManager, "ReserveOptionsDialog")
         } else {
             CaptchaDialog
                     .newInstance(this, 0, user)
-                    .show(fragmentManager!!, "CaptchaDialog")
+                    .show(parentFragmentManager, "CaptchaDialog")
         }
     }
 

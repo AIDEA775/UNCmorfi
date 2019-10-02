@@ -135,4 +135,8 @@ class MainActivity :
         return fragment
     }
 
+    fun change(id: Int) {
+        replaceFragment(id)
+        navView.setCheckedItem(id)
+    }
 }

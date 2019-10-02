@@ -19,8 +19,8 @@ internal class MenuAdapter (private val mContext: Context,
 
         fun bind(day: DayMenu) {
             itemView.menuView.setDayMenu(day)
-            itemView.menuCard.setOnClickListener { mClickListener(day) }
-            itemView.menuCard.setOnLongClickListener { mLongClickListener(day); true }
+            itemView.menuView.setOnClickListener { mClickListener(day) }
+            itemView.menuView.setOnLongClickListener { mLongClickListener(day); true }
         }
     }
 

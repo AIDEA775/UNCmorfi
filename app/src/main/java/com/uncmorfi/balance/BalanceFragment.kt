@@ -105,7 +105,7 @@ class BalanceFragment : Fragment() {
 
     private fun showUserOptionsDialog(user: User) {
         UserOptionsDialog.newInstance(this, USER_OPTIONS_CODE, user)
-                .show(fragmentManager!!, "UserOptionsDialog")
+                .show(parentFragmentManager, "UserOptionsDialog")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.uncmorfi.MainActivity
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.models.DayMenu
@@ -73,6 +74,9 @@ class HomeFragment : Fragment() {
                 homeMenuContainer.visibility = GONE
             }
         })
+        homeMenuShowMore.setOnClickListener {
+            (requireActivity() as MainActivity).change(R.id.nav_menu)
+        }
 
         /*
          * Tarjetas
@@ -88,16 +92,19 @@ class HomeFragment : Fragment() {
                 homeCardContainer.visibility = GONE
             }
         })
-        homeCardContainer.setOnClickListener {
+        homeCard.setOnClickListener {
             UserOptionsDialog
                     .newInstance(this, USER_OPTIONS_CODE, mUser)
-                    .show(fragmentManager!!, "UserOptionsDialog")
+                    .show(parentFragmentManager, "UserOptionsDialog")
         }
-        homeCardContainer.setOnLongClickListener {
+        homeCard.setOnLongClickListener {
             mUser.isLoading = true
             homeCard.setUser(mUser)
             mViewModel.downloadUsers(mUser)
             true
+        }
+        homeCardShowMore.setOnClickListener {
+            (requireActivity() as MainActivity).change(R.id.nav_balance)
         }
 
         /*
@@ -105,13 +112,16 @@ class HomeFragment : Fragment() {
          */
         mViewModel.getServings().observe(this, Observer {
             if (it.isNotEmpty()) {
-                servingsPieChart.set(it)
+                homeServingsPieChart.set(it)
             }
         })
-        servingsPieChart.setTouchEnabled(false)
-        homeServingsContainer.setOnClickListener {
-            mRootView.snack(R.string.snack_updating, LOADING)
+        homeServingsPieChart.setTouchEnabled(false)
+        homeServingsPieChart.setOnClickListener {
+            homeSwipeRefresh.isRefreshing = true
             mViewModel.updateServings()
+        }
+        homeServingsShowMore.setOnClickListener {
+            (requireActivity() as MainActivity).change(R.id.nav_servings)
         }
 
         /*

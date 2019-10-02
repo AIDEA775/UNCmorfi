@@ -48,7 +48,7 @@ class CaptchaDialog: BaseDialogHelper() {
             if (it == ReserveStatus.CACHED) {
                 ReserveOptionsDialog
                         .newInstance(this, 0, user)
-                        .show(fragmentManager!!, "ReserveOptionsDialog")
+                        .show(parentFragmentManager, "ReserveOptionsDialog")
                 dismiss()
             }
         })

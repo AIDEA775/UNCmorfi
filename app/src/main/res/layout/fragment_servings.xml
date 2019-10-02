@@ -28,87 +28,12 @@
                 android:layout_marginRight="16dp"/>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                style="@style/MaterialCard">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/servingEstimateText"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_gravity="start"
-                        android:drawableStart="@drawable/ic_access_time"
-                        android:drawableLeft="@drawable/ic_access_time"
-                        android:drawablePadding="4dp"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textSize="18sp"
-                        tools:text="25 min. aprox. (10:30)"/>
-
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/servingEstimateChart"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp" />
-
-                    <TextView
-                        android:id="@+id/servingDistance"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
-                        android:layout_gravity="start"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/servings_estimate_empty" />
-
-                    <SeekBar
-                        android:id="@+id/servingSeek"
-                        style="@style/Widget.AppCompat.SeekBar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:max="27"
-                        android:progress="1" />
-
-                    <Button
-                        android:id="@+id/servingEstimateButton"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="@string/servings_estimate_button" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/servingChartsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
+                tools:visibility="visible"
                 style="@style/MaterialCard">
 
                 <LinearLayout

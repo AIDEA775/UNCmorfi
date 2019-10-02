@@ -114,10 +114,16 @@
     <string name="faq_action_share">Compartir</string>
 
     <!-- About -->
-    <string name="about_unofficial_app">Esta es una app no oficial</string>
     <string name="about_source_code">Código fuente:</string>
     <string name="about_fanpage">Fanpage:</string>
+    <string name="about_unofficial_app">No es una app oficial:</string>
+    <string name="about_disclaimer">
+        La aplicación es proporcionada \"tal cual es\"
+        y no hay garantía de que los datos sean siempre correctos,
+        a pesar de que sean extraidos desde las webs oficiales del comedor.\n\n
 
+        No nos responsabilizamos de los daños que pueda llegar a ocasionar por su uso.
+    </string>
     <!-- Snacks -->
     <string name="snack_no_online">No hay conexión</string>
     <string name="snack_connect_error">Error de conexión</string>

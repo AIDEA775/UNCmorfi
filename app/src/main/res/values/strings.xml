@@ -113,10 +113,16 @@
     <string name="faq_action_share">Share</string>
 
     <!-- About -->
-    <string name="about_unofficial_app">This is an unofficial app</string>
     <string name="about_source_code">Source code:</string>
-    <string name="about_fanpage">Fanpage:</string>
+    <string name="about_fanpage">FanPage:</string>
+    <string name="about_unofficial_app">This is an unofficial app:</string>
+    <string name="about_disclaimer">
+        The application is provided \"as is\"
+        and there is no guarantee that the data is always correct,
+        even when it is extracted from the official dining room websites.\n\n
 
+        We are not responsible for any damage caused by its use.
+    </string>
     <!-- Snacks -->
     <string name="snack_no_online">No connection</string>
     <string name="snack_connect_error">Connection error</string>

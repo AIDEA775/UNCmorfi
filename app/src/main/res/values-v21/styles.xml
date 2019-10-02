@@ -5,5 +5,14 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:ambientShadowAlpha">0.02</item>
+        <item name="android:spotShadowAlpha">0.06</item>
+    </style>
+
+    <style name="MaterialCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">6dp</item>
+        <item name="cardElevation">8dp</item>
+        <item name="rippleColor">@color/accent</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 </resources>

@@ -10,18 +10,18 @@ Una app para Android para consultar todo lo referido con el comedor universitari
 Podés reportar un bug o pedir una nueva funcionalidad [abriendo un issue](https://github.com/AIDEA775/UNCmorfi/issues/new).
 
 ## Aportes
-Todos los _pull requests_ son re bienvenidos.
+Todos los _pull requests_ son requete bienvenidos.
 
 ## Paleta de colores
-Color | Code | Preview | Hex
---- | --- | --- | ---
-Rojo | accent | ![#FF5252](https://placehold.it/15/FF5252/000000?text=+) | #FF5252
-Naraja 1 | primary_light | ![#FFB74D](https://placehold.it/15/FFB74D/000000?text=+) | #FFB74D
-Naraja 2 | primary | ![#FFA726](https://placehold.it/15/FFA726/000000?text=+) | #FFA726
-Naraja 3 | primary_dark | ![#FF9800](https://placehold.it/15/FF9800/000000?text=+) | #FF9800
-Gris 1 | primary_text | ![#424242](https://placehold.it/15/424242/000000?text=+) | #424242
-Gris 2 | secondary_text | ![#757575](https://placehold.it/15/757575/000000?text=+) | #757575
-Blanco | white | ![#FFFFFF](https://placehold.it/15/FFFFFF/000000?text=+) | #FFFFFF
+  Color  |      Code      |                          Preview                         | Hex
+ ------- | -------------- | -------------------------------------------------------- | -------
+Rojo     | accent         | ![#FF5252](https://placehold.it/15/FF5252/000000?text=+) | #FF5252
+Naraja 1 | primary_light  | ![#FFB74D](https://placehold.it/15/FFB74D/000000?text=+) | #FFB74D
+Naraja 2 | primary        | ![#FFA726](https://placehold.it/15/FFA726/000000?text=+) | #FFA726
+Naraja 3 | primary_dark   | ![#FF9800](https://placehold.it/15/FF9800/000000?text=+) | #FF9800
+Gris 1   | primary_text   | ![#424242](https://placehold.it/15/424242/000000?text=+) | #424242
+Gris 2   | secondary_text | ![#757575](https://placehold.it/15/757575/000000?text=+) | #757575
+Blanco   | white          | ![#FFFFFF](https://placehold.it/15/FFFFFF/000000?text=+) | #FFFFFF
 
 ## FAQ
 Está alojado en la rama `gh-pages`:
@@ -30,7 +30,7 @@ Está alojado en la rama `gh-pages`:
 
 ## Backend
 Usamos otro servidor que hace el trabajo sucio de parsear los datos de la web del comedor y entregar un lindo JSON.
-Si tenes dudas, también podes consultar su codigo fuente:
+También podes consultar su codigo fuente:
 
 [https://github.com/georgealegre/UNCmorfiServer](https://github.com/georgealegre/UNCmorfiServer)
 
@@ -40,16 +40,11 @@ Facu Alegre se re copó e hizo una version para iOS:
 [https://github.com/georgealegre/UNCmorfi](https://github.com/georgealegre/UNCmorfi)
 
 ## Librerias
-* Google: [v4 support](https://developer.android.com/topic/libraries/support-library/features.html#v4)
-* Google: [v7 appcompat](https://developer.android.com/topic/libraries/support-library/features.html#v7-appcompat)
-* Google: [v7 cardview](https://developer.android.com/topic/libraries/support-library/features.html#v7-cardview)
-* Google: [v7 recyclerview](https://developer.android.com/topic/libraries/support-library/features.html#v7-recyclerview)
-* Google: [Design support](https://developer.android.com/topic/libraries/support-library/features.html#design)
-* Google: [Play services maps](https://developers.google.com/maps/documentation/android-api/)
 * Bumtech: [Glide](https://github.com/bumptech/glide)
 * Jhy: [Jsoup](https://github.com/jhy/jsoup)
-* PhilJay: [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 * journeyapps: [zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
+* PhilJay: [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+* Square: [retrofit](https://github.com/square/retrofit)
 
 ## Licencia
 * [GNU General Public License v3.0](./LICENSE)

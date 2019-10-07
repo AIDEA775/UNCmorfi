@@ -74,6 +74,7 @@ class MenuFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.stackFromEnd = true
         menuRecyclerView.layoutManager = layoutManager
+        menuRecyclerView.isNestedScrollingEnabled = false
     }
 
     private fun initMenu() {

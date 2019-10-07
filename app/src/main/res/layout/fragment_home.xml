@@ -4,27 +4,25 @@
     tools:context="com.uncmorfi.home.HomeFragment"
     android:id="@+id/homeSwipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbarStyle="outsideOverlay">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/homeMenuTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:text="@string/home_menu"
                 android:visibility="gone"
@@ -34,7 +32,6 @@
                 android:id="@+id/homeMenuContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:visibility="gone"
                 tools:visibility="visible"
                 style="@style/MaterialCard">
@@ -72,8 +69,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:visibility="gone"
                 tools:visibility="visible"
                 android:text="@string/home_cards"/>
@@ -82,7 +80,6 @@
                 android:id="@+id/homeCardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:visibility="gone"
                 tools:visibility="visible"
                 style="@style/MaterialCard">
@@ -120,8 +117,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:text="@string/home_servings"/>
 
             <com.google.android.material.card.MaterialCardView

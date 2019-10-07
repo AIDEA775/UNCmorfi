@@ -102,7 +102,6 @@ class ServingsFragment : Fragment() {
             val timeData = StyledLineDataSet(requireContext(), data, getString(R.string.servings_chart_label_time), RATIONS)
             val cumulativeData = StyledLineDataSet(requireContext(), accumulate(data), getString(R.string.servings_chart_label_accumulated), CUMULATIVE)
 
-            servingChartsCard.visibility = View.VISIBLE
             servingTimeChart.update(timeData)
             servingAccumulatedChart.update(cumulativeData)
         }

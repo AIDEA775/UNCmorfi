@@ -207,8 +207,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             return UPDATE_ERROR
         }
 
-        Collections.sort(menuList, ParserHelper.MenuDayComparator())
-        db.menuDao().clear()
+        db.menuDao().clearOld()
         val inserts = db.menuDao().insert(*menuList.toTypedArray())
 
         return if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
@@ -257,13 +256,12 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                     data.add(Serving(date, ration))
                 }
             }
-            Collections.sort(data, ParserHelper.ServingsComparator())
 
             if (data.isEmpty()) {
                 return UPDATE_SUCCESS
             }
 
-            db.servingDao().clear()
+            db.servingDao().clearOld()
             db.servingDao().insert(*data.toTypedArray())
             return UPDATE_SUCCESS
         } catch (e: IOException) {
@@ -364,7 +362,9 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
     fun reserveStop() {
         reserveJob?.cancel()
+        reserveJob = null
         reserveTry.value = 0
+        status.value = BUSY
     }
 
     fun reserveLogout(user: User) {

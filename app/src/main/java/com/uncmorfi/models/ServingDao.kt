@@ -7,12 +7,12 @@ import androidx.room.Query
 
 @Dao
 interface ServingDao {
-    @Query("SELECT * FROM servings WHERE datetime(date) >= date('now', 'start of day')")
+    @Query("SELECT * FROM servings WHERE datetime(date) >= date('now', 'start of day') ORDER BY datetime(date)")
     suspend fun getToday(): List<Serving>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg menus: Serving): List<Long>
 
     @Query("DELETE FROM servings WHERE datetime(date) <= date('now','-2 day')")
-    suspend fun clear()
+    suspend fun clearOld()
 }

@@ -7,7 +7,7 @@ import androidx.room.Query
 
 @Dao
 interface DayMenuDao {
-    @Query("SELECT * FROM menu")
+    @Query("SELECT * FROM menu ORDER BY datetime(date)")
     suspend fun getAll(): List<DayMenu>
 
     @Query("SELECT * FROM menu ORDER BY datetime(date) DESC LIMIT 1")
@@ -17,7 +17,7 @@ interface DayMenuDao {
     suspend fun insert(vararg menus: DayMenu): List<Long>
 
     @Query("DELETE FROM menu WHERE datetime(date) <= date('now','-15 day')")
-    suspend fun clear()
+    suspend fun clearOld()
 
     @Query("DELETE FROM menu")
     suspend fun clearAll()

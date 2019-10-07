@@ -1,7 +1,5 @@
 package com.uncmorfi.shared
 
-import com.uncmorfi.models.DayMenu
-import com.uncmorfi.models.Serving
 import org.json.JSONArray
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -55,18 +53,4 @@ fun Calendar.compareToToday(): Int {
 
 fun Calendar.compareToTodayInMillis(): Int {
     return this.compareTo(Calendar.getInstance())
-}
-
-object ParserHelper {
-    class MenuDayComparator : Comparator<DayMenu> {
-        override fun compare(left: DayMenu, right: DayMenu): Int {
-            return left.date.compareTo(right.date)
-        }
-    }
-
-    class ServingsComparator : Comparator<Serving> {
-        override fun compare(left: Serving, right: Serving): Int {
-            return left.date.compareTo(right.date)
-        }
-    }
 }

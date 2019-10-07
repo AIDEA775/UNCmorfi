@@ -11,7 +11,7 @@ android {
         applicationId "com.uncmorfi"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 12
+        versionCode 13
         versionName "v6.0.1 Florentina"
         resValue "string", "app_name", "UNCmorfi"
         kapt {

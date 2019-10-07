@@ -12,7 +12,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 12
-        versionName "v6.0 Florentina"
+        versionName "v6.0.1 Florentina"
         resValue "string", "app_name", "UNCmorfi"
         kapt {
             arguments {

@@ -20,6 +20,7 @@
     <string name="home_cards">Your card</string>
     <string name="home_servings">Current servings</string>
     <string name="home_more">Show more</string>
+    <string name="home_action_update">Get updates</string>
 
     <!-- Menu -->
     <string name="menu_action_update">Update menu</string>

@@ -2,11 +2,9 @@ package com.uncmorfi.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +29,11 @@ class HomeFragment : Fragment() {
     private var mDayMenu: DayMenu? = null
     private lateinit var mRootView: View
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -41,16 +44,7 @@ class HomeFragment : Fragment() {
         mRootView = view
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        homeSwipeRefresh.init {
-            homeSwipeRefresh.isRefreshing = true
-            if (mDayMenu == null) {
-                mViewModel.updateMenu()
-            }
-            mViewModel.updateServings()
-            mUser.isLoading = true
-            homeCard.setUser(mUser)
-            mViewModel.downloadUsers(mUser)
-        }
+        homeSwipeRefresh.init { updateAll() }
 
         mViewModel.status.observe(this, Observer {
             if (it != BUSY) {
@@ -136,6 +130,21 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private fun updateAll() {
+        homeSwipeRefresh.isRefreshing = true
+        if (mDayMenu == null) {
+            mViewModel.updateMenu()
+        }
+
+        mViewModel.updateServings()
+
+        if (::mUser.isInitialized) {
+            mUser.isLoading = true
+            homeCard.setUser(mUser)
+            mViewModel.downloadUsers(mUser)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             USER_OPTIONS_CODE -> {
@@ -147,6 +156,17 @@ class HomeFragment : Fragment() {
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.home_update -> { updateAll(); true }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

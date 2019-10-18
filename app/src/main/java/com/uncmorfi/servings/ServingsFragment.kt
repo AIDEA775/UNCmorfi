@@ -104,6 +104,9 @@ class ServingsFragment : Fragment() {
 
             servingTimeChart.update(timeData)
             servingAccumulatedChart.update(cumulativeData)
+        } else {
+            servingTimeChart.clear()
+            servingAccumulatedChart.clear()
         }
     }
 

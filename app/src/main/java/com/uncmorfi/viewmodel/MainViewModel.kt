@@ -425,9 +425,9 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     }
 
     companion object {
-        private const val USER_URL = "http://uncmorfi.georgealegre.com/users?codes="
-        private const val MENU_URL = "http://uncmorfi.georgealegre.com/menu"
-        private const val SERVINGS_URL = "http://uncmorfi.georgealegre.com/servings"
+        private const val USER_URL = "https://uncmorfi.georgealegre.com/users?codes="
+        private const val MENU_URL = "https://uncmorfi.georgealegre.com/menu"
+        private const val SERVINGS_URL = "https://uncmorfi.georgealegre.com/servings"
     }
 
 }

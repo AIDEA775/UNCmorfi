@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
-        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="24">
         <activity
             android:name=".MainActivity"

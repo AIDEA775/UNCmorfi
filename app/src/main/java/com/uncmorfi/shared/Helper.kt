@@ -189,7 +189,7 @@ fun Activity.hideKeyboard() {
 
 fun Context.copyToClipboard(label: String, data: String) {
     val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    clipboard.primaryClip = ClipData.newPlainText(label, data)
+    clipboard.setPrimaryClip(ClipData.newPlainText(label, data))
 }
 
 fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {

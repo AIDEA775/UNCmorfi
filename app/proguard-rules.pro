@@ -21,5 +21,3 @@
     public <fields>;
     private <fields>;
 }
--keep class com.uncmorfi.model.UsersContract$* { *; }
--dontwarn java.awt.**

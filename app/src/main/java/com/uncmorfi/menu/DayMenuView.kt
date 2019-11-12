@@ -3,7 +3,7 @@ package com.uncmorfi.menu
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.RelativeLayout
 import com.uncmorfi.R
 import com.uncmorfi.models.DayMenu
 import com.uncmorfi.shared.colorOf
@@ -12,7 +12,7 @@ import com.uncmorfi.shared.toFormat
 import com.uncmorfi.shared.updateVisibility
 import kotlinx.android.synthetic.main.view_day_menu.view.*
 
-class DayMenuView : ConstraintLayout {
+class DayMenuView : RelativeLayout {
     private lateinit var mDayMenu: DayMenu
 
     constructor(context: Context): super(context)

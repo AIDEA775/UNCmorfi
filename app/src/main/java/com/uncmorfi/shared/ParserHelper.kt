@@ -1,17 +1,15 @@
 package com.uncmorfi.shared
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializer
 import org.json.JSONArray
+import java.io.IOException
+import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-
-fun JSONArray.toArray() : Array<String> {
-    val result = ArrayList<String>()
-    for (i in 0 until this.length()) {
-        result.add(this.getString(i))
-    }
-    return result.toTypedArray()
-}
 
 fun String.toCalendar(timeZone: String? = null): Calendar? {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
@@ -53,4 +51,13 @@ fun Calendar.compareToToday(): Int {
 
 fun Calendar.compareToTodayInMillis(): Int {
     return this.compareTo(Calendar.getInstance())
+}
+
+class CalendarDeserializer : JsonDeserializer<Calendar> {
+    @Throws(IOException::class)
+    override fun deserialize(json: JsonElement, typeOfT: Type,
+                             context: JsonDeserializationContext): Calendar {
+        return json.asString.toCalendar()!!
+
+    }
 }

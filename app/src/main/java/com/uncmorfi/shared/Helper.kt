@@ -218,24 +218,3 @@ fun Context?.isOnline(): Boolean {
 fun TextView.updateVisibility() {
     this.visibility = if (this.text.isNullOrEmpty()) GONE else VISIBLE
 }
-
-fun URL.downloadByGet(): String {
-    val conn = this.openConnection() as HttpURLConnection
-    conn.readTimeout = 10000
-    conn.connectTimeout = 15000
-    conn.requestMethod = "GET"
-    conn.doInput = true
-    conn.connect()
-    val inputStream = conn.inputStream
-
-    val rd = BufferedReader(InputStreamReader(inputStream))
-    var line: String
-    val response = StringBuilder()
-    while (true) {
-        line = rd.readLine() ?: break
-        response.append(line)
-    }
-    rd.close()
-
-    return response.toString()
-}

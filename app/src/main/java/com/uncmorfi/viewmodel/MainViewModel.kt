@@ -10,16 +10,16 @@ import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.*
 import com.uncmorfi.shared.StatusCode.*
 import kotlinx.coroutines.*
-import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import java.net.URL
 import java.util.*
 import kotlin.coroutines.coroutineContext
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
+import com.google.gson.GsonBuilder
 
 class MainViewModel(val context: Application): AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
@@ -33,9 +33,19 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     var reserveJob: Job? = null
 
     private val client by lazy {
+        val okHttpClient = OkHttpClient.Builder()
+                .readTimeout(1, TimeUnit.MINUTES)
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .build()
+
+        val gson = GsonBuilder()
+                .registerTypeAdapter(Calendar::class.java, CalendarDeserializer())
+                .create()
+
         Retrofit.Builder()
                 .baseUrl("https://frozen-sierra-45328.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
                 .build().create(Webservice::class.java)
     }
 
@@ -60,7 +70,13 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun downloadUsers(vararg users: User) {
         mainDispatch {
             if (context.isOnline()) {
-                val status = ioDispatch { downloadUsersTask(*users) }
+                val status = ioDispatch {
+                    val cards = users.joinToString(separator = ",") { it.card }
+                    val userUpdated = client.getUsers(cards)
+
+                    val rows = db.userDao().upsertUser(*userUpdated.toTypedArray())
+                    if (rows > 0) UPDATE_SUCCESS else USER_INSERTED
+                }
                 usersNotify(status!!)
             } else {
                 usersNotify(NO_ONLINE)
@@ -88,47 +104,6 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         this.status.value = status
     }
 
-    private suspend fun downloadUsersTask(vararg users: User): StatusCode {
-        try {
-            val cards = users.joinToString(separator = ",") { it.card }
-            val result = URL(USER_URL + cards).downloadByGet()
-            val array = JSONArray(result)
-
-            if (array.length() == 0) {
-                return USER_NOT_FOUND
-            }
-
-            val userUpdated = mutableListOf<User>()
-            for (i in 0 until array.length()) {
-                val item = array.getJSONObject(i)
-
-                val card = item.getString("code")
-                val user = users.find { u -> u.card == card }
-
-                if (user != null) {
-                    user.name = item.getString("name")
-                    user.type = item.getString("type")
-                    user.image = item.getString("imageURL")
-                    user.balance = item.getInt("balance")
-
-                    val expireDate = item.getString("expirationDate").toCalendar()
-                    if (expireDate != null) user.expiration = expireDate
-
-                    user.lastUpdate = Calendar.getInstance()
-                    userUpdated.add(user)
-                }
-            }
-            val rows = db.userDao().upsertUser(*userUpdated.toTypedArray())
-            return if (rows > 0) UPDATE_SUCCESS else USER_INSERTED
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return CONNECT_ERROR
-        } catch (e: JSONException) {
-            e.printStackTrace()
-            return INTERNAL_ERROR
-        }
-    }
-
     /*
      * Menu stuff
      */
@@ -148,7 +123,19 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun updateMenu() {
         mainDispatch {
             if (context.isOnline()) {
-                this.status.value = ioDispatch { downloadMenuTask() }
+                this.status.value = ioDispatch {
+                    val menu = client.getMenu()
+                    val menuList = menu.menu.map { entry -> DayMenu(entry.key, entry.value) }
+
+                    if (menuList.isEmpty()) {
+                        return@ioDispatch UPDATE_ERROR
+                    }
+                    db.menuDao().clearOld()
+                    val inserts = db.menuDao().insert(*menuList.toTypedArray())
+
+                    if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
+                }
+
                 menuLive.value = db.menuDao().getAll()
             } else {
                 this.status.value = NO_ONLINE
@@ -177,46 +164,9 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         return menuYear < nowYear || menuWeek < nowWeek
     }
 
-    private suspend fun downloadMenuTask(): StatusCode {
-        val menuList = mutableListOf<DayMenu>()
-
-        try {
-            val result = URL(MENU_URL).downloadByGet()
-            val week = JSONObject(result).getJSONObject("menu")
-
-            val keys = week.keys()
-            while (keys.hasNext()) {
-                val key = keys.next() as String
-                val foods = week.getJSONArray(key)
-                val day = key.toCalendar()
-                day?.let {
-                    menuList.add(DayMenu(day, foods.toArray().toList()))
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return CONNECT_ERROR
-        } catch (e: JSONException) {
-            e.printStackTrace()
-            return INTERNAL_ERROR
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-        if (menuList.isEmpty()) {
-            return UPDATE_ERROR
-        }
-
-        db.menuDao().clearOld()
-        val inserts = db.menuDao().insert(*menuList.toTypedArray())
-
-        return if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
-    }
-
     /*
      * Serving stuff
      */
-
     fun getServings(): LiveData<List<Serving>> {
         if (servingLive.value == null) {
             mainDispatch {
@@ -230,47 +180,23 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun updateServings() {
         mainDispatch {
             if (context.isOnline()) {
-                this.status.value = ioDispatch { downloadServingsTask() }
+                this.status.value = ioDispatch {
+                    val servings = client.getServings().servings.map {
+                        entry -> Serving(entry.key, entry.value)
+                    }
+
+                    if (servings.isEmpty()) {
+                        return@ioDispatch ALREADY_UPDATED
+                    }
+                    db.servingDao().clearOld()
+                    val inserts = db.servingDao().insert(*servings.toTypedArray())
+
+                    if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
+                }
                 servingLive.value = db.servingDao().getToday()
             } else {
                 this.status.value = NO_ONLINE
             }
-        }
-    }
-
-    private suspend fun downloadServingsTask(): StatusCode {
-        try {
-            val result = URL(SERVINGS_URL).downloadByGet()
-            val items = JSONObject(result).getJSONObject("servings")
-
-            val data = mutableListOf<Serving>()
-
-            val keys = items.keys()
-            while (keys.hasNext()) {
-                val key = keys.next() as String
-
-                val date = key.toCalendar("UTC")
-                val ration = items.getInt(key)
-
-                date?.let {
-                    data.add(Serving(date, ration))
-                }
-            }
-
-            if (data.isEmpty()) {
-                return UPDATE_SUCCESS
-            }
-
-            db.servingDao().clearOld()
-            db.servingDao().insert(*data.toTypedArray())
-            return UPDATE_SUCCESS
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return CONNECT_ERROR
-        } catch (e: JSONException) {
-            return INTERNAL_ERROR
-        } catch (e: NumberFormatException) {
-            return INTERNAL_ERROR
         }
     }
 
@@ -422,12 +348,6 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             this.status.value =  INTERNAL_ERROR
         }
         return null
-    }
-
-    companion object {
-        private const val USER_URL = "https://uncmorfi.georgealegre.com/users?codes="
-        private const val MENU_URL = "https://uncmorfi.georgealegre.com/menu"
-        private const val SERVINGS_URL = "https://uncmorfi.georgealegre.com/servings"
     }
 
 }

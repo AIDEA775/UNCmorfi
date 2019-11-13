@@ -17,3 +17,7 @@ data class DayMenu (
         return "$name $num:\n$menu"
     }
 }
+
+data class Menu (
+        val menu: Map<Calendar, List<String>>
+)

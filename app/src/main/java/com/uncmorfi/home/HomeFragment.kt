@@ -3,7 +3,6 @@ package com.uncmorfi.home
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,7 +13,6 @@ import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.models.DayMenu
 import com.uncmorfi.models.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
-import com.uncmorfi.shared.StatusCode.BUSY
 import com.uncmorfi.shared.compareToToday
 import com.uncmorfi.shared.getUser
 import com.uncmorfi.shared.init
@@ -51,13 +49,9 @@ class HomeFragment : Fragment() {
             val today = menuList.firstOrNull { it.date.compareToToday() == 0 }
             mDayMenu = today
 
-            if (today != null) {
+            today?.let {
                 homeMenu.setDayMenu(today)
-                homeMenuTitle.visibility = VISIBLE
-                homeMenuContainer.visibility = VISIBLE
-            } else {
-                homeMenuTitle.visibility = GONE
-                homeMenuContainer.visibility = GONE
+                homeMenu.visibility = VISIBLE
             }
         })
         homeMenuShowMore.setOnClickListener {
@@ -71,11 +65,7 @@ class HomeFragment : Fragment() {
             if (it.isNotEmpty()) {
                 mUser = it.first()
                 homeCard.setUser(mUser)
-                homeCardTitle.visibility = VISIBLE
-                homeCardContainer.visibility = VISIBLE
-            } else {
-                homeCardTitle.visibility = GONE
-                homeCardContainer.visibility = GONE
+                homeCard.visibility = VISIBLE
             }
         })
         homeCard.setOnClickListener {

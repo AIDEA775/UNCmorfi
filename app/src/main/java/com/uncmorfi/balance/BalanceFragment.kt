@@ -147,23 +147,25 @@ class BalanceFragment : Fragment() {
     }
 
     private fun updateUser(vararg users: User) {
-        if(users.any { it.card.length < 15 }) {
+
+        if (users.any { it.card.length < 15 }) {
             mRootView.snack(R.string.snack_new_user_dumb, FINISH)
-        } else {
-            userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
-            mUserAdapter.setUsers(userList)
-
-            when {
-                userList.any { it.isLoading } ->
-                    mRootView.snack(R.string.snack_updating, LOADING)
-                users.size == 1 ->
-                    mRootView.snack(getNewUserMsg(users.first()), LOADING)
-                else ->
-                    mRootView.snack(R.string.snack_new_user_several_adds, LOADING)
-            }
-
-            mViewModel.downloadUsers(*users)
+            return
         }
+
+        userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
+        mUserAdapter.setUsers(userList)
+
+        when {
+            userList.any { it.isLoading } ->
+                mRootView.snack(R.string.snack_updating, LOADING)
+            users.size == 1 ->
+                mRootView.snack(getNewUserMsg(users.first()), LOADING)
+            else ->
+                mRootView.snack(R.string.snack_new_user_several_adds, LOADING)
+        }
+
+        mViewModel.downloadUsers(*users)
     }
 
     private fun getNewUserMsg(user: User): String {

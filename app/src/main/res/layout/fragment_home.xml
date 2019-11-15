@@ -17,23 +17,17 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/homeMenuTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:text="@string/home_menu"
-                android:visibility="gone"
-                tools:visibility="visible"/>
+                android:text="@string/home_menu"/>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/homeMenuContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
                 style="@style/MaterialCard">
 
                 <LinearLayout
@@ -48,7 +42,9 @@
                         android:padding="12dp"
                         android:focusable="true"
                         android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground" />
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                     <View
                         android:layout_width="match_parent"
@@ -65,23 +61,17 @@
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/homeCardTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:visibility="gone"
-                tools:visibility="visible"
                 android:text="@string/home_cards"/>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/homeCardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
                 style="@style/MaterialCard">
 
                 <LinearLayout
@@ -95,7 +85,9 @@
                         android:layout_height="wrap_content"
                         android:focusable="true"
                         android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground"/>
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -113,7 +105,6 @@
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/homeServingsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"

@@ -6,13 +6,15 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
 import com.uncmorfi.shared.onTextChanged
 import kotlinx.android.synthetic.main.view_user_new.view.*
 
 class NewUserView: LinearLayout {
     private lateinit var doneListener: (String) -> Unit
-    private lateinit var scannerListener: () -> Unit
+    private lateinit var scannerListener: Fragment
 
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
@@ -32,7 +34,7 @@ class NewUserView: LinearLayout {
         newUserInput.onTextChanged { onTextChanged(it) }
 
         // Por defecto llama al lector
-        newUserScanner.setOnClickListener { scannerListener() }
+        newUserScanner.setOnClickListener { onScanner() }
     }
 
     private fun onTextChanged(s: CharSequence) {
@@ -48,7 +50,9 @@ class NewUserView: LinearLayout {
                 // Si es está vacio, llama al lector.
                 setImageResource(R.drawable.ic_barcode)
                 contentDescription = context.getString(R.string.balance_new_user_button_code)
-                setOnClickListener { scannerListener() }
+                setOnClickListener {
+
+                }
             }
         }
     }
@@ -58,12 +62,20 @@ class NewUserView: LinearLayout {
         doneListener(input)
     }
 
-    fun done(l: (String) -> Unit) {
-        doneListener = l
+    // Inicia el lector de barras.
+    // Devuelve el resultado por scannerListener.onActivityResult.
+    private fun onScanner() {
+        val integrator = IntentIntegrator.forSupportFragment(scannerListener)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES)
+        integrator.setPrompt(context.getString(R.string.balance_align_barcode))
+        integrator.setBeepEnabled(false)
+        integrator.setBarcodeImageEnabled(true)
+        integrator.initiateScan()
     }
 
-    fun scanner(l: () -> Unit) {
-        scannerListener = l
+    fun init(f: Fragment, l: (String) -> Unit) {
+        scannerListener = f
+        doneListener = l
     }
 
     fun clearText() {

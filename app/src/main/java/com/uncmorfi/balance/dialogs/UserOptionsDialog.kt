@@ -54,7 +54,7 @@ class UserOptionsDialog: BaseDialogHelper() {
     }
 
     private fun reservationInit() {
-        viewModel.reserveStatus.observe(this, Observer {
+        viewModel.reservation.observe(this, Observer {
             reserveCached = reserveCached || (it == ReserveStatus.CACHED)
         })
         viewModel.reserveIsCached(user)

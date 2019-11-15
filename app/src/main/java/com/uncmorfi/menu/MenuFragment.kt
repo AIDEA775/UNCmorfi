@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.R
 import com.uncmorfi.models.DayMenu
 import com.uncmorfi.shared.*
-import com.uncmorfi.shared.StatusCode.BUSY
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_menu.*
 
@@ -36,20 +35,14 @@ class MenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
 
-        menuSwipeRefresh.init { refreshMenu() }
+        swipeRefresh.init { mViewModel.updateMenu() }
         initRecyclerAndAdapter()
         initMenu()
 
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        mViewModel.getMenu().observe(this, Observer {
+        mViewModel.getMenu().observe(viewLifecycleOwner, Observer {
             mMenuAdapter.updateMenu(it)
-        })
-
-        mViewModel.status.observe(this, Observer {
-            if (it != BUSY) {
-                menuSwipeRefresh.isRefreshing = false
-            }
         })
     }
 
@@ -59,11 +52,8 @@ class MenuFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_update -> { refreshMenu(); true }
-            R.id.menu_clear -> {
-                mViewModel.clearMenu()
-                menuSwipeRefresh.isRefreshing = true
-                true }
+            R.id.menu_update -> { mViewModel.updateMenu(); true }
+            R.id.menu_clear -> { mViewModel.clearMenu(); true }
             R.id.menu_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
@@ -82,11 +72,6 @@ class MenuFragment : Fragment() {
                 { onClick(it) },
                 { onLongClick(it) })
         menuRecyclerView.adapter = mMenuAdapter
-    }
-
-    private fun refreshMenu() {
-        menuSwipeRefresh.isRefreshing = true
-        mViewModel.updateMenu()
     }
 
     override fun onResume() {

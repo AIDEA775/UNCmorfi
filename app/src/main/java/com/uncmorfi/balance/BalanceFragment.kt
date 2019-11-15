@@ -49,41 +49,22 @@ class BalanceFragment : Fragment() {
 
         initRecyclerAndAdapter()
 
-        newUser.done {
+        newUser.init(this) { code ->
             activity?.hideKeyboard()
-            if (it.isNotBlank()) {
-                updateUser(*parseUsers(it))
+            if (code.isNotBlank()) {
+                updateUser(*parseUsers(code))
             }
         }
-        newUser.scanner {
-            // Inicia el lector de barras.
-            // Devuelve el resultado por [.onActivityResult].
-            val integrator = IntentIntegrator.forSupportFragment(this)
-            integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES)
-            integrator.setPrompt(getString(R.string.balance_align_barcode))
-            integrator.setBeepEnabled(false)
-            integrator.setBarcodeImageEnabled(true)
-            integrator.initiateScan()
-        }
 
-
-        mViewModel.status.observe(this, Observer {
+        mViewModel.status.observe(viewLifecycleOwner, Observer {
             if (it == UPDATE_SUCCESS || it == USER_INSERTED) {
                 newUser.clearText()
             }
         })
 
-        mViewModel.allUsers().observe(this, Observer {
+        mViewModel.allUsers().observe(viewLifecycleOwner, Observer {
             mUserAdapter.setUsers(it)
             userList = it
-        })
-
-        mViewModel.reserveStatus.observe(this, Observer {
-            mRootView.snack(it)
-        })
-
-        mViewModel.reserveTry.observe(this, Observer {
-            if (it > 0) mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
         })
     }
 
@@ -131,7 +112,7 @@ class BalanceFragment : Fragment() {
 
     private fun copyAllUsers() {
         if (userList.isNotEmpty()) {
-            context?.copyToClipboard("cards",userList.joinToString("\n") { it.card })
+            context?.copyToClipboard("cards", userList.joinToString("\n") { it.card })
             mRootView.snack(R.string.snack_copied, FINISH)
         }
         else {
@@ -198,7 +179,7 @@ class BalanceFragment : Fragment() {
         super.onStop()
         activity?.hideKeyboard()
         newUser.clearFocus()
-        mViewModel.reserveStatus.value = NOCACHED
+        mViewModel.reservation.value = NOCACHED
     }
 
     companion object {

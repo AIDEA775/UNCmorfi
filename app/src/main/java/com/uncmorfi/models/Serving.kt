@@ -6,7 +6,7 @@ import java.util.*
 
 @Entity(tableName = "servings")
 data class Serving (
-        @PrimaryKey() var date: Calendar = Calendar.getInstance(),
+        @PrimaryKey var date: Calendar = Calendar.getInstance(),
         val serving: Int = 0
 )
 

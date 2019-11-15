@@ -9,6 +9,7 @@ import androidx.customview.widget.ViewDragHelper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.navigation.NavigationView
 import com.uncmorfi.about.AboutDialog
 import com.uncmorfi.balance.BalanceFragment
@@ -18,10 +19,7 @@ import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
 import com.uncmorfi.reservations.ReservationFragment
 import com.uncmorfi.servings.ServingsFragment
-import com.uncmorfi.shared.openFacebook
-import com.uncmorfi.shared.sendEmail
-import com.uncmorfi.shared.snack
-import com.uncmorfi.shared.startBrowser
+import com.uncmorfi.shared.*
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -38,10 +36,26 @@ class MainActivity :
         }
 
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         viewModel.status.observe(this, Observer {
+            val refreshLayout = content_layout.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+            if (it == StatusCode.UPDATING) {
+                refreshLayout?.isRefreshing = true
+            } else if (it != StatusCode.BUSY) {
+                refreshLayout?.isRefreshing = false
+            }
             content_layout.snack(it)
         })
 
+        viewModel.reservation.observe(this, Observer {
+            content_layout.snack(it)
+        })
+
+        viewModel.reserveTry.observe(this, Observer {
+            if (it > 0) {
+                content_layout.snack(getString(R.string.snack_loop).format(it), SnackType.LOADING)
+            }
+        })
     }
 
     private fun setToolbarAndNavigation() {

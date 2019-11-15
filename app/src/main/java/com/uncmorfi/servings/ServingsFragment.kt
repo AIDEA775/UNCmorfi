@@ -41,7 +41,7 @@ class ServingsFragment : Fragment() {
         mRootView = view
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        servingSwipeRefresh.init { refreshServings() }
+        swipeRefresh.init { refreshServings() }
         servingTimeChart.init(requireContext())
         servingAccumulatedChart.init(requireContext())
 
@@ -54,16 +54,11 @@ class ServingsFragment : Fragment() {
         // Parametros especiales de ambos LineChart
         servingAccumulatedChart.xAxis.setDrawGridLines(false)
 
-        mViewModel.getServings().observe(this, Observer {
+        mViewModel.getServings().observe(viewLifecycleOwner, Observer {
             servingsPieChart.set(it)
             updateCharts(it)
         })
 
-        mViewModel.status.observe(this, Observer {
-            if (it != BUSY) {
-                servingSwipeRefresh.isRefreshing = false
-            }
-        })
         refreshServings()
     }
 
@@ -85,7 +80,6 @@ class ServingsFragment : Fragment() {
     }
 
     private fun refreshServings() {
-        servingSwipeRefresh.isRefreshing = true
         mViewModel.updateServings()
     }
 

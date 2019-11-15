@@ -14,12 +14,10 @@ import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.models.DayMenu
 import com.uncmorfi.models.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
-import com.uncmorfi.shared.SnackType.LOADING
 import com.uncmorfi.shared.StatusCode.BUSY
 import com.uncmorfi.shared.compareToToday
 import com.uncmorfi.shared.getUser
 import com.uncmorfi.shared.init
-import com.uncmorfi.shared.snack
 import com.uncmorfi.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -44,18 +42,12 @@ class HomeFragment : Fragment() {
         mRootView = view
         mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        homeSwipeRefresh.init { updateAll() }
-
-        mViewModel.status.observe(this, Observer {
-            if (it != BUSY) {
-                homeSwipeRefresh.isRefreshing = false
-            }
-        })
+        swipeRefresh.init { updateAll() }
 
         /*
          * Menú
          */
-        mViewModel.getMenu().observe(this, Observer { menuList ->
+        mViewModel.getMenu().observe(viewLifecycleOwner, Observer { menuList ->
             val today = menuList.firstOrNull { it.date.compareToToday() == 0 }
             mDayMenu = today
 
@@ -75,7 +67,7 @@ class HomeFragment : Fragment() {
         /*
          * Tarjetas
          */
-        mViewModel.allUsers().observe(this, Observer {
+        mViewModel.allUsers().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 mUser = it.first()
                 homeCard.setUser(mUser)
@@ -104,34 +96,21 @@ class HomeFragment : Fragment() {
         /*
          * Medidor
          */
-        mViewModel.getServings().observe(this, Observer {
+        mViewModel.getServings().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 homeServingsPieChart.set(it)
             }
         })
         homeServingsPieChart.setTouchEnabled(false)
         homeServingsPieChart.setOnClickListener {
-            homeSwipeRefresh.isRefreshing = true
             mViewModel.updateServings()
         }
         homeServingsShowMore.setOnClickListener {
             (requireActivity() as MainActivity).change(R.id.nav_servings)
         }
-
-        /*
-         * Reservas
-         */
-        mViewModel.reserveStatus.observe(this, Observer {
-            mRootView.snack(it)
-        })
-
-        mViewModel.reserveTry.observe(this, Observer {
-            if (it > 0) mRootView.snack(getString(R.string.snack_loop).format(it), LOADING)
-        })
     }
 
     private fun updateAll() {
-        homeSwipeRefresh.isRefreshing = true
         if (mDayMenu == null) {
             mViewModel.updateMenu()
         }
@@ -177,8 +156,9 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        mViewModel.reserveStatus.value = NOCACHED
+        mViewModel.reservation.value = NOCACHED
     }
+
     companion object {
         private const val USER_OPTIONS_CODE = 1
     }

@@ -44,7 +44,7 @@ class CaptchaDialog: BaseDialogHelper() {
                 "UTF-8",
                 "https://comedor.unc.edu.ar")
 
-        viewModel.reserveStatus.observe(this, Observer {
+        viewModel.reservation.observe(this, Observer {
             if (it == ReserveStatus.CACHED) {
                 ReserveOptionsDialog
                         .newInstance(this, 0, user)

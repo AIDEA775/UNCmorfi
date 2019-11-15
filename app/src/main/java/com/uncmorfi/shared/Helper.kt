@@ -78,14 +78,14 @@ fun View.snack(msg: String, type: SnackType): Snackbar {
     return bar
 }
 
-fun View.snack(code: StatusCode): Snackbar? {
+fun View.snack(code: StatusCode?): Snackbar? {
     return when (code) {
         StatusCode.NO_ONLINE -> this.snack(R.string.snack_no_online, SnackType.ERROR)
         StatusCode.CONNECT_ERROR -> this.snack(R.string.snack_connect_error, SnackType.ERROR)
         StatusCode.INTERNAL_ERROR -> this.snack(R.string.snack_internal_error, SnackType.ERROR)
         StatusCode.UPDATE_ERROR -> this.snack(R.string.snack_update_error, SnackType.ERROR)
 
-        StatusCode.UPDATING -> this.snack(R.string.snack_updating, SnackType.LOADING)
+//        StatusCode.UPDATING -> this.snack(R.string.snack_updating, SnackType.LOADING)
 
         StatusCode.UPDATE_SUCCESS -> this.snack(R.string.snack_update_success, SnackType.FINISH)
         StatusCode.EMPTY_UPDATE -> this.snack(R.string.snack_empty_update, SnackType.FINISH)

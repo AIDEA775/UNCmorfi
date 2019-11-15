@@ -28,20 +28,20 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
 
     val status: MutableLiveData<StatusCode> = MutableLiveData()
-    val reserveStatus: MutableLiveData<ReserveStatus> = MutableLiveData()
+    val reservation: MutableLiveData<ReserveStatus> = MutableLiveData()
     val reserveTry: MutableLiveData<Int> = MutableLiveData()
     var reserveJob: Job? = null
 
-    private val client by lazy {
-        val okHttpClient = OkHttpClient.Builder()
-                .readTimeout(1, TimeUnit.MINUTES)
-                .connectTimeout(1, TimeUnit.MINUTES)
-                .build()
+    private val okHttpClient = OkHttpClient.Builder()
+            .readTimeout(1, TimeUnit.MINUTES)
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .build()
 
-        val gson = GsonBuilder()
-                .registerTypeAdapter(Calendar::class.java, CalendarDeserializer())
-                .create()
+    private val gson = GsonBuilder()
+            .registerTypeAdapter(Calendar::class.java, CalendarDeserializer())
+            .create()
 
+    private val clientBeta by lazy {
         Retrofit.Builder()
                 .baseUrl("https://frozen-sierra-45328.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -49,9 +49,17 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                 .build().create(Webservice::class.java)
     }
 
+    private val client by lazy {
+        Retrofit.Builder()
+                .baseUrl("https://uncmorfi.georgealegre.com/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build().create(Webservice::class.java)
+    }
+
     init {
-        this.status.value = BUSY
-        reserveStatus.value = NOCACHED
+        status.value = BUSY
+        reservation.value = NOCACHED
     }
 
     /*
@@ -99,9 +107,9 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         }
     }
 
-    private suspend fun usersNotify(status: StatusCode) {
+    private suspend fun usersNotify(code: StatusCode) {
         userLive.value = db.userDao().getAll()
-        this.status.value = status
+        status.value = code
     }
 
     /*
@@ -111,7 +119,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         if (menuLive.value == null) {
             mainDispatch {
                 menuLive.value = db.menuDao().getAll()
-                this.status.value = BUSY
+                status.value = BUSY
                 if (needAutoUpdateMenu()) {
                     updateMenu()
                 }
@@ -123,7 +131,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun updateMenu() {
         mainDispatch {
             if (context.isOnline()) {
-                this.status.value = ioDispatch {
+                status.value = ioDispatch {
                     val menu = client.getMenu()
                     val menuList = menu.menu.map { entry -> DayMenu(entry.key, entry.value) }
 
@@ -138,7 +146,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
 
                 menuLive.value = db.menuDao().getAll()
             } else {
-                this.status.value = NO_ONLINE
+                status.value = NO_ONLINE
             }
         }
     }
@@ -171,7 +179,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         if (servingLive.value == null) {
             mainDispatch {
                 servingLive.value = db.servingDao().getToday()
-                this.status.value = BUSY
+                status.value = BUSY
             }
         }
         return servingLive
@@ -180,7 +188,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun updateServings() {
         mainDispatch {
             if (context.isOnline()) {
-                this.status.value = ioDispatch {
+                status.value = ioDispatch {
                     val servings = client.getServings().servings.map {
                         entry -> Serving(entry.key, entry.value)
                     }
@@ -190,12 +198,11 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                     }
                     db.servingDao().clearOld()
                     val inserts = db.servingDao().insert(*servings.toTypedArray())
-
                     if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
                 }
                 servingLive.value = db.servingDao().getToday()
             } else {
-                this.status.value = NO_ONLINE
+                status.value = NO_ONLINE
             }
         }
     }
@@ -208,22 +215,22 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         mainDispatch {
             val reserve = getReserve(user.card)
             if (reserve != null) {
-                reserveStatus.value = CACHED
+                reservation.value = CACHED
             } else {
-                reserveStatus.value = NOCACHED
+                reservation.value = NOCACHED
             }
         }
     }
 
     fun reserveLogin(user: User, captcha: String) {
         mainDispatch {
-            val reserve = client.getLogin(user.card)
+            val reserve = clientBeta.getLogin(user.card)
             reserve.captchaText = captcha
 
-            val result = ioDispatch { client.doLogin(reserve) }
+            val result = ioDispatch { clientBeta.doLogin(reserve) }
             result?.let {
                 insertReservation(result)
-                reserveStatus.value = CACHED
+                reservation.value = CACHED
             }
         }
     }
@@ -233,14 +240,14 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             val reserve = getReserve(user.card)
             if (reserve != null) {
                 if (context.isOnline()) {
-                    reserveStatus.value = CONSULTING
-                    val result = ioDispatch { client.status(reserve) }
+                    reservation.value = CONSULTING
+                    val result = ioDispatch { clientBeta.status(reserve) }
                     result?.updateReservation(reserve)
                 } else {
-                    this.status.value = NO_ONLINE
+                    status.value = NO_ONLINE
                 }
             } else {
-                reserveStatus.value = REDOLOGIN
+                reservation.value = REDOLOGIN
             }
         }
     }
@@ -250,14 +257,14 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             val reserve = getReserve(user.card)
             if (reserve != null) {
                 if (context.isOnline()) {
-                    reserveStatus.value = RESERVING
-                    val result = ioDispatch { client.reserve(reserve) }
+                    reservation.value = RESERVING
+                    val result = ioDispatch { clientBeta.reserve(reserve) }
                     result?.updateReservation(reserve)
                 } else {
-                    this.status.value = NO_ONLINE
+                    status.value = NO_ONLINE
                 }
             } else {
-                reserveStatus.value = REDOLOGIN
+                reservation.value = REDOLOGIN
             }
         }
     }
@@ -266,7 +273,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         mainDispatch {
             val reserve = getReserve(user.card)
             if (reserve == null) {
-                reserveStatus.value = REDOLOGIN
+                reservation.value = REDOLOGIN
                 return@mainDispatch
             }
             reserveJob?.cancel()
@@ -276,7 +283,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                 do {
                     intent += 1
                     reserveTry.value = intent
-                    val result = ioDispatch { client.reserve(reserve) }
+                    val result = ioDispatch { clientBeta.reserve(reserve) }
                     val status = result?.updateReservation(reserve)
                     delay(1500)
                 } while (status != RESERVED && status != REDOLOGIN)
@@ -296,7 +303,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     fun reserveLogout(user: User) {
         mainDispatch {
             db.reserveDao().delete(user.card)
-            reserveStatus.value = NOCACHED
+            reservation.value = NOCACHED
         }
     }
 
@@ -305,7 +312,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         this.token?.let { reserve.token = it }
 
         val status = ReserveStatus.valueOf(this.reservationResult.toUpperCase())
-        reserveStatus.value = status
+        reservation.value = status
 
         if (status == REDOLOGIN) {
             db.reserveDao().delete(reserve.code)
@@ -332,20 +339,21 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     }
 
     private suspend fun <T>ioDispatch(f: suspend (CoroutineScope) -> T): T? {
+        status.value = UPDATING
         try {
             return withContext(coroutineContext + Dispatchers.IO, block = f)
         } catch (e: HttpException) {
             e.printStackTrace()
-            this.status.value = CONNECT_ERROR
+            status.value = CONNECT_ERROR
         } catch (e: IOException) {
             e.printStackTrace()
-            this.status.value = CONNECT_ERROR
+            status.value = CONNECT_ERROR
         } catch (e: JSONException) {
             e.printStackTrace()
-            this.status.value =  INTERNAL_ERROR
+            status.value =  INTERNAL_ERROR
         } catch (e: NumberFormatException) {
             e.printStackTrace()
-            this.status.value =  INTERNAL_ERROR
+            status.value =  INTERNAL_ERROR
         }
         return null
     }

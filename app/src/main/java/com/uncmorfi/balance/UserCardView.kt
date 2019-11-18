@@ -56,7 +56,8 @@ class UserCardView : RelativeLayout {
     }
 
     private fun relativeLastUpdate(lastUpdate: Calendar): String {
-        return DateUtils.getRelativeTimeSpanString(lastUpdate.timeInMillis).toString().toLowerCase()
+        return DateUtils.getRelativeTimeSpanString(lastUpdate.timeInMillis)
+                .toString().toLowerCase(Locale.getDefault())
     }
 
     private fun setImage(user: User) {
@@ -77,14 +78,14 @@ class UserCardView : RelativeLayout {
 
         // Alerta si la tarjeta está vencida o está por vencerse
         when {
-            expired(user.expiration) -> {
+            warning(user.expiration, 0) -> {
                 setBackgroundColor(context.colorOf(R.color.accent))
                 userBalance.setTextColor(context.colorOf(R.color.white))
                 userExpiration.setTypeface(null, Typeface.BOLD)
                 userExpiration.setTextColor(context.colorOf(R.color.white))
                 setTextColor( R.color.white, R.color.white)
             }
-            warningExpiration(user.expiration) -> {
+            warning(user.expiration, WARNING_USER_EXPIRE) -> {
                 setBackgroundColor(context.colorOf(R.color.white))
                 userExpiration.setTypeface(null, Typeface.NORMAL)
                 userExpiration.setTextColor(context.colorOf(R.color.accent))
@@ -107,15 +108,11 @@ class UserCardView : RelativeLayout {
         userLastUpdate.setTextColor(context.colorOf(extra))
     }
 
-    private fun warningExpiration(expiration: Calendar): Boolean {
+    private fun warning(expiration: Calendar, months: Int): Boolean {
         val cal = Calendar.getInstance()
         cal.time = Date()
-        cal.add(Calendar.MONTH, WARNING_USER_EXPIRE)
+        cal.add(Calendar.MONTH, months)
         return expiration.before(cal)
-    }
-
-    private fun expired(expiration: Calendar): Boolean {
-        return expiration.before(Date())
     }
 
     private fun setProgressBar(isLoading: Boolean) {

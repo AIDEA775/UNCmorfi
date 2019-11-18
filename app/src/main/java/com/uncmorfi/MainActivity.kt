@@ -37,14 +37,11 @@ class MainActivity :
 
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.status.observe(this, Observer {
+        viewModel.status.observe(this, Observer { content_layout.snack(it) })
+
+        viewModel.isLoading.observe(this, Observer {
             val refreshLayout = content_layout.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
-            if (it == StatusCode.UPDATING) {
-                refreshLayout?.isRefreshing = true
-            } else if (it != StatusCode.BUSY) {
-                refreshLayout?.isRefreshing = false
-            }
-            content_layout.snack(it)
+            refreshLayout?.isRefreshing = it
         })
 
         viewModel.reservation.observe(this, Observer {
@@ -68,18 +65,6 @@ class MainActivity :
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
-
-        // Abrir drawerLayout desde mas o menos la mitad de la pantalla
-        // https://stackoverflow.com/a/17802569
-        val mDragger = drawerLayout.javaClass.getDeclaredField("mLeftDragger")
-        mDragger.isAccessible = true
-        val draggerObj = mDragger.get(drawerLayout) as ViewDragHelper
-
-        val mEdgeSize = draggerObj.javaClass.getDeclaredField("mEdgeSize")
-        mEdgeSize.isAccessible = true
-        val edge = mEdgeSize.getInt(draggerObj)
-
-        mEdgeSize.setInt(draggerObj, edge * 3) // any constant in dp
     }
 
     private fun setMainFragment() {

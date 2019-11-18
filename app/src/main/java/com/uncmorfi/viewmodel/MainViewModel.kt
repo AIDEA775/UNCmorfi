@@ -27,6 +27,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     private val menuLive: MutableLiveData<List<DayMenu>> = MutableLiveData()
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
 
+    val isLoading: MutableLiveData<Boolean> = MutableLiveData()
     val status: MutableLiveData<StatusCode> = MutableLiveData()
     val reservation: MutableLiveData<ReserveStatus> = MutableLiveData()
     val reserveTry: MutableLiveData<Int> = MutableLiveData()
@@ -85,7 +86,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                     val rows = db.userDao().upsertUser(*userUpdated.toTypedArray())
                     if (rows > 0) UPDATE_SUCCESS else USER_INSERTED
                 }
-                usersNotify(status!!)
+                usersNotify(status)
             } else {
                 usersNotify(NO_ONLINE)
             }
@@ -107,7 +108,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         }
     }
 
-    private suspend fun usersNotify(code: StatusCode) {
+    private suspend fun usersNotify(code: StatusCode?) {
         userLive.value = db.userDao().getAll()
         status.value = code
     }
@@ -339,9 +340,10 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     }
 
     private suspend fun <T>ioDispatch(f: suspend (CoroutineScope) -> T): T? {
-        status.value = UPDATING
+        var result: T? = null
+        isLoading.value = true
         try {
-            return withContext(coroutineContext + Dispatchers.IO, block = f)
+            result = withContext(coroutineContext + Dispatchers.IO, block = f)
         } catch (e: HttpException) {
             e.printStackTrace()
             status.value = CONNECT_ERROR
@@ -354,8 +356,10 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         } catch (e: NumberFormatException) {
             e.printStackTrace()
             status.value =  INTERNAL_ERROR
+        } finally {
+            isLoading.value = false
         }
-        return null
+        return result
     }
 
 }

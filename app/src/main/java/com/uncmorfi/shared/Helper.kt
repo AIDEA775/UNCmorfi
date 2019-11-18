@@ -85,8 +85,6 @@ fun View.snack(code: StatusCode?): Snackbar? {
         StatusCode.INTERNAL_ERROR -> this.snack(R.string.snack_internal_error, SnackType.ERROR)
         StatusCode.UPDATE_ERROR -> this.snack(R.string.snack_update_error, SnackType.ERROR)
 
-//        StatusCode.UPDATING -> this.snack(R.string.snack_updating, SnackType.LOADING)
-
         StatusCode.UPDATE_SUCCESS -> this.snack(R.string.snack_update_success, SnackType.FINISH)
         StatusCode.EMPTY_UPDATE -> this.snack(R.string.snack_empty_update, SnackType.FINISH)
         StatusCode.ALREADY_UPDATED -> this.snack(R.string.snack_already_updated, SnackType.FINISH)

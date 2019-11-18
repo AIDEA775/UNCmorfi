@@ -11,8 +11,8 @@ android {
         applicationId "com.uncmorfi"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 13
-        versionName "v6.0.1 Florentina"
+        versionCode 14
+        versionName "v6.0.2 Florentina"
         resValue "string", "app_name", "UNCmorfi"
         kapt {
             arguments {
@@ -24,7 +24,9 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
         }
     }
     buildTypes {
@@ -59,6 +61,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 }
+
 repositories {
     mavenCentral()
 }

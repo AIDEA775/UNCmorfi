@@ -35,7 +35,7 @@ También podes consultar su codigo fuente:
 [https://github.com/georgealegre/UNCmorfiServer](https://github.com/georgealegre/UNCmorfiServer)
 
 ## Version de iOS
-Facu Alegre se re copó e hizo una version para iOS:
+@jorgealegre se re copó e hizo una version para iOS:
 
 [https://github.com/georgealegre/UNCmorfi](https://github.com/georgealegre/UNCmorfi)
 

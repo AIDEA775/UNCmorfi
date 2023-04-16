@@ -204,6 +204,7 @@
             "columnNames": [
               "code_id"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_cookies_code_id` ON `${TABLE_NAME}` (`code_id`)"
           }
         ],

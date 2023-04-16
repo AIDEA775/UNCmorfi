@@ -16,7 +16,7 @@ open class BaseDialogHelper : AppCompatDialogFragment() {
 
     fun init() {
         user = arguments?.getSerializable(ARG_USER) as User
-        builder = MaterialAlertDialogBuilder(context)
+        builder = MaterialAlertDialogBuilder(requireContext())
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 

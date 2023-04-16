@@ -122,9 +122,7 @@
     <string name="about_disclaimer">
         La aplicación es proporcionada \"tal cual es\"
         y no hay garantía de que los datos sean siempre correctos,
-        a pesar de que sean extraidos desde las webs oficiales del comedor.\n\n
-
-        No nos responsabilizamos de los daños que pueda llegar a ocasionar por su uso.
+        a pesar de que sean extraidos desde las webs oficiales del comedor.
     </string>
     <!-- Snacks -->
     <string name="snack_no_online">No hay conexión</string>

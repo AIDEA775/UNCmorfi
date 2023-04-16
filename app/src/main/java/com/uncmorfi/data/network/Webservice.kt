@@ -1,10 +1,14 @@
-package com.uncmorfi.models
+package com.uncmorfi.data.network
 
+import com.uncmorfi.data.network.models.Menu
+import com.uncmorfi.data.network.models.ReservationResponse
+import com.uncmorfi.data.network.models.Servings
+import com.uncmorfi.data.persistence.entities.Reservation
+import com.uncmorfi.data.persistence.entities.User
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
-import java.util.*
 
 interface Webservice {
     @GET("/users")

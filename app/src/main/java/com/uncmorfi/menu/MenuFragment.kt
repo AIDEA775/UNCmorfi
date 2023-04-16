@@ -7,9 +7,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.R
-import com.uncmorfi.models.DayMenu
+import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.shared.*
-import com.uncmorfi.viewmodel.MainViewModel
+import com.uncmorfi.MainViewModel
 import kotlinx.android.synthetic.main.fragment_menu.*
 
 /**

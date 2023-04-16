@@ -1,9 +1,10 @@
-package com.uncmorfi.models
+package com.uncmorfi.data.persistence.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.uncmorfi.data.persistence.entities.DayMenu
 
 @Dao
 interface DayMenuDao {

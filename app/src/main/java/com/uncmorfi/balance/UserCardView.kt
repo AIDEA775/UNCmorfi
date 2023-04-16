@@ -13,18 +13,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
-import com.uncmorfi.models.User
+import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.colorOf
 import com.uncmorfi.shared.toFormat
 import kotlinx.android.synthetic.main.view_user_card.view.*
 import java.util.*
 
-class UserCardView : RelativeLayout {
-    private lateinit var mUser: User
+class UserCardView @JvmOverloads constructor(
+    context: Context,
+    attr: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : RelativeLayout(context, attr, defStyleAttr) {
 
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int): super(context, attrs, defStyleAttr)
+    private lateinit var mUser: User
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_user_card, this, true)
@@ -45,28 +46,29 @@ class UserCardView : RelativeLayout {
 
         userBalance.text = String.format(Locale.US, "$ %d", user.balance)
         userExpiration.text = context.getString(R.string.balance_expiration)
-                .format(textExpiration(user.expiration))
+            .format(textExpiration(user.expiration))
         userLastUpdate.text = context.getString(R.string.balance_last_update)
-                .format(relativeLastUpdate(user.lastUpdate))
+            .format(relativeLastUpdate(user.lastUpdate))
     }
 
     private fun textExpiration(expiration: Calendar?): String {
-        return if (expiration == null) "?"
-        else expiration.toFormat("yyyy-MM-dd")
+        return expiration?.toFormat("yyyy-MM-dd") ?: "?"
     }
 
     private fun relativeLastUpdate(lastUpdate: Calendar): String {
-        return DateUtils.getRelativeTimeSpanString(lastUpdate.timeInMillis)
-                .toString().toLowerCase(Locale.getDefault())
+        return DateUtils
+            .getRelativeTimeSpanString(lastUpdate.timeInMillis)
+            .toString()
+            .lowercase(Locale.getDefault())
     }
 
     private fun setImage(user: User) {
         Glide.with(context)
-                .load(user.image)
-                .placeholder(R.drawable.ic_account)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .apply(RequestOptions.circleCropTransform())
-                .into(userImage)
+            .load(user.image)
+            .placeholder(R.drawable.ic_account)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .apply(RequestOptions.circleCropTransform())
+            .into(userImage)
     }
 
     private fun setColors(user: User) {
@@ -83,19 +85,19 @@ class UserCardView : RelativeLayout {
                 userBalance.setTextColor(context.colorOf(R.color.white))
                 userExpiration.setTypeface(null, Typeface.BOLD)
                 userExpiration.setTextColor(context.colorOf(R.color.white))
-                setTextColor( R.color.white, R.color.white)
+                setTextColor(R.color.white, R.color.white)
             }
             warning(user.expiration, WARNING_USER_EXPIRE) -> {
                 setBackgroundColor(context.colorOf(R.color.white))
                 userExpiration.setTypeface(null, Typeface.NORMAL)
                 userExpiration.setTextColor(context.colorOf(R.color.accent))
-                setTextColor( R.color.primary_text, R.color.secondary_text)
+                setTextColor(R.color.primary_text, R.color.secondary_text)
             }
             else -> {
                 setBackgroundColor(context.colorOf(R.color.white))
                 userExpiration.setTypeface(null, Typeface.NORMAL)
                 userExpiration.setTextColor(context.colorOf(R.color.secondary_text))
-                setTextColor( R.color.primary_text, R.color.secondary_text)
+                setTextColor(R.color.primary_text, R.color.secondary_text)
             }
         }
     }
@@ -127,10 +129,11 @@ class UserCardView : RelativeLayout {
 
     private fun scaleView(v: View, endX: Float, endY: Float) {
         val anim = ScaleAnimation(
-                v.scaleX, endX,
-                v.scaleY, endY,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f)
+            v.scaleX, endX,
+            v.scaleY, endY,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
         anim.fillAfter = true
         anim.duration = SCALE_USER_IMAGE_TIME
         v.startAnimation(anim)

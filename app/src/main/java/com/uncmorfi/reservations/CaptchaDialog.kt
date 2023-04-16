@@ -8,7 +8,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.uncmorfi.models.User
+import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.BaseDialogHelper
 import com.uncmorfi.shared.ReserveStatus
 

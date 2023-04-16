@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.R
 import com.uncmorfi.shared.SnackType
 import com.uncmorfi.shared.snack
-import com.uncmorfi.viewmodel.MainViewModel
+import com.uncmorfi.MainViewModel
 import kotlinx.android.synthetic.main.fragment_reservation.*
 import java.util.*
 

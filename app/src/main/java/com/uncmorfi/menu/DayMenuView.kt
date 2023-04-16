@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import com.uncmorfi.R
-import com.uncmorfi.models.DayMenu
+import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.shared.colorOf
 import com.uncmorfi.shared.compareToToday
 import com.uncmorfi.shared.toFormat

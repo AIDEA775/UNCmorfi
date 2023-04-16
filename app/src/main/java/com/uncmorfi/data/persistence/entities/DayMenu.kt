@@ -1,4 +1,4 @@
-package com.uncmorfi.models
+package com.uncmorfi.data.persistence.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -17,7 +17,3 @@ data class DayMenu (
         return "$name $num:\n$menu"
     }
 }
-
-data class Menu (
-        val menu: Map<Calendar, List<String>>
-)

@@ -10,13 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.MainActivity
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.models.DayMenu
-import com.uncmorfi.models.User
+import com.uncmorfi.data.persistence.entities.DayMenu
+import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.compareToToday
 import com.uncmorfi.shared.getUser
 import com.uncmorfi.shared.init
-import com.uncmorfi.viewmodel.MainViewModel
+import com.uncmorfi.MainViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {

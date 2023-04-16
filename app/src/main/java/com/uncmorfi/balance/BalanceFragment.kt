@@ -4,19 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
-import com.uncmorfi.models.User
+import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.SnackType.*
 import com.uncmorfi.shared.StatusCode.UPDATE_SUCCESS
 import com.uncmorfi.shared.StatusCode.USER_INSERTED
-import com.uncmorfi.viewmodel.MainViewModel
+import com.uncmorfi.MainViewModel
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 /**
@@ -28,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 class BalanceFragment : Fragment() {
     private lateinit var mRootView: View
     private lateinit var mUserAdapter: UserAdapter
-    private lateinit var mViewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
 
     private var userList: List<User> = emptyList()
 
@@ -37,15 +36,17 @@ class BalanceFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
-        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         initRecyclerAndAdapter()
 
@@ -56,16 +57,16 @@ class BalanceFragment : Fragment() {
             }
         }
 
-        mViewModel.status.observe(viewLifecycleOwner, Observer {
+        observe(viewModel.status) {
             if (it == UPDATE_SUCCESS || it == USER_INSERTED) {
                 newUser.clearText()
             }
-        })
+        }
 
-        mViewModel.allUsers().observe(viewLifecycleOwner, Observer {
+        observe(viewModel.allUsers()) {
             mUserAdapter.setUsers(it)
             userList = it
-        })
+        }
     }
 
     private fun initRecyclerAndAdapter() {
@@ -77,16 +78,15 @@ class BalanceFragment : Fragment() {
         balanceList.isNestedScrollingEnabled = false
         balanceList.layoutManager = layoutManager
 
-        mUserAdapter = UserAdapter(requireContext(),
-                { showUserOptionsDialog(it) },
-                { updateUser(it) })
+        mUserAdapter = UserAdapter({ showUserOptionsDialog(it) }
+        ) { updateUser(it) }
 
         balanceList.adapter = mUserAdapter
     }
 
     private fun showUserOptionsDialog(user: User) {
         UserOptionsDialog.newInstance(this, USER_OPTIONS_CODE, user)
-                .show(parentFragmentManager, "UserOptionsDialog")
+            .show(parentFragmentManager, "UserOptionsDialog")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -95,8 +95,12 @@ class BalanceFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.balance_update -> { updateAllUsers(); true }
-            R.id.balance_copy -> { copyAllUsers(); true}
+            R.id.balance_update -> {
+                updateAllUsers(); true
+            }
+            R.id.balance_copy -> {
+                copyAllUsers(); true
+            }
             R.id.balance_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
@@ -114,8 +118,7 @@ class BalanceFragment : Fragment() {
         if (userList.isNotEmpty()) {
             context?.copyToClipboard("cards", userList.joinToString("\n") { it.card })
             mRootView.snack(R.string.snack_copied, FINISH)
-        }
-        else {
+        } else {
             mRootView.snack(R.string.snack_empty_copy, ERROR)
         }
     }
@@ -139,11 +142,10 @@ class BalanceFragment : Fragment() {
     }
 
     private fun parseUsers(cards: String): Array<User> {
-        val users = mutableListOf<User>()
-        for (c in cards.split("\\s+".toRegex())) {
-            users.add(User(c))
-        }
-        return users.toTypedArray()
+        return cards
+            .split("\\s+".toRegex())
+            .map { User(it) }
+            .toTypedArray()
     }
 
     private fun updateUser(vararg users: User) {
@@ -165,7 +167,7 @@ class BalanceFragment : Fragment() {
                 mRootView.snack(R.string.snack_new_user_several_adds, LOADING)
         }
 
-        mViewModel.downloadUsers(*users)
+        viewModel.downloadUsers(*users)
     }
 
     private fun getNewUserMsg(user: User): String {
@@ -181,7 +183,7 @@ class BalanceFragment : Fragment() {
         super.onStop()
         activity?.hideKeyboard()
         newUser.clearFocus()
-        mViewModel.reservation.value = NOCACHED
+        viewModel.reservation.value = NOCACHED
     }
 
     companion object {

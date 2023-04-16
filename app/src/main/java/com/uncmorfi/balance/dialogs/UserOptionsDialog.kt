@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.uncmorfi.R
 import com.uncmorfi.balance.BarcodeActivity
-import com.uncmorfi.models.User
+import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.reservations.CaptchaDialog
 import com.uncmorfi.reservations.ReserveOptionsDialog
 import com.uncmorfi.shared.BaseDialogHelper

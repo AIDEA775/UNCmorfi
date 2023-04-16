@@ -16,7 +16,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.uncmorfi.R
-import com.uncmorfi.models.Serving
+import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.shared.colorOf
 import java.util.*
 

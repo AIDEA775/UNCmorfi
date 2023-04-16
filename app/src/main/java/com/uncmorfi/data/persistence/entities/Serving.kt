@@ -1,4 +1,4 @@
-package com.uncmorfi.models
+package com.uncmorfi.data.persistence.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,6 +10,3 @@ data class Serving (
         val serving: Int = 0
 )
 
-data class Servings (
-        val servings: Map<Calendar, Int>
-)

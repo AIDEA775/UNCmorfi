@@ -29,10 +29,8 @@
         android:importantForAccessibility="no"
         android:indeterminateDrawable="@drawable/progressbar"
         android:layout_alignBottom="@+id/userImage"
-        android:layout_alignLeft="@+id/userImage"
         android:layout_alignStart="@+id/userImage"
         android:layout_alignTop="@+id/userImage"
-        android:layout_alignRight="@+id/userImage"
         android:layout_alignEnd="@+id/userImage" />
 
     <LinearLayout
@@ -45,9 +43,7 @@
         android:gravity="center"
         android:layout_alignTop="@+id/userImage"
         android:layout_alignBottom="@+id/userImage"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/userImage"
         android:layout_toEndOf="@+id/userImage">
 
         <TextView
@@ -79,9 +75,7 @@
         android:orientation="vertical"
         android:layout_margin="8dp"
         android:layout_below="@+id/userImage"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/userBalance"
         android:layout_toStartOf="@+id/userBalance">
 
         <TextView
@@ -123,7 +117,6 @@
         android:importantForAccessibility="yes"
         android:layout_margin="8dp"
         android:layout_below="@+id/userImage"
-        android:layout_alignRight="@+id/user_name_layout"
         android:layout_alignEnd="@+id/user_name_layout"
         tools:text="$ 56"/>
 

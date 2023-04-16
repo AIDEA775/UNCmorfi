@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.uncmorfi.models.User
-import com.uncmorfi.viewmodel.MainViewModel
+import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.MainViewModel
 
 open class BaseDialogHelper : AppCompatDialogFragment() {
     lateinit var builder: MaterialAlertDialogBuilder

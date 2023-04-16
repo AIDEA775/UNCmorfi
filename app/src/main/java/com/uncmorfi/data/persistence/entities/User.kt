@@ -1,4 +1,4 @@
-package com.uncmorfi.models
+package com.uncmorfi.data.persistence.entities
 
 import androidx.room.Entity
 import androidx.room.Ignore

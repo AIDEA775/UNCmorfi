@@ -7,14 +7,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.data.Entry
 import com.uncmorfi.R
-import com.uncmorfi.models.Serving
+import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.CUMULATIVE
 import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.RATIONS
-import com.uncmorfi.shared.StatusCode.BUSY
 import com.uncmorfi.shared.clearDate
 import com.uncmorfi.shared.init
 import com.uncmorfi.shared.startBrowser
-import com.uncmorfi.viewmodel.MainViewModel
+import com.uncmorfi.MainViewModel
 import kotlinx.android.synthetic.main.fragment_servings.*
 
 /**

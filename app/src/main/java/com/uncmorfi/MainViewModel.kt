@@ -1,27 +1,33 @@
-package com.uncmorfi.viewmodel
+package com.uncmorfi
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.uncmorfi.models.*
+import com.google.gson.GsonBuilder
+import com.uncmorfi.data.network.Webservice
+import com.uncmorfi.data.network.models.ReservationResponse
+import com.uncmorfi.data.persistence.AppDatabase
+import com.uncmorfi.data.persistence.entities.DayMenu
+import com.uncmorfi.data.persistence.entities.Reservation
+import com.uncmorfi.data.persistence.entities.Serving
+import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.*
 import com.uncmorfi.shared.StatusCode.*
 import kotlinx.coroutines.*
+import okhttp3.OkHttpClient
 import org.json.JSONException
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.util.*
-import kotlin.coroutines.coroutineContext
-import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
-import com.google.gson.GsonBuilder
+import kotlin.coroutines.coroutineContext
 
-class MainViewModel(val context: Application): AndroidViewModel(context) {
+class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
     private val userLive: MutableLiveData<List<User>> = MutableLiveData()
     private val menuLive: MutableLiveData<List<DayMenu>> = MutableLiveData()
@@ -34,28 +40,28 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
     var reserveJob: Job? = null
 
     private val okHttpClient = OkHttpClient.Builder()
-            .readTimeout(1, TimeUnit.MINUTES)
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .build()
+        .readTimeout(1, TimeUnit.MINUTES)
+        .connectTimeout(1, TimeUnit.MINUTES)
+        .build()
 
     private val gson = GsonBuilder()
-            .registerTypeAdapter(Calendar::class.java, CalendarDeserializer())
-            .create()
+        .registerTypeAdapter(Calendar::class.java, CalendarDeserializer())
+        .create()
 
     private val clientBeta by lazy {
         Retrofit.Builder()
-                .baseUrl("https://frozen-sierra-45328.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(okHttpClient)
-                .build().create(Webservice::class.java)
+            .baseUrl("https://frozen-sierra-45328.herokuapp.com/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
+            .build().create(Webservice::class.java)
     }
 
     private val client by lazy {
         Retrofit.Builder()
-                .baseUrl("https://uncmorfi.georgealegre.com/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(okHttpClient)
-                .build().create(Webservice::class.java)
+            .baseUrl("https://uncmorfi.georgealegre.com/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
+            .build().create(Webservice::class.java)
     }
 
     init {
@@ -190,8 +196,8 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         mainDispatch {
             if (context.isOnline()) {
                 status.value = ioDispatch {
-                    val servings = client.getServings().servings.map {
-                        entry -> Serving(entry.key, entry.value)
+                    val servings = client.getServings().servings.map { entry ->
+                        Serving(entry.key, entry.value)
                     }
 
                     if (servings.isEmpty()) {
@@ -278,7 +284,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
                 return@mainDispatch
             }
             reserveJob?.cancel()
-            reserveJob = mainDispatch{
+            reserveJob = mainDispatch {
                 var intent = 0
 
                 do {
@@ -339,7 +345,7 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
         return viewModelScope.launch(Dispatchers.Main, block = f)
     }
 
-    private suspend fun <T>ioDispatch(f: suspend (CoroutineScope) -> T): T? {
+    private suspend fun <T> ioDispatch(f: suspend (CoroutineScope) -> T): T? {
         var result: T? = null
         isLoading.value = true
         try {
@@ -352,10 +358,10 @@ class MainViewModel(val context: Application): AndroidViewModel(context) {
             status.value = CONNECT_ERROR
         } catch (e: JSONException) {
             e.printStackTrace()
-            status.value =  INTERNAL_ERROR
+            status.value = INTERNAL_ERROR
         } catch (e: NumberFormatException) {
             e.printStackTrace()
-            status.value =  INTERNAL_ERROR
+            status.value = INTERNAL_ERROR
         } finally {
             isLoading.value = false
         }

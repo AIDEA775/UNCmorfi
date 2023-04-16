@@ -1,6 +1,8 @@
-package com.uncmorfi.models
+package com.uncmorfi.data.persistence.dao
 
 import androidx.room.*
+import com.uncmorfi.data.persistence.entities.Cookie
+import com.uncmorfi.data.persistence.entities.Reservation
 
 
 @Dao

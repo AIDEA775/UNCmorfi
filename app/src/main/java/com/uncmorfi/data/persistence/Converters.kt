@@ -1,4 +1,4 @@
-package com.uncmorfi.models
+package com.uncmorfi.data.persistence
 
 import androidx.room.TypeConverter
 import com.uncmorfi.shared.toCalendar
@@ -22,7 +22,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun stringToList(value: String): List<String>? {
+    fun stringToList(value: String): List<String> {
         return value.split("*-*")
     }
 }

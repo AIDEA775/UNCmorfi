@@ -17,14 +17,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.uncmorfi.R
-import com.uncmorfi.models.User
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
+import com.uncmorfi.data.persistence.entities.User
 
 enum class SnackType {
     ERROR,
@@ -215,4 +213,8 @@ fun Context?.isOnline(): Boolean {
 
 fun TextView.updateVisibility() {
     this.visibility = if (this.text.isNullOrEmpty()) GONE else VISIBLE
+}
+
+inline fun <T> LifecycleOwner.observe(liveData: LiveData<T>, crossinline body: (T) -> Unit) {
+    liveData.observe(this, { body.invoke(it) })
 }

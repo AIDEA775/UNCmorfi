@@ -12,13 +12,14 @@ import com.uncmorfi.R
 import com.uncmorfi.shared.onTextChanged
 import kotlinx.android.synthetic.main.view_user_new.view.*
 
-class NewUserView: LinearLayout {
+class NewUserView @JvmOverloads constructor(
+    context: Context,
+    attr: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : LinearLayout(context, attr, defStyleAttr) {
+
     private lateinit var doneListener: (String) -> Unit
     private lateinit var scannerListener: Fragment
-
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int): super(context, attrs, defStyleAttr)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_user_new, this, true)

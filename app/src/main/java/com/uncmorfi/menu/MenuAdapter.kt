@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.uncmorfi.R
-import com.uncmorfi.models.DayMenu
+import com.uncmorfi.data.persistence.entities.DayMenu
 import kotlinx.android.synthetic.main.item_menu.view.*
 
 internal class MenuAdapter (private val mContext: Context,

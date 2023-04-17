@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,7 +15,6 @@
         android:paddingRight="4dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         tools:text="01" />
 
@@ -29,7 +26,6 @@
         android:layout_marginRight="8dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/menuDayNumber"
         android:layout_toEndOf="@+id/menuDayNumber"
         tools:text="Lunes" />
 
@@ -37,36 +33,60 @@
         android:id="@+id/menuFood1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_below="@+id/menuDayName"
-        android:layout_toRightOf="@id/menuDayNumber"
+        android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/menuDayNumber"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textStyle="bold"
         tools:text="Costeleta con salsa criolla" />
 
     <TextView
         android:id="@+id/menuFood2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_below="@+id/menuFood1"
-        android:layout_toRightOf="@id/menuDayNumber"
+        android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/menuDayNumber"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         tools:text="Papas a las Finas Hierbas o Ensalada de Zanahoria y choclo" />
 
     <TextView
         android:id="@+id/menuFood3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_below="@+id/menuFood2"
-        android:layout_toRightOf="@id/menuDayNumber"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/menuDayNumber"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        tools:text="Fruta de estación" />
+
+    <TextView
+        android:id="@+id/menuFood4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_below="@+id/menuFood3"
         android:layout_toEndOf="@id/menuDayNumber"
         tools:text="Fruta de estación" />
 
+    <TextView
+        android:id="@+id/menuFood5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_below="@+id/menuFood4"
+        android:layout_toEndOf="@id/menuDayNumber"
+        tools:text="Fruta de estación" />
+
+    <TextView
+        android:id="@+id/menuFood6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_below="@+id/menuFood5"
+        android:layout_toEndOf="@id/menuDayNumber"
+        tools:text="Fruta de estación" />
 </merge>

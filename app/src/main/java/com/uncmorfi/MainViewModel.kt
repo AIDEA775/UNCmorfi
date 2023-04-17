@@ -13,6 +13,7 @@ import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.Reservation
 import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.data.repository.RepoMenu
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.*
 import com.uncmorfi.shared.StatusCode.*
@@ -29,6 +30,7 @@ import kotlin.coroutines.coroutineContext
 
 class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
+    private val repoMenu = RepoMenu()
     private val userLive: MutableLiveData<List<User>> = MutableLiveData()
     private val menuLive: MutableLiveData<List<DayMenu>> = MutableLiveData()
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
@@ -139,7 +141,8 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
         mainDispatch {
             if (context.isOnline()) {
                 status.value = ioDispatch {
-                    val menu = client.getMenu()
+                    val menu = repoMenu.fetch()
+//                    val menu = client.getMenu()
                     val menuList = menu.menu.map { entry -> DayMenu(entry.key, entry.value) }
 
                     if (menuList.isEmpty()) {

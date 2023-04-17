@@ -35,6 +35,16 @@ android {
             resValue "string", "app_name", "UNCmorfi DEBUG"
         }
     }
+    compileOptions {
+        // Flag to enable suppiort for the new lenguage APIs
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -70,4 +80,15 @@ dependencies {
     // Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+
+    // Parse HTML
+    implementation("org.jsoup:jsoup:1.14.3")
+
+    // Java 8 API (for Instant class)
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+    // Unit testing
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'com.google.truth:truth:1.0.1'
+
 }

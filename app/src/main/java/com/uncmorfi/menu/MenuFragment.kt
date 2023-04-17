@@ -3,8 +3,7 @@ package com.uncmorfi.menu
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_menu.*
 class MenuFragment : Fragment() {
     private lateinit var mRootView: View
     private lateinit var mMenuAdapter: MenuAdapter
-    private lateinit var mViewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,15 +34,13 @@ class MenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
 
-        swipeRefresh.init { mViewModel.updateMenu() }
+        swipeRefresh.init { viewModel.updateMenu() }
         initRecyclerAndAdapter()
         initMenu()
 
-        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-
-        mViewModel.getMenu().observe(viewLifecycleOwner, Observer {
+        observe(viewModel.getMenu()) {
             mMenuAdapter.updateMenu(it)
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -52,8 +49,8 @@ class MenuFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_update -> { mViewModel.updateMenu(); true }
-            R.id.menu_clear -> { mViewModel.clearMenu(); true }
+            R.id.menu_update -> { viewModel.updateMenu(); true }
+            R.id.menu_clear -> { viewModel.clearMenu(); true }
             R.id.menu_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
@@ -68,9 +65,8 @@ class MenuFragment : Fragment() {
     }
 
     private fun initMenu() {
-        mMenuAdapter = MenuAdapter(requireContext(),
-                { onClick(it) },
-                { onLongClick(it) })
+        mMenuAdapter = MenuAdapter({ onClick(it) }
+        ) { onLongClick(it) }
         menuRecyclerView.adapter = mMenuAdapter
     }
 

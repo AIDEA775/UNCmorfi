@@ -1,6 +1,5 @@
 package com.uncmorfi.menu
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +8,11 @@ import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
 import kotlinx.android.synthetic.main.item_menu.view.*
 
-internal class MenuAdapter (private val mContext: Context,
-                            private val mClickListener: (DayMenu) -> Unit,
-                            private val mLongClickListener: (DayMenu) -> Unit) :
-                            RecyclerView.Adapter<MenuAdapter.MenuItemViewHolder>() {
+internal class MenuAdapter(
+    private val mClickListener: (DayMenu) -> Unit,
+    private val mLongClickListener: (DayMenu) -> Unit
+) : RecyclerView.Adapter<MenuAdapter.MenuItemViewHolder>() {
+
     private var mMenuList: List<DayMenu> = emptyList()
 
     internal inner class MenuItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -26,7 +26,7 @@ internal class MenuAdapter (private val mContext: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuItemViewHolder {
         val v = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_menu, parent, false)
+            .inflate(R.layout.item_menu, parent, false)
         return MenuItemViewHolder(v)
     }
 

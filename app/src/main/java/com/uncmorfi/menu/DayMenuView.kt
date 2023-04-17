@@ -56,15 +56,26 @@ class DayMenuView : RelativeLayout {
         menuFood1.setTextColor(colorFood)
         menuFood2.setTextColor(colorFood)
         menuFood3.setTextColor(colorFood)
+        menuFood4.setTextColor(colorFood)
+        menuFood5.setTextColor(colorFood)
+        menuFood6.setTextColor(colorFood)
 
         menuDayNumber.text = menu.date.toFormat("dd")
         menuDayName.text = menu.date.toFormat("EEEE").capitalize()
 
         menuFood1.text = menu.food.getOrNull(0)
         menuFood1.updateVisibility()
+
+        // TODO: mejorar esto
         menuFood2.text = menu.food.getOrNull(1)
         menuFood2.updateVisibility()
         menuFood3.text = menu.food.getOrNull(2)
         menuFood3.updateVisibility()
+        menuFood4.text = menu.food.getOrNull(3)
+        menuFood4.updateVisibility()
+        menuFood5.text = menu.food.getOrNull(4)
+        menuFood5.updateVisibility()
+        menuFood6.text = menu.food.getOrNull(5)
+        menuFood6.updateVisibility()
     }
 }

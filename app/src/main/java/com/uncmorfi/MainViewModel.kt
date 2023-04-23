@@ -1,6 +1,7 @@
 package com.uncmorfi
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,13 +25,14 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
 
 class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
-    private val repoMenu = RepoMenu()
+    private val repoMenu = RepoMenu(context)
     private val userLive: MutableLiveData<List<User>> = MutableLiveData()
     private val menuLive: MutableLiveData<List<DayMenu>> = MutableLiveData()
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
@@ -124,62 +126,39 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     /*
      * Menu stuff
      */
-    fun getMenu(): LiveData<List<DayMenu>> {
-        if (menuLive.value == null) {
-            mainDispatch {
-                menuLive.value = db.menuDao().getAll()
-                status.value = BUSY
-                if (needAutoUpdateMenu()) {
-                    updateMenu()
-                }
-            }
-        }
-        return menuLive
-    }
+    fun getMenu(): LiveData<List<DayMenu>> = repoMenu.getAll()
 
-    fun updateMenu() {
-        mainDispatch {
-            if (context.isOnline()) {
-                status.value = ioDispatch {
-                    val menu = repoMenu.fetch()
-//                    val menu = client.getMenu()
-                    val menuList = menu.menu.map { entry -> DayMenu(entry.key, entry.value) }
-
-                    if (menuList.isEmpty()) {
-                        return@ioDispatch UPDATE_ERROR
-                    }
-                    db.menuDao().clearOld()
-                    val inserts = db.menuDao().insert(*menuList.toTypedArray())
-
-                    if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
-                }
-
-                menuLive.value = db.menuDao().getAll()
-            } else {
-                status.value = NO_ONLINE
-            }
+    fun refreshMenu() = viewModelScope.launch(Dispatchers.IO) {
+        if (needAutoUpdateMenu()) {
+            forceRefreshMenu()
         }
     }
 
-    fun clearMenu() {
-        mainDispatch {
-            db.menuDao().clearAll()
-            menuLive.value = db.menuDao().getAll()
-            updateMenu()
+    fun forceRefreshMenu() = viewModelScope.launch(Dispatchers.IO) {
+        Log.d("ViewModel", "Force update menu")
+        if (!context.isOnline()) {
+            status.postValue(NO_ONLINE)
+            return@launch
         }
+        status.postValue(UPDATING)
+        val inserts = repoMenu.update()
+
+        status.postValue(when {
+            inserts.isEmpty() -> UPDATE_ERROR
+            inserts.all { it == -1L } -> ALREADY_UPDATED
+            else -> UPDATE_SUCCESS
+        })
+    }
+
+    fun clearMenu() = viewModelScope.launch(Dispatchers.IO) {
+        repoMenu.clear()
+        forceRefreshMenu()
     }
 
     private suspend fun needAutoUpdateMenu(): Boolean {
-        val now = Calendar.getInstance()
-        now.time = Date()
-        val nowWeek = now.get(Calendar.WEEK_OF_YEAR)
-        val nowYear = now.get(Calendar.YEAR)
-
-        val menu = db.menuDao().getLast()?.date ?: return true
-        val menuWeek = menu.get(Calendar.WEEK_OF_YEAR)
-        val menuYear = now.get(Calendar.YEAR)
-
-        return menuYear < nowYear || menuWeek < nowWeek
+        val now = LocalDate.now()
+        val last = repoMenu.last() ?: return true
+        return last.date.isBefore(now)
     }
 
     /*

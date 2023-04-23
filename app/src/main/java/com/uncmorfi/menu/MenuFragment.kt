@@ -5,11 +5,13 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.shared.*
-import com.uncmorfi.MainViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_menu.*
+import java.time.LocalDate
 
 /**
  * Menú de la semana.
@@ -17,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_menu.*
  */
 class MenuFragment : Fragment() {
     private lateinit var mRootView: View
-    private lateinit var mMenuAdapter: MenuAdapter
+    private lateinit var adapter: MenuAdapter
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +27,10 @@ class MenuFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_menu, container, false)
     }
 
@@ -34,12 +38,19 @@ class MenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
 
-        swipeRefresh.init { viewModel.updateMenu() }
+        swipeRefresh.init { viewModel.forceRefreshMenu() }
         initRecyclerAndAdapter()
         initMenu()
 
-        observe(viewModel.getMenu()) {
-            mMenuAdapter.updateMenu(it)
+        observe(viewModel.getMenu()) { menu ->
+            adapter.updateMenu(menu)
+            val today = menu.indexOfFirst { it.isToday() }
+            menuRecyclerView.scrollToPosition(today)
+        }
+
+        observe(viewModel.status) {
+            swipeRefresh.isRefreshing = it == StatusCode.UPDATING
+            view.snack(it)
         }
     }
 
@@ -49,8 +60,12 @@ class MenuFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_update -> { viewModel.updateMenu(); true }
-            R.id.menu_clear -> { viewModel.clearMenu(); true }
+            R.id.menu_update -> {
+                viewModel.forceRefreshMenu(); true
+            }
+            R.id.menu_clear -> {
+                viewModel.clearMenu(); true
+            }
             R.id.menu_browser -> requireActivity().startBrowser(URL)
             else -> super.onOptionsItemSelected(item)
         }
@@ -65,21 +80,22 @@ class MenuFragment : Fragment() {
     }
 
     private fun initMenu() {
-        mMenuAdapter = MenuAdapter({ onClick(it) }
-        ) { onLongClick(it) }
-        menuRecyclerView.adapter = mMenuAdapter
+        adapter = MenuAdapter({ onClick(it) }) { onLongClick(it) }
+        menuRecyclerView.adapter = adapter
     }
 
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_menu)
+        viewModel.refreshMenu()
     }
 
     private fun onClick(dayMenu: DayMenu) {
         requireActivity().shareText(
-                getString(R.string.menu_share_subject),
-                dayMenu.toString() + "\n\n" + getString(R.string.menu_share_banner),
-                getString(R.string.menu_share_subject))
+            getString(R.string.menu_share_subject),
+            dayMenu.toString() + "\n\n" + getString(R.string.menu_share_banner),
+            getString(R.string.menu_share_subject)
+        )
     }
 
     private fun onLongClick(dayMenu: DayMenu) {

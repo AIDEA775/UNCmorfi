@@ -3,6 +3,7 @@ package com.uncmorfi.data.persistence
 import androidx.room.TypeConverter
 import com.uncmorfi.shared.toCalendar
 import com.uncmorfi.shared.toISOString
+import java.time.LocalDate
 import java.util.*
 
 class Converters {
@@ -14,6 +15,16 @@ class Converters {
     @TypeConverter
     fun dateToTimestamp(cal: Calendar?): String? {
         return cal?.toISOString()
+    }
+
+    @TypeConverter
+    fun readLocalDate(value: String?): LocalDate? {
+        return value?.let { LocalDate.parse(value) }
+    }
+
+    @TypeConverter
+    fun saveLocalDate(date: LocalDate?): String? {
+        return date?.toString()
     }
 
     @TypeConverter

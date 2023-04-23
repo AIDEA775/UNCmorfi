@@ -13,4 +13,7 @@ object DateUtils {
         .parseDefaulting(ChronoField.HOUR_OF_DAY, 0) // default value for minute
         .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0) // set locale
         .toFormatter(Locale("es", "ES"))
+
+    val FORMAT_ARG2: DateTimeFormatter = DateTimeFormatter.ofPattern("dd")
+    val FORMAT_ARG3: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE")
 }

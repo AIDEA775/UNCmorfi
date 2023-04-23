@@ -1,5 +1,6 @@
 package com.uncmorfi.data.persistence.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,11 +12,14 @@ interface DayMenuDao {
     @Query("SELECT * FROM menu ORDER BY datetime(date)")
     suspend fun getAll(): List<DayMenu>
 
+    @Query("SELECT * FROM menu ORDER BY datetime(date)")
+    fun getAllAsLiveData(): LiveData<List<DayMenu>>
+
     @Query("SELECT * FROM menu ORDER BY datetime(date) DESC LIMIT 1")
     suspend fun getLast(): DayMenu?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg menus: DayMenu): List<Long>
+    suspend fun insert(menus: List<DayMenu>): List<Long>
 
     @Query("DELETE FROM menu WHERE datetime(date) <= date('now','-15 day')")
     suspend fun clearOld()

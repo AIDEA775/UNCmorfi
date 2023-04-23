@@ -6,18 +6,21 @@ import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
+import com.uncmorfi.shared.DateUtils.FORMAT_ARG2
+import com.uncmorfi.shared.DateUtils.FORMAT_ARG3
 import com.uncmorfi.shared.colorOf
 import com.uncmorfi.shared.compareToToday
 import com.uncmorfi.shared.toFormat
 import com.uncmorfi.shared.updateVisibility
 import kotlinx.android.synthetic.main.view_day_menu.view.*
+import java.time.LocalDate
 
-class DayMenuView : RelativeLayout {
+class DayMenuView @JvmOverloads constructor(
+    context: Context,
+    attr: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : RelativeLayout(context, attr, defStyleAttr) {
     private lateinit var mDayMenu: DayMenu
-
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int): super(context, attrs, defStyleAttr)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_day_menu, this, true)
@@ -25,7 +28,7 @@ class DayMenuView : RelativeLayout {
 
     fun setDayMenu(menu: DayMenu) {
         mDayMenu = menu
-        val offset = menu.date.compareToToday()
+        val offset = menu.date.compareTo(LocalDate.now())
 
         val colorDay: Int
         val colorFood: Int
@@ -60,8 +63,8 @@ class DayMenuView : RelativeLayout {
         menuFood5.setTextColor(colorFood)
         menuFood6.setTextColor(colorFood)
 
-        menuDayNumber.text = menu.date.toFormat("dd")
-        menuDayName.text = menu.date.toFormat("EEEE").capitalize()
+        menuDayNumber.text = menu.date.format(FORMAT_ARG2)
+        menuDayName.text = menu.date.format(FORMAT_ARG3)
 
         menuFood1.text = menu.food.getOrNull(0)
         menuFood1.updateVisibility()

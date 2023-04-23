@@ -14,7 +14,8 @@
             android:clipToPadding="false"
             android:scrollbars="none"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="64dp"
+            tools:listitem="@layout/item_menu">
         </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

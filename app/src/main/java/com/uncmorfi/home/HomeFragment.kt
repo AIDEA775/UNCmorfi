@@ -13,14 +13,15 @@ import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
-import com.uncmorfi.shared.compareToToday
 import com.uncmorfi.shared.getUser
 import com.uncmorfi.shared.init
 import com.uncmorfi.MainViewModel
+import com.uncmorfi.shared.observe
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.time.LocalDate
 
 class HomeFragment : Fragment() {
-    private lateinit var mViewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
     private lateinit var mUser: User
     private var mDayMenu: DayMenu? = null
     private lateinit var mRootView: View
@@ -38,22 +39,23 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
-        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         swipeRefresh.init { updateAll() }
 
         /*
          * Menú
          */
-        mViewModel.getMenu().observe(viewLifecycleOwner, Observer { menuList ->
-            val today = menuList.firstOrNull { it.date.compareToToday() == 0 }
+        observe(viewModel.getMenu()) { menu ->
+            val today = menu.firstOrNull { it.isToday() }
             mDayMenu = today
 
             today?.let {
                 homeMenu.setDayMenu(today)
                 homeMenu.visibility = VISIBLE
             }
-        })
+        }
+
         homeMenuShowMore.setOnClickListener {
             (requireActivity() as MainActivity).change(R.id.nav_menu)
         }
@@ -61,7 +63,7 @@ class HomeFragment : Fragment() {
         /*
          * Tarjetas
          */
-        mViewModel.allUsers().observe(viewLifecycleOwner, Observer {
+        viewModel.allUsers().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 mUser = it.first()
                 homeCard.setUser(mUser)
@@ -76,7 +78,7 @@ class HomeFragment : Fragment() {
         homeCard.setOnLongClickListener {
             mUser.isLoading = true
             homeCard.setUser(mUser)
-            mViewModel.downloadUsers(mUser)
+            viewModel.downloadUsers(mUser)
             true
         }
         homeCardShowMore.setOnClickListener {
@@ -86,14 +88,14 @@ class HomeFragment : Fragment() {
         /*
          * Medidor
          */
-        mViewModel.getServings().observe(viewLifecycleOwner, Observer {
+        viewModel.getServings().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 homeServingsPieChart.set(it)
             }
         })
         homeServingsPieChart.setTouchEnabled(false)
         homeServingsPieChart.setOnClickListener {
-            mViewModel.updateServings()
+            viewModel.updateServings()
         }
         homeServingsShowMore.setOnClickListener {
             (requireActivity() as MainActivity).change(R.id.nav_servings)
@@ -102,15 +104,15 @@ class HomeFragment : Fragment() {
 
     private fun updateAll() {
         if (mDayMenu == null) {
-            mViewModel.updateMenu()
+            viewModel.refreshMenu()
         }
 
-        mViewModel.updateServings()
+        viewModel.updateServings()
 
         if (::mUser.isInitialized) {
             mUser.isLoading = true
             homeCard.setUser(mUser)
-            mViewModel.downloadUsers(mUser)
+            viewModel.downloadUsers(mUser)
         }
     }
 
@@ -120,7 +122,7 @@ class HomeFragment : Fragment() {
                 val user = data.getUser()
                 user.isLoading = true
                 homeCard.setUser(user)
-                mViewModel.downloadUsers(user)
+                viewModel.downloadUsers(user)
             }
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)
@@ -146,7 +148,7 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        mViewModel.reservation.value = NOCACHED
+        viewModel.reservation.value = NOCACHED
     }
 
     companion object {

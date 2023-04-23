@@ -14,9 +14,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.shared.DateUtils.FORMAT_ARG4
 import com.uncmorfi.shared.colorOf
-import com.uncmorfi.shared.toFormat
+import com.uncmorfi.shared.toMoneyFormat
 import kotlinx.android.synthetic.main.view_user_card.view.*
+import java.time.Instant
+import java.time.LocalDate
 import java.util.*
 
 class UserCardView @JvmOverloads constructor(
@@ -25,18 +28,18 @@ class UserCardView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RelativeLayout(context, attr, defStyleAttr) {
 
-    private lateinit var mUser: User
+    private lateinit var user: User
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_user_card, this, true)
     }
 
     fun setUser(u: User) {
-        mUser = u
-        setText(mUser)
-        setImage(mUser)
-        setColors(mUser)
-        setProgressBar(mUser.isLoading)
+        user = u
+        setText(user)
+        setImage(user)
+        setColors(user)
+        setProgressBar(user.isLoading)
     }
 
     private fun setText(user: User) {
@@ -44,20 +47,22 @@ class UserCardView @JvmOverloads constructor(
         userCard.text = user.card
         userType.text = user.type
 
-        userBalance.text = String.format(Locale.US, "$ %d", user.balance)
-        userExpiration.text = context.getString(R.string.balance_expiration)
-            .format(textExpiration(user.expiration))
-        userLastUpdate.text = context.getString(R.string.balance_last_update)
-            .format(relativeLastUpdate(user.lastUpdate))
+        userBalance.text = user.balance.toMoneyFormat()
+        userExpiration.text = context.getString(
+            R.string.balance_expiration, user.expiration.format(FORMAT_ARG4)
+        )
+        userLastUpdate.text = context.getString(
+            R.string.balance_last_update, relativeLastUpdate(user.lastUpdate)
+        )
+
+        userRation.text = context.resources.getQuantityString(
+            R.plurals.balance_ration, user.rations(), user.rations()
+        )
     }
 
-    private fun textExpiration(expiration: Calendar?): String {
-        return expiration?.toFormat("yyyy-MM-dd") ?: "?"
-    }
-
-    private fun relativeLastUpdate(lastUpdate: Calendar): String {
+    private fun relativeLastUpdate(lastUpdate: Instant): String {
         return DateUtils
-            .getRelativeTimeSpanString(lastUpdate.timeInMillis)
+            .getRelativeTimeSpanString(lastUpdate.toEpochMilli())
             .toString()
             .lowercase(Locale.getDefault())
     }
@@ -73,10 +78,14 @@ class UserCardView @JvmOverloads constructor(
 
     private fun setColors(user: User) {
         // Alerta si le queda poco saldo
-        if (user.balance < WARNING_USER_BALANCE)
-            userBalance.setTextColor(context.colorOf(R.color.accent))
-        else
-            userBalance.setTextColor(context.colorOf(R.color.primary_dark))
+        userBalance.setTextColor(context.colorOf(
+            if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
+            else R.color.primary_dark
+        ))
+        userRation.setTextColor(context.colorOf(
+            if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
+            else R.color.primary_text
+        ))
 
         // Alerta si la tarjeta está vencida o está por vencerse
         when {
@@ -104,17 +113,14 @@ class UserCardView @JvmOverloads constructor(
 
     private fun setTextColor(primary: Int, extra: Int) {
         userName.setTextColor(context.colorOf(primary))
-        userCard.setTextColor(context.colorOf(primary))
 
+        userCard.setTextColor(context.colorOf(extra))
         userType.setTextColor(context.colorOf(extra))
         userLastUpdate.setTextColor(context.colorOf(extra))
     }
 
-    private fun warning(expiration: Calendar, months: Int): Boolean {
-        val cal = Calendar.getInstance()
-        cal.time = Date()
-        cal.add(Calendar.MONTH, months)
-        return expiration.before(cal)
+    private fun warning(expiration: LocalDate, months: Long): Boolean {
+        return expiration.isBefore(LocalDate.now().plusMonths(months))
     }
 
     private fun setProgressBar(isLoading: Boolean) {
@@ -142,7 +148,7 @@ class UserCardView @JvmOverloads constructor(
     companion object {
         private const val SCALE_USER_IMAGE_SIZE = 0.8f
         private const val SCALE_USER_IMAGE_TIME = 500L
-        private const val WARNING_USER_BALANCE = 20
-        private const val WARNING_USER_EXPIRE = 1
+        private const val WARNING_USER_RATIONS = 1
+        private const val WARNING_USER_EXPIRE = 1L
     }
 }

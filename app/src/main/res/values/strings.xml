@@ -34,6 +34,10 @@
 
     <string name="balance_expiration">Expiration date: %1$s</string>
     <string name="balance_last_update">Last update %1$s</string>
+    <plurals name="balance_ration">
+        <item quantity="one">(%1$d food ration)</item>
+        <item quantity="other">(%1$d food rations)</item>
+    </plurals>
 
     <string name="balance_new_user_hint">Write card number</string>
     <string name="balance_new_user_button_enter">Add card</string>

@@ -32,8 +32,12 @@
     <string name="balance_action_update">Actualizar tarjetas</string>
     <string name="balance_action_copy">Copiar tarjetas</string>
 
-    <string name="balance_expiration">Fecha de vencimiento: %1$s</string>
-    <string name="balance_last_update">Última actualización %1$s</string>
+    <string name="balance_expiration">Vence el %1$s</string>
+    <string name="balance_last_update">Actualizado %1$s</string>
+    <plurals name="balance_ration">
+        <item quantity="one">(%1$d ración)</item>
+        <item quantity="other">(%1$d raciones)</item>
+    </plurals>
 
     <string name="balance_new_user_hint">Escribe el número de la tarjeta</string>
     <string name="balance_new_user_button_enter">Agregar la tarjeta</string>

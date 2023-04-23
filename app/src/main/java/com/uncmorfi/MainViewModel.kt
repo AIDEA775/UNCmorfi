@@ -14,6 +14,7 @@ import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.Reservation
 import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.data.repository.RepoUser
 import com.uncmorfi.data.repository.RepoMenu
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.*
@@ -33,6 +34,7 @@ import kotlin.coroutines.coroutineContext
 class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
     private val repoMenu = RepoMenu(context)
+    private val repoUser = RepoUser(context)
     private val userLive: MutableLiveData<List<User>> = MutableLiveData()
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
 
@@ -76,13 +78,15 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
      * Balance stuff
      */
 
-    fun allUsers(): LiveData<List<User>> {
-        if (userLive.value == null) {
-            mainDispatch {
-                userLive.value = db.userDao().getAll()
-            }
+    fun allUsers(): LiveData<List<User>> = repoUser.getAll()
+
+    fun updateCards(card: String) = viewModelScope.launch(Dispatchers.IO) {
+        if (!context.isOnline()) {
+            status.postValue(NO_ONLINE)
+            return@launch
         }
-        return userLive
+        val updates = repoUser.fetch(card)
+        status.postValue(if (updates > 0) UPDATE_SUCCESS else USER_INSERTED)
     }
 
     fun downloadUsers(vararg users: User) {
@@ -102,11 +106,9 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
         }
     }
 
-    fun updateUserName(user: User) {
-        mainDispatch {
-            db.userDao().updateFullUser(user)
-            usersNotify(UPDATE_SUCCESS)
-        }
+    fun updateUserName(user: User) = viewModelScope.launch {
+        repoUser.fullUpdate(user)
+        status.value = UPDATE_SUCCESS
     }
 
     fun deleteUser(user: User) {

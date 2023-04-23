@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,50 +10,51 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:padding="4dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
-        android:scaleType="centerInside"
         android:importantForAccessibility="no"
+        android:padding="4dp"
+        android:scaleType="centerInside"
         tools:ignore="ContentDescription" />
 
     <ProgressBar
         android:id="@+id/userBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="visible"
-        android:importantForAccessibility="no"
-        android:indeterminateDrawable="@drawable/progressbar"
-        android:layout_alignBottom="@+id/userImage"
         android:layout_alignStart="@+id/userImage"
         android:layout_alignTop="@+id/userImage"
-        android:layout_alignEnd="@+id/userImage" />
+        android:layout_alignEnd="@+id/userImage"
+        android:layout_alignBottom="@+id/userImage"
+        android:importantForAccessibility="no"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/progressbar"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/user_name_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:gravity="center"
         android:layout_alignTop="@+id/userImage"
         android:layout_alignBottom="@+id/userImage"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/userImage">
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toStartOf="@+id/userBalance"
+        android:layout_toEndOf="@+id/userImage"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textSize="24sp"
             android:ellipsize="end"
-            android:maxLines="1"
             android:importantForAccessibility="yes"
+            android:maxLines="1"
+            android:textStyle="bold"
             tools:text="Alejandro Ismael" />
 
         <TextView
@@ -62,9 +62,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="14sp"
             android:importantForAccessibility="no"
-            tools:text="43217032843" />
+            tools:text="0475ED74C481B7A" />
+
+        <TextView
+            android:id="@+id/userLastUpdate"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="yes"
+            tools:text="Last update" />
 
     </LinearLayout>
 
@@ -72,37 +79,29 @@
         android:id="@+id/user_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="8dp"
         android:layout_below="@+id/userImage"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/userBalance">
-
-        <TextView
-            android:id="@+id/userLastUpdate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-normal"
-            android:importantForAccessibility="yes"
-            android:textSize="12sp"
-            tools:text="Last update" />
+        android:layout_margin="8dp"
+        android:layout_toStartOf="@+id/userBalance"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/userExpiration"
+            style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-normal"
             android:importantForAccessibility="yes"
             android:textSize="12sp"
             tools:text="Expiration date" />
 
         <TextView
             android:id="@+id/userType"
+            style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-normal"
-            android:textSize="12sp"
             android:importantForAccessibility="no"
+            android:textSize="12sp"
             tools:text="Grade student" />
     </LinearLayout>
 
@@ -110,14 +109,30 @@
         android:id="@+id/userBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_alignTop="@+id/userImage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="sans-serif-light"
-        android:textSize="34sp"
-        android:textColor="@color/primary_dark"
+        android:gravity="center"
         android:importantForAccessibility="yes"
-        android:layout_margin="8dp"
-        android:layout_below="@+id/userImage"
-        android:layout_alignEnd="@+id/user_name_layout"
-        tools:text="$ 56"/>
+        android:textColor="@color/primary_dark"
+        android:textSize="24sp"
+        tools:text="$ 1234,56" />
+
+    <TextView
+        android:id="@+id/userRation"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/userBalance"
+        android:layout_alignEnd="@+id/userBalance"
+        android:layout_toEndOf="@+id/user_name_layout"
+        android:gravity="center"
+        android:importantForAccessibility="no"
+        android:textColor="@color/primary_text"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="1 food ration" />
 
 </merge>

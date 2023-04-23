@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.uncmorfi.MainActivity
+import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.DayMenu
@@ -15,10 +16,8 @@ import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.getUser
 import com.uncmorfi.shared.init
-import com.uncmorfi.MainViewModel
 import com.uncmorfi.shared.observe
 import kotlinx.android.synthetic.main.fragment_home.*
-import java.time.LocalDate
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
@@ -31,8 +30,10 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -63,17 +64,17 @@ class HomeFragment : Fragment() {
         /*
          * Tarjetas
          */
-        viewModel.allUsers().observe(viewLifecycleOwner, Observer {
+        observe(viewModel.allUsers()) {
             if (it.isNotEmpty()) {
                 mUser = it.first()
                 homeCard.setUser(mUser)
                 homeCard.visibility = VISIBLE
             }
-        })
+        }
         homeCard.setOnClickListener {
             UserOptionsDialog
-                    .newInstance(this, USER_OPTIONS_CODE, mUser)
-                    .show(parentFragmentManager, "UserOptionsDialog")
+                .newInstance(this, USER_OPTIONS_CODE, mUser)
+                .show(parentFragmentManager, "UserOptionsDialog")
         }
         homeCard.setOnLongClickListener {
             mUser.isLoading = true
@@ -136,7 +137,9 @@ class HomeFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.home_update -> { updateAll(); true }
+            R.id.home_update -> {
+                updateAll(); true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

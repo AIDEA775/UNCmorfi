@@ -3,13 +3,12 @@ package com.uncmorfi.shared
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.google.gson.JsonSerializer
-import org.json.JSONArray
 import java.io.IOException
 import java.lang.reflect.Type
+import java.math.BigDecimal
+import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 fun String.toCalendar(timeZone: String? = null): Calendar? {
@@ -40,7 +39,7 @@ fun Calendar.clearDate(): Long {
     return this.timeInMillis / 1000
 }
 
-fun Calendar.toFormat(format: String) : String {
+fun Calendar.toFormat(format: String): String {
     val fmt = SimpleDateFormat(format, Locale.getDefault())
     return fmt.format(this.time)
 }
@@ -56,9 +55,13 @@ fun Calendar.compareToTodayInMillis(): Int {
 
 class CalendarDeserializer : JsonDeserializer<Calendar> {
     @Throws(IOException::class)
-    override fun deserialize(json: JsonElement, typeOfT: Type,
-                             context: JsonDeserializationContext): Calendar {
+    override fun deserialize(
+        json: JsonElement, typeOfT: Type,
+        context: JsonDeserializationContext
+    ): Calendar {
         return json.asString.toCalendar()!!
 
     }
 }
+
+fun BigDecimal.toMoneyFormat(): String = NumberFormat.getCurrencyInstance().format(this)

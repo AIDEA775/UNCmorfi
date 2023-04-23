@@ -19,7 +19,7 @@ import com.uncmorfi.data.persistence.entities.*
         Reservation::class,
         Cookie::class,
     ],
-    version = 2
+    version = 3
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

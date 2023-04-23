@@ -61,8 +61,8 @@ dependencies {
     // Database
     def room_version = "2.4.3"
     implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     // Material Design
     implementation 'com.google.android.material:material:1.6.0'
@@ -76,6 +76,7 @@ dependencies {
     // Rest client
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
 
     // Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'

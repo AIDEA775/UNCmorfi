@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.zxing.integration.android.IntentIntegrator
+import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.User
@@ -15,7 +16,6 @@ import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.SnackType.*
 import com.uncmorfi.shared.StatusCode.UPDATE_SUCCESS
 import com.uncmorfi.shared.StatusCode.USER_INSERTED
-import com.uncmorfi.MainViewModel
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 /**
@@ -53,7 +53,7 @@ class BalanceFragment : Fragment() {
         newUser.init(this) { code ->
             activity?.hideKeyboard()
             if (code.isNotBlank()) {
-                updateUser(*parseUsers(code))
+                updateCards(parseCards(code))
             }
         }
 
@@ -61,6 +61,7 @@ class BalanceFragment : Fragment() {
             if (it == UPDATE_SUCCESS || it == USER_INSERTED) {
                 newUser.clearText()
             }
+            mRootView.snack(it)
         }
 
         observe(viewModel.allUsers()) {
@@ -78,8 +79,9 @@ class BalanceFragment : Fragment() {
         balanceList.isNestedScrollingEnabled = false
         balanceList.layoutManager = layoutManager
 
-        mUserAdapter = UserAdapter({ showUserOptionsDialog(it) }
-        ) { updateUser(it) }
+        mUserAdapter = UserAdapter(::showUserOptionsDialog) {
+            updateCards(listOf(it.card))
+        }
 
         balanceList.adapter = mUserAdapter
     }
@@ -110,7 +112,7 @@ class BalanceFragment : Fragment() {
         if (userList.isEmpty()) {
             mRootView.snack(R.string.snack_empty_update, ERROR)
         } else {
-            updateUser(*userList.toTypedArray())
+            updateCards(userList.map { it.card })
         }
     }
 
@@ -127,12 +129,12 @@ class BalanceFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
-            updateUser(*parseUsers(result.contents))
+            updateCards(parseCards(result.contents))
         } else {
             when (requestCode) {
                 USER_OPTIONS_CODE -> {
                     val user = data.getUser()
-                    updateUser(user)
+                    updateCards(listOf(user.card))
                 }
                 else -> {
                     super.onActivityResult(requestCode, resultCode, data)
@@ -141,37 +143,31 @@ class BalanceFragment : Fragment() {
         }
     }
 
-    private fun parseUsers(cards: String): Array<User> {
-        return cards
-            .split("\\s+".toRegex())
-            .map { User(it) }
-            .toTypedArray()
+    private fun parseCards(cards: String): List<String> {
+        return cards.split("\\s+".toRegex())
     }
 
-    private fun updateUser(vararg users: User) {
+    private fun updateCards(cards: List<String>) {
 
-        if (users.any { it.card.length < 15 }) {
+        if (cards.any { it.length < 15 }) {
             mRootView.snack(R.string.snack_new_user_dumb, FINISH)
             return
         }
 
-        userList.map { u -> if (u.card in users.map { it.card }) u.isLoading = true }
+        userList.map { u -> if (u.card in cards) u.isLoading = true }
         mUserAdapter.setUsers(userList)
 
         when {
-            userList.any { it.isLoading } ->
-                mRootView.snack(R.string.snack_updating, LOADING)
-            users.size == 1 ->
-                mRootView.snack(getNewUserMsg(users.first()), LOADING)
-            else ->
-                mRootView.snack(R.string.snack_new_user_several_adds, LOADING)
+            userList.any { it.isLoading } -> mRootView.snack(R.string.snack_updating, LOADING)
+            cards.size == 1 -> mRootView
+                .snack(
+                    getString(R.string.snack_new_user_adding).format(cards.first()), LOADING
+                )
+            else -> mRootView.snack(R.string.snack_new_user_several_adds, LOADING)
         }
 
-        viewModel.downloadUsers(*users)
-    }
-
-    private fun getNewUserMsg(user: User): String {
-        return getString(R.string.snack_new_user_adding).format(user.card)
+        // TODO
+        viewModel.updateCards(cards.first())
     }
 
     override fun onResume() {

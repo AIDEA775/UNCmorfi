@@ -3,6 +3,8 @@ package com.uncmorfi.data.persistence
 import androidx.room.TypeConverter
 import com.uncmorfi.shared.toCalendar
 import com.uncmorfi.shared.toISOString
+import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.util.*
 
@@ -23,8 +25,28 @@ class Converters {
     }
 
     @TypeConverter
-    fun saveLocalDate(date: LocalDate?): String? {
-        return date?.toString()
+    fun saveLocalDate(value: LocalDate?): String? {
+        return value?.toString()
+    }
+
+    @TypeConverter
+    fun readInstant(value: String?): Instant? {
+        return value?.let { Instant.parse(value) }
+    }
+
+    @TypeConverter
+    fun saveInstant(value: Instant?): String? {
+        return value?.toString()
+    }
+
+    @TypeConverter
+    fun readBigDecimal(value: String?): BigDecimal? {
+        return value?.let { BigDecimal(value) }
+    }
+
+    @TypeConverter
+    fun saveBigDecimal(value: BigDecimal?): String? {
+        return value?.toString()
     }
 
     @TypeConverter

@@ -22,8 +22,7 @@ class SetNameDialog : BaseDialogHelper() {
         v.setNameInput.append(user.name)
 
         v.setNameSave.setOnClickListener {
-            user.name = v.setNameInput.text.toString()
-            viewModel.updateUserName(user)
+            viewModel.updateUserName(user.copy(name = v.setNameInput.text.toString()))
             dismiss()
         }
 

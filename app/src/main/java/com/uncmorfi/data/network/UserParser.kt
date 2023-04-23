@@ -12,7 +12,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
-object BalanceParser {
+object UserParser {
     private val logger = object : HttpLoggingInterceptor.Logger {
         override fun log(message: String) {
             Log.v("http", message)
@@ -57,7 +57,7 @@ object BalanceParser {
                 card = card,
                 name = tokens[17],
                 type = tokens[9],
-                email = tokens[22],
+                email = tokens[21],
                 image = "https://asiruws.unc.edu.ar/foto/" + tokens[25],
                 balance = BigDecimal(tokens[6]),
                 price = BigDecimal(tokens[23]).minus(BigDecimal(tokens[12])),

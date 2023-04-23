@@ -20,7 +20,7 @@ class SetNameDialog : BaseDialogHelper() {
         v.setNameInput.append(user.name)
 
         builder.setView(v)
-            .setNeutralButton(android.R.string.cancel) { _, _ -> dismiss() }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> dismiss() }
             .setPositiveButton(R.string.save) { _, _ ->
                 viewModel.updateUserName(user.copy(name = v.setNameInput.text.toString()))
                 dismiss()

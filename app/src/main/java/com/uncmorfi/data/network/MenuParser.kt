@@ -10,7 +10,7 @@ import org.jsoup.safety.Safelist
 import java.time.LocalDate
 
 object MenuParser {
-    private val URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana"
+    private const val URL = "https://www.unc.edu.ar/vida-estudiantil/men%C3%BA-de-la-semana"
 
     fun fetch(): List<DayMenu> {
         val doc: Document = Jsoup.connect(URL).get()

@@ -34,7 +34,6 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
     private val repoMenu = RepoMenu(context)
     private val userLive: MutableLiveData<List<User>> = MutableLiveData()
-    private val menuLive: MutableLiveData<List<DayMenu>> = MutableLiveData()
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
 
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()

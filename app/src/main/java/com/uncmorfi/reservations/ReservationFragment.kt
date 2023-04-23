@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_reservation.*
 import java.util.*
 
 class ReservationFragment : Fragment() {
-    private lateinit var mViewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -24,7 +24,7 @@ class ReservationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         reservation_1.initDays()
         reservation_1.setHeader(R.string.reservations_head1)

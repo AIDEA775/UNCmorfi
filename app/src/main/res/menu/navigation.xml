@@ -25,6 +25,7 @@
         <item
             android:id="@+id/nav_reservation"
             android:icon="@drawable/nav_ticket"
+            android:visible="false"
             android:title="@string/navigation_reservation" />
         <item
             android:id="@+id/nav_renovation"

@@ -9,8 +9,6 @@ import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.shared.DateUtils.FORMAT_ARG2
 import com.uncmorfi.shared.DateUtils.FORMAT_ARG3
 import com.uncmorfi.shared.colorOf
-import com.uncmorfi.shared.compareToToday
-import com.uncmorfi.shared.toFormat
 import com.uncmorfi.shared.updateVisibility
 import kotlinx.android.synthetic.main.view_day_menu.view.*
 import java.time.LocalDate

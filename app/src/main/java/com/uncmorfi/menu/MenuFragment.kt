@@ -9,9 +9,7 @@ import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.shared.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_menu.*
-import java.time.LocalDate
 
 /**
  * Menú de la semana.
@@ -80,7 +78,7 @@ class MenuFragment : Fragment() {
     }
 
     private fun initMenu() {
-        adapter = MenuAdapter({ onClick(it) }) { onLongClick(it) }
+        adapter = MenuAdapter(::onClick, ::onLongClick)
         menuRecyclerView.adapter = adapter
     }
 

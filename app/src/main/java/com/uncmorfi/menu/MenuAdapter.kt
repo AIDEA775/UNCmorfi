@@ -9,18 +9,18 @@ import com.uncmorfi.data.persistence.entities.DayMenu
 import kotlinx.android.synthetic.main.item_menu.view.*
 
 internal class MenuAdapter(
-    private val mClickListener: (DayMenu) -> Unit,
-    private val mLongClickListener: (DayMenu) -> Unit
+    private val onClick: (DayMenu) -> Unit,
+    private val onLongClick: (DayMenu) -> Unit
 ) : RecyclerView.Adapter<MenuAdapter.MenuItemViewHolder>() {
 
-    private var mMenuList: List<DayMenu> = emptyList()
+    private val menu = mutableListOf<DayMenu>()
 
     internal inner class MenuItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         fun bind(day: DayMenu) {
             itemView.menuView.setDayMenu(day)
-            itemView.menuView.setOnClickListener { mClickListener(day) }
-            itemView.menuView.setOnLongClickListener { mLongClickListener(day); true }
+            itemView.menuView.setOnClickListener { onClick(day) }
+            itemView.menuView.setOnLongClickListener { onLongClick(day); true }
         }
     }
 
@@ -31,16 +31,18 @@ internal class MenuAdapter(
     }
 
     override fun onBindViewHolder(holder: MenuItemViewHolder, position: Int) {
-        val day = mMenuList[position]
+        val day = menu[position]
         holder.bind(day)
     }
 
     override fun getItemCount(): Int {
-        return mMenuList.size
+        return menu.size
     }
 
     fun updateMenu(menuList: List<DayMenu>) {
-        mMenuList = menuList
-        notifyDataSetChanged()
+        notifyItemRangeRemoved(0, menu.size)
+        menu.clear()
+        menu.addAll(menuList)
+        notifyItemRangeInserted(0, menu.size)
     }
 }

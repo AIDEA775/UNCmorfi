@@ -20,5 +20,9 @@ class RepoUser(context: Context) {
         userDAO.updateFullUser(user)
     }
 
+    suspend fun delete(user: User) {
+        userDAO.delete(user)
+    }
+
 
 }

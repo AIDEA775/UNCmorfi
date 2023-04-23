@@ -35,7 +35,6 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
     private val repoMenu = RepoMenu(context)
     private val repoUser = RepoUser(context)
-    private val userLive: MutableLiveData<List<User>> = MutableLiveData()
     private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
 
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
@@ -89,39 +88,14 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
         status.postValue(if (updates > 0) UPDATE_SUCCESS else USER_INSERTED)
     }
 
-    fun downloadUsers(vararg users: User) {
-        mainDispatch {
-            if (context.isOnline()) {
-                val status = ioDispatch {
-                    val cards = users.joinToString(separator = ",") { it.card }
-                    val userUpdated = client.getUsers(cards)
-
-                    val rows = db.userDao().upsertUser(*userUpdated.toTypedArray())
-                    if (rows > 0) UPDATE_SUCCESS else USER_INSERTED
-                }
-                usersNotify(status)
-            } else {
-                usersNotify(NO_ONLINE)
-            }
-        }
-    }
-
     fun updateUserName(user: User) = viewModelScope.launch {
         repoUser.fullUpdate(user)
         status.value = UPDATE_SUCCESS
     }
 
-    fun deleteUser(user: User) {
-        mainDispatch {
-            db.userDao().delete(user)
-            // fixme eliminar tambien la caché del codigo de barras de la tarjeta
-            usersNotify(USER_DELETED)
-        }
-    }
-
-    private suspend fun usersNotify(code: StatusCode?) {
-        userLive.value = db.userDao().getAll()
-        status.value = code
+    fun deleteUser(user: User) = viewModelScope.launch {
+        repoUser.delete(user)
+        status.value = USER_DELETED
     }
 
     /*

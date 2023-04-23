@@ -61,8 +61,7 @@
     <string name="balance_delete_user_title">Delete %1$s\'s card?</string>
     <string name="balance_delete_user_positive">Delete</string>
 
-    <string name="balance_set_name_title">New name</string>
-    <string name="balance_set_name_hint">Your name</string>
+    <string name="balance_set_name_title">Your name</string>
 
     <string name="balance_align_barcode">Align barcode</string>
 

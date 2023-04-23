@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
-    private lateinit var mUser: User
+    private lateinit var user: User
     private var mDayMenu: DayMenu? = null
     private lateinit var mRootView: View
 
@@ -66,20 +66,20 @@ class HomeFragment : Fragment() {
          */
         observe(viewModel.allUsers()) {
             if (it.isNotEmpty()) {
-                mUser = it.first()
-                homeCard.setUser(mUser)
+                user = it.first()
+                homeCard.setUser(user)
                 homeCard.visibility = VISIBLE
             }
         }
         homeCard.setOnClickListener {
             UserOptionsDialog
-                .newInstance(this, USER_OPTIONS_CODE, mUser)
+                .newInstance(this, USER_OPTIONS_CODE, user)
                 .show(parentFragmentManager, "UserOptionsDialog")
         }
         homeCard.setOnLongClickListener {
-            mUser.isLoading = true
-            homeCard.setUser(mUser)
-            viewModel.downloadUsers(mUser)
+            user.isLoading = true
+            homeCard.setUser(user)
+            viewModel.updateCards(user.card)
             true
         }
         homeCardShowMore.setOnClickListener {
@@ -110,10 +110,10 @@ class HomeFragment : Fragment() {
 
         viewModel.updateServings()
 
-        if (::mUser.isInitialized) {
-            mUser.isLoading = true
-            homeCard.setUser(mUser)
-            viewModel.downloadUsers(mUser)
+        if (::user.isInitialized) {
+            user.isLoading = true
+            homeCard.setUser(user)
+            viewModel.updateCards(user.card)
         }
     }
 
@@ -123,7 +123,7 @@ class HomeFragment : Fragment() {
                 val user = data.getUser()
                 user.isLoading = true
                 homeCard.setUser(user)
-                viewModel.downloadUsers(user)
+                viewModel.updateCards(user.card)
             }
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)

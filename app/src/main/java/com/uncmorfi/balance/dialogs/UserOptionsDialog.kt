@@ -28,7 +28,7 @@ class UserOptionsDialog: BaseDialogHelper() {
                 getString(R.string.balance_user_options_reserve),
                 getString(R.string.balance_user_options_delete),
                 getString(R.string.balance_user_options_copy),
-                getString(R.string.balance_user_options_barcode),
+//                getString(R.string.balance_user_options_barcode),
                 getString(R.string.balance_user_options_set_name)
         )
 
@@ -44,8 +44,8 @@ class UserOptionsDialog: BaseDialogHelper() {
                             context?.copyToClipboard("card", user.card)
                             viewModel.status.value = StatusCode.COPIED
                         }
-                        4 -> startActivity(BarcodeActivity.intent(context!!, user))
-                        5 -> SetNameDialog
+//                        4 -> startActivity(BarcodeActivity.intent(context!!, user))
+                        4 -> SetNameDialog
                                 .newInstance(this, 0, user)
                                 .show(parentFragmentManager, "SetNameDialog")
                     }

@@ -17,16 +17,14 @@ class SetNameDialog : BaseDialogHelper() {
         super.init()
 
         val v = View.inflate(context, R.layout.dialog_set_name, null)
-        builder.setView(v)
-
         v.setNameInput.append(user.name)
 
-        v.setNameSave.setOnClickListener {
-            viewModel.updateUserName(user.copy(name = v.setNameInput.text.toString()))
-            dismiss()
-        }
-
-        v.setNameCancel.setOnClickListener { dismiss() }
+        builder.setView(v)
+            .setNeutralButton(android.R.string.cancel) { _, _ -> dismiss() }
+            .setPositiveButton(R.string.save) { _, _ ->
+                viewModel.updateUserName(user.copy(name = v.setNameInput.text.toString()))
+                dismiss()
+            }
 
         return showKeyboard(builder.create())
     }

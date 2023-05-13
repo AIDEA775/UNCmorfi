@@ -1,39 +1,22 @@
 package com.uncmorfi.data.network
 
-import android.util.Log
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.DateUtils.FORMAT_JS
+import com.uncmorfi.shared.HUEMUL_URL
+import com.uncmorfi.shared.PROFILE_PIC_URL
 import okhttp3.FormBody
-import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.logging.HttpLoggingInterceptor
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
-import java.util.concurrent.TimeUnit
 
 object UserParser {
-    private val logger = object : HttpLoggingInterceptor.Logger {
-        override fun log(message: String) {
-            Log.v("http", message)
-        }
-    }
-    private val loggingInterceptor = HttpLoggingInterceptor(logger).apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .readTimeout(1, TimeUnit.MINUTES)
-        .connectTimeout(1, TimeUnit.MINUTES)
-        .build()
 
     fun fetch(card: String): User? {
         return try {
-
             val response = okHttpClient.newCall(
                 Request.Builder()
-                    .url("https://comedor.unc.edu.ar/gv-ds.php")
+                    .url(HUEMUL_URL)
                     .post(
                         FormBody.Builder()
                             .add("accion", "4")
@@ -45,7 +28,7 @@ object UserParser {
 
             val body = response.body?.string()!!
 
-            println("body::: $body")
+//            println("body::: $body")
 
             val left = body.indexOf("rows: [{c: [")
             val right = body.indexOf("]", left)
@@ -58,7 +41,7 @@ object UserParser {
                 name = tokens[17],
                 type = tokens[9],
                 email = tokens[21],
-                image = "https://asiruws.unc.edu.ar/foto/" + tokens[25],
+                image = PROFILE_PIC_URL + tokens[25],
                 balance = BigDecimal(tokens[6]),
                 price = BigDecimal(tokens[23]).minus(BigDecimal(tokens[12])),
                 expiration = parseExpiration(tokens[5]),

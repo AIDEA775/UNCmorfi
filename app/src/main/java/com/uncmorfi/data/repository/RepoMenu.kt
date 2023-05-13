@@ -15,6 +15,7 @@ class RepoMenu(context: Context) {
         if (menu.isEmpty()) {
             return emptyList()
         }
+
         menuDAO.clearOld()
         return menuDAO.insert(menu)
     }

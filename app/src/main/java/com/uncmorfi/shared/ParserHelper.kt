@@ -44,11 +44,6 @@ fun Calendar.toFormat(format: String): String {
     return fmt.format(this.time)
 }
 
-fun Calendar.compareToToday(): Int {
-    val fmt = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-    return fmt.format(this.time).compareTo(fmt.format(Date()))
-}
-
 fun Calendar.compareToTodayInMillis(): Int {
     return this.compareTo(Calendar.getInstance())
 }

@@ -16,6 +16,7 @@ import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.data.repository.RepoUser
 import com.uncmorfi.data.repository.RepoMenu
+import com.uncmorfi.data.repository.RepoServings
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.*
 import com.uncmorfi.shared.StatusCode.*
@@ -35,7 +36,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val db: AppDatabase = AppDatabase(context)
     private val repoMenu = RepoMenu(context)
     private val repoUser = RepoUser(context)
-    private val servingLive: MutableLiveData<List<Serving>> = MutableLiveData()
+    private val repoServings = RepoServings(context)
 
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
     val status: MutableLiveData<StatusCode> = MutableLiveData()
@@ -139,38 +140,23 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     /*
      * Serving stuff
      */
-    fun getServings(): LiveData<List<Serving>> {
-        if (servingLive.value == null) {
-            mainDispatch {
-                servingLive.value = db.servingDao().getToday()
-                status.value = BUSY
-            }
+    fun getServings(): LiveData<List<Serving>> = repoServings.getToday()
+
+    fun updateServings() = viewModelScope.launch(Dispatchers.IO) {
+        Log.d("ViewModel", "Update serving")
+        if (!context.isOnline()) {
+            status.postValue(NO_ONLINE)
+            return@launch
         }
-        return servingLive
+        status.postValue(UPDATING)
+        val inserts = repoServings.update()
+
+        status.postValue(when {
+            inserts.isEmpty() -> EMPTY_UPDATE
+            inserts.all { it == -1L } -> ALREADY_UPDATED
+            else -> UPDATE_SUCCESS
+        })
     }
-
-    fun updateServings() {
-        mainDispatch {
-            if (context.isOnline()) {
-                status.value = ioDispatch {
-                    val servings = client.getServings().servings.map { entry ->
-                        Serving(entry.key, entry.value)
-                    }
-
-                    if (servings.isEmpty()) {
-                        return@ioDispatch ALREADY_UPDATED
-                    }
-                    db.servingDao().clearOld()
-                    val inserts = db.servingDao().insert(*servings.toTypedArray())
-                    if (inserts.all { it == -1L }) ALREADY_UPDATED else UPDATE_SUCCESS
-                }
-                servingLive.value = db.servingDao().getToday()
-            } else {
-                status.value = NO_ONLINE
-            }
-        }
-    }
-
 
     /*
      * Reservation stuff

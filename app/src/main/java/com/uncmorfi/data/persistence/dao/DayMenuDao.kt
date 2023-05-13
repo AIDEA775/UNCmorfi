@@ -21,7 +21,7 @@ interface DayMenuDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(menus: List<DayMenu>): List<Long>
 
-    @Query("DELETE FROM menu WHERE datetime(date) <= date('now','-15 day')")
+    @Query("DELETE FROM menu WHERE datetime(date) <= date('now','-30 day')")
     suspend fun clearOld()
 
     @Query("DELETE FROM menu")

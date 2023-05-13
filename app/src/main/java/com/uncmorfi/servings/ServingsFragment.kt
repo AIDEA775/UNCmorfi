@@ -3,18 +3,16 @@ package com.uncmorfi.servings
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.github.mikephil.charting.data.Entry
+import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.CUMULATIVE
 import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.RATIONS
-import com.uncmorfi.shared.clearDate
-import com.uncmorfi.shared.init
-import com.uncmorfi.shared.startBrowser
-import com.uncmorfi.MainViewModel
+import com.uncmorfi.shared.*
 import kotlinx.android.synthetic.main.fragment_servings.*
+import java.time.ZoneId
 
 /**
  * Medidor de raciones.
@@ -23,47 +21,50 @@ import kotlinx.android.synthetic.main.fragment_servings.*
 
 class ServingsFragment : Fragment() {
     private lateinit var mRootView: View
-    private lateinit var mViewModel: MainViewModel
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, i: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_servings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRootView = view
-        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        swipeRefresh.init { refreshServings() }
+        swipeRefresh.init { viewModel.updateServings() }
         servingTimeChart.init(requireContext())
         servingAccumulatedChart.init(requireContext())
 
         servingTimeChart.onChartGestureListener = SyncChartsGestureListener(
-                servingTimeChart, servingAccumulatedChart)
+            servingTimeChart, servingAccumulatedChart
+        )
 
         servingAccumulatedChart.onChartGestureListener = SyncChartsGestureListener(
-                servingAccumulatedChart, servingTimeChart)
+            servingAccumulatedChart, servingTimeChart
+        )
 
         // Parametros especiales de ambos LineChart
         servingAccumulatedChart.xAxis.setDrawGridLines(false)
 
-        mViewModel.getServings().observe(viewLifecycleOwner, Observer {
+        observe(viewModel.getServings()) {
             servingsPieChart.set(it)
             updateCharts(it)
-        })
+        }
 
-        refreshServings()
+        observe(viewModel.status) {
+            swipeRefresh.isRefreshing = it == StatusCode.UPDATING
+        }
     }
 
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_servings)
+        viewModel.updateServings()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -72,19 +73,24 @@ class ServingsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.serving_update -> { refreshServings(); true }
-            R.id.serving_browser -> requireActivity().startBrowser(URL)
+            R.id.serving_update -> {
+                viewModel.updateServings(); true
+            }
+            R.id.serving_browser -> requireActivity().startBrowser(COCINA_URL)
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun refreshServings() {
-        mViewModel.updateServings()
-    }
-
     private fun updateCharts(items: List<Serving>) {
         if (items.isNotEmpty()) {
-            val data = items.map { s -> Entry(s.date.clearDate().toFloat(), s.serving.toFloat()) }
+            val data = items.map { s ->
+                val x = s.date
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalTime()
+                    .toSecondOfDay()
+                    .toFloat()
+                Entry(x, s.serving.toFloat())
+            }
             if (data.size > 1) {
                 // Algunas veces el medidor se cae, y las raciones aparecen cargadas a las 00:00hs
                 // así que al primer elemento lo ponemos 1 min antes del segundo elemento
@@ -92,8 +98,18 @@ class ServingsFragment : Fragment() {
                 data[0].x = data[1].x - 60f
             }
 
-            val timeData = StyledLineDataSet(requireContext(), data, getString(R.string.servings_chart_label_time), RATIONS)
-            val cumulativeData = StyledLineDataSet(requireContext(), accumulate(data), getString(R.string.servings_chart_label_accumulated), CUMULATIVE)
+            val timeData = StyledLineDataSet(
+                requireContext(),
+                data,
+                getString(R.string.servings_chart_label_time),
+                RATIONS
+            )
+            val cumulativeData = StyledLineDataSet(
+                requireContext(),
+                accumulate(data),
+                getString(R.string.servings_chart_label_accumulated),
+                CUMULATIVE
+            )
 
             servingTimeChart.update(timeData)
             servingAccumulatedChart.update(cumulativeData)
@@ -113,7 +129,4 @@ class ServingsFragment : Fragment() {
         return accumulated
     }
 
-    companion object {
-        private const val URL = "http://comedor.unc.edu.ar/cocina.php"
-    }
 }

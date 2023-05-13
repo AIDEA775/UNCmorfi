@@ -1,6 +1,7 @@
 package com.uncmorfi
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -33,7 +34,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setMainFragment()
         }
 
-        observe(viewModel.status) { content_layout.snack(it) }
+        observe(viewModel.status) {
+            Log.i("MainActivity", "new status: $it")
+            content_layout.snack(it)
+        }
 
         observe(viewModel.isLoading) {
             val refreshLayout = content_layout.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)

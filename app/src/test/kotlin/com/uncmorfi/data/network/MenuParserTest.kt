@@ -1,17 +1,12 @@
-package com.uncmorfi.data.repository
+package com.uncmorfi.data.network
 
-import com.uncmorfi.data.network.MenuParser
 import org.junit.Test
-import org.jsoup.Jsoup
-import org.junit.Assert
 
-
-class RepoMenuTest {
+class MenuParserTest {
 
     @Test
     fun `se puede parsear el menu de la semana directamente`() {
         val out = MenuParser.fetch()
         println(out)
     }
-
 }

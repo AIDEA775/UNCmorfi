@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.MainViewModel
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 class BalanceFragment : Fragment() {
     private lateinit var mRootView: View
     private lateinit var mUserAdapter: UserAdapter
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     private var userList: List<User> = emptyList()
 
@@ -61,7 +61,6 @@ class BalanceFragment : Fragment() {
             if (it == UPDATE_SUCCESS || it == USER_INSERTED) {
                 newUser.clearText()
             }
-            mRootView.snack(it)
         }
 
         observe(viewModel.allUsers()) {
@@ -103,7 +102,7 @@ class BalanceFragment : Fragment() {
             R.id.balance_copy -> {
                 copyAllUsers(); true
             }
-            R.id.balance_browser -> requireActivity().startBrowser(URL)
+            R.id.balance_browser -> requireActivity().startBrowser(HUEMUL_AUTOCONSULTA_URL)
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -183,7 +182,6 @@ class BalanceFragment : Fragment() {
     }
 
     companion object {
-        private const val URL = "http://comedor.unc.edu.ar/autoconsulta.php"
         private const val USER_OPTIONS_CODE = 1
     }
 }

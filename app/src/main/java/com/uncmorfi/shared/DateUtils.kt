@@ -8,7 +8,7 @@ import java.util.*
 object DateUtils {
     val FORMAT_ARG1: DateTimeFormatter = DateTimeFormatterBuilder()
         .parseCaseInsensitive()
-        .appendPattern("MMMM yyyy EEEE dd")
+        .appendPattern("MMMM yyyy EEEE d")
         .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
         .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
         .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
@@ -16,7 +16,7 @@ object DateUtils {
 
     val FORMAT_ARG2: DateTimeFormatter = DateTimeFormatter.ofPattern("dd")
     val FORMAT_ARG3: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE")
-    val FORMAT_ARG4: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val FORMAT_ARG4: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:ss:mm")
 
     val FORMAT_JS: DateTimeFormatter = DateTimeFormatter.ofPattern("'new Date('yyyy',' M',' dd')'")
 }

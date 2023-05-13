@@ -106,7 +106,7 @@ class TotalPieChartView: PieChart {
     }
 
     companion object {
-        private const val FOOD_RATIONS = 1700
+        private const val FOOD_RATIONS = 1500
         private const val FOOD_LIMIT = 200
     }
 }

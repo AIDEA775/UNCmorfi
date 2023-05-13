@@ -3,7 +3,7 @@ package com.uncmorfi.menu
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_menu.*
 class MenuFragment : Fragment() {
     private lateinit var mRootView: View
     private lateinit var adapter: MenuAdapter
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,6 @@ class MenuFragment : Fragment() {
 
         observe(viewModel.status) {
             swipeRefresh.isRefreshing = it == StatusCode.UPDATING
-            view.snack(it)
         }
     }
 

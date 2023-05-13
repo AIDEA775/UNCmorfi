@@ -1,20 +1,18 @@
 package com.uncmorfi.balance
 
 import android.content.Context
-import android.graphics.Typeface
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
-import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
-import com.uncmorfi.shared.DateUtils.FORMAT_ARG4
 import com.uncmorfi.shared.colorOf
 import com.uncmorfi.shared.toMoneyFormat
 import kotlinx.android.synthetic.main.view_user_card.view.*
@@ -26,7 +24,7 @@ class UserCardView @JvmOverloads constructor(
     context: Context,
     attr: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : RelativeLayout(context, attr, defStyleAttr) {
+) : ConstraintLayout(context, attr, defStyleAttr) {
 
     private lateinit var user: User
 
@@ -45,12 +43,8 @@ class UserCardView @JvmOverloads constructor(
     private fun setText(user: User) {
         userName.text = user.name
         userCard.text = user.card
-        userType.text = user.type
 
         userBalance.text = user.balance.toMoneyFormat()
-        userExpiration.text = context.getString(
-            R.string.balance_expiration, user.expiration.format(FORMAT_ARG4)
-        )
         userLastUpdate.text = context.getString(
             R.string.balance_last_update, relativeLastUpdate(user.lastUpdate)
         )
@@ -78,34 +72,32 @@ class UserCardView @JvmOverloads constructor(
 
     private fun setColors(user: User) {
         // Alerta si le queda poco saldo
-        userBalance.setTextColor(context.colorOf(
-            if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
-            else R.color.primary_dark
-        ))
-        userRation.setTextColor(context.colorOf(
-            if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
-            else R.color.primary_text
-        ))
+        userBalance.setTextColor(
+            context.colorOf(
+                if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
+                else R.color.primary_dark
+            )
+        )
+        userRation.setTextColor(
+            context.colorOf(
+                if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
+                else R.color.primary_text
+            )
+        )
 
         // Alerta si la tarjeta está vencida o está por vencerse
         when {
             warning(user.expiration, 0) -> {
                 setBackgroundColor(context.colorOf(R.color.accent))
                 userBalance.setTextColor(context.colorOf(R.color.white))
-                userExpiration.setTypeface(null, Typeface.BOLD)
-                userExpiration.setTextColor(context.colorOf(R.color.white))
                 setTextColor(R.color.white, R.color.white)
             }
             warning(user.expiration, WARNING_USER_EXPIRE) -> {
                 setBackgroundColor(context.colorOf(R.color.white))
-                userExpiration.setTypeface(null, Typeface.NORMAL)
-                userExpiration.setTextColor(context.colorOf(R.color.accent))
                 setTextColor(R.color.primary_text, R.color.secondary_text)
             }
             else -> {
                 setBackgroundColor(context.colorOf(R.color.white))
-                userExpiration.setTypeface(null, Typeface.NORMAL)
-                userExpiration.setTextColor(context.colorOf(R.color.secondary_text))
                 setTextColor(R.color.primary_text, R.color.secondary_text)
             }
         }
@@ -115,7 +107,6 @@ class UserCardView @JvmOverloads constructor(
         userName.setTextColor(context.colorOf(primary))
 
         userCard.setTextColor(context.colorOf(extra))
-        userType.setTextColor(context.colorOf(extra))
         userLastUpdate.setTextColor(context.colorOf(extra))
     }
 

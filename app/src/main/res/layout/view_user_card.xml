@@ -1,109 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:parentTag="android.widget.RelativeLayout">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <ImageView
         android:id="@+id/userImage"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="8dp"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
         android:importantForAccessibility="no"
         android:padding="4dp"
         android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <ProgressBar
         android:id="@+id/userBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/userImage"
-        android:layout_alignTop="@+id/userImage"
-        android:layout_alignEnd="@+id/userImage"
-        android:layout_alignBottom="@+id/userImage"
         android:importantForAccessibility="no"
         android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progressbar"
-        android:visibility="visible" />
+        android:padding="4dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/userImage"
+        app:layout_constraintEnd_toEndOf="@+id/userImage"
+        app:layout_constraintStart_toStartOf="@+id/userImage"
+        app:layout_constraintTop_toTopOf="@+id/userImage" />
 
-    <LinearLayout
-        android:id="@+id/user_name_layout"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/userImage"
-        android:layout_alignBottom="@+id/userImage"
-        android:layout_marginLeft="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_toStartOf="@+id/userBalance"
-        android:layout_toEndOf="@+id/userImage"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:ellipsize="end"
+        android:importantForAccessibility="yes"
+        android:maxLines="1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/userCard"
+        app:layout_constraintEnd_toStartOf="@+id/barrier"
+        app:layout_constraintStart_toEndOf="@+id/userImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Alejandro Ismael" />
 
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:importantForAccessibility="yes"
-            android:maxLines="1"
-            android:textStyle="bold"
-            tools:text="Alejandro Ismael" />
-
-        <TextView
-            android:id="@+id/userCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:importantForAccessibility="no"
-            tools:text="0475ED74C481B7A" />
-
-        <TextView
-            android:id="@+id/userLastUpdate"
-            style="@style/TextAppearance.MaterialComponents.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAccessibility="yes"
-            tools:text="Last update" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/user_detail"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/userCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userImage"
-        android:layout_alignParentStart="true"
-        android:layout_margin="8dp"
-        android:layout_toStartOf="@+id/userBalance"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:ellipsize="marquee"
+        android:fontFamily="sans-serif-condensed"
+        android:importantForAccessibility="no"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@+id/userLastUpdate"
+        app:layout_constraintEnd_toEndOf="@+id/userName"
+        app:layout_constraintStart_toEndOf="@+id/userImage"
+        app:layout_constraintTop_toBottomOf="@+id/userName"
+        tools:text="0475ED74C481B7A" />
 
-        <TextView
-            android:id="@+id/userExpiration"
-            style="@style/TextAppearance.MaterialComponents.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAccessibility="yes"
-            android:textSize="12sp"
-            tools:text="Expiration date" />
-
-        <TextView
-            android:id="@+id/userType"
-            style="@style/TextAppearance.MaterialComponents.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAccessibility="no"
-            android:textSize="12sp"
-            tools:text="Grade student" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/userLastUpdate"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:importantForAccessibility="yes"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/userName"
+        app:layout_constraintStart_toEndOf="@+id/userImage"
+        app:layout_constraintTop_toBottomOf="@+id/userCard"
+        tools:text="Updated 1 minute ago" />
 
     <TextView
         android:id="@+id/userBalance"
@@ -111,28 +84,39 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/userImage"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:importantForAccessibility="yes"
         android:textColor="@color/primary_dark"
         android:textSize="24sp"
-        tools:text="$ 1234,56" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/userName"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="$ 1,500" />
 
     <TextView
         android:id="@+id/userRation"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userBalance"
-        android:layout_alignEnd="@+id/userBalance"
-        android:layout_toEndOf="@+id/user_name_layout"
+        android:layout_marginHorizontal="8dp"
         android:gravity="center"
         android:importantForAccessibility="no"
         android:textColor="@color/primary_text"
         android:textSize="12sp"
         android:textStyle="bold"
-        tools:text="1 food ration" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/userName"
+        app:layout_constraintTop_toBottomOf="@+id/userBalance"
+        tools:text="(1 food ration)" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left"
+        app:constraint_referenced_ids="userBalance,userRation" />
 
 </merge>

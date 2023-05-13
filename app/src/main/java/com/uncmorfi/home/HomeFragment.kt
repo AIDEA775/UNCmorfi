@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.uncmorfi.MainActivity
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
@@ -14,16 +13,16 @@ import com.uncmorfi.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
+import com.uncmorfi.shared.StatusCode
 import com.uncmorfi.shared.getUser
 import com.uncmorfi.shared.init
 import com.uncmorfi.shared.observe
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
-    private lateinit var viewModel: MainViewModel
     private lateinit var user: User
     private var mDayMenu: DayMenu? = null
-    private lateinit var mRootView: View
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +38,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRootView = view
-        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         swipeRefresh.init { updateAll() }
+
+        observe(viewModel.status) {
+            swipeRefresh.isRefreshing = it == StatusCode.UPDATING
+        }
 
         /*
          * Menú
@@ -89,11 +90,12 @@ class HomeFragment : Fragment() {
         /*
          * Medidor
          */
-        viewModel.getServings().observe(viewLifecycleOwner, Observer {
+        observe(viewModel.getServings()) {
             if (it.isNotEmpty()) {
                 homeServingsPieChart.set(it)
             }
-        })
+        }
+
         homeServingsPieChart.setTouchEnabled(false)
         homeServingsPieChart.setOnClickListener {
             viewModel.updateServings()

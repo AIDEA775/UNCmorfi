@@ -39,11 +39,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             content_layout.snack(it)
         }
 
-        observe(viewModel.isLoading) {
-            val refreshLayout = content_layout.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
-            refreshLayout?.isRefreshing = it
-        }
-
         observe(viewModel.reservation) {
             content_layout.snack(it)
         }

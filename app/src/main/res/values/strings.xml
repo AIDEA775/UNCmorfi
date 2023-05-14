@@ -52,11 +52,14 @@
 
     <string name="balance_user_options_title">Card</string>
     <string name="balance_user_options_update">Update</string>
-    <string name="balance_user_options_reserve">Reserve (BETA)</string>
+    <string name="balance_user_options_recharge">Recharge</string>
+    <string name="balance_user_options_reserve">Reserve</string>
     <string name="balance_user_options_delete">Delete</string>
     <string name="balance_user_options_copy">Copy</string>
     <string name="balance_user_options_barcode">Barcode</string>
     <string name="balance_user_options_set_name">Change name</string>
+    <string name="balance_user_options_price">(%1$s each ration)</string>
+    <string name="balance_user_options_balance_title">Balance</string>
 
     <string name="balance_delete_user_title">Delete %1$s\'s card?</string>
     <string name="balance_delete_user_positive">Delete</string>

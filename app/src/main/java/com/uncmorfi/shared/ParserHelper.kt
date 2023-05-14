@@ -32,13 +32,6 @@ fun Calendar.toISOString(): String {
     return fmt.format(this.time)
 }
 
-fun Calendar.clearDate(): Long {
-    this.set(Calendar.YEAR, 1970)
-    this.set(Calendar.MONTH, 0)
-    this.set(Calendar.DAY_OF_MONTH, 1)
-    return this.timeInMillis / 1000
-}
-
 fun Calendar.toFormat(format: String): String {
     val fmt = SimpleDateFormat(format, Locale.getDefault())
     return fmt.format(this.time)
@@ -60,3 +53,5 @@ class CalendarDeserializer : JsonDeserializer<Calendar> {
 }
 
 fun BigDecimal.toMoneyFormat(): String = NumberFormat.getCurrencyInstance().format(this)
+
+fun String.toBigDecimalOrZero(): BigDecimal = toBigDecimalOrNull() ?: BigDecimal.ZERO

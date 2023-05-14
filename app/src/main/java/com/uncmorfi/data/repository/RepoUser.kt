@@ -11,7 +11,7 @@ class RepoUser(context: Context) {
     fun getAll() = userDAO.getAllAsLiveData()
 
     suspend fun fetch(card: String): Int {
-        val user = UserParser.fetch(card) ?: return 0
+        val user = UserParser.fetch(card) ?: return -1
 
         return userDAO.upsert(listOf(user))
     }

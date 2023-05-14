@@ -2,25 +2,54 @@ package com.uncmorfi.balance.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.reservations.CaptchaDialog
 import com.uncmorfi.reservations.ReserveOptionsDialog
-import com.uncmorfi.shared.BaseDialogHelper
-import com.uncmorfi.shared.ReserveStatus
-import com.uncmorfi.shared.StatusCode
-import com.uncmorfi.shared.copyToClipboard
+import com.uncmorfi.shared.*
+import kotlinx.android.synthetic.main.dialog_user.view.*
+import kotlinx.android.synthetic.main.dialog_user.view.userBalance
+import kotlinx.android.synthetic.main.dialog_user.view.userName
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.
  */
 class UserOptionsDialog : BaseDialogHelper() {
-    private var reserveCached = false
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.init()
+
+        val v = View.inflate(context, R.layout.dialog_user, null)
+
+        v.userName.text = user.name
+        v.userEmail.text = user.email
+        v.userType.text = user.type
+        v.userBalance.text = user.balance.toMoneyFormat()
+        v.userPrice.text =
+            getString(R.string.balance_user_options_price, user.price.toMoneyFormat())
+
+        Glide.with(requireContext())
+            .load(user.image)
+            .placeholder(R.drawable.ic_account)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .apply(RequestOptions.circleCropTransform())
+            .into(v.userPhoto)
+
+        builder.setView(v)
+
+        return builder.create()
+    }
+
+    private var reserveCached = false
+
+    fun onCreateDialog2(savedInstanceState: Bundle?): Dialog {
         reservationInit()
         val items = arrayOf(
             getString(R.string.balance_user_options_update),

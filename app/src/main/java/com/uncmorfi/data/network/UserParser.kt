@@ -30,29 +30,31 @@ object UserParser {
 
 //            println("body::: $body")
 
-            val left = body.indexOf("rows: [{c: [")
-            val right = body.indexOf("]", left)
-            val result = body.substring(left + 12, right - 2)
-            val tokens = result.split("['},]*\\{v: '?".toRegex()).toTypedArray()
-            if (tokens.size < 2) return null
-
-            val user = User(
-                card = card,
-                name = tokens[17],
-                type = tokens[9],
-                email = tokens[21],
-                image = PROFILE_PIC_URL + tokens[25],
-                balance = BigDecimal(tokens[6]),
-                price = BigDecimal(tokens[23]).minus(BigDecimal(tokens[12])),
-                expiration = parseExpiration(tokens[5]),
-                lastUpdate = Instant.now(),
-            )
-
-            user
+            parse(body)
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
+    }
+
+    fun parse(body: String): User? {
+        val left = body.indexOf("rows: [{c: [")
+        val right = body.indexOf("]", left)
+        val result = body.substring(left + 12, right - 2)
+        val tokens = result.split("['},]*\\{v: '?".toRegex()).toTypedArray()
+        if (tokens.size < 2) return null
+
+        return User(
+            card = tokens[26],
+            name = tokens[17],
+            type = tokens[9],
+            email = tokens[21],
+            image = PROFILE_PIC_URL + tokens[25],
+            balance = BigDecimal(tokens[6]),
+            price = BigDecimal(tokens[23]).minus(BigDecimal(tokens[12])),
+            expiration = parseExpiration(tokens[5]),
+            lastUpdate = Instant.now(),
+        )
     }
 
     fun parseExpiration(token: String): LocalDate = LocalDate

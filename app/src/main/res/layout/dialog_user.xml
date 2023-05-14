@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="24dp"
+        app:cardPreventCornerOverlap="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/userPhoto"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:adjustViewBounds="false"
+            android:cropToPadding="false"
+            android:importantForAccessibility="no"
+            android:scaleType="centerInside"
+            tools:ignore="ContentDescription" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:importantForAccessibility="yes"
+        android:maxLines="1"
+        android:textStyle="bold"
+        android:textColor="@color/primary_text"
+        app:layout_constraintBottom_toTopOf="@+id/userEmail"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="@+id/cardView"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Alejandro Ismael" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:padding="0dp"
+        app:icon="@drawable/ic_edit"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/userName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/barrier2"
+        app:layout_constraintTop_toTopOf="@+id/userName" />
+
+    <TextView
+        android:id="@+id/userEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ellipsize="marquee"
+        android:importantForAccessibility="no"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@+id/userType"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/userName"
+        tools:text="user@mi.unc.edu.ar" />
+
+    <TextView
+        android:id="@+id/userType"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ellipsize="marquee"
+        android:importantForAccessibility="yes"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/userEmail"
+        tools:text="Estudiante de grado" />
+
+    <TextView
+        android:id="@+id/userBalanceTitle"
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:importantForAccessibility="no"
+        android:text="@string/balance_user_options_balance_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <TextView
+        android:id="@+id/userBalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:importantForAccessibility="yes"
+        android:textColor="@color/primary_text"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userBalanceTitle"
+        tools:text="$ 1500,40" />
+
+    <TextView
+        android:id="@+id/userPrice"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="8dp"
+        android:gravity="center"
+        android:importantForAccessibility="yes"
+        app:layout_constraintEnd_toEndOf="@+id/userBalance"
+        app:layout_constraintStart_toStartOf="@+id/userBalance"
+        app:layout_constraintTop_toBottomOf="@+id/userBalance"
+        tools:text="(350p cada ración)" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/userUpdate"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="8dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:padding="0dp"
+        app:icon="@drawable/ic_refresh"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/userBalance"
+        app:layout_constraintStart_toEndOf="@+id/userBalance"
+        app:layout_constraintTop_toTopOf="@+id/userBalance" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/userRecharge"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:maxLines="1"
+        android:padding="16dp"
+        android:text="@string/balance_user_options_recharge"
+        android:textColor="@color/primary_dark"
+        app:icon="@drawable/ic_money"
+        app:iconGravity="top"
+        app:layout_constraintEnd_toStartOf="@+id/userReserve"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userPrice"
+        app:strokeColor="@color/primary_light"
+        tools:text="arstarstttt" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/userReserve"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:padding="16dp"
+        android:text="@string/balance_user_options_reserve"
+        android:textColor="@color/primary_dark"
+        app:icon="@drawable/nav_ticket"
+        app:iconGravity="top"
+        app:layout_constraintBottom_toBottomOf="@+id/userRecharge"
+        app:layout_constraintEnd_toStartOf="@+id/userCopyToClip"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/userRecharge"
+        app:layout_constraintTop_toTopOf="@+id/userRecharge"
+        app:strokeColor="@color/primary_light" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/userCopyToClip"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:maxLines="1"
+        android:padding="16dp"
+        android:text="@string/balance_user_options_copy"
+        android:textColor="@color/primary_dark"
+        app:icon="@drawable/ic_copy"
+        app:iconGravity="top"
+        app:layout_constraintBottom_toBottomOf="@+id/userRecharge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/userReserve"
+        app:layout_constraintTop_toTopOf="@+id/userRecharge"
+        app:strokeColor="@color/primary_light" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/userDelete"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/balance_user_options_delete"
+        android:textColor="@color/accent"
+        app:icon="@drawable/ic_delete"
+        app:iconTint="@color/accent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userRecharge" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="userName,userEmail,userType"
+        tools:layout_editor_absoluteX="104dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

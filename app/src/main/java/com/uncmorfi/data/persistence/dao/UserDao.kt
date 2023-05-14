@@ -6,7 +6,6 @@ import com.uncmorfi.data.persistence.entities.User
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
-import java.util.*
 
 @Dao
 interface UserDao {
@@ -20,21 +19,26 @@ interface UserDao {
     @Update
     suspend fun updateFullUser(vararg users: User)
 
-    @Query("""
+    @Query(
+        """
         UPDATE users SET
         type = :type,
+        email = :email,
         image = :image,
         balance= :balance,
         expiration= :expiration,
         lastUpdate= :lastUpdate
         WHERE card = :card
-        """)
-    suspend fun updatePartialUser(card: String,
-                                  type: String?,
-                                  image: String?,
-                                  balance: BigDecimal,
-                                  expiration: LocalDate,
-                                  lastUpdate: Instant
+        """
+    )
+    suspend fun updatePartialUser(
+        card: String,
+        type: String?,
+        email: String,
+        image: String?,
+        balance: BigDecimal,
+        expiration: LocalDate,
+        lastUpdate: Instant
     )
 
     @Delete
@@ -56,7 +60,15 @@ interface UserDao {
         }
 
         for (u in updateList) {
-            updatePartialUser(u.card, u.type, u.image, u.balance, u.expiration, u.lastUpdate)
+            updatePartialUser(
+                u.card,
+                u.type,
+                u.email,
+                u.image,
+                u.balance,
+                u.expiration,
+                u.lastUpdate
+            )
         }
 
         return updateList.size

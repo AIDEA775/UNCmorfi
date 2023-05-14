@@ -50,16 +50,15 @@
     <string name="snack_new_user_success">Agregado</string>
     <string name="snack_delete_user_done">Tarjeta eliminada</string>
 
-    <string name="balance_user_options_title">Tarjeta</string>
-    <string name="balance_user_options_update">Actualizar</string>
+    <string name="balance_user_options_title">La tarjeta de</string>
     <string name="balance_user_options_recharge">Recargar</string>
     <string name="balance_user_options_reserve">Reservar</string>
     <string name="balance_user_options_delete">Eliminar</string>
     <string name="balance_user_options_copy">Copiar</string>
     <string name="balance_user_options_barcode">Código de barras</string>
-    <string name="balance_user_options_set_name">Cambiar nombre</string>
     <string name="balance_user_options_price">(%1$s cada ración)</string>
     <string name="balance_user_options_balance_title">Saldo</string>
+    <string name="balance_user_options_copy_toast">El código de la tarjeta está copiado en el portapapeles</string>
 
     <string name="balance_delete_user_title">Eliminar tarjeta de %1$s?</string>
     <string name="balance_delete_user_positive">Eliminar</string>
@@ -142,6 +141,7 @@
     <string name="snack_already_updated">Ya estaba actualizado</string>
 
     <string name="snack_copied">Copiado al portapapeles</string>
+    <string name="snack_copied_param">%1$s copiado al portapapeles</string>
     <string name="snack_empty_copy">Nada para copiar</string>
 
     <!-- Cualquiera -->

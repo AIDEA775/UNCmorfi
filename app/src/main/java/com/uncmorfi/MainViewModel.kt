@@ -47,25 +47,29 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
      * Balance stuff
      */
 
-    fun allUsers(): LiveData<List<User>> = repoUser.getAll()
+    fun getAllUsers(): LiveData<List<User>> = repoUser.getAll()
+
+    fun getUser(card: String): LiveData<User?> = repoUser.getBy(card)
 
     fun updateCards(card: String) = launchIO {
         if (!context.isOnline()) {
             status.postValue(NO_ONLINE)
             return@launchIO
         }
+        status.postValue(UPDATING)
+//        delay(4_000)
         val updates = repoUser.fetch(card)
         status.postValue(if (updates > 0) UPDATE_SUCCESS else USER_INSERTED)
     }
 
     fun updateUserName(user: User) = launchIO {
         repoUser.fullUpdate(user)
-        status.value = UPDATE_SUCCESS
+        status.postValue(UPDATE_SUCCESS)
     }
 
     fun deleteUser(user: User) = launchIO {
         repoUser.delete(user)
-        status.value = USER_DELETED
+        status.postValue(USER_DELETED)
     }
 
     /*

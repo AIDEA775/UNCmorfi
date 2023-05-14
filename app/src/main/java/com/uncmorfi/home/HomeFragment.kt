@@ -1,6 +1,5 @@
 package com.uncmorfi.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.View.VISIBLE
@@ -14,7 +13,6 @@ import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.StatusCode
-import com.uncmorfi.shared.getUser
 import com.uncmorfi.shared.init
 import com.uncmorfi.shared.observe
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -65,7 +63,7 @@ class HomeFragment : Fragment() {
         /*
          * Tarjetas
          */
-        observe(viewModel.allUsers()) {
+        observe(viewModel.getAllUsers()) {
             if (it.isNotEmpty()) {
                 user = it.first()
                 homeCard.setUser(user)
@@ -74,7 +72,7 @@ class HomeFragment : Fragment() {
         }
         homeCard.setOnClickListener {
             UserOptionsDialog
-                .newInstance(this, USER_OPTIONS_CODE, user)
+                .newInstance(user)
                 .show(parentFragmentManager, "UserOptionsDialog")
         }
         homeCard.setOnLongClickListener {
@@ -119,20 +117,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            USER_OPTIONS_CODE -> {
-                val user = data.getUser()
-                user.isLoading = true
-                homeCard.setUser(user)
-                viewModel.updateCards(user.card)
-            }
-            else -> {
-                super.onActivityResult(requestCode, resultCode, data)
-            }
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)
     }
@@ -156,7 +140,4 @@ class HomeFragment : Fragment() {
         viewModel.reservation.value = NOCACHED
     }
 
-    companion object {
-        private const val USER_OPTIONS_CODE = 1
-    }
 }

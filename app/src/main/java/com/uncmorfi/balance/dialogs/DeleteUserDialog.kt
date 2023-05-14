@@ -2,9 +2,9 @@ package com.uncmorfi.balance.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.shared.ARG_USER
 import com.uncmorfi.shared.BaseDialogHelper
 
 class DeleteUserDialog : BaseDialogHelper() {
@@ -21,8 +21,12 @@ class DeleteUserDialog : BaseDialogHelper() {
     }
 
     companion object {
-        fun newInstance(fragment: Fragment, code: Int, user: User): DeleteUserDialog {
-            return newInstance(::DeleteUserDialog, fragment, code, user)
+        fun newInstance(user: User): DeleteUserDialog {
+            return DeleteUserDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_USER, user)
+                }
+            }
         }
     }
 }

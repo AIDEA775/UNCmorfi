@@ -1,109 +1,92 @@
 package com.uncmorfi.balance.dialogs
 
-import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
-import com.uncmorfi.reservations.CaptchaDialog
-import com.uncmorfi.reservations.ReserveOptionsDialog
 import com.uncmorfi.shared.*
 import kotlinx.android.synthetic.main.dialog_user.view.*
-import kotlinx.android.synthetic.main.dialog_user.view.userBalance
-import kotlinx.android.synthetic.main.dialog_user.view.userName
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.
  */
-class UserOptionsDialog : BaseDialogHelper() {
+class UserOptionsDialog : BottomSheetDialogFragment() {
 
+    val viewModel: MainViewModel by activityViewModels()
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        super.init()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.dialog_user, container, false)
 
-        val v = View.inflate(context, R.layout.dialog_user, null)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        v.userName.text = user.name
-        v.userEmail.text = user.email
-        v.userType.text = user.type
-        v.userBalance.text = user.balance.toMoneyFormat()
-        v.userPrice.text =
-            getString(R.string.balance_user_options_price, user.price.toMoneyFormat())
+        val card = arguments?.getSerializable(ARG_CARD) as String
 
-        Glide.with(requireContext())
-            .load(user.image)
-            .placeholder(R.drawable.ic_account)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .apply(RequestOptions.circleCropTransform())
-            .into(v.userPhoto)
+        observe(viewModel.status) {
+            view.userProgressBar.invisible(it != StatusCode.UPDATING)
+            view.userUpdate.invisible(it == StatusCode.UPDATING)
+        }
 
-        builder.setView(v)
-
-        return builder.create()
-    }
-
-    private var reserveCached = false
-
-    fun onCreateDialog2(savedInstanceState: Bundle?): Dialog {
-        reservationInit()
-        val items = arrayOf(
-            getString(R.string.balance_user_options_update),
-            getString(R.string.balance_user_options_reserve),
-            getString(R.string.balance_user_options_delete),
-            getString(R.string.balance_user_options_copy),
-//                getString(R.string.balance_user_options_barcode),
-            getString(R.string.balance_user_options_set_name)
-        )
-
-        builder.setTitle(getString(R.string.balance_user_options_title))
-            .setItems(items) { _, which ->
-                when (which) {
-                    0 -> sendResult(which, user)
-                    1 -> reservation()
-                    2 -> DeleteUserDialog
-                        .newInstance(this, 0, user)
-                        .show(parentFragmentManager, "DeleteUserDialog")
-                    3 -> {
-                        context?.copyToClipboard("card", user.card)
-                        viewModel.status.value = StatusCode.COPIED
-                    }
-//                        4 -> startActivity(BarcodeActivity.intent(context!!, user))
-                    4 -> SetNameDialog
-                        .newInstance(this, 0, user)
-                        .show(parentFragmentManager, "SetNameDialog")
-                }
+        observe(viewModel.getUser(card)) { user ->
+            if (user == null) {
+                dismiss()
+                return@observe
             }
-        return builder.create()
-    }
 
-    private fun reservationInit() {
-        viewModel.reservation.observe(this, Observer {
-            reserveCached = reserveCached || (it == ReserveStatus.CACHED)
-        })
-        viewModel.reserveIsCached(user)
-    }
+            view.userName.text = user.name
+            view.userEmail.text = user.email
+            view.userType.text = user.type
+            view.userBalance.text = user.balance.toMoneyFormat()
+            view.userPrice.text =
+                getString(R.string.balance_user_options_price, user.price.toMoneyFormat())
 
-    private fun reservation() {
-        if (reserveCached) {
-            ReserveOptionsDialog
-                .newInstance(this, 0, user)
-                .show(parentFragmentManager, "ReserveOptionsDialog")
-        } else {
-            CaptchaDialog
-                .newInstance(this, 0, user)
-                .show(parentFragmentManager, "CaptchaDialog")
+            view.userUpdate.setOnClickListener {
+                viewModel.updateCards(user.card)
+            }
+
+            // https://github.com/material-components/material-components-android/issues/1952#issuecomment-1000997296
+            view.userCopyToClip.setOnClickListener {
+                requireContext().copyToClipboard("card", user.card)
+                val msg = getString(R.string.snack_copied_param, user.card)
+                view.userSnackbarHack.snack(msg, SnackType.FINISH)
+            }
+
+            view.userEdit.setOnClickListener {
+                EditNameDialog
+                    .newInstance(user)
+                    .show(parentFragmentManager, "SetNameDialog")
+            }
+
+            view.userRecharge.setOnClickListener {
+                requireActivity().startBrowser(SANAVIRON_URL)
+            }
+
+            view.userReserve.setOnClickListener {
+                requireContext().copyToClipboard("card", user.card)
+                Toast.makeText(
+                    requireContext(),
+                    R.string.balance_user_options_copy_toast,
+                    Toast.LENGTH_SHORT
+                ).show()
+                requireActivity().startBrowser(HUEMUL_RESERVA_URL)
+            }
         }
     }
 
     companion object {
-        fun newInstance(fragment: Fragment, code: Int, user: User): UserOptionsDialog {
-            return newInstance(::UserOptionsDialog, fragment, code, user)
+        fun newInstance(user: User) = UserOptionsDialog().apply {
+            arguments = Bundle().apply {
+                putString(ARG_CARD, user.card)
+            }
         }
     }
-
 }

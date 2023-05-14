@@ -10,6 +10,9 @@ import java.time.LocalDate
 @Dao
 interface UserDao {
 
+    @Query("SELECT * FROM users WHERE card = :card")
+    fun getByCard(card: String): LiveData<User?>
+
     @Query("SELECT * FROM users")
     fun getAllAsLiveData(): LiveData<List<User>>
 

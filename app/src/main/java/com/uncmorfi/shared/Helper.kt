@@ -11,8 +11,7 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
@@ -61,6 +60,14 @@ enum class StatusCode {
     USER_NOT_FOUND,
 
     BUSY
+}
+
+fun View.visible(show: Boolean) {
+    visibility = if (show) VISIBLE else GONE
+}
+
+fun View.invisible(isInvisible: Boolean) {
+    visibility = if (isInvisible) INVISIBLE else VISIBLE
 }
 
 fun View.snack(resId: Int, type: SnackType): Snackbar {
@@ -201,10 +208,6 @@ fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {
         override fun afterTextChanged(editable: Editable?) {
         }
     })
-}
-
-fun Intent?.getUser() : User {
-    return this?.getSerializableExtra(BaseDialogHelper.ARG_USER) as User
 }
 
 fun Context?.isOnline(): Boolean {

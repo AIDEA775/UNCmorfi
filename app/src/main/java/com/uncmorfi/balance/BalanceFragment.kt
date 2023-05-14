@@ -63,7 +63,7 @@ class BalanceFragment : Fragment() {
             }
         }
 
-        observe(viewModel.allUsers()) {
+        observe(viewModel.getAllUsers()) {
             mUserAdapter.setUsers(it)
             userList = it
         }
@@ -86,7 +86,7 @@ class BalanceFragment : Fragment() {
     }
 
     private fun showUserOptionsDialog(user: User) {
-        UserOptionsDialog.newInstance(this, USER_OPTIONS_CODE, user)
+        UserOptionsDialog.newInstance(user)
             .show(parentFragmentManager, "UserOptionsDialog")
     }
 
@@ -129,16 +129,6 @@ class BalanceFragment : Fragment() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             updateCards(parseCards(result.contents))
-        } else {
-            when (requestCode) {
-                USER_OPTIONS_CODE -> {
-                    val user = data.getUser()
-                    updateCards(listOf(user.card))
-                }
-                else -> {
-                    super.onActivityResult(requestCode, resultCode, data)
-                }
-            }
         }
     }
 
@@ -181,7 +171,4 @@ class BalanceFragment : Fragment() {
         viewModel.reservation.value = NOCACHED
     }
 
-    companion object {
-        private const val USER_OPTIONS_CODE = 1
-    }
 }

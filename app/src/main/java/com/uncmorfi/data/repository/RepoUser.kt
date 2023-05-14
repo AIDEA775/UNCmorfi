@@ -1,12 +1,15 @@
 package com.uncmorfi.data.repository
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.uncmorfi.data.network.UserParser
 import com.uncmorfi.data.persistence.AppDatabase
 import com.uncmorfi.data.persistence.entities.User
 
 class RepoUser(context: Context) {
     private val userDAO = AppDatabase(context).userDao()
+
+    fun getBy(card: String): LiveData<User?> = userDAO.getByCard(card)
 
     fun getAll() = userDAO.getAllAsLiveData()
 

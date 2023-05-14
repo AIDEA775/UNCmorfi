@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginHorizontal="8dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
@@ -91,16 +91,17 @@
         android:textColor="@color/primary_dark"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/userName"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="$ 1,500" />
+        tools:text="$ 1" />
 
     <TextView
         android:id="@+id/userRation"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
+        android:paddingHorizontal="8dp"
         android:gravity="center"
         android:importantForAccessibility="no"
         android:textColor="@color/primary_text"

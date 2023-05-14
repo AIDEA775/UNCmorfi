@@ -4,6 +4,7 @@ import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.DateUtils.FORMAT_JS
 import com.uncmorfi.shared.HUEMUL_URL
 import com.uncmorfi.shared.PROFILE_PIC_URL
+import com.uncmorfi.shared.toBigDecimalOrZero
 import okhttp3.FormBody
 import okhttp3.Request
 import java.math.BigDecimal
@@ -50,8 +51,9 @@ object UserParser {
             type = tokens[9],
             email = tokens[21],
             image = PROFILE_PIC_URL + tokens[25],
-            balance = BigDecimal(tokens[6]),
-            price = BigDecimal(tokens[23]).minus(BigDecimal(tokens[12])),
+            balance = tokens[6].toBigDecimalOrNull(),
+            price = tokens[23].toBigDecimalOrNull()?.minus(tokens[12].toBigDecimalOrZero()),
+            rations = tokens[7].toIntOrNull(),
             expiration = parseExpiration(tokens[5]),
             lastUpdate = Instant.now(),
         )

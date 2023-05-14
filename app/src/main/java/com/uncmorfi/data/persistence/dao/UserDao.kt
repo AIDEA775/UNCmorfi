@@ -28,9 +28,11 @@ interface UserDao {
         type = :type,
         email = :email,
         image = :image,
-        balance= :balance,
-        expiration= :expiration,
-        lastUpdate= :lastUpdate
+        balance = :balance,
+        price = :price,
+        rations = :rations,
+        expiration = :expiration,
+        lastUpdate = :lastUpdate
         WHERE card = :card
         """
     )
@@ -39,7 +41,9 @@ interface UserDao {
         type: String?,
         email: String,
         image: String?,
-        balance: BigDecimal,
+        balance: BigDecimal?,
+        price: BigDecimal?,
+        rations: Int?,
         expiration: LocalDate,
         lastUpdate: Instant
     )
@@ -69,6 +73,8 @@ interface UserDao {
                 u.email,
                 u.image,
                 u.balance,
+                u.price,
+                u.rations,
                 u.expiration,
                 u.lastUpdate
             )

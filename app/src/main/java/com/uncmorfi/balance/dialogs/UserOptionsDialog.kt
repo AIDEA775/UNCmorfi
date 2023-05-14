@@ -45,9 +45,11 @@ class UserOptionsDialog : BottomSheetDialogFragment() {
             view.userName.text = user.name
             view.userEmail.text = user.email
             view.userType.text = user.type
-            view.userBalance.text = user.balance.toMoneyFormat()
+
+            view.userBalance.text = user.balanceOrRations()
             view.userPrice.text =
-                getString(R.string.balance_user_options_price, user.price.toMoneyFormat())
+                if (user.rations != null) getString(R.string.balance_user_options_rations)
+                else getString(R.string.balance_user_options_price, user.price?.toMoneyFormat())
 
             view.userUpdate.setOnClickListener {
                 viewModel.updateCards(user.card)
@@ -63,7 +65,7 @@ class UserOptionsDialog : BottomSheetDialogFragment() {
             view.userEdit.setOnClickListener {
                 EditNameDialog
                     .newInstance(user)
-                    .show(parentFragmentManager, "SetNameDialog")
+                    .show(parentFragmentManager, "EditNameDialog")
             }
 
             view.userRecharge.setOnClickListener {

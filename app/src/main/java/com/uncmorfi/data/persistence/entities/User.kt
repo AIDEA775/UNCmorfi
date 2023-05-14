@@ -3,6 +3,7 @@ package com.uncmorfi.data.persistence.entities
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.uncmorfi.shared.toMoneyFormat
 import java.io.Serializable
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -22,9 +23,11 @@ data class User(
 
     val image: String = "",
 
-    val balance: BigDecimal = BigDecimal.ZERO,
+    val balance: BigDecimal? = null,
 
-    val price: BigDecimal = BigDecimal.ZERO,
+    val price: BigDecimal? = null,
+
+    val rations: Int? = null,
 
     val expiration: LocalDate = LocalDate.now(),
 
@@ -34,7 +37,13 @@ data class User(
     @Ignore
     var isLoading: Boolean = false
 
-    fun rations() = balance
-        .divide(price, 0, RoundingMode.DOWN)
-        .toInt()
+    fun anyRations() = rations ?: calculateRations() ?: 0
+
+    fun calculateRations() =  balance
+        ?.divide(price, 0, RoundingMode.DOWN)
+        ?.toInt()
+
+    fun balanceOrRations(): String = rations?.toString()
+        ?: balance?.toMoneyFormat()
+        ?: BigDecimal.ZERO.toMoneyFormat() // Podría explotar pero mejor no
 }

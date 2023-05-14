@@ -57,6 +57,7 @@
     <string name="balance_user_options_copy">Copy</string>
     <string name="balance_user_options_barcode">Barcode</string>
     <string name="balance_user_options_price">(%1$s each ration)</string>
+    <string name="balance_user_options_rations">Rations left</string>
     <string name="balance_user_options_balance_title">Balance</string>
     <string name="balance_user_options_copy_toast">The card code is on the clipboard</string>
 

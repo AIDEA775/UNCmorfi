@@ -18,5 +18,5 @@ object DateUtils {
     val FORMAT_ARG3: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE")
     val FORMAT_ARG4: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:ss:mm")
 
-    val FORMAT_JS: DateTimeFormatter = DateTimeFormatter.ofPattern("'new Date('yyyy',' M',' dd')'")
+    val FORMAT_JS: DateTimeFormatter = DateTimeFormatter.ofPattern("'new Date('yyyy',' M',' d')'")
 }

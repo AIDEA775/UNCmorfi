@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.colorOf
-import com.uncmorfi.shared.toMoneyFormat
+import com.uncmorfi.shared.visible
 import kotlinx.android.synthetic.main.view_user_card.view.*
 import java.time.Instant
 import java.time.LocalDate
@@ -44,14 +44,16 @@ class UserCardView @JvmOverloads constructor(
         userName.text = user.name
         userCard.text = user.card
 
-        userBalance.text = user.balance.toMoneyFormat()
+        userBalance.text = user.balanceOrRations()
         userLastUpdate.text = context.getString(
             R.string.balance_last_update, relativeLastUpdate(user.lastUpdate)
         )
 
-        userRation.text = context.resources.getQuantityString(
-            R.plurals.balance_ration, user.rations(), user.rations()
-        )
+        val rations = user.calculateRations()?.let {
+            context.resources.getQuantityString(R.plurals.balance_ration, it, it)
+        }
+        userRation.text = rations
+        userRation.visible(rations != null)
     }
 
     private fun relativeLastUpdate(lastUpdate: Instant): String {
@@ -74,13 +76,13 @@ class UserCardView @JvmOverloads constructor(
         // Alerta si le queda poco saldo
         userBalance.setTextColor(
             context.colorOf(
-                if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
+                if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
                 else R.color.primary_dark
             )
         )
         userRation.setTextColor(
             context.colorOf(
-                if (user.rations() <= WARNING_USER_RATIONS) R.color.accent
+                if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
                 else R.color.primary_text
             )
         )

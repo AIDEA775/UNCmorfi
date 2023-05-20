@@ -35,12 +35,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCSp9NAfXyfp4RTPawVvfYcS_tZaWoXA_g" />
 
-        <activity
-            android:name=".balance.BarcodeActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
         <receiver android:name=".reservations.AlarmReceiver" />
         <receiver android:name=".reservations.BootReceiver"
             android:enabled="false"

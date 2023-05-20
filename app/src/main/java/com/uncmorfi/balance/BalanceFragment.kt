@@ -1,12 +1,10 @@
 package com.uncmorfi.balance
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.balance.dialogs.UserOptionsDialog
@@ -50,11 +48,9 @@ class BalanceFragment : Fragment() {
 
         initRecyclerAndAdapter()
 
-        newUser.init(this) { code ->
+        newUser.onDone { code ->
             activity?.hideKeyboard()
-            if (code.isNotBlank()) {
-                updateCards(parseCards(code))
-            }
+            updateCards(parseCards(code))
         }
 
         observe(viewModel.status) {
@@ -121,14 +117,6 @@ class BalanceFragment : Fragment() {
             mRootView.snack(R.string.snack_copied, FINISH)
         } else {
             mRootView.snack(R.string.snack_empty_copy, ERROR)
-        }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null && result.contents != null) {
-            updateCards(parseCards(result.contents))
         }
     }
 

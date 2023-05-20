@@ -23,13 +23,13 @@
         android:importantForAutofill="no" />
 
     <ImageButton
-        android:id="@+id/newUserScanner"
+        android:id="@+id/newUserDone"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:maxLines="1"
         android:padding="16dp"
-        android:src="@drawable/ic_barcode"
+        android:src="@drawable/ic_add"
         android:contentDescription="@string/balance_new_user_button_code" />
 
 </merge>

@@ -57,6 +57,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     // Database
     def room_version = "2.4.3"
@@ -80,7 +81,6 @@ dependencies {
 
     // Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     // Parse HTML
     implementation("org.jsoup:jsoup:1.14.3")

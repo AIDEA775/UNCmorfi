@@ -6,9 +6,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
-import com.google.zxing.integration.android.IntentIntegrator
 import com.uncmorfi.R
+import com.uncmorfi.shared.invisible
 import com.uncmorfi.shared.onTextChanged
 import kotlinx.android.synthetic.main.view_user_new.view.*
 
@@ -19,7 +18,6 @@ class NewUserView @JvmOverloads constructor(
 ) : LinearLayout(context, attr, defStyleAttr) {
 
     private lateinit var doneListener: (String) -> Unit
-    private lateinit var scannerListener: Fragment
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_user_new, this, true)
@@ -32,50 +30,21 @@ class NewUserView @JvmOverloads constructor(
             false
         }
 
-        newUserInput.onTextChanged { onTextChanged(it) }
-
-        // Por defecto llama al lector
-        newUserScanner.setOnClickListener { onScanner() }
-    }
-
-    private fun onTextChanged(s: CharSequence) {
-        newUserScanner.apply {
-            if (s.isNotEmpty()) {
-                // Cuando hay texto, cambia la función del botón por newUser.
-                setImageResource(R.drawable.ic_done)
-                contentDescription = context.getString(R.string.balance_new_user_button_enter)
-                setOnClickListener {
-                    onDone()
-                }
-            } else {
-                // Si es está vacio, llama al lector.
-                setImageResource(R.drawable.ic_barcode)
-                contentDescription = context.getString(R.string.balance_new_user_button_code)
-                setOnClickListener {
-
-                }
-            }
+        newUserInput.onTextChanged {
+            newUserDone.invisible(it.isBlank())
         }
+
+        newUserDone.invisible(true)
+        newUserDone.contentDescription = context.getString(R.string.balance_new_user_button_enter)
+        newUserDone.setOnClickListener { onDone() }
     }
 
     private fun onDone() {
-        val input = newUserInput.text.toString()
+        val input = newUserInput.text.toString().trim()
         doneListener(input)
     }
 
-    // Inicia el lector de barras.
-    // Devuelve el resultado por scannerListener.onActivityResult.
-    private fun onScanner() {
-        val integrator = IntentIntegrator.forSupportFragment(scannerListener)
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES)
-        integrator.setPrompt(context.getString(R.string.balance_align_barcode))
-        integrator.setBeepEnabled(false)
-        integrator.setBarcodeImageEnabled(true)
-        integrator.initiateScan()
-    }
-
-    fun init(f: Fragment, l: (String) -> Unit) {
-        scannerListener = f
+    fun onDone(l: (String) -> Unit) {
         doneListener = l
     }
 

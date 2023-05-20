@@ -1,5 +1,7 @@
 package com.uncmorfi.data.network
 
+import com.uncmorfi.servings.HourAxisValueFormatter
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 
 class ServingParserTest {
@@ -43,10 +45,14 @@ class ServingParserTest {
         });
     """.trimIndent()
 
+    val formatter = HourAxisValueFormatter()
+
     @Test
     fun `se puede parsear los datos de una tarjeta`() {
         val out = ServingParser.parseBody(input)
         println(out)
+        val display = formatter.format(out.first().toFloat())
+        assertEquals("12:04", display)
     }
 
 }

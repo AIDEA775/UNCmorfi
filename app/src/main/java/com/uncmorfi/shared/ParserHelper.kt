@@ -32,11 +32,6 @@ fun Calendar.toISOString(): String {
     return fmt.format(this.time)
 }
 
-fun Calendar.toFormat(format: String): String {
-    val fmt = SimpleDateFormat(format, Locale.getDefault())
-    return fmt.format(this.time)
-}
-
 fun Calendar.compareToTodayInMillis(): Int {
     return this.compareTo(Calendar.getInstance())
 }

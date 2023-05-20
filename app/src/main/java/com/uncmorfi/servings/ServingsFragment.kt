@@ -83,14 +83,7 @@ class ServingsFragment : Fragment() {
 
     private fun updateCharts(items: List<Serving>) {
         if (items.isNotEmpty()) {
-            val data = items.map { s ->
-                val x = s.date
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalTime()
-                    .toSecondOfDay()
-                    .toFloat()
-                Entry(x, s.serving.toFloat())
-            }
+            val data = items.map { s -> Entry(s.toFloat(), s.serving.toFloat()) }
             if (data.size > 1) {
                 // Algunas veces el medidor se cae, y las raciones aparecen cargadas a las 00:00hs
                 // así que al primer elemento lo ponemos 1 min antes del segundo elemento

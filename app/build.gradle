@@ -11,8 +11,8 @@ android {
         applicationId "com.uncmorfi"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 14
-        versionName "v6.0.2 Florentina"
+        versionCode 15
+        versionName "v7.0 Garbanzo"
         resValue "string", "app_name", "UNCmorfi"
         kapt {
             arguments {
@@ -24,8 +24,7 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile(
-                    'proguard-android-optimize.txt'),
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro'
         }
     }

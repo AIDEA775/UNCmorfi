@@ -16,6 +16,7 @@
     <string name="navigation_about">Acerca de</string>
 
     <!-- Home -->
+    <string name="home_hint">¡No te olvides de traer cubiertos y reservar!</string>
     <string name="home_menu">Comida de hoy</string>
     <string name="home_cards">Tu tarjeta</string>
     <string name="home_servings">Porciones dadas</string>

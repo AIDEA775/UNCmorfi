@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.uncmorfi.home.HomeFragment"
     android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.uncmorfi.home.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,19 +17,36 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:text="@string/home_menu"/>
+                app:cardBackgroundColor="@color/primary_text">
 
-            <com.google.android.material.card.MaterialCardView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/home_hint"
+                    android:textColor="@color/white"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/MaterialCard">
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/home_menu"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -39,23 +57,23 @@
                         android:id="@+id/homeMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:focusable="true"
                         android:clickable="true"
+                        android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:padding="12dp"
                         android:visibility="gone"
                         tools:visibility="visible" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray"/>
+                        android:background="@color/gray" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/homeMenuShowMore"
+                        style="@style/MaterialShowMore"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/MaterialShowMore" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -63,16 +81,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:text="@string/home_cards"/>
+                android:text="@string/home_cards"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/MaterialCard">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -83,22 +101,22 @@
                         android:id="@+id/homeCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
                         android:clickable="true"
+                        android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:visibility="gone"
-                        tools:visibility="visible"/>
+                        tools:visibility="visible" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray"/>
+                        android:background="@color/gray" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/homeCardShowMore"
+                        style="@style/MaterialShowMore"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/MaterialShowMore" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
 
@@ -107,17 +125,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:text="@string/home_servings"/>
+                android:text="@string/home_servings"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                style="@style/MaterialCard">
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -128,20 +146,20 @@
                         android:id="@+id/homeServingsPieChart"
                         android:layout_width="match_parent"
                         android:layout_height="225dp"
-                        android:focusable="true"
                         android:clickable="true"
+                        android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray"/>
+                        android:background="@color/gray" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/homeServingsShowMore"
+                        style="@style/MaterialShowMore"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/MaterialShowMore" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 

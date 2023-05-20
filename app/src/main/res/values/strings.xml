@@ -16,6 +16,7 @@
     <string name="navigation_about">About</string>
 
     <!-- Home -->
+    <string name="home_hint">Don\'t forget to bring cutlery and to reserve</string>
     <string name="home_menu">Today\'s menu</string>
     <string name="home_cards">Your card</string>
     <string name="home_servings">Current servings</string>

@@ -1,6 +1,6 @@
 package com.uncmorfi.data.network.models
 
-data class ReservationResponse(
+data class ReservationRes(
         var reservationResult: String = "",
         var token: String? = null,
         var path: String? = null

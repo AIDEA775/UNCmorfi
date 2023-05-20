@@ -1,8 +1,8 @@
 package com.uncmorfi.data.network
 
-import com.uncmorfi.data.network.models.Menu
-import com.uncmorfi.data.network.models.ReservationResponse
-import com.uncmorfi.data.network.models.Servings
+import com.uncmorfi.data.network.models.MenuRes
+import com.uncmorfi.data.network.models.ReservationRes
+import com.uncmorfi.data.network.models.ServingsRes
 import com.uncmorfi.data.persistence.entities.Reservation
 import com.uncmorfi.data.persistence.entities.User
 import retrofit2.http.Body
@@ -15,10 +15,10 @@ interface Webservice {
     suspend fun getUsers(@Query("codes") codes: String): List<User>
 
     @GET("/menu")
-    suspend fun getMenu(): Menu
+    suspend fun getMenu(): MenuRes
 
     @GET("/servings")
-    suspend fun getServings(): Servings
+    suspend fun getServings(): ServingsRes
 
     @GET("/reservation/login")
     suspend fun getLogin(@Query("code") code: String): Reservation
@@ -27,8 +27,8 @@ interface Webservice {
     suspend fun doLogin(@Body reservation: Reservation): Reservation
 
     @POST("/reservation/reserve")
-    suspend fun reserve(@Body reservation: Reservation): ReservationResponse
+    suspend fun reserve(@Body reservation: Reservation): ReservationRes
 
     @POST("/reservation/status")
-    suspend fun status(@Body reservation: Reservation): ReservationResponse
+    suspend fun status(@Body reservation: Reservation): ReservationRes
 }

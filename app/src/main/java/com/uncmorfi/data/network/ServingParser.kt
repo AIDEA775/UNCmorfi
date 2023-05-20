@@ -11,30 +11,25 @@ import java.time.ZoneId
 
 object ServingParser {
 
-    fun fetch(): List<Serving>? {
-        return try {
-            val response = okHttpClient.newCall(
-                Request.Builder()
-                    .url(
-                        HUEMUL_URL
-                            .toHttpUrl()
-                            .newBuilder()
-                            .addQueryParameter("accion", "1")
-                            .addQueryParameter("sede", "0475")
-                            .build()
-                    )
-                    .build()
-            ).execute()
+    fun fetch(): List<Serving> {
+        val response = okHttpClient.newCall(
+            Request.Builder()
+                .url(
+                    HUEMUL_URL
+                        .toHttpUrl()
+                        .newBuilder()
+                        .addQueryParameter("accion", "1")
+                        .addQueryParameter("sede", "0475")
+                        .build()
+                )
+                .build()
+        ).execute()
 
-            val body = response.body?.string()!!
+        val body = response.body?.string()!!
 
-//            println("body::: $body")
+//        println("body::: $body")
 
-            return parseBody(body)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        return parseBody(body)
     }
 
     fun parseBody(body: String): List<Serving> {

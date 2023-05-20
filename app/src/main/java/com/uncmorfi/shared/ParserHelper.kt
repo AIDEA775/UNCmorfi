@@ -27,11 +27,6 @@ fun String.toCalendar(timeZone: String? = null): Calendar? {
     }
 }
 
-fun Calendar.toISOString(): String {
-    val fmt = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-    return fmt.format(this.time)
-}
-
 fun Calendar.compareToTodayInMillis(): Int {
     return this.compareTo(Calendar.getInstance())
 }

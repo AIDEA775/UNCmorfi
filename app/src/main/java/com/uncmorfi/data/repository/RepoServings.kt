@@ -12,7 +12,7 @@ class RepoServings(context: Context) {
     suspend fun update(): List<Long> {
         val servings = ServingParser.fetch()
 
-        if (servings.isNullOrEmpty()) {
+        if (servings.isEmpty()) {
             return emptyList()
         }
 

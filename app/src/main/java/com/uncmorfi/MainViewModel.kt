@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.uncmorfi.data.network.clientBeta
-import com.uncmorfi.data.network.models.ReservationResponse
+import com.uncmorfi.data.network.models.ReservationRes
 import com.uncmorfi.data.persistence.AppDatabase
 import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.Reservation
@@ -91,6 +91,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
         }
         status.postValue(UPDATING)
         val inserts = repoMenu.update()
+        Log.d("ViewModel", "menu update result: $inserts")
 
         status.postValue(when {
             inserts.isEmpty() -> UPDATE_ERROR
@@ -99,7 +100,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
         })
     }
 
-    fun clearMenu() = launchIO{
+    fun clearMenu() = launchIO {
         repoMenu.clear()
         forceRefreshMenu()
     }
@@ -230,7 +231,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
         }
     }
 
-    private suspend fun ReservationResponse.updateReservation(reserve: Reservation): ReserveStatus {
+    private suspend fun ReservationRes.updateReservation(reserve: Reservation): ReserveStatus {
         this.path?.let { reserve.path = it }
         this.token?.let { reserve.token = it }
 
@@ -262,20 +263,22 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     }
 
     private fun launchIO(f: suspend (CoroutineScope) -> Unit) {
-        try {
-            viewModelScope.launch(Dispatchers.IO, block = f)
-        } catch (e: HttpException) {
-            e.printStackTrace()
-            status.value = CONNECT_ERROR
-        } catch (e: IOException) {
-            e.printStackTrace()
-            status.value = CONNECT_ERROR
-        } catch (e: JSONException) {
-            e.printStackTrace()
-            status.value = INTERNAL_ERROR
-        } catch (e: Exception) {
-            e.printStackTrace()
-            status.value = INTERNAL_ERROR
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                f.invoke(this)
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                status.postValue(CONNECT_ERROR)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                status.postValue(CONNECT_ERROR)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+                status.postValue(INTERNAL_ERROR)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                status.postValue(INTERNAL_ERROR)
+            }
         }
     }
 

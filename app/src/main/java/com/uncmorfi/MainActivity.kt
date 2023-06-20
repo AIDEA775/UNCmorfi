@@ -8,7 +8,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.navigation.NavigationView
 import com.uncmorfi.about.AboutDialog
 import com.uncmorfi.balance.BalanceFragment
@@ -16,7 +15,7 @@ import com.uncmorfi.faq.FaqFragment
 import com.uncmorfi.home.HomeFragment
 import com.uncmorfi.map.MapFragment
 import com.uncmorfi.menu.MenuFragment
-import com.uncmorfi.reservations.ReservationFragment
+import com.uncmorfi.reservations.RemindersFragment
 import com.uncmorfi.servings.ServingsFragment
 import com.uncmorfi.shared.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -33,6 +32,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             setMainFragment()
         }
+
+        viewModel.refreshWorkers()
 
         observe(viewModel.status) {
             Log.i("MainActivity", "new status: $it")
@@ -117,7 +118,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_menu -> return MenuFragment()
             R.id.nav_balance -> return BalanceFragment()
             R.id.nav_servings -> return ServingsFragment()
-            R.id.nav_reservation -> return ReservationFragment()
+            R.id.nav_reminders -> return RemindersFragment()
             R.id.nav_renovation -> sendEmail(
                 "credenciales@estudiantiles.unc.edu.ar",
                 R.string.renovation_email_subject,

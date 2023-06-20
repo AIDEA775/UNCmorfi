@@ -1,13 +1,14 @@
 <resources>
 
     <!-- Navigation -->
+
     <string name="navigation_open">Open navigation drawer</string>
     <string name="navigation_close">Close navigation drawer</string>
     <string name="navigation_home">Home</string>
     <string name="navigation_menu">Menu</string>
     <string name="navigation_balance">Balance</string>
     <string name="navigation_servings">Servings</string>
-    <string name="navigation_reservation">Reservations</string>
+    <string name="navigation_reminders">Reminders</string>
     <string name="navigation_renovation">Renovation</string>
     <string name="navigation_map">Map</string>
     <string name="navigation_faq">FAQ</string>
@@ -16,6 +17,7 @@
     <string name="navigation_about">About</string>
 
     <!-- Home -->
+
     <string name="home_hint">Don\'t forget to bring cutlery and to reserve</string>
     <string name="home_menu">Today\'s menu</string>
     <string name="home_cards">Your card</string>
@@ -24,12 +26,14 @@
     <string name="home_action_update">Get updates</string>
 
     <!-- Menu -->
+
     <string name="menu_action_update">Update menu</string>
     <string name="menu_action_clear">Clear menu</string>
     <string name="menu_share_subject">Weekly menu</string>
     <string name="menu_share_banner">Shared from UNCmorfi</string>
 
     <!-- Balance -->
+
     <string name="balance_action_update">Update all cards</string>
     <string name="balance_action_copy">Copy cards</string>
 
@@ -70,6 +74,7 @@
     <string name="balance_align_barcode">Align barcode</string>
 
     <!-- Servings -->
+
     <string name="servings_action_update">Update servings</string>
     <string name="servings_rations_title">%1$d rations of %2$d</string>
     <string name="servings_estimate_button">Add</string>
@@ -80,22 +85,30 @@
     <string name="servings_chart_label_time">Rations for time</string>
     <string name="servings_chart_label_accumulated">Accumulated rations</string>
 
+    <!-- Reminders -->
+
+    <string name="reminders_title">Reserve ration</string>
+    <string name="reminders_dialog_title">Reservations</string>
+    <string name="reminders_reservation_empty">Don\'t reminder to reserve</string>
+
+    <string-array name="reminders_empty_array" />
+    <string-array name="reminders_entries">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+    </string-array>
+
+    <string-array name="reminders_entries_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <!-- Reservations -->
-    <string name="reservations_title">Reservation</string>
-    <string name="reservations_content">Reserve your serving in the dinning room!</string>
-
-    <string name="reservations_chip_head">Notify me these days:</string>
-    <string name="reservations_head1">At 7AM:</string>
-    <string name="reservations_head2">At 10AM:</string>
-
-    <string name="reservations_channel_name">Reservations</string>
-    <string name="reservations_channel_description">Notifications when reservations is open</string>
-
-    <string name="reservations_reserve">Reserve</string>
-    <string name="reservations_consult">Consult</string>
-    <string name="reservations_loop">Reserve for ever</string>
-    <string name="reservations_stop">Stop loop</string>
-    <string name="reservations_logout">Logout</string>
 
     <string name="snack_reserving">Reserving&#8230;</string>
     <string name="snack_consulting">Consulting&#8230;</string>
@@ -107,6 +120,7 @@
     <string name="snack_loop">Reserving, try %1$d&#8230;</string>
 
     <!-- Renovation -->
+
     <string name="renovation_email_subject">RENOVAR</string>
     <string name="renovation_email_body">
         \tDo not forget to attach the regular student certificate if you are a student!\n\n
@@ -115,13 +129,16 @@
         are a Teacher or Non-Teacher.</string>
 
     <!-- Map -->
+
     <string name="map_central">Headquarters</string>
     <string name="map_belgrano">Belgrano headquarters</string>
 
     <!-- FAQ -->
+
     <string name="faq_action_share">Share</string>
 
     <!-- About -->
+
     <string name="about_source_code">Source code:</string>
     <string name="about_fanpage">FanPage:</string>
     <string name="about_unofficial_app">This is an unofficial app:</string>
@@ -130,7 +147,9 @@
         and there is no guarantee that the data is always correct,
         even when it is extracted from the official dining room websites.
     </string>
+
     <!-- Snacks -->
+
     <string name="snack_no_online">No connection</string>
     <string name="snack_connect_error">Connection error</string>
     <string name="snack_internal_error">An error occurred</string>
@@ -144,6 +163,16 @@
     <string name="snack_copied">Copied</string>
     <string name="snack_copied_param">%1$s copied</string>
     <string name="snack_empty_copy">No cards</string>
+
+    <!-- Notifications -->
+
+    <string name="channel_name">UNCmorfi</string>
+    <string name="channel_description">Notifications from UNCmorfi</string>
+
+    <string name="notify_recharge_title">Recharge!</string>
+    <string name="notify_recharge_text">You have low balance</string>
+    <string name="notify_reserve_title">Reserve!</string>
+    <string name="notify_reserve_text">Reserve your serving in the dinning room!</string>
 
     <!-- Any -->
     <string name="action_browser">Open with&#8230;</string>

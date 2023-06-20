@@ -35,14 +35,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCSp9NAfXyfp4RTPawVvfYcS_tZaWoXA_g" />
 
-        <receiver android:name=".reservations.AlarmReceiver" />
-        <receiver android:name=".reservations.BootReceiver"
-            android:enabled="false"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

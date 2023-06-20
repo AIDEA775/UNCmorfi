@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.shared.WARNING_USER_RATIONS
 import com.uncmorfi.shared.colorOf
 import com.uncmorfi.shared.visible
 import kotlinx.android.synthetic.main.view_user_card.view.*
@@ -141,7 +142,6 @@ class UserCardView @JvmOverloads constructor(
     companion object {
         private const val SCALE_USER_IMAGE_SIZE = 0.8f
         private const val SCALE_USER_IMAGE_TIME = 500L
-        private const val WARNING_USER_RATIONS = 1
         private const val WARNING_USER_EXPIRE = 1L
     }
 }

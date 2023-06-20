@@ -27,10 +27,6 @@ fun String.toCalendar(timeZone: String? = null): Calendar? {
     }
 }
 
-fun Calendar.compareToTodayInMillis(): Int {
-    return this.compareTo(Calendar.getInstance())
-}
-
 class CalendarDeserializer : JsonDeserializer<Calendar> {
     @Throws(IOException::class)
     override fun deserialize(

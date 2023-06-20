@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="reminder_low_balance"
+        app:summaryOn="Te recordaremos recargar saldo si hay una tarjeta con menos de una ración"
+        app:title="Tarjetas con poco saldo" />
+
+    <MultiSelectListPreference
+        app:defaultValue="@array/reminders_empty_array"
+        app:dialogTitle="@string/reminders_dialog_title"
+        app:entries="@array/reminders_entries"
+        app:entryValues="@array/reminders_entries_values"
+        app:key="reminder_reservation"
+        app:summary=""
+        app:title="@string/reminders_title" />
+
+</PreferenceScreen>

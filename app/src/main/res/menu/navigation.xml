@@ -23,10 +23,9 @@
             android:icon="@drawable/nav_usage"
             android:title="@string/navigation_servings" />
         <item
-            android:id="@+id/nav_reservation"
+            android:id="@+id/nav_reminders"
             android:icon="@drawable/nav_ticket"
-            android:visible="false"
-            android:title="@string/navigation_reservation" />
+            android:title="@string/navigation_reminders" />
         <item
             android:id="@+id/nav_renovation"
             android:icon="@drawable/nav_renovation"

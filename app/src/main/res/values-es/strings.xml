@@ -1,13 +1,14 @@
 <resources>
 
     <!-- Navigation -->
+
     <string name="navigation_open">Abrir menú deslizable</string>
     <string name="navigation_close">Cerrar menú deslizable</string>
     <string name="navigation_home">Inicio</string>
     <string name="navigation_menu">Menú</string>
     <string name="navigation_balance">Saldo</string>
     <string name="navigation_servings">Medidor</string>
-    <string name="navigation_reservation">Reservas</string>
+    <string name="navigation_reminders">Recordatorios</string>
     <string name="navigation_renovation">Renovación</string>
     <string name="navigation_map">Mapa</string>
     <string name="navigation_faq">FAQ</string>
@@ -16,6 +17,7 @@
     <string name="navigation_about">Acerca de</string>
 
     <!-- Home -->
+
     <string name="home_hint">¡No te olvides de traer cubiertos y reservar!</string>
     <string name="home_menu">Comida de hoy</string>
     <string name="home_cards">Tu tarjeta</string>
@@ -24,12 +26,14 @@
     <string name="home_action_update">Actualizar</string>
 
     <!-- Menu -->
+
     <string name="menu_action_update">Actualizar menú</string>
     <string name="menu_action_clear">Limpiar menú</string>
     <string name="menu_share_subject">Menú de la semana</string>
     <string name="menu_share_banner">Compartido desde UNCmorfi</string>
 
     <!-- Balance -->
+
     <string name="balance_action_update">Actualizar tarjetas</string>
     <string name="balance_action_copy">Copiar tarjetas</string>
 
@@ -70,6 +74,7 @@
     <string name="balance_align_barcode">Alineá el código de barras</string>
 
     <!-- Servings -->
+
     <string name="servings_action_update">Actualizar medidor</string>
     <string name="servings_rations_title">%1$d raciones de %2$d</string>
     <string name="servings_estimate_button">Agregar</string>
@@ -80,22 +85,20 @@
     <string name="servings_chart_label_time">Raciones por tiempo</string>
     <string name="servings_chart_label_accumulated">Raciones acumuladas</string>
 
+    <!-- Reminders -->
+
+    <string name="reminders_title">Reservar ración</string>
+    <string name="reminders_dialog_title">Recordar reservar los</string>
+    <string name="reminders_reservation_empty">No te recordaremos reservar</string>
+    <string-array name="reminders_entries">
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miércoles</item>
+        <item>Jueves</item>
+        <item>Viernes</item>
+    </string-array>
+
     <!-- Reservations -->
-    <string name="reservations_title">Reservá</string>
-    <string name="reservations_content">Reserva tu porción en el comedor</string>
-
-    <string name="reservations_chip_head">Notificame sobre las reservas los días:</string>
-    <string name="reservations_head1">A las 7AM:</string>
-    <string name="reservations_head2">A las 10AM:</string>
-
-    <string name="reservations_channel_name">Reservaciones</string>
-    <string name="reservations_channel_description">Notifica cuando las reservaciones están abiertas</string>
-
-    <string name="reservations_reserve">Reservar</string>
-    <string name="reservations_consult">Consultar</string>
-    <string name="reservations_loop">Reservar hasta morir</string>
-    <string name="reservations_stop">Parar de reservar</string>
-    <string name="reservations_logout">Cerrar sesion</string>
 
     <string name="snack_reserving">Reservando&#8230;</string>
     <string name="snack_consulting">Consultando&#8230;</string>
@@ -107,6 +110,7 @@
     <string name="snack_loop">Reservando, intento %1$d&#8230;</string>
 
     <!-- Renovation -->
+
     <string name="renovation_email_subject">RENOVAR</string>
     <string name="renovation_email_body">
         \t¡No te olvides de adjuntar el certificado de alumno
@@ -116,13 +120,16 @@
         relación con la UNC si eres Docente o No Docente.</string>
 
     <!-- Map -->
+
     <string name="map_central">Sede principal</string>
     <string name="map_belgrano">Sede Belgrano</string>
 
     <!-- FAQ -->
+
     <string name="faq_action_share">Compartir</string>
 
     <!-- About -->
+
     <string name="about_source_code">Código fuente:</string>
     <string name="about_fanpage">Fanpage:</string>
     <string name="about_unofficial_app">No es una app oficial:</string>
@@ -131,7 +138,9 @@
         y no hay garantía de que los datos sean siempre correctos,
         a pesar de que sean extraidos desde las webs oficiales del comedor.
     </string>
+
     <!-- Snacks -->
+
     <string name="snack_no_online">No hay conexión</string>
     <string name="snack_connect_error">Error de conexión</string>
     <string name="snack_internal_error">Ocurrió un error</string>
@@ -146,7 +155,18 @@
     <string name="snack_copied_param">%1$s copiado al portapapeles</string>
     <string name="snack_empty_copy">Nada para copiar</string>
 
+    <!-- Notifications -->
+
+    <string name="channel_name">UNCmorfi</string>
+    <string name="channel_description">Notificaciones de UNCmorfi</string>
+
+    <string name="notify_recharge_title">Recargá!</string>
+    <string name="notify_recharge_text">Tenés una tarjeta con poco saldo</string>
+    <string name="notify_reserve_title">Reservá!</string>
+    <string name="notify_reserve_text">No te olvides de hacer la reserva del comedor</string>
+
     <!-- Cualquiera -->
+
     <string name="action_browser">Abrir en&#8230;</string>
     <string name="save">Guardar</string>
     <string name="saved">Guardado</string>

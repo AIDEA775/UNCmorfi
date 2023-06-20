@@ -16,6 +16,7 @@ import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.data.repository.RepoMenu
 import com.uncmorfi.data.repository.RepoServings
 import com.uncmorfi.data.repository.RepoUser
+import com.uncmorfi.data.service.ServWorkers
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.ReserveStatus.*
 import com.uncmorfi.shared.StatusCode.*
@@ -32,6 +33,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     private val repoMenu = RepoMenu(context)
     private val repoUser = RepoUser(context)
     private val repoServings = RepoServings(context)
+    private val servWorkers = ServWorkers(context)
 
     val status: MutableLiveData<StatusCode> = MutableLiveData()
     val reservation: MutableLiveData<ReserveStatus> = MutableLiveData()
@@ -47,7 +49,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
      * Balance stuff
      */
 
-    fun getAllUsers(): LiveData<List<User>> = repoUser.getAll()
+    fun getAllUsers(): LiveData<List<User>> = repoUser.listenAll()
 
     fun getUser(card: String): LiveData<User?> = repoUser.getBy(card)
 
@@ -135,6 +137,10 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     /*
      * Reservation stuff
      */
+    fun refreshWorkers() {
+        servWorkers.refreshAllWorkers()
+    }
+
     fun reserveIsCached(user: User) {
         mainDispatch {
             val reserve = getReserve(user.card)

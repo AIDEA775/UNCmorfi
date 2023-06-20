@@ -24,8 +24,7 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     buildTypes {
@@ -35,7 +34,7 @@ android {
         }
     }
     compileOptions {
-        // Flag to enable suppiort for the new lenguage APIs
+        // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -57,6 +56,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
 
     // Database
     def room_version = "2.4.3"
@@ -84,7 +85,7 @@ dependencies {
     // Parse HTML
     implementation("org.jsoup:jsoup:1.14.3")
 
-    // Java 8 API (for Instant class)
+    // Java 8 API (for Java Time classes)
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // Unit testing

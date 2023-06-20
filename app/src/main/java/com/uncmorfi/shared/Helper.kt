@@ -1,6 +1,8 @@
 package com.uncmorfi.shared
 
 import android.app.Activity
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -21,8 +23,6 @@ import androidx.lifecycle.LiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.uncmorfi.R
-import com.uncmorfi.data.persistence.entities.User
-import java.time.LocalDate
 
 enum class SnackType {
     ERROR,
@@ -143,12 +143,12 @@ fun SwipeRefreshLayout.init(f: () -> Unit) {
     this.setColorSchemeResources(R.color.white)
 }
 
-fun Context.colorOf(resId: Int) : Int {
+fun Context.colorOf(resId: Int): Int {
     return ContextCompat.getColor(this, resId)
 }
 
 // Devuelvo true porque lo uso en los onOptionsItemSelected() de los fragments
-fun Activity.startBrowser(uri: String) : Boolean {
+fun Activity.startBrowser(uri: String): Boolean {
     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
     return true
 }
@@ -162,7 +162,7 @@ fun Activity.openFacebook() {
     }
 }
 
-fun Activity.shareText(subject: String, text: String, title: String = "UNCmorfi") : Boolean {
+fun Activity.shareText(subject: String, text: String, title: String = "UNCmorfi"): Boolean {
     val i = Intent(Intent.ACTION_SEND)
     i.type = "text/plain"
     i.putExtra(Intent.EXTRA_SUBJECT, subject)
@@ -180,6 +180,16 @@ fun Activity.sendEmail(to: String, subject: Int, text: Int) {
 
     if (i.resolveActivity(packageManager) != null)
         startActivity(i)
+}
+
+fun Intent.toPendingIntent(context: Context): PendingIntent {
+    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+    return PendingIntent.getActivity(
+        context,
+        System.currentTimeMillis().toInt(),
+        this,
+        FLAG_IMMUTABLE
+    )
 }
 
 fun Activity.hideKeyboard() {
@@ -212,7 +222,7 @@ fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {
 
 fun Context?.isOnline(): Boolean {
     return (this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-            .activeNetworkInfo?.isConnected ?: false
+        .activeNetworkInfo?.isConnected ?: false
 }
 
 fun TextView.updateVisibility() {

@@ -14,6 +14,9 @@ interface UserDao {
     fun getByCard(card: String): LiveData<User?>
 
     @Query("SELECT * FROM users")
+    fun getAll(): List<User>
+
+    @Query("SELECT * FROM users")
     fun getAllAsLiveData(): LiveData<List<User>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

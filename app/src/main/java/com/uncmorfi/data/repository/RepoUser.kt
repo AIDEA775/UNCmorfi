@@ -11,7 +11,9 @@ class RepoUser(context: Context) {
 
     fun getBy(card: String): LiveData<User?> = userDAO.getByCard(card)
 
-    fun getAll() = userDAO.getAllAsLiveData()
+    fun getAll() = userDAO.getAll()
+
+    fun listenAll() = userDAO.getAllAsLiveData()
 
     suspend fun fetch(card: String): Int {
         val user = UserParser.fetch(card) ?: return -1

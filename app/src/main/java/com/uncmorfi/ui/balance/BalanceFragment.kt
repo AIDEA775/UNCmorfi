@@ -1,4 +1,4 @@
-package com.uncmorfi.balance
+package com.uncmorfi.ui.balance
 
 import android.os.Bundle
 import android.view.*
@@ -7,10 +7,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
-import com.uncmorfi.balance.dialogs.UserOptionsDialog
+import com.uncmorfi.ui.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.shared.*
-import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.SnackType.*
 import com.uncmorfi.shared.StatusCode.UPDATE_SUCCESS
 import com.uncmorfi.shared.StatusCode.USER_INSERTED
@@ -156,7 +155,6 @@ class BalanceFragment : Fragment() {
         super.onStop()
         activity?.hideKeyboard()
         newUser.clearFocus()
-        viewModel.reservation.value = NOCACHED
     }
 
 }

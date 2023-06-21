@@ -1,4 +1,4 @@
-package com.uncmorfi.balance
+package com.uncmorfi.ui.balance.views
 
 import android.content.Context
 import android.text.format.DateUtils

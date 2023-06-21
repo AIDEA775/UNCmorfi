@@ -1,4 +1,4 @@
-package com.uncmorfi.reservations
+package com.uncmorfi.ui.reminders
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -17,8 +17,8 @@ class RemindersFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.reminders_screen, rootKey)
 
-        val reservation = findPreference<MultiSelectListPreference>("reminder_reservation")
-        reservation!!.summaryProvider = SummaryProvider()
+        val reservation = findPreference<MultiSelectListPreference>("reminder_reservation")!!
+        reservation.summaryProvider = SummaryProvider()
     }
 
     override fun onResume() {
@@ -39,9 +39,9 @@ class RemindersFragment : PreferenceFragmentCompat(),
     class SummaryProvider : Preference.SummaryProvider<MultiSelectListPreference> {
 
         override fun provideSummary(pref: MultiSelectListPreference): CharSequence {
-            return pref.values.joinToString(", ") {
-                pref.entries[pref.findIndexOfValue(it)]
-            }.ifEmpty { pref.context.getString(R.string.reminders_reservation_empty) }
+            return pref.values
+                .joinToString(", ") { pref.entries[pref.findIndexOfValue(it)] }
+                .ifEmpty { pref.context.getString(R.string.reminders_reservation_empty) }
         }
     }
 

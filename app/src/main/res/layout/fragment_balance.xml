@@ -2,7 +2,7 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".balance.BalanceFragment"
+    tools:context=".ui.balance.BalanceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbarStyle="outsideOverlay" >
@@ -21,7 +21,7 @@
             android:layout_marginTop="12dp"
             style="@style/MaterialCard">
 
-            <com.uncmorfi.balance.NewUserView
+            <com.uncmorfi.ui.balance.views.NewUserView
                 android:id="@+id/newUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

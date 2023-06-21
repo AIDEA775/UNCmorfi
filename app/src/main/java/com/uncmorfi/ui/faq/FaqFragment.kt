@@ -1,4 +1,4 @@
-package com.uncmorfi.faq
+package com.uncmorfi.ui.faq
 
 import android.annotation.SuppressLint
 import android.os.Bundle

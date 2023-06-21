@@ -1,4 +1,4 @@
-package com.uncmorfi.servings
+package com.uncmorfi.ui.servings
 
 import android.content.Context
 import com.github.mikephil.charting.charts.LineChart

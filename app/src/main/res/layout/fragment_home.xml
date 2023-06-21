@@ -5,7 +5,7 @@
     android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.uncmorfi.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <com.uncmorfi.menu.DayMenuView
+                    <com.uncmorfi.ui.menu.DayMenuView
                         android:id="@+id/homeMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <com.uncmorfi.balance.UserCardView
+                    <com.uncmorfi.ui.balance.views.UserCardView
                         android:id="@+id/homeCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <com.uncmorfi.servings.TotalPieChartView
+                    <com.uncmorfi.ui.servings.TotalPieChartView
                         android:id="@+id/homeServingsPieChart"
                         android:layout_width="match_parent"
                         android:layout_height="225dp"

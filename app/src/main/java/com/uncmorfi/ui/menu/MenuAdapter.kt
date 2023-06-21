@@ -1,4 +1,4 @@
-package com.uncmorfi.menu
+package com.uncmorfi.ui.menu
 
 import android.view.LayoutInflater
 import android.view.View

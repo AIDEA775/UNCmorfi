@@ -9,14 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
-import com.uncmorfi.about.AboutDialog
-import com.uncmorfi.balance.BalanceFragment
-import com.uncmorfi.faq.FaqFragment
-import com.uncmorfi.home.HomeFragment
-import com.uncmorfi.map.MapFragment
-import com.uncmorfi.menu.MenuFragment
-import com.uncmorfi.reservations.RemindersFragment
-import com.uncmorfi.servings.ServingsFragment
+import com.uncmorfi.ui.about.AboutDialog
+import com.uncmorfi.ui.balance.BalanceFragment
+import com.uncmorfi.ui.faq.FaqFragment
+import com.uncmorfi.ui.home.HomeFragment
+import com.uncmorfi.ui.map.MapFragment
+import com.uncmorfi.ui.menu.MenuFragment
+import com.uncmorfi.ui.reminders.RemindersFragment
+import com.uncmorfi.ui.servings.ServingsFragment
 import com.uncmorfi.shared.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -38,16 +38,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         observe(viewModel.status) {
             Log.i("MainActivity", "new status: $it")
             content_layout.snack(it)
-        }
-
-        observe(viewModel.reservation) {
-            content_layout.snack(it)
-        }
-
-        observe(viewModel.reserveTry) {
-            if (it > 0) {
-                content_layout.snack(getString(R.string.snack_loop).format(it), SnackType.LOADING)
-            }
         }
     }
 

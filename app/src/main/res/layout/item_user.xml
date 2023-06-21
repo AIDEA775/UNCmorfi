@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.uncmorfi.balance.UserCardView
+<com.uncmorfi.ui.balance.views.UserCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/userCardView"
     android:layout_width="match_parent"

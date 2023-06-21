@@ -1,4 +1,4 @@
-package com.uncmorfi.home
+package com.uncmorfi.ui.home
 
 import android.os.Bundle
 import android.view.*
@@ -8,10 +8,9 @@ import androidx.fragment.app.activityViewModels
 import com.uncmorfi.MainActivity
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
-import com.uncmorfi.balance.dialogs.UserOptionsDialog
+import com.uncmorfi.ui.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.User
-import com.uncmorfi.shared.ReserveStatus.NOCACHED
 import com.uncmorfi.shared.StatusCode
 import com.uncmorfi.shared.init
 import com.uncmorfi.shared.observe
@@ -133,11 +132,6 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.app_name)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.reservation.value = NOCACHED
     }
 
 }

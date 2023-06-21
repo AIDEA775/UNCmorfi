@@ -1,4 +1,4 @@
-package com.uncmorfi.servings
+package com.uncmorfi.ui.servings
 
 import android.content.Context
 import android.graphics.Color

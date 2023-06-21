@@ -1,4 +1,4 @@
-package com.uncmorfi.servings
+package com.uncmorfi.ui.servings
 
 import android.os.Bundle
 import android.view.*
@@ -8,11 +8,10 @@ import com.github.mikephil.charting.data.Entry
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.Serving
-import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.CUMULATIVE
-import com.uncmorfi.servings.StyledLineDataSet.Companion.ChartStyle.RATIONS
+import com.uncmorfi.ui.servings.StyledLineDataSet.Companion.ChartStyle.CUMULATIVE
+import com.uncmorfi.ui.servings.StyledLineDataSet.Companion.ChartStyle.RATIONS
 import com.uncmorfi.shared.*
 import kotlinx.android.synthetic.main.fragment_servings.*
-import java.time.ZoneId
 
 /**
  * Medidor de raciones.

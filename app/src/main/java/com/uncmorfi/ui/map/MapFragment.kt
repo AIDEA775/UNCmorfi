@@ -1,4 +1,4 @@
-package com.uncmorfi.map
+package com.uncmorfi.ui.map
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -31,7 +31,7 @@ class MapFragment : Fragment() {
         mapView.onResume()
 
         try {
-            MapsInitializer.initialize(activity!!.applicationContext)
+            MapsInitializer.initialize(requireActivity().applicationContext)
         } catch (e: Exception) {
             e.printStackTrace()
         }

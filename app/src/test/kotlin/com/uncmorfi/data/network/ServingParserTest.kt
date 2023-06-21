@@ -1,6 +1,6 @@
 package com.uncmorfi.data.network
 
-import com.uncmorfi.servings.HourAxisValueFormatter
+import com.uncmorfi.ui.servings.HourAxisValueFormatter
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

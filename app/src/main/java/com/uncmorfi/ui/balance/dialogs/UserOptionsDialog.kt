@@ -1,4 +1,4 @@
-package com.uncmorfi.balance.dialogs
+package com.uncmorfi.ui.balance.dialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater

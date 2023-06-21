@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.uncmorfi.menu.DayMenuView
+    <com.uncmorfi.ui.menu.DayMenuView
         android:id="@+id/menuView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

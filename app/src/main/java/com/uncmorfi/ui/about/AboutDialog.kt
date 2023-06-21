@@ -1,4 +1,4 @@
-package com.uncmorfi.about
+package com.uncmorfi.ui.about
 
 import android.app.Dialog
 import android.os.Bundle

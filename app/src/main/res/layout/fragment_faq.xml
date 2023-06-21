@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.uncmorfi.faq.FaqFragment">
+    tools:context=".ui.faq.FaqFragment">
 
     <WebView
         android:id="@+id/faqContent"

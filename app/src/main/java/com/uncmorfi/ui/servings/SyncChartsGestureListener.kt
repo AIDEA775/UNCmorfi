@@ -1,4 +1,4 @@
-package com.uncmorfi.servings
+package com.uncmorfi.ui.servings
 
 import android.graphics.Matrix
 import android.view.MotionEvent

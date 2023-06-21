@@ -1,4 +1,4 @@
-package com.uncmorfi.balance
+package com.uncmorfi.ui.balance
 
 import android.view.LayoutInflater
 import android.view.View

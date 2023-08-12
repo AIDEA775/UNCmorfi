@@ -39,6 +39,7 @@ class MenuFragment : Fragment() {
         swipeRefresh.init { viewModel.forceRefreshMenu() }
         initRecyclerAndAdapter()
         initMenu()
+        initInformationMessage()
 
         observe(viewModel.getMenu()) { menu ->
             adapter.updateMenu(menu)
@@ -71,7 +72,6 @@ class MenuFragment : Fragment() {
     private fun initRecyclerAndAdapter() {
         menuRecyclerView.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
-        layoutManager.stackFromEnd = true
         menuRecyclerView.layoutManager = layoutManager
         menuRecyclerView.isNestedScrollingEnabled = false
     }
@@ -79,6 +79,16 @@ class MenuFragment : Fragment() {
     private fun initMenu() {
         adapter = MenuAdapter(::onClick, ::onLongClick)
         menuRecyclerView.adapter = adapter
+    }
+
+    private fun initInformationMessage() {
+        informationCard.apply {
+            setMessage(getString(R.string.menu_information))
+            setButtonText(getString(R.string.go))
+            setOnClickListener {
+                requireActivity().openInstagram(SEC_BIMO_INSTAGRAM)
+            }
+        }
     }
 
     override fun onResume() {

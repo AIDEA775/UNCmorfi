@@ -10,6 +10,8 @@ const val COCINA_URL = "http://comedor.unc.edu.ar/cocina.php"
 const val PROFILE_PIC_URL = "https://asiruws.unc.edu.ar/foto/"
 const val SANAVIRON_URL = "https://autogestion.sanaviron.unc.edu.ar/micuenta"
 
+const val SEC_BIMO_INSTAGRAM = "bienestarunc"
+
 const val ARG_CARD = "card"
 const val ARG_USER = "user"
 

@@ -172,4 +172,7 @@
     <string name="saved">Guardado</string>
     <string name="clean">Limpiar</string>
     <string name="cleaned">Limpiado</string>
+
+    <string name="menu_information">"Por el momento el menu se publica a diario en las historias de Instagram de Bienestar Estudiantil"</string>
+    <string name="go">Ir</string>
 </resources>

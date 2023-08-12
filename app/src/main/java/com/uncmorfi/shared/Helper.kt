@@ -3,6 +3,7 @@ package com.uncmorfi.shared
 import android.app.Activity
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -159,6 +160,25 @@ fun Activity.openFacebook() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/1978631742388364")))
     } catch (e: Exception) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/UNCmorfi")))
+    }
+}
+
+fun Activity.openInstagram(user : String){
+    val userUrl = "http://instagram.com/stories/$user/"
+    val url = "http://instagram.com/$user"
+
+    val uri = Uri.parse(userUrl)
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.setPackage("com.instagram.android")
+
+    try {
+        ContextCompat.startActivity(this,intent,null)
+    } catch (e: ActivityNotFoundException) {
+        ContextCompat.startActivity(this,
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(url)
+            ),null)
     }
 }
 

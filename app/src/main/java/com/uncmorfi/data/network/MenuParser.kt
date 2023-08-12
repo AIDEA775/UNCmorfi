@@ -9,6 +9,8 @@ import org.jsoup.nodes.Element
 import org.jsoup.parser.Parser
 import org.jsoup.safety.Safelist
 import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 object MenuParser {
 
@@ -28,6 +30,11 @@ object MenuParser {
             .split("-")
             .last()
             .trim()
+
+        val currentMonth = currentDay.month.getDisplayName(TextStyle.FULL , Locale.getDefault())
+        if(!month.contains(currentMonth,true)){
+            return emptyList()
+        }
 
         for (child in menu.children()) {
             if (child.childrenSize() == 0) continue

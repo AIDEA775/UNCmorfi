@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.menu.MenuFragment"
-    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.menu.MenuFragment">
+
+    <com.uncmorfi.ui.menu.InformationMessageView
+        android:id="@+id/informationCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/MaterialCard"
+        app:rippleColor="@null"
+        app:cardBackgroundColor="@color/primary_text"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/informationCard">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/menuRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
             android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
             android:scrollbars="none"
-            android:paddingTop="8dp"
-            android:paddingBottom="64dp"
-            tools:listitem="@layout/item_menu">
-        </androidx.recyclerview.widget.RecyclerView>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            tools:listitem="@layout/item_menu" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

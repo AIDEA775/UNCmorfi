@@ -175,10 +175,14 @@
     <string name="notify_reserve_text">Reserve your serving in the dinning room!</string>
 
     <!-- Any -->
+    
     <string name="action_browser">Open with&#8230;</string>
     <string name="save">Save</string>
     <string name="saved">Saved</string>
     <string name="clean">Clean</string>
     <string name="cleaned">Cleaned</string>
+    
+    <string name="menu_information">"Currently, the menu is published daily on the Instagram stories of Bienestar Estudiantil"</string>
+    <string name="go">Go</string>
 
 </resources>

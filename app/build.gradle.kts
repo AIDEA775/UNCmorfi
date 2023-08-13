@@ -1,7 +1,7 @@
 plugins{
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -17,10 +17,8 @@ android {
         versionName = "v7.1 Garbanzo"
         resValue("string", "app_name", "UNCmorfi")
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
     buildTypes {
@@ -76,7 +74,7 @@ dependencies {
     val room_version = "2.4.3"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 
     // Material Design
     implementation("com.google.android.material:material:1.6.0")

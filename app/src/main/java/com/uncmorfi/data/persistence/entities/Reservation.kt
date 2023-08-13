@@ -13,9 +13,11 @@ import androidx.room.PrimaryKey
             childColumns = arrayOf("code")
         )])
 data class Reservation(
-    @PrimaryKey var code: String = "",
-    var token: String = "",
-    @Ignore var cookies: List<Cookie>? = null,
-    var path: String = "",
-    @Ignore var captchaText: String? = null
-)
+    @PrimaryKey val code: String = "",
+    val token: String = "",
+    val path: String = "",
+){
+    @Ignore val cookies: List<Cookie>? = null
+
+    @Ignore val captchaText: String? = null
+}

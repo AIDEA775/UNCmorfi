@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
+import com.uncmorfi.databinding.ViewDayMenuBinding
 import com.uncmorfi.shared.DateUtils.FORMAT_ARG2
 import com.uncmorfi.shared.DateUtils.FORMAT_ARG3
 import com.uncmorfi.shared.colorOf
 import com.uncmorfi.shared.updateVisibility
-import kotlinx.android.synthetic.main.view_day_menu.view.*
 import java.time.LocalDate
 
 class DayMenuView @JvmOverloads constructor(
@@ -20,11 +20,9 @@ class DayMenuView @JvmOverloads constructor(
 ) : RelativeLayout(context, attr, defStyleAttr) {
     private lateinit var mDayMenu: DayMenu
 
-    init {
-        LayoutInflater.from(context).inflate(R.layout.view_day_menu, this, true)
-    }
+    private val binding = ViewDayMenuBinding.inflate(LayoutInflater.from(context),this)
 
-    fun setDayMenu(menu: DayMenu) {
+    fun setDayMenu(menu: DayMenu) = with(binding){
         mDayMenu = menu
         val offset = menu.date.compareTo(LocalDate.now())
 

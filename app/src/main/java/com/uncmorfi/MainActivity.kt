@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
+import com.uncmorfi.databinding.ActivityMainBinding
 import com.uncmorfi.ui.about.AboutDialog
 import com.uncmorfi.ui.balance.BalanceFragment
 import com.uncmorfi.ui.faq.FaqFragment
@@ -18,17 +19,18 @@ import com.uncmorfi.ui.menu.MenuFragment
 import com.uncmorfi.ui.reminders.RemindersFragment
 import com.uncmorfi.ui.servings.ServingsFragment
 import com.uncmorfi.shared.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        setToolbarAndNavigation()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.setUi()
+
         if (savedInstanceState == null) {
             setMainFragment()
         }
@@ -37,24 +39,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         observe(viewModel.status) {
             Log.i("MainActivity", "new status: $it")
-            content_layout.snack(it)
+            binding.contentLayout.snack(it)
         }
     }
 
+    private fun ActivityMainBinding.setUi(){
+        setContentView(root)
+        setToolbarAndNavigation()
+    }
+
     private fun setToolbarAndNavigation() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         val toggle = ActionBarDrawerToggle(
             this,
-            drawerLayout,
-            toolbar,
+            binding.drawerLayout,
+            binding.toolbar,
             R.string.navigation_open,
             R.string.navigation_close
         )
-        drawerLayout.addDrawerListener(toggle)
+        binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        navView.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
     }
 
     private fun setMainFragment() {
@@ -70,22 +77,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (!item.isChecked)
             changed = replaceFragment(item.itemId)
 
-        drawerLayout.closeDrawer(GravityCompat.START)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return changed
     }
 
     override fun onBackPressed() {
         when {
-            drawerLayout.isDrawerOpen(GravityCompat.START) -> {
-                drawerLayout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
             }
-            navView.menu.getItem(0).isChecked -> {
+            binding.navView.menu.getItem(0).isChecked -> {
                 super.onBackPressed()
             }
             else -> {
                 // Go to main fragment
                 replaceFragment(R.id.nav_home)
-                navView.setCheckedItem(R.id.nav_home)
+                binding.navView.setCheckedItem(R.id.nav_home)
             }
         }
     }
@@ -125,6 +132,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun change(id: Int) {
         replaceFragment(id)
-        navView.setCheckedItem(id)
+        binding.navView.setCheckedItem(id)
     }
 }

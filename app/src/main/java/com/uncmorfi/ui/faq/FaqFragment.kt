@@ -6,30 +6,32 @@ import android.view.*
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.uncmorfi.R
+import com.uncmorfi.databinding.FragmentFaqBinding
 import com.uncmorfi.shared.shareText
 import com.uncmorfi.shared.startBrowser
-import kotlinx.android.synthetic.main.fragment_faq.*
 
 /**
  * Preguntas frecuentes.
  * Muestra una página web alojada en el mismo repositorio de github.
  * Depende del lenguaje del sistema operativo.
  */
-class FaqFragment : Fragment() {
+class FaqFragment : Fragment(R.layout.fragment_faq) {
+
+    private lateinit var binding: FragmentFaqBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_faq, container, false)
-    }
-
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentFaqBinding.bind(view)
+        binding.setUi()
+    }
+
+    private fun FragmentFaqBinding.setUi(){
         faqContent.webViewClient = WebViewClient()
         faqContent.settings.javaScriptEnabled = true
         faqContent.loadUrl(URL)

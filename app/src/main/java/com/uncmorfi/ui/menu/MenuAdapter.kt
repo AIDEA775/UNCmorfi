@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
-import kotlinx.android.synthetic.main.item_menu.view.*
+import com.uncmorfi.databinding.ItemMenuBinding
 
 internal class MenuAdapter(
     private val onClick: (DayMenu) -> Unit,
@@ -17,10 +17,14 @@ internal class MenuAdapter(
 
     internal inner class MenuItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
+        private val binding = ItemMenuBinding.bind(v)
+
         fun bind(day: DayMenu) {
-            itemView.menuView.setDayMenu(day)
-            itemView.menuView.setOnClickListener { onClick(day) }
-            itemView.menuView.setOnLongClickListener { onLongClick(day); true }
+            binding.menuView.apply {
+                setDayMenu(day)
+                setOnClickListener { onClick(day) }
+                setOnLongClickListener { onLongClick(day); true }
+            }
         }
     }
 

@@ -2,24 +2,25 @@ package com.uncmorfi.ui.about
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
-import android.view.View
 import com.uncmorfi.BuildConfig
-import com.uncmorfi.R
-import kotlinx.android.synthetic.main.dialog_about.view.*
+import com.uncmorfi.databinding.DialogAboutBinding
 
 class AboutDialog : DialogFragment() {
 
     private val version: String = BuildConfig.VERSION_NAME
 
+    private lateinit var binding : DialogAboutBinding
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireActivity())
 
-        val v = View.inflate(context, R.layout.dialog_about, null)
-        v.versionName.text = version
+        binding = DialogAboutBinding.inflate(LayoutInflater.from(context),null,false)
+        binding.versionName.text = version
 
-        builder.setView(v)
+        builder.setView(binding.root)
         return builder.create()
     }
 }

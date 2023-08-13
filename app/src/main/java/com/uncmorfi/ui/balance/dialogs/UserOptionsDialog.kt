@@ -10,8 +10,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.databinding.DialogUserBinding
 import com.uncmorfi.shared.*
-import kotlinx.android.synthetic.main.dialog_user.view.*
 
 /**
  * Muestra las opciones disponibles para efectuar sobre un usuario.
@@ -19,12 +19,16 @@ import kotlinx.android.synthetic.main.dialog_user.view.*
 class UserOptionsDialog : BottomSheetDialogFragment() {
 
     val viewModel: MainViewModel by activityViewModels()
+    private lateinit var binding : DialogUserBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.dialog_user, container, false)
+    ): View {
+        binding = DialogUserBinding.inflate(LayoutInflater.from(context),container,false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,8 +36,8 @@ class UserOptionsDialog : BottomSheetDialogFragment() {
         val card = arguments?.getSerializable(ARG_CARD) as String
 
         observe(viewModel.status) {
-            view.userProgressBar.invisible(it != StatusCode.UPDATING)
-            view.userUpdate.invisible(it == StatusCode.UPDATING)
+            binding.userProgressBar.invisible(it != StatusCode.UPDATING)
+            binding.userUpdate.invisible(it == StatusCode.UPDATING)
         }
 
         observe(viewModel.getUser(card)) { user ->
@@ -42,37 +46,37 @@ class UserOptionsDialog : BottomSheetDialogFragment() {
                 return@observe
             }
 
-            view.userName.text = user.name
-            view.userEmail.text = user.email
-            view.userType.text = user.type
+            binding.userName.text = user.name
+            binding.userEmail.text = user.email
+            binding.userType.text = user.type
 
-            view.userBalance.text = user.balanceOrRations()
-            view.userPrice.text =
+            binding.userBalance.text = user.balanceOrRations()
+            binding.userPrice.text =
                 if (user.rations != null) getString(R.string.balance_user_options_rations)
                 else getString(R.string.balance_user_options_price, user.price?.toMoneyFormat())
 
-            view.userUpdate.setOnClickListener {
+            binding.userUpdate.setOnClickListener {
                 viewModel.updateCards(user.card)
             }
 
             // https://github.com/material-components/material-components-android/issues/1952#issuecomment-1000997296
-            view.userCopyToClip.setOnClickListener {
+            binding.userCopyToClip.setOnClickListener {
                 requireContext().copyToClipboard("card", user.card)
                 val msg = getString(R.string.snack_copied_param, user.card)
-                view.userSnackbarHack.snack(msg, SnackType.FINISH)
+                binding.userSnackbarHack.snack(msg, SnackType.FINISH)
             }
 
-            view.userEdit.setOnClickListener {
+            binding.userEdit.setOnClickListener {
                 EditNameDialog
                     .newInstance(user)
                     .show(parentFragmentManager, "EditNameDialog")
             }
 
-            view.userRecharge.setOnClickListener {
+            binding.userRecharge.setOnClickListener {
                 requireActivity().startBrowser(SANAVIRON_URL)
             }
 
-            view.userReserve.setOnClickListener {
+            binding.userReserve.setOnClickListener {
                 requireContext().copyToClipboard("card", user.card)
                 Toast.makeText(
                     requireContext(),

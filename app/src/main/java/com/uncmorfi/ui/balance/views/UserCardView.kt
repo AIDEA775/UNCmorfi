@@ -13,10 +13,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.databinding.ViewUserCardBinding
 import com.uncmorfi.shared.WARNING_USER_RATIONS
 import com.uncmorfi.shared.colorOf
 import com.uncmorfi.shared.visible
-import kotlinx.android.synthetic.main.view_user_card.view.*
 import java.time.Instant
 import java.time.LocalDate
 import java.util.*
@@ -28,10 +28,7 @@ class UserCardView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attr, defStyleAttr) {
 
     private lateinit var user: User
-
-    init {
-        LayoutInflater.from(context).inflate(R.layout.view_user_card, this, true)
-    }
+    private val binding = ViewUserCardBinding.inflate(LayoutInflater.from(context),this)
 
     fun setUser(u: User) {
         user = u
@@ -42,19 +39,19 @@ class UserCardView @JvmOverloads constructor(
     }
 
     private fun setText(user: User) {
-        userName.text = user.name
-        userCard.text = user.card
+        binding.userName.text = user.name
+        binding.userCard.text = user.card
 
-        userBalance.text = user.balanceOrRations()
-        userLastUpdate.text = context.getString(
+        binding.userBalance.text = user.balanceOrRations()
+        binding.userLastUpdate.text = context.getString(
             R.string.balance_last_update, relativeLastUpdate(user.lastUpdate)
         )
 
         val rations = user.calculateRations()?.let {
             context.resources.getQuantityString(R.plurals.balance_ration, it, it)
         }
-        userRation.text = rations
-        userRation.visible(rations != null)
+        binding.userRation.text = rations
+        binding.userRation.visible(rations != null)
     }
 
     private fun relativeLastUpdate(lastUpdate: Instant): String {
@@ -70,18 +67,18 @@ class UserCardView @JvmOverloads constructor(
             .placeholder(R.drawable.ic_account)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .apply(RequestOptions.circleCropTransform())
-            .into(userImage)
+            .into(binding.userImage)
     }
 
     private fun setColors(user: User) {
         // Alerta si le queda poco saldo
-        userBalance.setTextColor(
+        binding.userBalance.setTextColor(
             context.colorOf(
                 if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
                 else R.color.primary_dark
             )
         )
-        userRation.setTextColor(
+        binding.userRation.setTextColor(
             context.colorOf(
                 if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
                 else R.color.primary_text
@@ -92,7 +89,7 @@ class UserCardView @JvmOverloads constructor(
         when {
             warning(user.expiration, 0) -> {
                 setBackgroundColor(context.colorOf(R.color.accent))
-                userBalance.setTextColor(context.colorOf(R.color.white))
+                binding.userBalance.setTextColor(context.colorOf(R.color.white))
                 setTextColor(R.color.white, R.color.white)
             }
             warning(user.expiration, WARNING_USER_EXPIRE) -> {
@@ -107,10 +104,10 @@ class UserCardView @JvmOverloads constructor(
     }
 
     private fun setTextColor(primary: Int, extra: Int) {
-        userName.setTextColor(context.colorOf(primary))
+        binding.userName.setTextColor(context.colorOf(primary))
 
-        userCard.setTextColor(context.colorOf(extra))
-        userLastUpdate.setTextColor(context.colorOf(extra))
+        binding.userCard.setTextColor(context.colorOf(extra))
+        binding.userLastUpdate.setTextColor(context.colorOf(extra))
     }
 
     private fun warning(expiration: LocalDate, months: Long): Boolean {
@@ -119,11 +116,11 @@ class UserCardView @JvmOverloads constructor(
 
     private fun setProgressBar(isLoading: Boolean) {
         if (isLoading) {
-            userBar.visibility = View.VISIBLE
-            scaleView(userImage, SCALE_USER_IMAGE_SIZE, SCALE_USER_IMAGE_SIZE)
+            binding.userBar.visibility = View.VISIBLE
+            scaleView(binding.userImage, SCALE_USER_IMAGE_SIZE, SCALE_USER_IMAGE_SIZE)
         } else {
-            userBar.visibility = View.INVISIBLE
-            scaleView(userImage, 1f, 1f)
+            binding.userBar.visibility = View.INVISIBLE
+            scaleView(binding.userImage, 1f, 1f)
         }
     }
 

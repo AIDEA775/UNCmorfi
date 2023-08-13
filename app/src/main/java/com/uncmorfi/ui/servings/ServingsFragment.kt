@@ -8,33 +8,43 @@ import com.github.mikephil.charting.data.Entry
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.Serving
+import com.uncmorfi.databinding.FragmentServingsBinding
 import com.uncmorfi.ui.servings.StyledLineDataSet.Companion.ChartStyle.CUMULATIVE
 import com.uncmorfi.ui.servings.StyledLineDataSet.Companion.ChartStyle.RATIONS
 import com.uncmorfi.shared.*
-import kotlinx.android.synthetic.main.fragment_servings.*
 
 /**
  * Medidor de raciones.
  * Administra la UI con todas sus features.
  */
 
-class ServingsFragment : Fragment() {
-    private lateinit var mRootView: View
+class ServingsFragment : Fragment(R.layout.fragment_servings) {
+
     private val viewModel: MainViewModel by activityViewModels()
+    private lateinit var binding : FragmentServingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, i: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_servings, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRootView = view
 
+        binding = FragmentServingsBinding.bind(view)
+        binding.setUi()
+
+        observe(viewModel.getServings()) {
+            binding.servingsPieChart.set(it)
+            updateCharts(it)
+        }
+
+        observe(viewModel.status) {
+            binding.swipeRefresh.isRefreshing = it == StatusCode.UPDATING
+        }
+    }
+
+    private fun FragmentServingsBinding.setUi(){
         swipeRefresh.init { viewModel.updateServings() }
         servingTimeChart.init(requireContext())
         servingAccumulatedChart.init(requireContext())
@@ -49,15 +59,6 @@ class ServingsFragment : Fragment() {
 
         // Parametros especiales de ambos LineChart
         servingAccumulatedChart.xAxis.setDrawGridLines(false)
-
-        observe(viewModel.getServings()) {
-            servingsPieChart.set(it)
-            updateCharts(it)
-        }
-
-        observe(viewModel.status) {
-            swipeRefresh.isRefreshing = it == StatusCode.UPDATING
-        }
     }
 
     override fun onResume() {
@@ -103,11 +104,11 @@ class ServingsFragment : Fragment() {
                 CUMULATIVE
             )
 
-            servingTimeChart.update(timeData)
-            servingAccumulatedChart.update(cumulativeData)
+            binding.servingTimeChart.update(timeData)
+            binding.servingAccumulatedChart.update(cumulativeData)
         } else {
-            servingTimeChart.clear()
-            servingAccumulatedChart.clear()
+            binding.servingTimeChart.clear()
+            binding.servingAccumulatedChart.clear()
         }
     }
 

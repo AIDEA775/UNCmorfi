@@ -2,7 +2,6 @@ plugins{
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions")
 }
 
 android {
@@ -20,7 +19,7 @@ android {
 
         kapt {
             arguments {
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
+                arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
     }
@@ -52,6 +51,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 }
 

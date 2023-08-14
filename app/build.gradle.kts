@@ -2,6 +2,7 @@ plugins{
     id("com.android.application")
     kotlin("android")
     id("com.google.devtools.ksp")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {

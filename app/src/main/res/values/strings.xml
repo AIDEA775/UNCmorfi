@@ -164,6 +164,8 @@
     <string name="notify_recharge_text">You have low balance</string>
     <string name="notify_reserve_title">Reserve!</string>
     <string name="notify_reserve_text">Reserve your serving in the dinning room!</string>
+    <string name="notify_permissions">Now you can receive notifications</string>
+    <string name="notify_permissions_rationale">The app requires notifications</string>
 
     <!-- Any -->
     <string name="action_browser">Open with&#8230;</string>

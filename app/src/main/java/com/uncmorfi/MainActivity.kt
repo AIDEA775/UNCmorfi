@@ -1,12 +1,18 @@
 package com.uncmorfi
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
@@ -26,8 +32,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val viewModel: MainViewModel by viewModels()
     private lateinit var binding : ActivityMainBinding
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Toast.makeText(this,R.string.notify_permissions,Toast.LENGTH_SHORT).show()
+        } else {
+            // Do nothing
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        askNotificationPermission()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.setUi()
@@ -137,5 +155,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun change(id: Int) {
         replaceFragment(id)
         binding.navView.setCheckedItem(id)
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                // Do nothing
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                Toast.makeText(this,R.string.notify_permissions_rationale,Toast.LENGTH_SHORT).show()
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 }

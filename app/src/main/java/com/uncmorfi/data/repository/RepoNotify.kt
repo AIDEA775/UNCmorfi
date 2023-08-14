@@ -1,10 +1,13 @@
 package com.uncmorfi.data.repository
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.uncmorfi.R
@@ -31,9 +34,16 @@ class RepoNotify(val context: Context) {
     }
 
     fun update(notification: Notification, id: Int = DEFAULT_ID) {
-        NotificationManagerCompat
-            .from(context)
-            .notify(id, notification)
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat
+                .from(context)
+                .notify(id, notification)
+            return
+        }
     }
 
     fun remove(id: Int) {

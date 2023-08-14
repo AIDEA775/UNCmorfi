@@ -155,6 +155,8 @@
     <string name="notify_recharge_text">Tenés una tarjeta con poco saldo</string>
     <string name="notify_reserve_title">Reservá!</string>
     <string name="notify_reserve_text">No te olvides de hacer la reserva del comedor</string>
+    <string name="notify_permissions">Ahora podes recibir notificaciones</string>
+    <string name="notify_permissions_rationale">La app requiere notificaciones</string>
 
     <!-- Cualquiera -->
 

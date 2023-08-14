@@ -37,7 +37,6 @@
     <string name="balance_action_update">Actualizar tarjetas</string>
     <string name="balance_action_copy">Copiar tarjetas</string>
 
-    <string name="balance_expiration">Vence el %1$s</string>
     <string name="balance_last_update">Actualizado %1$s</string>
     <plurals name="balance_ration">
         <item quantity="one">(%1$d ración)</item>
@@ -60,7 +59,6 @@
     <string name="balance_user_options_reserve">Reservar</string>
     <string name="balance_user_options_delete">Eliminar</string>
     <string name="balance_user_options_copy">Copiar</string>
-    <string name="balance_user_options_barcode">Código de barras</string>
     <string name="balance_user_options_price">(%1$s cada ración)</string>
     <string name="balance_user_options_rations">Raciones restantes</string>
     <string name="balance_user_options_balance_title">Saldo</string>
@@ -71,16 +69,10 @@
 
     <string name="balance_set_name_title">Tu nombre</string>
 
-    <string name="balance_align_barcode">Alineá el código de barras</string>
-
     <!-- Servings -->
 
     <string name="servings_action_update">Actualizar medidor</string>
     <string name="servings_rations_title">%1$d raciones de %2$d</string>
-    <string name="servings_estimate_button">Agregar</string>
-    <string name="servings_estimate">%1$d min aprox. (%2$s)</string>
-    <string name="servings_estimate_empty">Poné a que distancia estas</string>
-    <string name="servings_distance">Ventana %1$d</string>
     <string name="servings_chart_empty">Refrescá</string>
     <string name="servings_chart_label_time">Raciones por tiempo</string>
     <string name="servings_chart_label_accumulated">Raciones acumuladas</string>
@@ -107,7 +99,6 @@
     <string name="snack_soldout">Ya no hay mas reservas</string>
     <string name="snack_invalid">Invalido</string>
     <string name="snack_redologin">Volvé a iniciar sesión</string>
-    <string name="snack_loop">Reservando, intento %1$d&#8230;</string>
 
     <!-- Renovation -->
 
@@ -169,7 +160,4 @@
 
     <string name="action_browser">Abrir en&#8230;</string>
     <string name="save">Guardar</string>
-    <string name="saved">Guardado</string>
-    <string name="clean">Limpiar</string>
-    <string name="cleaned">Limpiado</string>
 </resources>

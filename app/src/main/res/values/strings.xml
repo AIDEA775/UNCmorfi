@@ -37,7 +37,6 @@
     <string name="balance_action_update">Update all cards</string>
     <string name="balance_action_copy">Copy cards</string>
 
-    <string name="balance_expiration">Expiration date: %1$s</string>
     <string name="balance_last_update">Last update %1$s</string>
     <plurals name="balance_ration">
         <item quantity="one">(%1$d food ration)</item>
@@ -60,7 +59,6 @@
     <string name="balance_user_options_reserve">Reserve</string>
     <string name="balance_user_options_delete">Delete</string>
     <string name="balance_user_options_copy">Copy</string>
-    <string name="balance_user_options_barcode">Barcode</string>
     <string name="balance_user_options_price">(%1$s each ration)</string>
     <string name="balance_user_options_rations">Rations left</string>
     <string name="balance_user_options_balance_title">Balance</string>
@@ -71,16 +69,10 @@
 
     <string name="balance_set_name_title">Your name</string>
 
-    <string name="balance_align_barcode">Align barcode</string>
-
     <!-- Servings -->
 
     <string name="servings_action_update">Update servings</string>
     <string name="servings_rations_title">%1$d rations of %2$d</string>
-    <string name="servings_estimate_button">Add</string>
-    <string name="servings_estimate">Approximately %1$d minutes left (%2$s)</string>
-    <string name="servings_estimate_empty">Set the distance at which you are</string>
-    <string name="servings_distance">Window %1$d</string>
     <string name="servings_chart_empty">Pull down to refresh</string>
     <string name="servings_chart_label_time">Rations for time</string>
     <string name="servings_chart_label_accumulated">Accumulated rations</string>
@@ -117,7 +109,6 @@
     <string name="snack_soldout">Sold out</string>
     <string name="snack_invalid">Invalid</string>
     <string name="snack_redologin">Redo login</string>
-    <string name="snack_loop">Reserving, try %1$d&#8230;</string>
 
     <!-- Renovation -->
 
@@ -177,8 +168,5 @@
     <!-- Any -->
     <string name="action_browser">Open with&#8230;</string>
     <string name="save">Save</string>
-    <string name="saved">Saved</string>
-    <string name="clean">Clean</string>
-    <string name="cleaned">Cleaned</string>
 
 </resources>

@@ -30,11 +30,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance) {
 
     private var userList: List<User> = emptyList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,10 +49,24 @@ class BalanceFragment : Fragment(R.layout.fragment_balance) {
     }
 
     private fun FragmentBalanceBinding.setUi(){
+        addMenu(R.menu.balance){ menuItemId ->
+            when (menuItemId) {
+                R.id.balance_update -> {
+                    updateAllUsers(); true
+                }
+                R.id.balance_copy -> {
+                    copyAllUsers(); true
+                }
+                R.id.balance_browser -> requireActivity().startBrowser(HUEMUL_AUTOCONSULTA_URL)
+                else -> false
+            }
+        }
+
         newUser.onDone { code ->
             activity?.hideKeyboard()
             updateCards(parseCards(code))
         }
+
         initRecyclerAndAdapter()
     }
     private fun initRecyclerAndAdapter() {
@@ -79,23 +88,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance) {
     private fun showUserOptionsDialog(user: User) {
         UserOptionsDialog.newInstance(user)
             .show(parentFragmentManager, "UserOptionsDialog")
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.balance, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.balance_update -> {
-                updateAllUsers(); true
-            }
-            R.id.balance_copy -> {
-                copyAllUsers(); true
-            }
-            R.id.balance_browser -> requireActivity().startBrowser(HUEMUL_AUTOCONSULTA_URL)
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun updateAllUsers() {

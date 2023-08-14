@@ -20,11 +20,6 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding : FragmentMenuBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,26 +38,21 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
     }
 
     private fun FragmentMenuBinding.setUi(){
+        addMenu(R.menu.menu){menuItemId ->
+            when(menuItemId){
+                R.id.menu_update -> {
+                    viewModel.forceRefreshMenu(); true
+                }
+                R.id.menu_clear -> {
+                    viewModel.clearMenu(); true
+                }
+                R.id.menu_browser -> requireActivity().startBrowser(URL)
+                else -> false
+            }
+        }
         swipeRefresh.init { viewModel.forceRefreshMenu() }
         initRecyclerAndAdapter()
         initMenu()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_update -> {
-                viewModel.forceRefreshMenu(); true
-            }
-            R.id.menu_clear -> {
-                viewModel.clearMenu(); true
-            }
-            R.id.menu_browser -> requireActivity().startBrowser(URL)
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun initRecyclerAndAdapter() {

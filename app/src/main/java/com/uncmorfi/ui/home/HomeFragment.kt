@@ -13,6 +13,7 @@ import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.databinding.FragmentHomeBinding
 import com.uncmorfi.shared.StatusCode
+import com.uncmorfi.shared.addMenu
 import com.uncmorfi.shared.init
 import com.uncmorfi.shared.observe
 
@@ -22,11 +23,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewModel: MainViewModel by activityViewModels()
 
     private lateinit var binding : FragmentHomeBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,7 +68,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun FragmentHomeBinding.setUi(){
+    private fun FragmentHomeBinding.setUi() {
         swipeRefresh.init { updateAll() }
 
         homeMenuShowMore.setOnClickListener {
@@ -100,6 +96,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeServingsShowMore.setOnClickListener {
             (requireActivity() as MainActivity).change(R.id.nav_servings)
         }
+
+        addMenu(R.menu.home){menuItemId ->
+            when(menuItemId){
+                R.id.home_update -> {
+                    updateAll()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun updateAll() {
@@ -113,19 +119,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             user.isLoading = true
             binding.homeCard.setUser(user)
             viewModel.updateCards(user.card)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.home_update -> {
-                updateAll(); true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

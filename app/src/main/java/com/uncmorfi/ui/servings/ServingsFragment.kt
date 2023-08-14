@@ -23,11 +23,6 @@ class ServingsFragment : Fragment(R.layout.fragment_servings) {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding : FragmentServingsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,6 +40,17 @@ class ServingsFragment : Fragment(R.layout.fragment_servings) {
     }
 
     private fun FragmentServingsBinding.setUi(){
+
+        addMenu(R.menu.servings){menuItemId ->
+            when(menuItemId){
+                R.id.serving_update -> {
+                    viewModel.updateServings(); true
+                }
+                R.id.serving_browser -> requireActivity().startBrowser(COCINA_URL)
+                else -> false
+            }
+        }
+
         swipeRefresh.init { viewModel.updateServings() }
         servingTimeChart.init(requireContext())
         servingAccumulatedChart.init(requireContext())
@@ -65,20 +71,6 @@ class ServingsFragment : Fragment(R.layout.fragment_servings) {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_servings)
         viewModel.updateServings()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.servings, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.serving_update -> {
-                viewModel.updateServings(); true
-            }
-            R.id.serving_browser -> requireActivity().startBrowser(COCINA_URL)
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun updateCharts(items: List<Serving>) {

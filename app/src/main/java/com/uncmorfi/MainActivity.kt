@@ -3,6 +3,7 @@ package com.uncmorfi
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +42,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Log.i("MainActivity", "new status: $it")
             binding.contentLayout.snack(it)
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when {
+                    binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> {
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+                    binding.navView.menu.getItem(0).isChecked -> {
+                        finish()
+                    }
+                    else -> {
+                        // Go to main fragment
+                        replaceFragment(R.id.nav_home)
+                        binding.navView.setCheckedItem(R.id.nav_home)
+                    }
+                }
+
+            }
+        })
     }
 
     private fun ActivityMainBinding.setUi(){
@@ -79,22 +99,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return changed
-    }
-
-    override fun onBackPressed() {
-        when {
-            binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> {
-                binding.drawerLayout.closeDrawer(GravityCompat.START)
-            }
-            binding.navView.menu.getItem(0).isChecked -> {
-                super.onBackPressed()
-            }
-            else -> {
-                // Go to main fragment
-                replaceFragment(R.id.nav_home)
-                binding.navView.setCheckedItem(R.id.nav_home)
-            }
-        }
     }
 
     private fun replaceFragment(item: Int): Boolean {

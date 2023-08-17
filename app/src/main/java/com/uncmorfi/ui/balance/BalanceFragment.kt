@@ -36,15 +36,15 @@ class BalanceFragment : Fragment(R.layout.fragment_balance) {
         binding = FragmentBalanceBinding.bind(view)
         binding.setUi()
 
-        observe(viewModel.status) {
-            if (it == UPDATE_SUCCESS || it == USER_INSERTED) {
+        observe(viewModel.state) { state ->
+            if (state == UPDATE_SUCCESS || state == USER_INSERTED) {
                 binding.newUser.clearText()
             }
         }
 
-        observe(viewModel.getAllUsers()) {
-            mUserAdapter.setUsers(it)
-            userList = it
+        observe(viewModel.users){ users ->
+            mUserAdapter.setUsers(users)
+            userList = users
         }
     }
 

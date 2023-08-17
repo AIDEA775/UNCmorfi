@@ -56,9 +56,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         viewModel.refreshWorkers()
 
-        observe(viewModel.status) {
-            Log.i("MainActivity", "new status: $it")
-            binding.contentLayout.snack(it)
+        observe(viewModel.state) { state ->
+            Log.i("MainActivity", "new status: $state")
+            binding.contentLayout.snack(state)
         }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

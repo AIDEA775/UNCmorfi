@@ -26,14 +26,14 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         binding = FragmentMenuBinding.bind(view)
         binding.setUi()
 
-        observe(viewModel.getMenu()) { menu ->
+        observe(viewModel.state) { state ->
+            binding.swipeRefresh.isRefreshing = state == StatusCode.UPDATING
+        }
+
+        observe(viewModel.menu) { menu ->
             adapter.updateMenu(menu)
             val today = menu.indexOfFirst { it.isToday() }
             binding.menuRecyclerView.scrollToPosition(today)
-        }
-
-        observe(viewModel.status) {
-            binding.swipeRefresh.isRefreshing = it == StatusCode.UPDATING
         }
     }
 

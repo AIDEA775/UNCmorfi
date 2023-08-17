@@ -35,9 +35,9 @@ class UserOptionsDialog : BottomSheetDialogFragment() {
 
         val card = arguments?.getSerializable(ARG_CARD) as String
 
-        observe(viewModel.status) {
-            binding.userProgressBar.invisible(it != StatusCode.UPDATING)
-            binding.userUpdate.invisible(it == StatusCode.UPDATING)
+        observe(viewModel.state) { state ->
+            binding.userProgressBar.invisible(state != StatusCode.UPDATING)
+            binding.userUpdate.invisible(state == StatusCode.UPDATING)
         }
 
         observe(viewModel.getUser(card)) { user ->

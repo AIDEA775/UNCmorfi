@@ -1,8 +1,8 @@
 package com.uncmorfi.data.persistence.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.uncmorfi.data.persistence.entities.User
+import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
@@ -11,13 +11,13 @@ import java.time.LocalDate
 interface UserDao {
 
     @Query("SELECT * FROM users WHERE card = :card")
-    fun getByCard(card: String): LiveData<User?>
+    fun getByCard(card: String): Flow<User?>
 
     @Query("SELECT * FROM users")
     fun getAll(): List<User>
 
     @Query("SELECT * FROM users")
-    fun getAllAsLiveData(): LiveData<List<User>>
+    fun getAllAsFlow(): Flow<List<User>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(users: List<User>): List<Long>

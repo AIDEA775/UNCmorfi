@@ -29,13 +29,13 @@ class ServingsFragment : Fragment(R.layout.fragment_servings) {
         binding = FragmentServingsBinding.bind(view)
         binding.setUi()
 
-        observe(viewModel.getServings()) {
-            binding.servingsPieChart.set(it)
-            updateCharts(it)
+        observe(viewModel.state) { state ->
+            binding.swipeRefresh.isRefreshing = state == StatusCode.UPDATING
         }
 
-        observe(viewModel.status) {
-            binding.swipeRefresh.isRefreshing = it == StatusCode.UPDATING
+        observe(viewModel.servings) { servings ->
+            binding.servingsPieChart.set(servings)
+            updateCharts(servings)
         }
     }
 

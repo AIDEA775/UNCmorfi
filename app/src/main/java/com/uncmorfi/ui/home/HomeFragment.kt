@@ -22,7 +22,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var mDayMenu: DayMenu? = null
     private val viewModel: MainViewModel by activityViewModels()
 
-    private lateinit var binding : FragmentHomeBinding
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,14 +30,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding = FragmentHomeBinding.bind(view)
         binding.setUi()
 
-        observe(viewModel.status) {
-            binding.swipeRefresh.isRefreshing = it == StatusCode.UPDATING
+        observe(viewModel.state) { state ->
+            binding.swipeRefresh.isRefreshing = state == StatusCode.UPDATING
         }
 
         /*
-         * Menú
-         */
-        observe(viewModel.getMenu()) { menu ->
+        * Menu
+        */
+        observe(viewModel.menu){ menu ->
             val today = menu.firstOrNull { it.isToday() }
             mDayMenu = today
 
@@ -48,24 +48,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         /*
-         * Tarjetas
-         */
-        observe(viewModel.getAllUsers()) {
-            if (it.isNotEmpty()) {
-                user = it.first()
+        * Tarjetas
+        */
+        observe(viewModel.users){ users ->
+            if (users.isNotEmpty()) {
+                user = users.first()
                 binding.homeCard.setUser(user)
                 binding.homeCard.visibility = VISIBLE
             }
         }
 
         /*
-         * Medidor
-         */
-        observe(viewModel.getServings()) {
-            if (it.isNotEmpty()) {
-                binding.homeServingsPieChart.set(it)
+        * Medidor
+        */
+        observe(viewModel.servings) { servings ->
+            if (servings.isNotEmpty()) {
+                binding.homeServingsPieChart.set(servings)
             }
         }
+
     }
 
     private fun FragmentHomeBinding.setUi() {
@@ -97,12 +98,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             (requireActivity() as MainActivity).change(R.id.nav_servings)
         }
 
-        addMenu(R.menu.home){menuItemId ->
-            when(menuItemId){
+        addMenu(R.menu.home) { menuItemId ->
+            when (menuItemId) {
                 R.id.home_update -> {
                     updateAll()
                     true
                 }
+
                 else -> false
             }
         }
@@ -126,5 +128,4 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onResume()
         requireActivity().setTitle(R.string.app_name)
     }
-
 }

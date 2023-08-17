@@ -18,11 +18,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.uncmorfi.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 enum class SnackType {
     ERROR,
@@ -229,6 +233,10 @@ fun TextView.updateVisibility() {
     this.visibility = if (this.text.isNullOrEmpty()) GONE else VISIBLE
 }
 
-inline fun <T> LifecycleOwner.observe(liveData: LiveData<T>, crossinline body: (T) -> Unit) {
-    liveData.observe(this, { body.invoke(it) })
+inline fun <T> LifecycleOwner.observe(flow : Flow<T>, state : Lifecycle.State = Lifecycle.State.RESUMED, crossinline body: (T) -> Unit){
+    lifecycleScope.launch {
+        repeatOnLifecycle(state){
+            flow.collect{ body(it) }
+        }
+    }
 }

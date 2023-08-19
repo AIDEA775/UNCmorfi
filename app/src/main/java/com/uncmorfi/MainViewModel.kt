@@ -1,16 +1,18 @@
 package com.uncmorfi
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.data.repository.RepoMenu
 import com.uncmorfi.data.repository.RepoServings
 import com.uncmorfi.data.repository.RepoUser
 import com.uncmorfi.data.service.ServWorkers
-import com.uncmorfi.shared.*
+import com.uncmorfi.shared.connectivity.ConnectivityObserver.*
 import com.uncmorfi.shared.StatusCode.*
+import com.uncmorfi.shared.connectivity.NetworkConnectivityObserver
+import com.uncmorfi.shared.connectivity.isOnline
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,15 +25,26 @@ import org.json.JSONException
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.LocalDate
+import javax.inject.Inject
 
-class MainViewModel(val context: Application) : AndroidViewModel(context) {
-    private val repoMenu = RepoMenu(context)
-    private val repoUser = RepoUser(context)
-    private val repoServings = RepoServings(context)
-    private val servWorkers = ServWorkers(context)
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repoMenu: RepoMenu,
+    private val repoUser: RepoUser,
+    private val repoServings: RepoServings,
+    private val servWorkers: ServWorkers,
+    private val networkConnectivityObserver: NetworkConnectivityObserver,
+) : ViewModel() {
 
     private val _state = MutableStateFlow(BUSY)
     val state = _state.asStateFlow()
+
+    private val networkConnection = networkConnectivityObserver.observe()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = Status.Unavailable
+        )
 
     val users = repoUser.listenAll()
         .distinctUntilChanged()
@@ -60,7 +73,6 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     init {
         viewModelScope.launch {
             _state.update { BUSY }
-            updateServings()
         }
     }
 
@@ -70,7 +82,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
     fun getUser(card: String): Flow<User?> = repoUser.getBy(card)
 
     fun updateCards(card: String) = launchIO {
-        if (!context.isOnline()) {
+        if (!networkConnection.value.isOnline()) {
             _state.update { NO_ONLINE }
             return@launchIO
         }
@@ -103,7 +115,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
 
     fun forceRefreshMenu() = launchIO {
         Log.d("ViewModel", "Force update menu")
-        if (!context.isOnline()) {
+        if (!networkConnection.value.isOnline()) {
             _state.update { NO_ONLINE }
             return@launchIO
         }
@@ -137,7 +149,7 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
 
     fun updateServings() = launchIO {
         Log.d("ViewModel", "Update serving")
-        if (!context.isOnline()) {
+        if (!networkConnection.value.isOnline()) {
             _state.update { NO_ONLINE }
             return@launchIO
         }

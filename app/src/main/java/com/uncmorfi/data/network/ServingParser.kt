@@ -4,12 +4,16 @@ import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.shared.DateUtils.FORMAT_ARG4
 import com.uncmorfi.shared.HUEMUL_URL
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import javax.inject.Inject
 
-object ServingParser {
+class ServingParser @Inject constructor(
+    private val okHttpClient: OkHttpClient
+) {
 
     fun fetch(): List<Serving> {
         val response = okHttpClient.newCall(

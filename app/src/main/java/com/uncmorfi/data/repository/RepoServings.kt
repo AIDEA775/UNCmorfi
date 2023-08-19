@@ -1,16 +1,17 @@
 package com.uncmorfi.data.repository
 
-import android.content.Context
 import com.uncmorfi.data.network.ServingParser
-import com.uncmorfi.data.persistence.AppDatabase
+import com.uncmorfi.data.persistence.dao.ServingDao
+import javax.inject.Inject
 
-class RepoServings(context: Context) {
-    private val servingDAO = AppDatabase(context).servingDao()
-
+class RepoServings @Inject constructor(
+    private val servingDAO: ServingDao,
+    private val servingParser: ServingParser
+) {
     fun getToday() = servingDAO.getToday()
 
     suspend fun update(): List<Long> {
-        val servings = ServingParser.fetch()
+        val servings = servingParser.fetch()
 
         if (servings.isEmpty()) {
             return emptyList()

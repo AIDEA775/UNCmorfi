@@ -224,11 +224,6 @@ fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {
     })
 }
 
-fun Context?.isOnline(): Boolean {
-    return (this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-        .activeNetworkInfo?.isConnected ?: false
-}
-
 fun TextView.updateVisibility() {
     this.visibility = if (this.text.isNullOrEmpty()) GONE else VISIBLE
 }

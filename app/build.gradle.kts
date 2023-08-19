@@ -3,6 +3,8 @@ plugins{
     kotlin("android")
     id("com.google.devtools.ksp")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -12,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.uncmorfi"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 33
         versionCode = 16
         versionName = "v7.1 Garbanzo"
@@ -21,6 +23,8 @@ android {
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         getByName("release"){
@@ -31,7 +35,12 @@ android {
         }
         getByName("debug"){
             isDebuggable = true
+            versionNameSuffix = "-DEBUG"
             applicationIdSuffix = ".debug"
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            isCrunchPngs = false
             resValue("string", "app_name", "UNCmorfi DEBUG")
         }
     }
@@ -53,6 +62,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
 }
@@ -79,6 +89,11 @@ dependencies {
     // Material Design
     implementation("com.google.android.material:material:1.9.0")
 
+    //Dagger Hilt Di
+    implementation("com.google.dagger:hilt-android:2.46.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.46.1")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+
     // Maps
     implementation("com.google.android.gms:play-services-maps:18.1.0")
 
@@ -99,8 +114,13 @@ dependencies {
     // Java 8 API (for Java Time classes)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
+    //MockK
+    testImplementation("io.mockk:mockk:1.13.7")
+
     // Unit testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("com.google.truth:truth:1.0.1")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46.1")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.46.1")
 
 }

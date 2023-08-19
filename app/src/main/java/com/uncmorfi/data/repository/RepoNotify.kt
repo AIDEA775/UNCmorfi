@@ -13,8 +13,12 @@ import androidx.core.app.NotificationManagerCompat
 import com.uncmorfi.R
 import com.uncmorfi.shared.CHANNEL_ID
 import com.uncmorfi.shared.DEFAULT_ID
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class RepoNotify(val context: Context) {
+class RepoNotify @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     fun send(block: NotificationCompat.Builder.() -> Unit) {
         createChannel()

@@ -26,7 +26,9 @@ import com.uncmorfi.ui.menu.MenuFragment
 import com.uncmorfi.ui.reminders.RemindersFragment
 import com.uncmorfi.ui.servings.ServingsFragment
 import com.uncmorfi.shared.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val viewModel: MainViewModel by viewModels()

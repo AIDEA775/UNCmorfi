@@ -59,7 +59,7 @@ class TotalPieChartView: PieChart {
 
     private fun PieDataSet.style(): PieDataSet {
         val colors = ArrayList<Int>()
-        colors.add(context.colorOf(R.color.accent))
+//        colors.add(context.colorOf(R.color.accent))
         colors.add(Color.TRANSPARENT)
         this.colors = colors
         this.setDrawValues(false)
@@ -80,9 +80,9 @@ class TotalPieChartView: PieChart {
         val s = SpannableString("$pText\n$tText")
 
         s.setSpan(RelativeSizeSpan(3f), 0, pText.length, 0)
-        s.setSpan(ForegroundColorSpan(context.colorOf(
-                if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark)),
-                0, pText.length, 0)
+//        s.setSpan(ForegroundColorSpan(context.colorOf(
+//                if (total > FOOD_RATIONS - FOOD_LIMIT) R.color.accent else R.color.primary_dark)),
+//                0, pText.length, 0)
 
         s.setSpan(StyleSpan(Typeface.NORMAL), pText.length, s.length, 0)
         s.setSpan(ForegroundColorSpan(Color.BLACK), pText.length, s.length, 0)

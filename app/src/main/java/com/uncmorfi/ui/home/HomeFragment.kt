@@ -1,6 +1,7 @@
 package com.uncmorfi.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment

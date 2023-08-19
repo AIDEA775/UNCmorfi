@@ -75,35 +75,35 @@ class UserCardView @JvmOverloads constructor(
 
     private fun setColors(user: User) {
         // Alerta si le queda poco saldo
-        userBalance.setTextColor(
-            context.colorOf(
-                if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
-                else R.color.primary_dark
-            )
-        )
-        userRation.setTextColor(
-            context.colorOf(
-                if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
-                else R.color.primary_text
-            )
-        )
+//        userBalance.setTextColor(
+//            context.colorOf(
+//                if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
+//                else R.color.primary_dark
+//            )
+//        )
+//        userRation.setTextColor(
+//            context.colorOf(
+//                if (user.anyRations() <= WARNING_USER_RATIONS) R.color.accent
+//                else R.color.primary_text
+//            )
+//        )
 
         // Alerta si la tarjeta está vencida o está por vencerse
-        when {
-            warning(user.expiration, 0) -> {
-                setBackgroundColor(context.colorOf(R.color.accent))
-                userBalance.setTextColor(context.colorOf(R.color.white))
-                setTextColor(R.color.white, R.color.white)
-            }
-            warning(user.expiration, WARNING_USER_EXPIRE) -> {
-                setBackgroundColor(context.colorOf(R.color.white))
-                setTextColor(R.color.primary_text, R.color.secondary_text)
-            }
-            else -> {
-                setBackgroundColor(context.colorOf(R.color.white))
-                setTextColor(R.color.primary_text, R.color.secondary_text)
-            }
-        }
+//        when {
+//            warning(user.expiration, 0) -> {
+//                setBackgroundColor(context.colorOf(R.color.accent))
+//                userBalance.setTextColor(context.colorOf(R.color.white))
+//                setTextColor(R.color.white, R.color.white)
+//            }
+//            warning(user.expiration, WARNING_USER_EXPIRE) -> {
+//                setBackgroundColor(context.colorOf(R.color.white))
+//                setTextColor(R.color.primary_text, R.color.secondary_text)
+//            }
+//            else -> {
+//                setBackgroundColor(context.colorOf(R.color.white))
+//                setTextColor(R.color.primary_text, R.color.secondary_text)
+//            }
+//        }
     }
 
     private fun setTextColor(primary: Int, extra: Int) {

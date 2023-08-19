@@ -35,7 +35,7 @@ fun LineChart.init(context: Context) {
     this.xAxis.position = XAxis.XAxisPosition.BOTTOM
 
     this.legend.textSize = 14f
-    this.legend.textColor = context.colorOf(R.color.primary_text)
+//    this.legend.textColor = context.colorOf(R.color.primary_text)
 }
 
 fun LineChart.update(dataSet: LineDataSet, xMinRange: Float = 200f) {

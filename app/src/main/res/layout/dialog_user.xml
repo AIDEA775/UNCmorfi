@@ -28,7 +28,6 @@
         android:ellipsize="end"
         android:importantForAccessibility="yes"
         android:maxLines="1"
-        android:textColor="@color/primary_text"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/userEmail"
@@ -107,7 +106,6 @@
         android:layout_marginStart="16dp"
         android:gravity="center"
         android:importantForAccessibility="yes"
-        android:textColor="@color/primary_text"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -156,11 +154,11 @@
         android:indeterminate="true"
         android:visibility="visible"
         app:indicatorSize="24dp"
-        app:trackThickness="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/userUpdate"
         app:layout_constraintEnd_toEndOf="@+id/userUpdate"
         app:layout_constraintStart_toStartOf="@+id/userUpdate"
-        app:layout_constraintTop_toTopOf="@+id/userUpdate" />
+        app:layout_constraintTop_toTopOf="@+id/userUpdate"
+        app:trackThickness="2dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/userRecharge"
@@ -174,7 +172,6 @@
         android:maxLines="1"
         android:paddingVertical="16dp"
         android:text="@string/balance_user_options_recharge"
-        android:textColor="@color/primary_dark"
         app:icon="@drawable/ic_money"
         app:iconGravity="top"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -182,8 +179,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userPrice"
-        app:strokeColor="@color/primary_light" />
+        app:layout_constraintTop_toBottomOf="@+id/userPrice" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/userReserve"
@@ -193,15 +189,13 @@
         android:maxLines="1"
         android:paddingVertical="16dp"
         android:text="@string/balance_user_options_reserve"
-        android:textColor="@color/primary_dark"
         app:icon="@drawable/nav_ticket"
         app:iconGravity="top"
         app:layout_constraintBottom_toBottomOf="@+id/userRecharge"
         app:layout_constraintEnd_toStartOf="@+id/userCopyToClip"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/userRecharge"
-        app:layout_constraintTop_toTopOf="@+id/userRecharge"
-        app:strokeColor="@color/primary_light" />
+        app:layout_constraintTop_toTopOf="@+id/userRecharge" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/userCopyToClip"
@@ -213,15 +207,13 @@
         android:maxLines="1"
         android:paddingVertical="16dp"
         android:text="@string/balance_user_options_copy"
-        android:textColor="@color/primary_dark"
         app:icon="@drawable/ic_copy"
         app:iconGravity="top"
         app:layout_constraintBottom_toBottomOf="@+id/userRecharge"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/userReserve"
-        app:layout_constraintTop_toTopOf="@+id/userRecharge"
-        app:strokeColor="@color/primary_light" />
+        app:layout_constraintTop_toTopOf="@+id/userRecharge" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/userSnackbarHack"

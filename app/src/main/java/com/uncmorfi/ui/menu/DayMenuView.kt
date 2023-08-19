@@ -31,35 +31,35 @@ class DayMenuView @JvmOverloads constructor(
         val colorDay: Int
         val colorFood: Int
         val colorBack: Int
-        when {
-            offset < 0 -> {
-                colorDay = context.colorOf(R.color.primary)
-                colorFood = context.colorOf(R.color.secondary_text)
-                colorBack = context.colorOf(R.color.white)
-            }
-            offset == 0 -> {
-                colorDay = context.colorOf(R.color.white)
-                colorFood = context.colorOf(R.color.white)
-                colorBack = context.colorOf(R.color.accent)
+//        when {
+//            offset < 0 -> {
+//                colorDay = context.colorOf(R.color.primary)
+//                colorFood = context.colorOf(R.color.secondary_text)
+//                colorBack = context.colorOf(R.color.white)
+//            }
+//            offset == 0 -> {
+//                colorDay = context.colorOf(R.color.white)
+//                colorFood = context.colorOf(R.color.white)
+//                colorBack = context.colorOf(R.color.accent)
+//
+//            }
+//            else -> {
+//                colorDay = context.colorOf(R.color.primary_dark)
+//                colorFood = context.colorOf(R.color.primary_text)
+//                colorBack = context.colorOf(R.color.white)
+//            }
+//        }
 
-            }
-            else -> {
-                colorDay = context.colorOf(R.color.primary_dark)
-                colorFood = context.colorOf(R.color.primary_text)
-                colorBack = context.colorOf(R.color.white)
-            }
-        }
-
-        setBackgroundColor(colorBack)
-        menuDayNumber.setTextColor(colorDay)
-        menuDayName.setTextColor(colorDay)
-
-        menuFood1.setTextColor(colorFood)
-        menuFood2.setTextColor(colorFood)
-        menuFood3.setTextColor(colorFood)
-        menuFood4.setTextColor(colorFood)
-        menuFood5.setTextColor(colorFood)
-        menuFood6.setTextColor(colorFood)
+//        setBackgroundColor(colorBack)
+//        menuDayNumber.setTextColor(colorDay)
+//        menuDayName.setTextColor(colorDay)
+//
+//        menuFood1.setTextColor(colorFood)
+//        menuFood2.setTextColor(colorFood)
+//        menuFood3.setTextColor(colorFood)
+//        menuFood4.setTextColor(colorFood)
+//        menuFood5.setTextColor(colorFood)
+//        menuFood6.setTextColor(colorFood)
 
         menuDayNumber.text = menu.date.format(FORMAT_ARG2)
         menuDayName.text = menu.date.format(FORMAT_ARG3)

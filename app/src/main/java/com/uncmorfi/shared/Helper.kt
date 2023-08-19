@@ -127,20 +127,20 @@ private fun getLength(type: SnackType): Int {
 }
 
 private fun setColored(context: Context, snackBar: Snackbar, type: SnackType) {
-    val color = when (type) {
-        SnackType.ERROR -> context.colorOf(R.color.accent)
-        SnackType.LOADING -> context.colorOf(R.color.primary_text)
-        SnackType.FINISH -> context.colorOf(R.color.primary_dark)
-    }
+//    val color = when (type) {
+//        SnackType.ERROR -> context.colorOf(R.color.accent)
+//        SnackType.LOADING -> context.colorOf(R.color.primary_text)
+//        SnackType.FINISH -> context.colorOf(R.color.primary_dark)
+//    }
     snackBar.view.setBackgroundResource(R.drawable.rounded_corners)
     val drawable = snackBar.view.background as GradientDrawable
-    drawable.setColor(color)
+//    drawable.setColor(color)
 }
 
 fun SwipeRefreshLayout.init(f: () -> Unit) {
     this.setOnRefreshListener { f() }
-    this.setProgressBackgroundColorSchemeResource(R.color.accent)
-    this.setColorSchemeResources(R.color.white)
+//    this.setProgressBackgroundColorSchemeResource(R.color.accent)
+//    this.setColorSchemeResources(R.color.white)
 }
 
 fun Context.colorOf(resId: Int): Int {

@@ -18,8 +18,6 @@
         android:padding="16dp"
         android:fontFamily="sans-serif-light"
         android:textSize="18sp"
-        android:textColor="@color/primary_text"
-        android:textColorHint="@color/secondary_text"
         android:importantForAutofill="no" />
 
     <ImageButton

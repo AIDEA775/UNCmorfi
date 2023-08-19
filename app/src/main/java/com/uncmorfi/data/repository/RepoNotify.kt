@@ -22,7 +22,7 @@ class RepoNotify(val context: Context) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.drawable.ic_icon_mono)
-            .setColor(context.getColor(R.color.accent))
+            .setColor(context.getColor(R.color.md_theme_light_primary))
             .setAutoCancel(true)
 
         block(builder)

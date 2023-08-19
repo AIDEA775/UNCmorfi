@@ -15,34 +15,34 @@ class StyledLineDataSet(context: Context, yVals: List<Entry>, label: String, sty
             ChartStyle.POINTS -> {
                 setDrawValues(false)
                 setDrawCircleHole(true)
-                setCircleColor(context.colorOf(R.color.primary_dark))
-                setCircleColorHole(context.colorOf(R.color.primary_dark))
+//                setCircleColor(context.colorOf(R.color.primary_dark))
+//                setCircleColorHole(context.colorOf(R.color.primary_dark))
                 circleRadius = 4f
                 color = Color.TRANSPARENT
             }
             ChartStyle.ESTIMATE -> {
                 setDrawValues(false)
                 setDrawCircles(false)
-                color = context.colorOf(R.color.accent)
+//                color = context.colorOf(R.color.accent)
                 lineWidth = 2f
                 enableDashedLine(20f, 10f, 0f)
             }
             ChartStyle.RATIONS -> {
                 setDrawValues(false)
-                color = context.colorOf(R.color.accent)
-                setCircleColor(context.colorOf(R.color.accent))
+//                color = context.colorOf(R.color.accent)
+//                setCircleColor(context.colorOf(R.color.accent))
                 lineWidth = 2f
                 circleRadius = 3f
             }
             ChartStyle.CUMULATIVE -> {
                 setDrawValues(false)
                 setDrawCircles(false)
-                color = context.colorOf(R.color.primary_dark)
+//                color = context.colorOf(R.color.primary_dark)
                 lineWidth = 1f
 
                 setDrawFilled(true)
                 fillAlpha = 255
-                fillColor = context.colorOf(R.color.primary)
+//                fillColor = context.colorOf(R.color.primary)
             }
         }
     }

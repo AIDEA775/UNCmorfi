@@ -55,8 +55,11 @@ class ServWorkers(val context: Context) {
         workManager.enqueueUniquePeriodicWork(
             RESERVATION_WORK,
             ExistingPeriodicWorkPolicy.REPLACE,
-            PeriodicWorkRequestBuilder<ReservationWorker>(1, TimeUnit.DAYS)
-                .setInitialDelay(delay.toSeconds(), TimeUnit.SECONDS)
+            PeriodicWorkRequestBuilder<ReservationWorker>(
+                24, TimeUnit.HOURS,
+                5, TimeUnit.MINUTES
+            )
+                .setInitialDelay(delay.toMinutes(), TimeUnit.MINUTES)
                 .build()
         )
     }

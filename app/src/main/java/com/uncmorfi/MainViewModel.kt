@@ -1,75 +1,112 @@
 package com.uncmorfi
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uncmorfi.data.persistence.entities.DayMenu
-import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.data.persistence.entities.User
 import com.uncmorfi.data.repository.RepoMenu
 import com.uncmorfi.data.repository.RepoServings
 import com.uncmorfi.data.repository.RepoUser
 import com.uncmorfi.data.service.ServWorkers
-import com.uncmorfi.shared.*
-import com.uncmorfi.shared.ReserveStatus.*
+import com.uncmorfi.shared.connectivity.ConnectivityObserver.*
 import com.uncmorfi.shared.StatusCode.*
+import com.uncmorfi.shared.connectivity.NetworkConnectivityObserver
+import com.uncmorfi.shared.connectivity.isOnline
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import org.json.JSONException
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.LocalDate
-import java.util.*
+import javax.inject.Inject
 
-class MainViewModel(val context: Application) : AndroidViewModel(context) {
-    private val repoMenu = RepoMenu(context)
-    private val repoUser = RepoUser(context)
-    private val repoServings = RepoServings(context)
-    private val servWorkers = ServWorkers(context)
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repoMenu: RepoMenu,
+    private val repoUser: RepoUser,
+    private val repoServings: RepoServings,
+    private val servWorkers: ServWorkers,
+    private val networkConnectivityObserver: NetworkConnectivityObserver,
+) : ViewModel() {
 
-    val status: MutableLiveData<StatusCode> = MutableLiveData()
+    private val _state = MutableStateFlow(BUSY)
+    val state = _state.asStateFlow()
+
+    private val networkConnection = networkConnectivityObserver.observe()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = Status.Unavailable
+        )
+
+    val users = repoUser.listenAll()
+        .distinctUntilChanged()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = emptyList()
+        )
+
+    val servings = repoServings.getToday()
+        .distinctUntilChanged()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = emptyList()
+        )
+
+    val menu = repoMenu.getAll()
+        .distinctUntilChanged()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = emptyList()
+        )
 
     init {
-        status.value = BUSY
+        viewModelScope.launch {
+            _state.update { BUSY }
+        }
     }
 
     /*
      * Balance stuff
      */
-
-    fun getAllUsers(): LiveData<List<User>> = repoUser.listenAll()
-
-    fun getUser(card: String): LiveData<User?> = repoUser.getBy(card)
+    fun getUser(card: String): Flow<User?> = repoUser.getBy(card)
 
     fun updateCards(card: String) = launchIO {
-        if (!context.isOnline()) {
-            status.postValue(NO_ONLINE)
+        if (!networkConnection.value.isOnline()) {
+            _state.update { NO_ONLINE }
             return@launchIO
         }
-        status.postValue(UPDATING)
+        _state.update { UPDATING }
 //        delay(4_000)
         val updates = repoUser.fetch(card)
-        status.postValue(if (updates > 0) UPDATE_SUCCESS else USER_INSERTED)
+        _state.update {
+            if (updates > 0) UPDATE_SUCCESS else USER_INSERTED
+        }
     }
 
     fun updateUserName(user: User) = launchIO {
         repoUser.fullUpdate(user)
-        status.postValue(UPDATE_SUCCESS)
+        _state.update { UPDATE_SUCCESS }
     }
 
     fun deleteUser(user: User) = launchIO {
         repoUser.delete(user)
-        status.postValue(USER_DELETED)
+        _state.update { USER_DELETED }
     }
 
     /*
      * Menu stuff
      */
-
-    fun getMenu(): LiveData<List<DayMenu>> = repoMenu.getAll()
-
     fun refreshMenu() = launchIO {
         if (needAutoUpdateMenu()) {
             forceRefreshMenu()
@@ -78,19 +115,21 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
 
     fun forceRefreshMenu() = launchIO {
         Log.d("ViewModel", "Force update menu")
-        if (!context.isOnline()) {
-            status.postValue(NO_ONLINE)
+        if (!networkConnection.value.isOnline()) {
+            _state.update { NO_ONLINE }
             return@launchIO
         }
-        status.postValue(UPDATING)
+        _state.update { UPDATING }
         val inserts = repoMenu.update()
         Log.d("ViewModel", "menu update result: $inserts")
 
-        status.postValue(when {
-            inserts.isEmpty() -> UPDATE_ERROR
-            inserts.all { it == -1L } -> ALREADY_UPDATED
-            else -> UPDATE_SUCCESS
-        })
+        _state.update {
+            when {
+                inserts.isEmpty() -> UPDATE_ERROR
+                inserts.all { it == -1L } -> ALREADY_UPDATED
+                else -> UPDATE_SUCCESS
+            }
+        }
     }
 
     fun clearMenu() = launchIO {
@@ -108,28 +147,26 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
      * Serving stuff
      */
 
-    fun getServings(): LiveData<List<Serving>> = repoServings.getToday()
-
     fun updateServings() = launchIO {
         Log.d("ViewModel", "Update serving")
-        if (!context.isOnline()) {
-            status.postValue(NO_ONLINE)
+        if (!networkConnection.value.isOnline()) {
+            _state.update { NO_ONLINE }
             return@launchIO
         }
-        status.postValue(UPDATING)
+        _state.update { UPDATING }
         val inserts = repoServings.update()
-
-        status.postValue(when {
-            inserts.isEmpty() -> EMPTY_UPDATE
-            inserts.all { it == -1L } -> ALREADY_UPDATED
-            else -> UPDATE_SUCCESS
-        })
+        _state.update {
+            when {
+                inserts.isEmpty() -> EMPTY_UPDATE
+                inserts.all { it == -1L } -> ALREADY_UPDATED
+                else -> UPDATE_SUCCESS
+            }
+        }
     }
 
     /*
      * Worker stuff
      */
-
     fun refreshWorkers() {
         servWorkers.refreshAllWorkers()
     }
@@ -140,18 +177,17 @@ class MainViewModel(val context: Application) : AndroidViewModel(context) {
                 f.invoke(this)
             } catch (e: HttpException) {
                 e.printStackTrace()
-                status.postValue(CONNECT_ERROR)
+                _state.update { CONNECT_ERROR }
             } catch (e: IOException) {
                 e.printStackTrace()
-                status.postValue(CONNECT_ERROR)
+                _state.update { CONNECT_ERROR }
             } catch (e: JSONException) {
                 e.printStackTrace()
-                status.postValue(INTERNAL_ERROR)
+                _state.update { INTERNAL_ERROR }
             } catch (e: Exception) {
                 e.printStackTrace()
-                status.postValue(INTERNAL_ERROR)
+                _state.update { INTERNAL_ERROR }
             }
         }
     }
-
 }

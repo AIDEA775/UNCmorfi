@@ -8,77 +8,64 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.DayMenu
+import com.uncmorfi.databinding.FragmentMenuBinding
 import com.uncmorfi.shared.*
-import kotlinx.android.synthetic.main.fragment_menu.*
 
 /**
  * Menú de la semana.
  * Administra la UI.
  */
-class MenuFragment : Fragment() {
-    private lateinit var mRootView: View
+class MenuFragment : Fragment(R.layout.fragment_menu) {
     private lateinit var adapter: MenuAdapter
     private val viewModel: MainViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_menu, container, false)
-    }
+    private lateinit var binding : FragmentMenuBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRootView = view
 
+        binding = FragmentMenuBinding.bind(view)
+        binding.setUi()
+
+        observe(viewModel.state) { state ->
+            binding.swipeRefresh.isRefreshing = state == StatusCode.UPDATING
+        }
+
+        observe(viewModel.menu) { menu ->
+            adapter.updateMenu(menu)
+            val today = menu.indexOfFirst { it.isToday() }
+            binding.menuRecyclerView.scrollToPosition(today)
+        }
+    }
+
+    private fun FragmentMenuBinding.setUi(){
+        addMenu(R.menu.menu){menuItemId ->
+            when(menuItemId){
+                R.id.menu_update -> {
+                    viewModel.forceRefreshMenu(); true
+                }
+                R.id.menu_clear -> {
+                    viewModel.clearMenu(); true
+                }
+                R.id.menu_browser -> requireActivity().startBrowser(URL)
+                else -> false
+            }
+        }
         swipeRefresh.init { viewModel.forceRefreshMenu() }
         initRecyclerAndAdapter()
         initMenu()
-
-        observe(viewModel.getMenu()) { menu ->
-            adapter.updateMenu(menu)
-            val today = menu.indexOfFirst { it.isToday() }
-            menuRecyclerView.scrollToPosition(today)
-        }
-
-        observe(viewModel.status) {
-            swipeRefresh.isRefreshing = it == StatusCode.UPDATING
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_update -> {
-                viewModel.forceRefreshMenu(); true
-            }
-            R.id.menu_clear -> {
-                viewModel.clearMenu(); true
-            }
-            R.id.menu_browser -> requireActivity().startBrowser(URL)
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun initRecyclerAndAdapter() {
-        menuRecyclerView.setHasFixedSize(true)
+        binding.menuRecyclerView.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
         layoutManager.stackFromEnd = true
-        menuRecyclerView.layoutManager = layoutManager
-        menuRecyclerView.isNestedScrollingEnabled = false
+        binding.menuRecyclerView.layoutManager = layoutManager
+        binding.menuRecyclerView.isNestedScrollingEnabled = false
     }
 
     private fun initMenu() {
         adapter = MenuAdapter(::onClick, ::onLongClick)
-        menuRecyclerView.adapter = adapter
+        binding.menuRecyclerView.adapter = adapter
     }
 
     override fun onResume() {
@@ -97,7 +84,7 @@ class MenuFragment : Fragment() {
 
     private fun onLongClick(dayMenu: DayMenu) {
         context?.copyToClipboard("food", dayMenu.toString())
-        mRootView.snack(R.string.snack_copied, SnackType.FINISH)
+        binding.root.snack(R.string.snack_copied, SnackType.FINISH)
     }
 
     companion object {

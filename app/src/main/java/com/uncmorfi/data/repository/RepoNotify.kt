@@ -1,5 +1,7 @@
 package com.uncmorfi.data.repository
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,8 +12,13 @@ import androidx.core.app.NotificationManagerCompat
 import com.uncmorfi.R
 import com.uncmorfi.shared.CHANNEL_ID
 import com.uncmorfi.shared.DEFAULT_ID
+import com.uncmorfi.shared.isPermissionGranted
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class RepoNotify(val context: Context) {
+class RepoNotify @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     fun send(block: NotificationCompat.Builder.() -> Unit) {
         createChannel()
@@ -30,10 +37,15 @@ class RepoNotify(val context: Context) {
         return builder.build()
     }
 
+
+    @SuppressLint("MissingPermission")
     fun update(notification: Notification, id: Int = DEFAULT_ID) {
-        NotificationManagerCompat
-            .from(context)
-            .notify(id, notification)
+        if (context.isPermissionGranted(Manifest.permission.POST_NOTIFICATIONS)) {
+            NotificationManagerCompat
+                .from(context)
+                .notify(id, notification)
+            return
+        }
     }
 
     fun remove(id: Int) {

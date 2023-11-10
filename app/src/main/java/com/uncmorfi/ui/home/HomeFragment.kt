@@ -11,64 +11,71 @@ import com.uncmorfi.R
 import com.uncmorfi.ui.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.DayMenu
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.databinding.FragmentHomeBinding
 import com.uncmorfi.shared.StatusCode
+import com.uncmorfi.shared.addMenu
 import com.uncmorfi.shared.init
 import com.uncmorfi.shared.observe
-import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var user: User
     private var mDayMenu: DayMenu? = null
     private val viewModel: MainViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        swipeRefresh.init { updateAll() }
+        binding = FragmentHomeBinding.bind(view)
+        binding.setUi()
 
-        observe(viewModel.status) {
-            swipeRefresh.isRefreshing = it == StatusCode.UPDATING
+        observe(viewModel.state) { state ->
+            binding.swipeRefresh.isRefreshing = state == StatusCode.UPDATING
         }
 
         /*
-         * Menú
-         */
-        observe(viewModel.getMenu()) { menu ->
+        * Menu
+        */
+        observe(viewModel.menu){ menu ->
             val today = menu.firstOrNull { it.isToday() }
             mDayMenu = today
 
             today?.let {
-                homeMenu.setDayMenu(today)
-                homeMenu.visibility = VISIBLE
+                binding.homeMenu.setDayMenu(today)
+                binding.homeMenu.visibility = VISIBLE
             }
         }
+
+        /*
+        * Tarjetas
+        */
+        observe(viewModel.users){ users ->
+            if (users.isNotEmpty()) {
+                user = users.first()
+                binding.homeCard.setUser(user)
+                binding.homeCard.visibility = VISIBLE
+            }
+        }
+
+        /*
+        * Medidor
+        */
+        observe(viewModel.servings) { servings ->
+            if (servings.isNotEmpty()) {
+                binding.homeServingsPieChart.set(servings)
+            }
+        }
+
+    }
+
+    private fun FragmentHomeBinding.setUi() {
+        swipeRefresh.init { updateAll() }
 
         homeMenuShowMore.setOnClickListener {
             (requireActivity() as MainActivity).change(R.id.nav_menu)
         }
 
-        /*
-         * Tarjetas
-         */
-        observe(viewModel.getAllUsers()) {
-            if (it.isNotEmpty()) {
-                user = it.first()
-                homeCard.setUser(user)
-                homeCard.visibility = VISIBLE
-            }
-        }
         homeCard.setOnClickListener {
             UserOptionsDialog
                 .newInstance(user)
@@ -83,22 +90,23 @@ class HomeFragment : Fragment() {
         homeCardShowMore.setOnClickListener {
             (requireActivity() as MainActivity).change(R.id.nav_balance)
         }
-
-        /*
-         * Medidor
-         */
-        observe(viewModel.getServings()) {
-            if (it.isNotEmpty()) {
-                homeServingsPieChart.set(it)
-            }
-        }
-
         homeServingsPieChart.setTouchEnabled(false)
         homeServingsPieChart.setOnClickListener {
             viewModel.updateServings()
         }
         homeServingsShowMore.setOnClickListener {
             (requireActivity() as MainActivity).change(R.id.nav_servings)
+        }
+
+        addMenu(R.menu.home) { menuItemId ->
+            when (menuItemId) {
+                R.id.home_update -> {
+                    updateAll()
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 
@@ -111,21 +119,8 @@ class HomeFragment : Fragment() {
 
         if (::user.isInitialized) {
             user.isLoading = true
-            homeCard.setUser(user)
+            binding.homeCard.setUser(user)
             viewModel.updateCards(user.card)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.home_update -> {
-                updateAll(); true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -133,5 +128,4 @@ class HomeFragment : Fragment() {
         super.onResume()
         requireActivity().setTitle(R.string.app_name)
     }
-
 }

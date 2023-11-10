@@ -7,8 +7,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.GradientDrawable
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,11 +18,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.uncmorfi.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 enum class SnackType {
     ERROR,
@@ -206,6 +210,10 @@ fun Context.copyToClipboard(label: String, data: String) {
     clipboard.setPrimaryClip(ClipData.newPlainText(label, data))
 }
 
+fun Context.isPermissionGranted(permission: String): Boolean {
+    return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+}
+
 fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, p1: Int, p2: Int, p3: Int) {
@@ -220,15 +228,14 @@ fun EditText.onTextChanged(onTextChanged: (CharSequence) -> Unit) {
     })
 }
 
-fun Context?.isOnline(): Boolean {
-    return (this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-        .activeNetworkInfo?.isConnected ?: false
-}
-
 fun TextView.updateVisibility() {
     this.visibility = if (this.text.isNullOrEmpty()) GONE else VISIBLE
 }
 
-inline fun <T> LifecycleOwner.observe(liveData: LiveData<T>, crossinline body: (T) -> Unit) {
-    liveData.observe(this, { body.invoke(it) })
+inline fun <T> LifecycleOwner.observe(flow : Flow<T>, state : Lifecycle.State = Lifecycle.State.RESUMED, crossinline body: (T) -> Unit){
+    lifecycleScope.launch {
+        repeatOnLifecycle(state){
+            flow.collect{ body(it) }
+        }
+    }
 }

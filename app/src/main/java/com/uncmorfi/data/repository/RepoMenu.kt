@@ -1,12 +1,12 @@
 package com.uncmorfi.data.repository
 
-import android.content.Context
 import com.uncmorfi.data.network.MenuParser
-import com.uncmorfi.data.persistence.AppDatabase
+import com.uncmorfi.data.persistence.dao.DayMenuDao
+import javax.inject.Inject
 
-class RepoMenu(context: Context) {
-    private val menuDAO = AppDatabase(context).menuDao()
-
+class RepoMenu @Inject constructor(
+    private val menuDAO : DayMenuDao
+) {
     fun getAll() = menuDAO.getAllAsLiveData()
 
     suspend fun update(): List<Long> {

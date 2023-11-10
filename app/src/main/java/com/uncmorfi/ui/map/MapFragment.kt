@@ -8,27 +8,26 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.uncmorfi.R
-import android.view.ViewGroup
-import android.view.LayoutInflater
 import android.view.View
 import com.google.android.gms.maps.MapsInitializer
-import kotlinx.android.synthetic.main.fragment_map.*
+import com.uncmorfi.databinding.FragmentMapBinding
 
 /**
  * Muestra las ubicaciones de los comedores en un GoogleMap.
  */
-class MapFragment : Fragment() {
+class MapFragment : Fragment(R.layout.fragment_map) {
     private lateinit var mMap: GoogleMap
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_map, container, false)
-    }
+    private lateinit var binding : FragmentMapBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mapView.onCreate(savedInstanceState)
 
-        mapView.onResume()
+        binding = FragmentMapBinding.bind(view)
+
+        binding.mapView.onCreate(savedInstanceState)
+
+        binding.mapView.onResume()
 
         try {
             MapsInitializer.initialize(requireActivity().applicationContext)
@@ -36,23 +35,23 @@ class MapFragment : Fragment() {
             e.printStackTrace()
         }
 
-        mapView.getMapAsync { onMapReady(it) }
+        binding.mapView.getMapAsync { onMapReady(it) }
     }
 
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_map)
-        mapView.onResume()
+        binding.mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        binding.mapView.onPause()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        binding.mapView.onLowMemory()
     }
 
     private fun onMapReady(googleMap: GoogleMap) {

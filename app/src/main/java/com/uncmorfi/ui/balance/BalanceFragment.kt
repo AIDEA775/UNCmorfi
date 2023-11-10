@@ -9,11 +9,11 @@ import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.ui.balance.dialogs.UserOptionsDialog
 import com.uncmorfi.data.persistence.entities.User
+import com.uncmorfi.databinding.FragmentBalanceBinding
 import com.uncmorfi.shared.*
 import com.uncmorfi.shared.SnackType.*
 import com.uncmorfi.shared.StatusCode.UPDATE_SUCCESS
 import com.uncmorfi.shared.StatusCode.USER_INSERTED
-import kotlinx.android.synthetic.main.fragment_balance.*
 
 /**
  * Saldo de las tarjetas.
@@ -21,63 +21,68 @@ import kotlinx.android.synthetic.main.fragment_balance.*
  * Usa a [UserAdapter] para llenar el RecyclerView.
  * Usa a [UserOptionsDialog] para que el usuario pueda modificar alguna tarjeta.
  */
-class BalanceFragment : Fragment() {
-    private lateinit var mRootView: View
+class BalanceFragment : Fragment(R.layout.fragment_balance) {
+
+    private lateinit var binding : FragmentBalanceBinding
+
     private lateinit var mUserAdapter: UserAdapter
     private val viewModel: MainViewModel by activityViewModels()
 
     private var userList: List<User> = emptyList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_balance, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRootView = view
 
-        initRecyclerAndAdapter()
+        binding = FragmentBalanceBinding.bind(view)
+        binding.setUi()
+
+        observe(viewModel.state) { state ->
+            if (state == UPDATE_SUCCESS || state == USER_INSERTED) {
+                binding.newUser.clearText()
+            }
+        }
+
+        observe(viewModel.users){ users ->
+            mUserAdapter.setUsers(users)
+            userList = users
+        }
+    }
+
+    private fun FragmentBalanceBinding.setUi(){
+        addMenu(R.menu.balance){ menuItemId ->
+            when (menuItemId) {
+                R.id.balance_update -> {
+                    updateAllUsers(); true
+                }
+                R.id.balance_copy -> {
+                    copyAllUsers(); true
+                }
+                R.id.balance_browser -> requireActivity().startBrowser(HUEMUL_AUTOCONSULTA_URL)
+                else -> false
+            }
+        }
 
         newUser.onDone { code ->
             activity?.hideKeyboard()
             updateCards(parseCards(code))
         }
 
-        observe(viewModel.status) {
-            if (it == UPDATE_SUCCESS || it == USER_INSERTED) {
-                newUser.clearText()
-            }
-        }
-
-        observe(viewModel.getAllUsers()) {
-            mUserAdapter.setUsers(it)
-            userList = it
-        }
+        initRecyclerAndAdapter()
     }
-
     private fun initRecyclerAndAdapter() {
         val layoutManager = object : LinearLayoutManager(context) {
             override fun isAutoMeasureEnabled(): Boolean {
                 return true
             }
         }
-        balanceList.isNestedScrollingEnabled = false
-        balanceList.layoutManager = layoutManager
+        binding.balanceList.isNestedScrollingEnabled = false
+        binding.balanceList.layoutManager = layoutManager
 
         mUserAdapter = UserAdapter(::showUserOptionsDialog) {
             updateCards(listOf(it.card))
         }
 
-        balanceList.adapter = mUserAdapter
+        binding.balanceList.adapter = mUserAdapter
     }
 
     private fun showUserOptionsDialog(user: User) {
@@ -85,26 +90,9 @@ class BalanceFragment : Fragment() {
             .show(parentFragmentManager, "UserOptionsDialog")
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.balance, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.balance_update -> {
-                updateAllUsers(); true
-            }
-            R.id.balance_copy -> {
-                copyAllUsers(); true
-            }
-            R.id.balance_browser -> requireActivity().startBrowser(HUEMUL_AUTOCONSULTA_URL)
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun updateAllUsers() {
         if (userList.isEmpty()) {
-            mRootView.snack(R.string.snack_empty_update, ERROR)
+            binding.root.snack(R.string.snack_empty_update, ERROR)
         } else {
             updateCards(userList.map { it.card })
         }
@@ -113,9 +101,9 @@ class BalanceFragment : Fragment() {
     private fun copyAllUsers() {
         if (userList.isNotEmpty()) {
             context?.copyToClipboard("cards", userList.joinToString("\n") { it.card })
-            mRootView.snack(R.string.snack_copied, FINISH)
+            binding.root.snack(R.string.snack_copied, FINISH)
         } else {
-            mRootView.snack(R.string.snack_empty_copy, ERROR)
+            binding.root.snack(R.string.snack_empty_copy, ERROR)
         }
     }
 
@@ -126,7 +114,7 @@ class BalanceFragment : Fragment() {
     private fun updateCards(cards: List<String>) {
 
         if (cards.any { it.length < 15 }) {
-            mRootView.snack(R.string.snack_new_user_dumb, FINISH)
+            binding.root.snack(R.string.snack_new_user_dumb, FINISH)
             return
         }
 
@@ -134,12 +122,12 @@ class BalanceFragment : Fragment() {
         mUserAdapter.setUsers(userList)
 
         when {
-            userList.any { it.isLoading } -> mRootView.snack(R.string.snack_updating, LOADING)
-            cards.size == 1 -> mRootView
+            userList.any { it.isLoading } -> binding.root.snack(R.string.snack_updating, LOADING)
+            cards.size == 1 -> binding.root
                 .snack(
                     getString(R.string.snack_new_user_adding).format(cards.first()), LOADING
                 )
-            else -> mRootView.snack(R.string.snack_new_user_several_adds, LOADING)
+            else -> binding.root.snack(R.string.snack_new_user_several_adds, LOADING)
         }
 
         // TODO
@@ -154,7 +142,7 @@ class BalanceFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         activity?.hideKeyboard()
-        newUser.clearFocus()
+        binding.newUser.clearFocus()
     }
 
 }

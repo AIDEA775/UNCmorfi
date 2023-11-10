@@ -1,11 +1,11 @@
 package com.uncmorfi.data.persistence.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.uncmorfi.data.persistence.entities.DayMenu
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DayMenuDao {
@@ -13,7 +13,7 @@ interface DayMenuDao {
     suspend fun getAll(): List<DayMenu>
 
     @Query("SELECT * FROM menu ORDER BY datetime(date)")
-    fun getAllAsLiveData(): LiveData<List<DayMenu>>
+    fun getAllAsLiveData(): Flow<List<DayMenu>>
 
     @Query("SELECT * FROM menu ORDER BY datetime(date) DESC LIMIT 1")
     suspend fun getLast(): DayMenu?

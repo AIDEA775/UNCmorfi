@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import com.uncmorfi.R
+import com.uncmorfi.databinding.ViewUserNewBinding
 import com.uncmorfi.shared.invisible
 import com.uncmorfi.shared.onTextChanged
-import kotlinx.android.synthetic.main.view_user_new.view.*
 
 class NewUserView @JvmOverloads constructor(
     context: Context,
@@ -19,28 +19,34 @@ class NewUserView @JvmOverloads constructor(
 
     private lateinit var doneListener: (String) -> Unit
 
+    private val binding = ViewUserNewBinding.inflate(LayoutInflater.from(context),this)
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_user_new, this, true)
+        binding.setUi()
+    }
 
-        newUserInput.filters = arrayOf<InputFilter>(InputFilter.AllCaps())
-        newUserInput.setOnEditorActionListener { _, i, _ ->
-            if (i == EditorInfo.IME_ACTION_DONE) {
-                onDone()
+    private fun ViewUserNewBinding.setUi(){
+        newUserInput.apply {
+            filters = arrayOf<InputFilter>(InputFilter.AllCaps())
+            setOnEditorActionListener { _, i, _ ->
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    onDone()
+                }
+                false
             }
-            false
+            onTextChanged {
+                newUserDone.invisible(it.isBlank())
+            }
         }
-
-        newUserInput.onTextChanged {
-            newUserDone.invisible(it.isBlank())
+        newUserDone.apply {
+            invisible(true)
+            contentDescription = context.getString(R.string.balance_new_user_button_enter)
+            setOnClickListener { onDone() }
         }
-
-        newUserDone.invisible(true)
-        newUserDone.contentDescription = context.getString(R.string.balance_new_user_button_enter)
-        newUserDone.setOnClickListener { onDone() }
     }
 
     private fun onDone() {
-        val input = newUserInput.text.toString().trim()
+        val input = binding.newUserInput.text.toString().trim()
         doneListener(input)
     }
 
@@ -49,7 +55,7 @@ class NewUserView @JvmOverloads constructor(
     }
 
     fun clearText() {
-        newUserInput.text.clear()
+        binding.newUserInput.text.clear()
     }
 
 }

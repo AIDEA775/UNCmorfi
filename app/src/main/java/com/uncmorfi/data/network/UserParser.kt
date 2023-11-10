@@ -6,12 +6,15 @@ import com.uncmorfi.shared.HUEMUL_URL
 import com.uncmorfi.shared.PROFILE_PIC_URL
 import com.uncmorfi.shared.toBigDecimalOrZero
 import okhttp3.FormBody
+import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import javax.inject.Inject
 
-object UserParser {
+class UserParser @Inject constructor(
+    private val okHttpClient: OkHttpClient
+) {
 
     fun fetch(card: String): User? {
         return try {

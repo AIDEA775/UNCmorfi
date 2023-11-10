@@ -7,9 +7,13 @@ import androidx.work.*
 import com.uncmorfi.data.worker.CheckBalanceWorker
 import com.uncmorfi.data.worker.ReservationWorker
 import com.uncmorfi.shared.*
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class ServWorkers(val context: Context) {
+class ServWorkers @Inject constructor(
+    @ApplicationContext val context: Context
+) {
 
     private val preferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val workManager = WorkManager.getInstance(context)

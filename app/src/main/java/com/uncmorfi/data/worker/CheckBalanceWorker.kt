@@ -2,6 +2,7 @@ package com.uncmorfi.data.worker
 
 import android.content.Context
 import android.content.Intent
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.uncmorfi.MainActivity
@@ -10,14 +11,18 @@ import com.uncmorfi.data.repository.RepoNotify
 import com.uncmorfi.data.repository.RepoUser
 import com.uncmorfi.shared.WARNING_USER_RATIONS
 import com.uncmorfi.shared.toPendingIntent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-
-class CheckBalanceWorker(context: Context, p: WorkerParameters) : CoroutineWorker(context, p) {
-
-    private val repoUser = RepoUser(context)
-    private val repoNotify = RepoNotify(context)
+@HiltWorker
+class CheckBalanceWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted p: WorkerParameters,
+    private val repoUser: RepoUser,
+    private val repoNotify: RepoNotify
+) : CoroutineWorker(context, p) {
 
     override suspend fun doWork() = withContext(Dispatchers.IO) {
 

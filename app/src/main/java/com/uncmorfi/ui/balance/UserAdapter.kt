@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.User
-import kotlinx.android.synthetic.main.item_user.view.*
+import com.uncmorfi.databinding.ItemUserBinding
 
 internal class UserAdapter(
     private val mClickListener: (User) -> Unit,
@@ -16,10 +16,12 @@ internal class UserAdapter(
 
     internal inner class UserItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
+        private val binding = ItemUserBinding.bind(v)
+
         fun bind(user: User) {
-            itemView.userCardView.setUser(user)
-            itemView.userCardView.setOnClickListener { mClickListener(user) }
-            itemView.userCardView.setOnLongClickListener { mLongClickListener(user); true }
+            binding.userCardView.setUser(user)
+            binding.userCardView.setOnClickListener { mClickListener(user) }
+            binding.userCardView.setOnLongClickListener { mLongClickListener(user); true }
         }
     }
 

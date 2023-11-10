@@ -20,11 +20,11 @@ import com.uncmorfi.data.persistence.entities.Serving
 import com.uncmorfi.shared.colorOf
 import java.util.*
 
-class TotalPieChartView: PieChart {
-
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+class TotalPieChartView @JvmOverloads constructor(
+    context: Context,
+    attr: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : PieChart(context,attr,defStyleAttr) {
 
     init {
         setNoDataText(context.getString(R.string.servings_chart_empty))

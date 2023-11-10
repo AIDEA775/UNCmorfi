@@ -8,32 +8,48 @@ import com.github.mikephil.charting.data.Entry
 import com.uncmorfi.MainViewModel
 import com.uncmorfi.R
 import com.uncmorfi.data.persistence.entities.Serving
+import com.uncmorfi.databinding.FragmentServingsBinding
 import com.uncmorfi.ui.servings.StyledLineDataSet.Companion.ChartStyle.CUMULATIVE
 import com.uncmorfi.ui.servings.StyledLineDataSet.Companion.ChartStyle.RATIONS
 import com.uncmorfi.shared.*
-import kotlinx.android.synthetic.main.fragment_servings.*
 
 /**
  * Medidor de raciones.
  * Administra la UI con todas sus features.
  */
 
-class ServingsFragment : Fragment() {
-    private lateinit var mRootView: View
+class ServingsFragment : Fragment(R.layout.fragment_servings) {
+
     private val viewModel: MainViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, i: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_servings, container, false)
-    }
+    private lateinit var binding : FragmentServingsBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRootView = view
+
+        binding = FragmentServingsBinding.bind(view)
+        binding.setUi()
+
+        observe(viewModel.state) { state ->
+            binding.swipeRefresh.isRefreshing = state == StatusCode.UPDATING
+        }
+
+        observe(viewModel.servings) { servings ->
+            binding.servingsPieChart.set(servings)
+            updateCharts(servings)
+        }
+    }
+
+    private fun FragmentServingsBinding.setUi(){
+
+        addMenu(R.menu.servings){menuItemId ->
+            when(menuItemId){
+                R.id.serving_update -> {
+                    viewModel.updateServings(); true
+                }
+                R.id.serving_browser -> requireActivity().startBrowser(COCINA_URL)
+                else -> false
+            }
+        }
 
         swipeRefresh.init { viewModel.updateServings() }
         servingTimeChart.init(requireContext())
@@ -49,35 +65,12 @@ class ServingsFragment : Fragment() {
 
         // Parametros especiales de ambos LineChart
         servingAccumulatedChart.xAxis.setDrawGridLines(false)
-
-        observe(viewModel.getServings()) {
-            servingsPieChart.set(it)
-            updateCharts(it)
-        }
-
-        observe(viewModel.status) {
-            swipeRefresh.isRefreshing = it == StatusCode.UPDATING
-        }
     }
 
     override fun onResume() {
         super.onResume()
         requireActivity().setTitle(R.string.navigation_servings)
         viewModel.updateServings()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.servings, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.serving_update -> {
-                viewModel.updateServings(); true
-            }
-            R.id.serving_browser -> requireActivity().startBrowser(COCINA_URL)
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun updateCharts(items: List<Serving>) {
@@ -103,11 +96,11 @@ class ServingsFragment : Fragment() {
                 CUMULATIVE
             )
 
-            servingTimeChart.update(timeData)
-            servingAccumulatedChart.update(cumulativeData)
+            binding.servingTimeChart.update(timeData)
+            binding.servingAccumulatedChart.update(cumulativeData)
         } else {
-            servingTimeChart.clear()
-            servingAccumulatedChart.clear()
+            binding.servingTimeChart.clear()
+            binding.servingAccumulatedChart.clear()
         }
     }
 

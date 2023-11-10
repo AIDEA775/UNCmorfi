@@ -1,7 +1,10 @@
 package com.uncmorfi.data.network
 
 import com.uncmorfi.ui.servings.HourAxisValueFormatter
+import io.mockk.mockk
 import junit.framework.Assert.assertEquals
+import okhttp3.OkHttpClient
+import org.junit.Before
 import org.junit.Test
 
 class ServingParserTest {
@@ -47,9 +50,17 @@ class ServingParserTest {
 
     val formatter = HourAxisValueFormatter()
 
+    private val okHttpClient : OkHttpClient = mockk()
+    private lateinit var servingParser: ServingParser
+
+    @Before
+    fun setUp(){
+        servingParser = ServingParser(okHttpClient)
+    }
+
     @Test
     fun `se puede parsear los datos de una tarjeta`() {
-        val out = ServingParser.parseBody(input)
+        val out = servingParser.parseBody(input)
         println(out)
         val display = formatter.format(out.first().toFloat())
         assertEquals("12:04", display)
